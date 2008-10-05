@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Mileage</string>
+    <string name="price_per_gallon">Price per gallon</string>
+    <string name="gallons">Gallons of Fuel</string>
+    <string name="odometer">Current Mileage</string>
+    <string name="custom_date">Change Date</string>
+    <string name="add_fillup">Record Fill-up</string>
+    <string name="fillup_history">Previous Fill-ups</string>
+    <string name="graphs">Graphical Analysis</string>
+</resources>
