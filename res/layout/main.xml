@@ -28,11 +28,11 @@
 		android:layout_height="wrap_content"
 		android:text="@string/custom_date"
 	/>
-	<Spinner
+	<!--<Spinner
 		android:id="@+id/vehicle_spinner"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-	/>
+	/>-->
 	<Button
 		android:id="@+id/add_fillup_btn"
 		android:layout_width="fill_parent"

@@ -6,6 +6,14 @@
     <string name="odometer">Current Mileage</string>
     <string name="custom_date">Change Date</string>
     <string name="add_fillup">Record Fill-up</string>
-    <string name="fillup_history">Previous Fill-ups</string>
-    <string name="graphs">Graphical Analysis</string>
+    <string name="fillup">Fill Up</string>
+    <string name="fillup_history">History</string>
+    <string name="graphs">Graphs</string>
+    <string name="save_changes">Save Changes</string>
+    <string name="delete_fillup">Delete</string>
+    <string name="edit_fillup">Edit Fill-up</string>
+    <string name="cancel_changes">Cancel Changes</string>
+    <string name="confirm_delete">Are you sure you want to delete this?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>
