@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
@@ -14,9 +13,6 @@ import android.widget.SimpleCursorAdapter;
 public class HistoryView extends ListActivity {
 
 	public static final String TAG = "HistoryList";
-
-	public static final int MENU_FILLUP = Menu.FIRST;
-	public static final int MENU_GRAPHS = Menu.FIRST + 1;
 
 	private static final String[] PROJECTIONS = new String[] {
 			FillUps._ID, FillUps.AMOUNT, FillUps.COST, FillUps.DATE
@@ -35,7 +31,7 @@ public class HistoryView extends ListActivity {
 
 		getListView().setOnCreateContextMenuListener(this);
 
-		Cursor c = managedQuery(getIntent().getData(), PROJECTIONS, null, null, FillUps.DEFAULT_SORT_ORDER);
+		Cursor c = managedQuery(intent.getData(), PROJECTIONS, null, null, FillUps.DEFAULT_SORT_ORDER);
 
 		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.history, c, new String[] {
 			FillUps.AMOUNT

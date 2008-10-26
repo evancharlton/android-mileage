@@ -4,12 +4,11 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     >
-    <LinearLayout
-    	android:orientation="horizontal"
-    	android:layout_width="fill_parent"
-    	android:layout_height="wrap_content"
-    	android:gravity="center"
-    >
+	<LinearLayout
+		android:gravity="center"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+	>
 		<EditText
 			android:id="@+id/price_edit"
 		    android:layout_width="200px" 
@@ -24,10 +23,9 @@
 		/>
 	</LinearLayout>
 	<LinearLayout
-		android:orientation="horizontal"
+		android:gravity="center"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-    	android:gravity="center"
 	>
 		<EditText
 			android:id="@+id/odometer_edit"
@@ -53,10 +51,28 @@
 			android:layout_height="wrap_content"
 		/>
 		<Button
-			android:id="@+id/add_fillup_btn"
+			android:id="@+id/save_btn"
 			android:layout_width="200px"
 			android:layout_height="wrap_content"
 			android:text="@string/add_fillup"
+		/>
+	</LinearLayout>
+	<LinearLayout
+		android:gravity="center"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+	>
+		<Button
+			android:id="@+id/cancel_btn"
+			android:layout_width="200px"
+			android:layout_height="wrap_content"
+			android:text="@string/cancel_changes"
+		/>
+		<Button
+			android:id="@+id/delete_btn"
+			android:layout_width="200px"
+			android:layout_height="wrap_content"
+			android:text="@string/delete"
 		/>
 	</LinearLayout>
 </LinearLayout>

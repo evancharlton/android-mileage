@@ -10,6 +10,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,6 +18,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.SimpleCursorAdapter;
+import android.widget.Spinner;
 
 public class Mileage extends Activity {
 
@@ -24,6 +27,7 @@ public class Mileage extends Activity {
 
 	public static final int MENU_HISTORY = Menu.FIRST;
 	public static final int MENU_GRAPHS = Menu.FIRST + 1;
+	public static final int MENU_VEHICLES = Menu.FIRST + 2;
 
 	private int m_year;
 	private int m_month;
@@ -34,8 +38,7 @@ public class Mileage extends Activity {
 	private EditText m_priceEdit;
 	private EditText m_amountEdit;
 	private EditText m_mileageEdit;
-
-	// private Spinner m_vehicleSpinner;
+	private Spinner m_vehicleSpinner;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -60,21 +63,19 @@ public class Mileage extends Activity {
 		m_mileageEdit = (EditText) findViewById(R.id.odometer_edit);
 		m_amountEdit = (EditText) findViewById(R.id.amount_edit);
 		m_priceEdit = (EditText) findViewById(R.id.price_edit);
-		// m_vehicleSpinner = (Spinner) findViewById(R.id.vehicle_spinner);
+		m_vehicleSpinner = (Spinner) findViewById(R.id.vehicle_spinner);
 
-		/*
-		 * ArrayAdapter<CharSequence> vehicleAdapter =
-		 * ArrayAdapter.createFromResource(this, R.array.vehicles,
-		 * android.R.layout.simple_spinner_item);
-		 * vehicleAdapter.setDropDownViewResource
-		 * (android.R.layout.simple_spinner_dropdown_item);
-		 * m_vehicleSpinner.setAdapter(vehicleAdapter);
-		 */
-		// populate with initial data
-		m_saveButton.setText(getString(R.string.add_fillup));
-		m_priceEdit.setText(getString(R.string.price_per_gallon));
-		m_mileageEdit.setText(getString(R.string.odometer));
-		m_amountEdit.setText(getString(R.string.gallons));
+		Cursor c = managedQuery(Vehicles.CONTENT_URI, new String[] {
+				Vehicles._ID, Vehicles.TITLE
+		}, null, null, Vehicles.DEFAULT_SORT_ORDER);
+
+		SimpleCursorAdapter vehicleAdapter = new SimpleCursorAdapter(this, android.R.layout.simple_spinner_item, c, new String[] {
+			Vehicles.TITLE
+		}, new int[] {
+			android.R.id.text1
+		});
+		vehicleAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		m_vehicleSpinner.setAdapter(vehicleAdapter);
 	}
 
 	private void initHandlers() {
@@ -98,11 +99,13 @@ public class Mileage extends Activity {
 				}
 
 				try {
-					int mileage = Integer.parseInt(m_mileageEdit.getText().toString());
+					double mileage = Double.parseDouble(m_mileageEdit.getText().toString());
 					values.put(FillUps.MILEAGE, mileage);
 				} catch (NumberFormatException nfe) {
 					values.put(FillUps.MILEAGE, 0);
 				}
+
+				values.put(FillUps.VEHICLE_ID, m_vehicleSpinner.getSelectedItemId());
 
 				Calendar c = new GregorianCalendar(m_year, m_month, m_day);
 				values.put(FillUps.DATE, c.getTimeInMillis());
@@ -188,10 +191,18 @@ public class Mileage extends Activity {
 	}
 
 	private void showHistory() {
-		startActivity(new Intent(Intent.ACTION_PICK));
+		Intent i = new Intent();
+		i.setClass(Mileage.this, HistoryView.class);
+		startActivity(i);
 	}
 
 	private void showGraphs() {
+	}
+
+	private void showVehicles() {
+		Intent i = new Intent();
+		i.setClass(Mileage.this, VehiclesView.class);
+		startActivity(i);
 	}
 
 	@Override
@@ -200,6 +211,7 @@ public class Mileage extends Activity {
 
 		menu.add(Menu.NONE, MENU_HISTORY, 0, R.string.fillup_history).setShortcut('1', 'h');
 		menu.add(Menu.NONE, MENU_GRAPHS, 0, R.string.graphs).setShortcut('2', 'g');
+		menu.add(Menu.NONE, MENU_VEHICLES, 0, R.string.vehicles).setShortcut('3', 'v');
 
 		return true;
 	}
@@ -212,6 +224,9 @@ public class Mileage extends Activity {
 				break;
 			case MENU_GRAPHS:
 				showGraphs();
+				break;
+			case MENU_VEHICLES:
+				showVehicles();
 				break;
 		}
 		return super.onOptionsItemSelected(item);
