@@ -11,6 +11,9 @@ import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,8 +29,8 @@ public class Mileage extends Activity {
 	public static final int DATE_DIALOG_ID = 0;
 
 	public static final int MENU_HISTORY = Menu.FIRST;
-	public static final int MENU_GRAPHS = Menu.FIRST + 1;
-	public static final int MENU_VEHICLES = Menu.FIRST + 2;
+	public static final int MENU_VEHICLES = Menu.FIRST + 1;
+	public static final int MENU_STATISTICS = Menu.FIRST + 2;
 
 	private int m_year;
 	private int m_month;
@@ -103,6 +106,21 @@ public class Mileage extends Activity {
 					values.put(FillUps.MILEAGE, mileage);
 				} catch (NumberFormatException nfe) {
 					values.put(FillUps.MILEAGE, 0);
+				}
+
+				LocationManager location = (LocationManager) getSystemService(LOCATION_SERVICE);
+				if (location != null) {
+					Criteria criteria = new Criteria();
+					criteria.setSpeedRequired(true);
+					criteria.setAccuracy(Criteria.ACCURACY_COARSE);
+					String provider = location.getBestProvider(criteria, true);
+					if (provider != null) {
+						Location loc = location.getLastKnownLocation(provider);
+						values.put(FillUps.LATITUDE, loc.getLatitude());
+						values.put(FillUps.LONGITUDE, loc.getLongitude());
+					} else {
+
+					}
 				}
 
 				values.put(FillUps.VEHICLE_ID, m_vehicleSpinner.getSelectedItemId());
@@ -196,12 +214,15 @@ public class Mileage extends Activity {
 		startActivity(i);
 	}
 
-	private void showGraphs() {
-	}
-
 	private void showVehicles() {
 		Intent i = new Intent();
 		i.setClass(Mileage.this, VehiclesView.class);
+		startActivity(i);
+	}
+
+	private void showStatistics() {
+		Intent i = new Intent();
+		i.setClass(Mileage.this, StatisticsView.class);
 		startActivity(i);
 	}
 
@@ -210,8 +231,8 @@ public class Mileage extends Activity {
 		super.onCreateOptionsMenu(menu);
 
 		menu.add(Menu.NONE, MENU_HISTORY, 0, R.string.fillup_history).setShortcut('1', 'h');
-		menu.add(Menu.NONE, MENU_GRAPHS, 0, R.string.graphs).setShortcut('2', 'g');
-		menu.add(Menu.NONE, MENU_VEHICLES, 0, R.string.vehicles).setShortcut('3', 'v');
+		menu.add(Menu.NONE, MENU_VEHICLES, 0, R.string.vehicles).setShortcut('2', 'v');
+		menu.add(Menu.NONE, MENU_STATISTICS, 0, R.string.statistics).setShortcut('3', 's');
 
 		return true;
 	}
@@ -222,11 +243,11 @@ public class Mileage extends Activity {
 			case MENU_HISTORY:
 				showHistory();
 				break;
-			case MENU_GRAPHS:
-				showGraphs();
-				break;
 			case MENU_VEHICLES:
 				showVehicles();
+				break;
+			case MENU_STATISTICS:
+				showStatistics();
 				break;
 		}
 		return super.onOptionsItemSelected(item);

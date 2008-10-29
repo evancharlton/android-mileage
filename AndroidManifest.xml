@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="com.evancharlton.mileage" android:versionCode="1"
 	android:versionName="1.0.0">
-	<application android:icon="@drawable/icon" android:label="@string/app_name">
+	<application android:label="@string/app_name" android:icon="@drawable/gasbuttonx">
 		<activity android:name=".Mileage" android:label="@string/app_name" android:screenOrientation="portrait">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
@@ -10,35 +10,11 @@
 			</intent-filter>
 		</activity>
 		<provider android:name="FillUpsProvider" android:authorities="com.evancharlton.provider.Mileage" />
-		<activity android:name="HistoryView">
-			<intent-filter>
-				<action android:name="android.intent.action.PICK"></action>
-				<category android:name="android.intent.category.DEFAULT"/>
-			</intent-filter>
-		</activity>
-		<activity android:name="VehiclesView">
-			<intent-filter>
-				<action android:name="android.intent.action.PICK"></action>
-				<category android:name="android.intent.category.DEFAULT"/>
-			</intent-filter>
-		</activity>
-		<activity android:name="FillUpView">
-			<intent-filter>
-				<action android:name="android.intent.action.EDIT"></action>
-				<category android:name="android.intent.category.DEFAULT"/>
-			</intent-filter>
-		</activity>
-		<activity android:name="AddVehicleView">
-			<intent-filter>
-				<action android:name="android.intent.action.INSERT"></action>
-				<category android:name="android.intent.category.DEFAULT"/>
-			</intent-filter>
-		</activity>
-		<activity android:name="EditVehicleView">
-			<intent-filter>
-				<action android:name="android.intent.action.EDIT"></action>
-				<category android:name="android.intent.category.DEFAULT"/>
-			</intent-filter>
-		</activity>
-</application>
+		<activity android:name="HistoryView"/>
+		<activity android:name="VehiclesView"/>
+		<activity android:name="FillUpView"/>
+		<activity android:name="AddVehicleView"/>
+		<activity android:name="EditVehicleView"/>
+		<activity android:name="StatisticsView"/>
+	</application>
 </manifest> 

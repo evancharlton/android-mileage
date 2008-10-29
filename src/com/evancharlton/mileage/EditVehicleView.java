@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.SimpleCursorAdapter;
 
 public class EditVehicleView extends Activity {
 	private EditText m_year;
@@ -65,17 +66,29 @@ public class EditVehicleView extends Activity {
 
 		m_delete.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				// prompt to make sure
 				showDialog(DELETE_DIALOG_ID);
 			}
 		});
 
 		m_cancel.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				// bail out
 				finish();
 			}
 		});
+
+		Cursor c = managedQuery(Vehicles.CONTENT_URI, new String[] {
+				Vehicles._ID, Vehicles.TITLE
+		}, null, null, Vehicles.DEFAULT_SORT_ORDER);
+
+		SimpleCursorAdapter vehicleAdapter = new SimpleCursorAdapter(this, android.R.layout.simple_spinner_item, c, new String[] {
+			Vehicles.TITLE
+		}, new int[] {
+			android.R.id.text1
+		});
+
+		if (vehicleAdapter.getCount() == 1) {
+			m_delete.setEnabled(false);
+		}
 	}
 
 	private void loadData() {

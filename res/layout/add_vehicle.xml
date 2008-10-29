@@ -12,13 +12,15 @@
 	>
 		<EditText
 			android:id="@+id/vehicle_year"
-			android:layout_width="200px"
+			android:layout_width="0dip"
+	   		android:layout_weight="1"
 			android:layout_height="wrap_content"
 			android:text="@string/vehicle_year"
 		/>
 		<EditText
 			android:id="@+id/vehicle_make"
-			android:layout_width="200px"
+			android:layout_width="0dip"
+	   		android:layout_weight="1"
 			android:layout_height="wrap_content"
 			android:text="@string/vehicle_make"
 		/>

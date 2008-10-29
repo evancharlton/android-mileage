@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    >
+>
 	<LinearLayout
 		android:gravity="center"
 		android:layout_width="fill_parent"
@@ -11,15 +12,19 @@
 	>
 		<EditText
 			android:id="@+id/price_edit"
-		    android:layout_width="200px" 
+		    android:layout_width="0dip"
+	   		android:layout_weight="1"
 		    android:layout_height="wrap_content" 
 		    android:text="@string/price_per_gallon"
+		    android:digits="1234567890."
 		/>
 		<EditText
 			android:id="@+id/amount_edit"
-			android:layout_width="200px"
+			android:layout_width="0dip"
+	   		android:layout_weight="1"
 			android:layout_height="wrap_content"
 			android:text="@string/gallons"
+		    android:digits="1234567890."
 		/>
 	</LinearLayout>
 	<LinearLayout
@@ -29,13 +34,16 @@
 	>
 		<EditText
 			android:id="@+id/odometer_edit"
-			android:layout_width="200px"
+			android:layout_width="0dip"
+	   		android:layout_weight="1"
 			android:layout_height="wrap_content"
 			android:text="@string/odometer"
+		    android:digits="1234567890."
 		/>
 		<Button
 			android:id="@+id/change_date_btn"
-			android:layout_width="200px"
+			android:layout_width="0dip"
+	   		android:layout_weight="1"
 			android:layout_height="wrap_content"
 			android:text="@string/custom_date"
 		/>
@@ -47,14 +55,16 @@
 	>
 		<Spinner
 			android:id="@+id/vehicle_spinner"
-			android:layout_width="200px"
+			android:layout_width="0dip"
+	   		android:layout_weight="1"
 			android:layout_height="wrap_content"
 		/>
 		<Button
 			android:id="@+id/save_btn"
-			android:layout_width="200px"
+			android:layout_width="0dip"
+	   		android:layout_weight="1"
 			android:layout_height="wrap_content"
-			android:text="@string/add_fillup"
+			android:text="@string/save_changes"
 		/>
 	</LinearLayout>
 	<LinearLayout
@@ -64,13 +74,15 @@
 	>
 		<Button
 			android:id="@+id/cancel_btn"
-			android:layout_width="200px"
+			android:layout_width="0dip"
+	   		android:layout_weight="1"
 			android:layout_height="wrap_content"
 			android:text="@string/cancel_changes"
 		/>
 		<Button
 			android:id="@+id/delete_btn"
-			android:layout_width="200px"
+			android:layout_width="0dip"
+	   		android:layout_weight="1"
 			android:layout_height="wrap_content"
 			android:text="@string/delete"
 		/>

@@ -1,6 +1,7 @@
 package com.evancharlton.mileage;
 
 import java.util.HashMap;
+import java.util.Random;
 
 import android.content.ContentProvider;
 import android.content.ContentUris;
@@ -20,7 +21,7 @@ public class FillUpsProvider extends ContentProvider {
 
 	private static final String TAG = "FillUpsProvider";
 	private static final String DATABASE_NAME = "fillups.db";
-	private static final int DATABASE_VERSION = 2;
+	private static final int DATABASE_VERSION = 1;
 	private static final String FILLUPS_TABLE_NAME = "fillups";
 	private static final String VEHICLES_TABLE_NAME = "vehicles";
 
@@ -75,8 +76,8 @@ public class FillUpsProvider extends ContentProvider {
 			sql.append(FillUps.MILEAGE).append(" DOUBLE,");
 			sql.append(FillUps.VEHICLE_ID).append(" INTEGER,");
 			sql.append(FillUps.DATE).append(" INTEGER,");
-			sql.append(FillUps.LATITUDE).append(" TEXT,");
-			sql.append(FillUps.LONGITUDE).append(" TEXT");
+			sql.append(FillUps.LATITUDE).append(" DOUBLE,");
+			sql.append(FillUps.LONGITUDE).append(" DOUBLE");
 			sql.append(");");
 			db.execSQL(sql.toString());
 
@@ -96,6 +97,19 @@ public class FillUpsProvider extends ContentProvider {
 			sql.append(Vehicles.YEAR).append(", ").append(Vehicles.TITLE);
 			sql.append(") VALUES ('Default', 'Default', '2008', 'Default Vehicle');");
 			db.execSQL(sql.toString());
+
+			// insert random data
+			double prevMileage = 100D;
+			Random r = new Random(System.currentTimeMillis());
+			for (int i = 0; i < 10; i++) {
+				prevMileage += (r.nextInt(1000) + 1);
+				sql = new StringBuilder();
+				sql.append("INSERT INTO ").append(FILLUPS_TABLE_NAME).append(" (");
+				sql.append(FillUps.COST).append(", ").append(FillUps.AMOUNT).append(", ").append(FillUps.MILEAGE).append(", ").append(FillUps.DATE);
+				sql.append(") VALUES ('").append(3 + r.nextDouble()).append("', '").append(r.nextDouble() * 10).append("', '").append(prevMileage);
+				sql.append("', '").append(System.currentTimeMillis() / 1000).append("');");
+				db.execSQL(sql.toString());
+			}
 		}
 
 		@Override

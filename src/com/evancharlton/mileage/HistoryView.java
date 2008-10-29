@@ -48,6 +48,5 @@ public class HistoryView extends ListActivity {
 		intent.setData(uri);
 		intent.setClass(HistoryView.this, FillUpView.class);
 		startActivity(intent);
-		finish();
 	}
 }

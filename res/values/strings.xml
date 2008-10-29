@@ -16,6 +16,7 @@
     <string name="confirm_delete">Are you sure you want to delete this?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="statistics">Statistics</string>
     
     <string name="vehicles">Vehicles</string>
     <string name="vehicle_make">Make</string>
@@ -24,4 +25,13 @@
     <string name="vehicle_title">Title (e.g. Mom's car)</string>
     <string name="vehicle_add">Add Vehicle</string>
     <string name="vehicle_save">Save Vehicle</string>
+    
+    <string name="stats_default">--</string>
+    <string name="stats_distance_running">Distance between last fill-ups:</string>
+    <string name="stats_distance_average">Average distance between fill-ups:</string>
+    <string name="stats_distance_maximum">Maximum distance between fill-ups:</string>
+    <string name="stats_economy_running">Fuel economy for last fill-up:</string>
+    <string name="stats_economy_average">Cumulative fuel economy:</string>
+    <string name="stats_economy_minimum">Minimum fuel economy:</string>
+    <string name="stats_economy_maximum">Maximum fuel economy:</string>
 </resources>
