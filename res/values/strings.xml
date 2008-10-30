@@ -16,6 +16,7 @@
     <string name="confirm_delete">Are you sure you want to delete this?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="ok">OK</string>
     <string name="statistics">Statistics</string>
     <string name="history_description">gal @ $</string>
     
@@ -46,4 +47,11 @@
     <string name="stats_amount_minimum">Minimum gallons of fuel per fill-up:</string>
     <string name="stats_amount_maximum">Maximum gallons of fuel per fill-up:</string>
     <string name="stats_amount_average_cost">Average cost per fill-up:</string>
+    
+    <string name="export_history">Export data</string>
+    <string name="error_exporting_data">Error while exporting</string>
+    <string name="export_finished">Export completed successfully!</string>
+    <string name="export_finished_msg">The copy of the database is now on your SD card in the following file:</string>
+    <string name="exporting">Exporting database</string>
+    <string name="exporting_title">Exporting</string>
 </resources>

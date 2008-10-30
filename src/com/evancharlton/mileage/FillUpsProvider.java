@@ -20,7 +20,7 @@ import android.util.Log;
 public class FillUpsProvider extends ContentProvider {
 
 	private static final String TAG = "FillUpsProvider";
-	private static final String DATABASE_NAME = "fillups.db";
+	public static final String DATABASE_NAME = "fillups.db";
 	private static final int DATABASE_VERSION = 1;
 	private static final String FILLUPS_TABLE_NAME = "fillups";
 	private static final String VEHICLES_TABLE_NAME = "vehicles";

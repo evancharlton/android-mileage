@@ -25,9 +25,8 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 
 public class Mileage extends Activity {
-
+	public static final String PACKAGE = "com.evancharlton.mileage";
 	public static final int DATE_DIALOG_ID = 0;
-
 	public static final int MENU_HISTORY = Menu.FIRST;
 	public static final int MENU_VEHICLES = Menu.FIRST + 1;
 	public static final int MENU_STATISTICS = Menu.FIRST + 2;
