@@ -98,6 +98,13 @@ public class FillUpsProvider extends ContentProvider {
 			sql.append(") VALUES ('Default', 'Default', '2008', 'Default Vehicle');");
 			db.execSQL(sql.toString());
 
+			sql = new StringBuilder();
+			sql.append("INSERT INTO ").append(VEHICLES_TABLE_NAME).append(" (");
+			sql.append(Vehicles.MAKE).append(", ").append(Vehicles.MODEL).append(", ");
+			sql.append(Vehicles.YEAR).append(", ").append(Vehicles.TITLE);
+			sql.append(") VALUES ('Default 2', 'Default 2', '2008', 'Second Vehicle');");
+			db.execSQL(sql.toString());
+
 			// insert random data
 			double prevMileage = 100D;
 			Random r = new Random(System.currentTimeMillis());
@@ -105,9 +112,20 @@ public class FillUpsProvider extends ContentProvider {
 				prevMileage += (r.nextInt(1000) + 1);
 				sql = new StringBuilder();
 				sql.append("INSERT INTO ").append(FILLUPS_TABLE_NAME).append(" (");
-				sql.append(FillUps.COST).append(", ").append(FillUps.AMOUNT).append(", ").append(FillUps.MILEAGE).append(", ").append(FillUps.DATE);
+				sql.append(FillUps.COST).append(", ").append(FillUps.AMOUNT).append(", ").append(FillUps.MILEAGE).append(", ").append(FillUps.DATE).append(", ").append(FillUps.VEHICLE_ID);
 				sql.append(") VALUES ('").append(3 + r.nextDouble()).append("', '").append(r.nextDouble() * 10).append("', '").append(prevMileage);
-				sql.append("', '").append(System.currentTimeMillis() / 1000).append("');");
+				sql.append("', '").append(System.currentTimeMillis() / 1000).append("', '1');");
+				db.execSQL(sql.toString());
+			}
+
+			prevMileage = 100D;
+			for (int i = 0; i < 10; i++) {
+				prevMileage += (r.nextInt(1000) + 1);
+				sql = new StringBuilder();
+				sql.append("INSERT INTO ").append(FILLUPS_TABLE_NAME).append(" (");
+				sql.append(FillUps.COST).append(", ").append(FillUps.AMOUNT).append(", ").append(FillUps.MILEAGE).append(", ").append(FillUps.DATE).append(", ").append(FillUps.VEHICLE_ID);
+				sql.append(") VALUES ('").append(3 + r.nextDouble()).append("', '").append(r.nextDouble() * 10).append("', '").append(prevMileage);
+				sql.append("', '").append(System.currentTimeMillis() / 1000).append("', '2');");
 				db.execSQL(sql.toString());
 			}
 		}
@@ -221,7 +239,7 @@ public class FillUpsProvider extends ContentProvider {
 		}
 
 		if (values.containsKey(FillUps.VEHICLE_ID) == false) {
-			values.put(FillUps.VEHICLE_ID, 0);
+			values.put(FillUps.VEHICLE_ID, 1);
 		}
 
 		if (values.containsKey(FillUps.LATITUDE) == false) {

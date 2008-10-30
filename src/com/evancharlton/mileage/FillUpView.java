@@ -104,6 +104,8 @@ public class FillUpView extends Activity {
 					values.put(FillUps.MILEAGE, 0);
 				}
 
+				values.put(FillUps.VEHICLE_ID, m_vehicleSpinner.getSelectedItemId());
+
 				Calendar c = new GregorianCalendar(m_year, m_month, m_day);
 				values.put(FillUps.DATE, c.getTimeInMillis());
 

@@ -17,6 +17,7 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="statistics">Statistics</string>
+    <string name="history_description">gal @ $</string>
     
     <string name="vehicles">Vehicles</string>
     <string name="vehicle_make">Make</string>
@@ -30,8 +31,19 @@
     <string name="stats_distance_running">Distance between last fill-ups:</string>
     <string name="stats_distance_average">Average distance between fill-ups:</string>
     <string name="stats_distance_maximum">Maximum distance between fill-ups:</string>
+    <string name="stats_distance_minimum">Minimum distance between fill-ups:</string>
     <string name="stats_economy_running">Fuel economy for last fill-up:</string>
-    <string name="stats_economy_average">Cumulative fuel economy:</string>
+    <string name="stats_economy_average">Average fuel economy:</string>
     <string name="stats_economy_minimum">Minimum fuel economy:</string>
     <string name="stats_economy_maximum">Maximum fuel economy:</string>
+    <string name="stats_price_running">Total cost of fuel:</string>
+    <string name="stats_price_latest">Last price per gallon:</string>
+    <string name="stats_price_average">Average price per gallon:</string>
+    <string name="stats_price_minimum">Lowest price per gallon:</string>
+    <string name="stats_price_maximum">Highest price per gallon:</string>
+    <string name="stats_amount_running">Total gallons of fuel:</string>
+    <string name="stats_amount_average">Average gallons of fuel per fill-up:</string>
+    <string name="stats_amount_minimum">Minimum gallons of fuel per fill-up:</string>
+    <string name="stats_amount_maximum">Maximum gallons of fuel per fill-up:</string>
+    <string name="stats_amount_average_cost">Average cost per fill-up:</string>
 </resources>

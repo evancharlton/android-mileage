@@ -1,5 +1,9 @@
 package com.evancharlton.mileage;
 
+import java.text.DateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+
 import android.app.ListActivity;
 import android.content.ContentUris;
 import android.content.Intent;
@@ -7,8 +11,8 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 
 public class HistoryView extends ListActivity {
 
@@ -32,13 +36,29 @@ public class HistoryView extends ListActivity {
 		getListView().setOnCreateContextMenuListener(this);
 
 		Cursor c = managedQuery(intent.getData(), PROJECTIONS, null, null, FillUps.DEFAULT_SORT_ORDER);
+		ArrayList<String> history = new ArrayList<String>();
 
-		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.history, c, new String[] {
-			FillUps.AMOUNT
-		}, new int[] {
-			android.R.id.text1
-		});
+		c.moveToFirst();
+		while (c.isAfterLast() == false) {
+			String amt = round(c.getDouble(1), 2);
+			String cost = round(c.getDouble(2), 2);
+			Date d = new Date(c.getLong(3) * 1000);
+			DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT);
+			String date = df.format(d);
+			String filler = " " + getString(R.string.history_description);
+			history.add(date + ": " + amt + filler + cost);
+			c.moveToNext();
+		}
+
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.history, history.toArray(new String[history.size()]));
 		setListAdapter(adapter);
+	}
+
+	private String round(double d, int precision) {
+		d *= Math.pow(10, precision);
+		d = Math.round(d);
+		d /= Math.pow(10, precision);
+		return String.valueOf(d);
 	}
 
 	@Override
