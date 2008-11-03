@@ -22,11 +22,12 @@
 			<!-- distance between refills -->
 			<LinearLayout
 				android:orientation="horizontal"
-				android:layout_width="wrap_content"
+				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
 			>
 				<TextView
 					style="@style/LabelText"
+					android:layout_weight="1"
 					android:layout_width="wrap_content"
 				    android:layout_height="wrap_content"
 					android:text="@string/stats_distance_running"
@@ -41,11 +42,12 @@
 			</LinearLayout>
 			<LinearLayout
 				android:orientation="horizontal"
-				android:layout_width="wrap_content"
+				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
 			>
 				<TextView
 					style="@style/LabelText"
+					android:layout_weight="1"
 					android:layout_width="wrap_content"
 				    android:layout_height="wrap_content"
 					android:text="@string/stats_distance_average"
@@ -60,11 +62,12 @@
 			</LinearLayout>
 			<LinearLayout
 				android:orientation="horizontal"
-				android:layout_width="wrap_content"
+				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
 			>
 				<TextView
 					style="@style/LabelText"
+					android:layout_weight="1"
 					android:layout_width="wrap_content"
 				    android:layout_height="wrap_content"
 					android:text="@string/stats_distance_maximum"
@@ -79,11 +82,12 @@
 			</LinearLayout>
 			<LinearLayout
 				android:orientation="horizontal"
-				android:layout_width="wrap_content"
+				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
 			>
 				<TextView
 					style="@style/LabelText"
+					android:layout_weight="1"
 					android:layout_width="wrap_content"
 				    android:layout_height="wrap_content"
 					android:text="@string/stats_distance_minimum"
@@ -99,11 +103,12 @@
 			<!-- fuel economy -->
 			<LinearLayout
 				android:orientation="horizontal"
-				android:layout_width="wrap_content"
+				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
 			>
 				<TextView
 					style="@style/LabelText"
+					android:layout_weight="1"
 					android:layout_width="wrap_content"
 				    android:layout_height="wrap_content"
 					android:text="@string/stats_economy_running"
@@ -118,11 +123,12 @@
 			</LinearLayout>
 			<LinearLayout
 				android:orientation="horizontal"
-				android:layout_width="wrap_content"
+				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
 			>
 				<TextView
 					style="@style/LabelText"
+					android:layout_weight="1"
 					android:layout_width="wrap_content"
 				    android:layout_height="wrap_content"
 					android:text="@string/stats_economy_average"
@@ -137,11 +143,12 @@
 			</LinearLayout>
 			<LinearLayout
 				android:orientation="horizontal"
-				android:layout_width="wrap_content"
+				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
 			>
 				<TextView
 					style="@style/LabelText"
+					android:layout_weight="1"
 					android:layout_width="wrap_content"
 				    android:layout_height="wrap_content"
 					android:text="@string/stats_economy_maximum"
@@ -156,11 +163,12 @@
 			</LinearLayout>
 			<LinearLayout
 				android:orientation="horizontal"
-				android:layout_width="wrap_content"
+				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
 			>
 				<TextView
 					style="@style/LabelText"
+					android:layout_weight="1"
 					android:layout_width="wrap_content"
 				    android:layout_height="wrap_content"
 					android:text="@string/stats_economy_minimum"
@@ -176,11 +184,12 @@
 			<!-- gas price stats -->
 			<LinearLayout
 				android:orientation="horizontal"
-				android:layout_width="wrap_content"
+				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
 			>
 				<TextView
 					style="@style/LabelText"
+					android:layout_weight="1"
 					android:layout_width="wrap_content"
 				    android:layout_height="wrap_content"
 					android:text="@string/stats_price_latest"
@@ -195,11 +204,12 @@
 			</LinearLayout>
 			<LinearLayout
 				android:orientation="horizontal"
-				android:layout_width="wrap_content"
+				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
 			>
 				<TextView
 					style="@style/LabelText"
+					android:layout_weight="1"
 					android:layout_width="wrap_content"
 				    android:layout_height="wrap_content"
 					android:text="@string/stats_price_running"
@@ -214,11 +224,12 @@
 			</LinearLayout>
 			<LinearLayout
 				android:orientation="horizontal"
-				android:layout_width="wrap_content"
+				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
 			>
 				<TextView
 					style="@style/LabelText"
+					android:layout_weight="1"
 					android:layout_width="wrap_content"
 				    android:layout_height="wrap_content"
 					android:text="@string/stats_price_average"
@@ -233,11 +244,12 @@
 			</LinearLayout>
 			<LinearLayout
 				android:orientation="horizontal"
-				android:layout_width="wrap_content"
+				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
 			>
 				<TextView
 					style="@style/LabelText"
+					android:layout_weight="1"
 					android:layout_width="wrap_content"
 				    android:layout_height="wrap_content"
 					android:text="@string/stats_price_maximum"
@@ -252,11 +264,12 @@
 			</LinearLayout>
 			<LinearLayout
 				android:orientation="horizontal"
-				android:layout_width="wrap_content"
+				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
 			>
 				<TextView
 					style="@style/LabelText"
+					android:layout_weight="1"
 					android:layout_width="wrap_content"
 				    android:layout_height="wrap_content"
 					android:text="@string/stats_price_minimum"
@@ -271,11 +284,12 @@
 			</LinearLayout>
 			<LinearLayout
 				android:orientation="horizontal"
-				android:layout_width="wrap_content"
+				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
 			>
 				<TextView
 					style="@style/LabelText"
+					android:layout_weight="1"
 					android:layout_width="wrap_content"
 				    android:layout_height="wrap_content"
 					android:text="@string/stats_amount_running"
@@ -290,11 +304,12 @@
 			</LinearLayout>
 			<LinearLayout
 				android:orientation="horizontal"
-				android:layout_width="wrap_content"
+				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
 			>
 				<TextView
 					style="@style/LabelText"
+					android:layout_weight="1"
 					android:layout_width="wrap_content"
 				    android:layout_height="wrap_content"
 					android:text="@string/stats_amount_average"
@@ -309,11 +324,12 @@
 			</LinearLayout>
 			<LinearLayout
 				android:orientation="horizontal"
-				android:layout_width="wrap_content"
+				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
 			>
 				<TextView
 					style="@style/LabelText"
+					android:layout_weight="1"
 					android:layout_width="wrap_content"
 				    android:layout_height="wrap_content"
 					android:text="@string/stats_amount_average_cost"
@@ -328,11 +344,12 @@
 			</LinearLayout>
 			<LinearLayout
 				android:orientation="horizontal"
-				android:layout_width="wrap_content"
+				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
 			>
 				<TextView
 					style="@style/LabelText"
+					android:layout_weight="1"
 					android:layout_width="wrap_content"
 				    android:layout_height="wrap_content"
 					android:text="@string/stats_amount_minimum"
@@ -347,11 +364,12 @@
 			</LinearLayout>
 			<LinearLayout
 				android:orientation="horizontal"
-				android:layout_width="wrap_content"
+				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
 			>
 				<TextView
 					style="@style/LabelText"
+					android:layout_weight="1"
 					android:layout_width="wrap_content"
 				    android:layout_height="wrap_content"
 					android:text="@string/stats_amount_maximum"

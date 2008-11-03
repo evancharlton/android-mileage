@@ -3,6 +3,8 @@ package com.evancharlton.mileage;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -67,6 +69,20 @@ public class AddVehicleView extends Activity {
 				setTextOnFocus(m_title, R.string.vehicle_title, hasFocus);
 			}
 		});
+	}
+
+	public boolean onCreateOptionsMenu(Menu menu) {
+		HelpDialog.injectHelp(menu, 'h');
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case HelpDialog.MENU_HELP:
+				HelpDialog.create(this, R.string.help_title_vehicle_add, R.string.help_vehicle_add);
+				break;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	private void setTextOnFocus(EditText editor, int defaultString, boolean hasFocus) {

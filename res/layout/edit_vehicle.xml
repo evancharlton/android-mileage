@@ -44,25 +44,4 @@
 		android:layout_height="wrap_content"
 		android:text="@string/vehicle_save"
 	/>
-	<LinearLayout
-		android:orientation="horizontal"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:gravity="center"
-	>
-		<Button
-			android:id="@+id/vehicle_edit_cancel_btn"
-			android:layout_width="0dip"
-	   		android:layout_weight="1"
-			android:layout_height="wrap_content"
-			android:text="@string/cancel_changes"
-		/>
-		<Button
-			android:id="@+id/vehicle_edit_delete_btn"
-			android:layout_width="0dip"
-	   		android:layout_weight="1"
-			android:layout_height="wrap_content"
-			android:text="@string/delete"
-		/>
-	</LinearLayout>
 </LinearLayout>

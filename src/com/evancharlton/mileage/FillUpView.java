@@ -14,6 +14,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -26,13 +28,14 @@ public class FillUpView extends Activity {
 	private static final int DATE_DIALOG_ID = 0;
 	private static final int DELETE_DIALOG_ID = 1;
 
+	public static final int MENU_CANCEL = Menu.FIRST;
+	public static final int MENU_DELETE = Menu.FIRST + 1;
+
 	private EditText m_priceEdit;
 	private EditText m_amountEdit;
 	private EditText m_mileageEdit;
 	private Button m_dateButton;
 	private Button m_saveButton;
-	private Button m_cancelButton;
-	private Button m_deleteButton;
 	private AlertDialog m_deleteDialog;
 	private Spinner m_vehicleSpinner;
 
@@ -56,8 +59,6 @@ public class FillUpView extends Activity {
 		m_mileageEdit = (EditText) findViewById(R.id.odometer_edit);
 		m_dateButton = (Button) findViewById(R.id.change_date_btn);
 		m_saveButton = (Button) findViewById(R.id.save_btn);
-		m_cancelButton = (Button) findViewById(R.id.cancel_btn);
-		m_deleteButton = (Button) findViewById(R.id.delete_btn);
 		m_vehicleSpinner = (Spinner) findViewById(R.id.vehicle_spinner);
 
 		m_deleteDialog = new AlertDialog.Builder(this).create();
@@ -113,19 +114,6 @@ public class FillUpView extends Activity {
 				finish();
 			}
 		});
-
-		m_cancelButton.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				finish();
-			}
-		});
-
-		m_deleteButton.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				// delete
-				showDialog(DELETE_DIALOG_ID);
-			}
-		});
 	}
 
 	private void delete() {
@@ -148,7 +136,12 @@ public class FillUpView extends Activity {
 
 		// load the data
 		String[] projections = new String[] {
-				FillUps._ID, FillUps.COST, FillUps.AMOUNT, FillUps.MILEAGE, FillUps.DATE, FillUps.VEHICLE_ID
+				FillUps._ID,
+				FillUps.COST,
+				FillUps.AMOUNT,
+				FillUps.MILEAGE,
+				FillUps.DATE,
+				FillUps.VEHICLE_ID
 		};
 
 		Cursor c = managedQuery(data.getData(), projections, null, null, null);
@@ -167,7 +160,8 @@ public class FillUpView extends Activity {
 		updateDate();
 
 		c = managedQuery(Vehicles.CONTENT_URI, new String[] {
-				Vehicles._ID, Vehicles.TITLE
+				Vehicles._ID,
+				Vehicles.TITLE
 		}, null, null, Vehicles.DEFAULT_SORT_ORDER);
 
 		SimpleCursorAdapter vehicleAdapter = new SimpleCursorAdapter(this, android.R.layout.simple_spinner_item, c, new String[] {
@@ -186,6 +180,31 @@ public class FillUpView extends Activity {
 			}
 		}
 		m_vehicleSpinner.setSelection(position);
+	}
+
+	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
+
+		menu.add(Menu.NONE, MENU_CANCEL, Menu.NONE, R.string.cancel_changes).setShortcut('1', 'c');
+		menu.add(Menu.NONE, MENU_DELETE, Menu.NONE, R.string.delete).setShortcut('2', 'd');
+		HelpDialog.injectHelp(menu, 'h');
+
+		return true;
+	}
+
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case MENU_CANCEL:
+				finish();
+				break;
+			case MENU_DELETE:
+				showDialog(DELETE_DIALOG_ID);
+				break;
+			case HelpDialog.MENU_HELP:
+				HelpDialog.create(this, R.string.help_title_fillup_edit, R.string.help_fillup_edit);
+				break;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	@Override

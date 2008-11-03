@@ -20,10 +20,10 @@ import android.util.Log;
 public class FillUpsProvider extends ContentProvider {
 
 	private static final String TAG = "FillUpsProvider";
-	public static final String DATABASE_NAME = "fillups.db";
-	private static final int DATABASE_VERSION = 1;
-	private static final String FILLUPS_TABLE_NAME = "fillups";
-	private static final String VEHICLES_TABLE_NAME = "vehicles";
+	public static final String DATABASE_NAME = "mileage.db";
+	public static final int DATABASE_VERSION = 1;
+	public static final String FILLUPS_TABLE_NAME = "fillups";
+	public static final String VEHICLES_TABLE_NAME = "vehicles";
 
 	private static HashMap<String, String> s_fillUpsProjectionMap;
 	private static HashMap<String, String> s_vehiclesProjectionMap;
@@ -354,4 +354,11 @@ public class FillUpsProvider extends ContentProvider {
 		return count;
 	}
 
+	public static HashMap<String, String> getFillUpsProjection() {
+		return s_fillUpsProjectionMap;
+	}
+
+	public static HashMap<String, String> getVehiclesProjection() {
+		return s_vehiclesProjectionMap;
+	}
 }

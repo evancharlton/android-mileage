@@ -68,7 +68,8 @@ public class Mileage extends Activity {
 		m_vehicleSpinner = (Spinner) findViewById(R.id.vehicle_spinner);
 
 		Cursor c = managedQuery(Vehicles.CONTENT_URI, new String[] {
-				Vehicles._ID, Vehicles.TITLE
+				Vehicles._ID,
+				Vehicles.TITLE
 		}, null, null, Vehicles.DEFAULT_SORT_ORDER);
 
 		SimpleCursorAdapter vehicleAdapter = new SimpleCursorAdapter(this, android.R.layout.simple_spinner_item, c, new String[] {
@@ -85,26 +86,27 @@ public class Mileage extends Activity {
 			public void onClick(View v) {
 				// save the new fill-up
 				ContentValues values = new ContentValues();
+				boolean error = false;
 
 				try {
 					double cost = Double.parseDouble(m_priceEdit.getText().toString());
 					values.put(FillUps.COST, cost);
 				} catch (NumberFormatException nfe) {
-					values.put(FillUps.COST, 0.00);
+					error = true;
 				}
 
 				try {
 					double amount = Double.parseDouble(m_amountEdit.getText().toString());
 					values.put(FillUps.AMOUNT, amount);
 				} catch (NumberFormatException nfe) {
-					values.put(FillUps.AMOUNT, 0.00);
+					error = true;
 				}
 
 				try {
 					double mileage = Double.parseDouble(m_mileageEdit.getText().toString());
 					values.put(FillUps.MILEAGE, mileage);
 				} catch (NumberFormatException nfe) {
-					values.put(FillUps.MILEAGE, 0);
+					error = true;
 				}
 
 				LocationManager location = (LocationManager) getSystemService(LOCATION_SERVICE);
@@ -118,8 +120,14 @@ public class Mileage extends Activity {
 						values.put(FillUps.LATITUDE, loc.getLatitude());
 						values.put(FillUps.LONGITUDE, loc.getLongitude());
 					} else {
-
+						values.put(FillUps.LATITUDE, 0D);
+						values.put(FillUps.LONGITUDE, 0D);
 					}
+				}
+
+				if (error) {
+					// TODO: show a dialog detailing the error?
+					return;
 				}
 
 				values.put(FillUps.VEHICLE_ID, m_vehicleSpinner.getSelectedItemId());
@@ -229,9 +237,10 @@ public class Mileage extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
 
-		menu.add(Menu.NONE, MENU_HISTORY, 0, R.string.fillup_history).setShortcut('1', 'h');
+		menu.add(Menu.NONE, MENU_HISTORY, 0, R.string.fillup_history).setShortcut('1', 'i');
 		menu.add(Menu.NONE, MENU_VEHICLES, 0, R.string.vehicles).setShortcut('2', 'v');
 		menu.add(Menu.NONE, MENU_STATISTICS, 0, R.string.statistics).setShortcut('3', 's');
+		HelpDialog.injectHelp(menu, 'h');
 
 		return true;
 	}
@@ -247,6 +256,9 @@ public class Mileage extends Activity {
 				break;
 			case MENU_STATISTICS:
 				showStatistics();
+				break;
+			case HelpDialog.MENU_HELP:
+				HelpDialog.create(this, R.string.help_title_fillup_new, R.string.help_fillup_new);
 				break;
 		}
 		return super.onOptionsItemSelected(item);

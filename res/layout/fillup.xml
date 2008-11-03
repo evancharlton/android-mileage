@@ -67,24 +67,4 @@
 			android:text="@string/save_changes"
 		/>
 	</LinearLayout>
-	<LinearLayout
-		android:gravity="center"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-	>
-		<Button
-			android:id="@+id/cancel_btn"
-			android:layout_width="0dip"
-	   		android:layout_weight="1"
-			android:layout_height="wrap_content"
-			android:text="@string/cancel_changes"
-		/>
-		<Button
-			android:id="@+id/delete_btn"
-			android:layout_width="0dip"
-	   		android:layout_weight="1"
-			android:layout_height="wrap_content"
-			android:text="@string/delete"
-		/>
-	</LinearLayout>
 </LinearLayout>

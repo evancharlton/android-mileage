@@ -18,7 +18,8 @@ public class VehiclesView extends ListActivity {
 	public static final int MENU_ADD = Menu.FIRST;
 
 	private static final String[] PROJECTIONS = new String[] {
-			Vehicles._ID, Vehicles.TITLE
+			Vehicles._ID,
+			Vehicles.TITLE
 	};
 
 	@Override
@@ -48,7 +49,8 @@ public class VehiclesView extends ListActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
 
-		menu.add(Menu.NONE, MENU_ADD, 0, R.string.vehicle_add).setShortcut('3', 'v');
+		menu.add(Menu.NONE, MENU_ADD, 0, R.string.vehicle_add).setShortcut('1', 'v');
+		HelpDialog.injectHelp(menu, 'h');
 
 		return true;
 	}
@@ -60,6 +62,9 @@ public class VehiclesView extends ListActivity {
 				Intent i = new Intent();
 				i.setClass(VehiclesView.this, AddVehicleView.class);
 				startActivity(i);
+				break;
+			case HelpDialog.MENU_HELP:
+				HelpDialog.create(this, R.string.help_title_vehicles, R.string.help_vehicles);
 				break;
 		}
 		return super.onOptionsItemSelected(item);

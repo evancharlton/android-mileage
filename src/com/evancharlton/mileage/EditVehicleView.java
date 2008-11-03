@@ -8,6 +8,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,11 +21,12 @@ public class EditVehicleView extends Activity {
 	private EditText m_model;
 	private EditText m_title;
 	private Button m_save;
-	private Button m_cancel;
-	private Button m_delete;
 	private AlertDialog m_deleteDialog;
+	private SimpleCursorAdapter m_vehicleAdapter;
 
 	private static final int DELETE_DIALOG_ID = 1;
+	private static final int MENU_CANCEL = 2;
+	private static final int MENU_DELETE = 3;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -40,8 +43,6 @@ public class EditVehicleView extends Activity {
 		m_model = (EditText) findViewById(R.id.vehicle_edit_model);
 		m_title = (EditText) findViewById(R.id.vehicle_edit_title);
 		m_save = (Button) findViewById(R.id.vehicle_edit_save_btn);
-		m_cancel = (Button) findViewById(R.id.vehicle_edit_cancel_btn);
-		m_delete = (Button) findViewById(R.id.vehicle_edit_delete_btn);
 
 		m_deleteDialog = new AlertDialog.Builder(this).create();
 		m_deleteDialog.setMessage(getString(R.string.confirm_delete));
@@ -64,31 +65,16 @@ public class EditVehicleView extends Activity {
 			}
 		});
 
-		m_delete.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				showDialog(DELETE_DIALOG_ID);
-			}
-		});
-
-		m_cancel.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				finish();
-			}
-		});
-
 		Cursor c = managedQuery(Vehicles.CONTENT_URI, new String[] {
-				Vehicles._ID, Vehicles.TITLE
+				Vehicles._ID,
+				Vehicles.TITLE
 		}, null, null, Vehicles.DEFAULT_SORT_ORDER);
 
-		SimpleCursorAdapter vehicleAdapter = new SimpleCursorAdapter(this, android.R.layout.simple_spinner_item, c, new String[] {
+		m_vehicleAdapter = new SimpleCursorAdapter(this, android.R.layout.simple_spinner_item, c, new String[] {
 			Vehicles.TITLE
 		}, new int[] {
 			android.R.id.text1
 		});
-
-		if (vehicleAdapter.getCount() == 1) {
-			m_delete.setEnabled(false);
-		}
 	}
 
 	private void loadData() {
@@ -96,7 +82,11 @@ public class EditVehicleView extends Activity {
 
 		// load the data
 		String[] projections = new String[] {
-				Vehicles._ID, Vehicles.YEAR, Vehicles.MAKE, Vehicles.MODEL, Vehicles.TITLE
+				Vehicles._ID,
+				Vehicles.YEAR,
+				Vehicles.MAKE,
+				Vehicles.MODEL,
+				Vehicles.TITLE
 		};
 
 		Cursor c = managedQuery(data.getData(), projections, null, null, null);
@@ -110,6 +100,31 @@ public class EditVehicleView extends Activity {
 
 	private void delete() {
 		getContentResolver().delete(getIntent().getData(), null, null);
+	}
+
+	public boolean onCreateOptionsMenu(Menu menu) {
+		menu.add(Menu.NONE, MENU_CANCEL, Menu.NONE, R.string.cancel_changes).setShortcut('1', 'c');
+		if (m_vehicleAdapter.getCount() > 1) {
+			menu.add(Menu.NONE, MENU_DELETE, Menu.NONE, R.string.delete).setShortcut('2', 'd');
+		}
+		HelpDialog.injectHelp(menu, 'h');
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case MENU_DELETE:
+				showDialog(DELETE_DIALOG_ID);
+				break;
+			case MENU_CANCEL:
+				// TODO: add dirty check?
+				finish();
+				break;
+			case HelpDialog.MENU_HELP:
+				HelpDialog.create(this, R.string.help_title_vehicle_edit, R.string.help_vehicle_edit);
+				break;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	protected Dialog onCreateDialog(int id) {

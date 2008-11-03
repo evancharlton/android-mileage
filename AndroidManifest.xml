@@ -16,5 +16,6 @@
 		<activity android:name="AddVehicleView"/>
 		<activity android:name="EditVehicleView"/>
 		<activity android:name="StatisticsView"/>
-	</application>
+	<activity android:name="ImportExportView"></activity>
+</application>
 </manifest> 
