@@ -10,6 +10,7 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.location.Criteria;
@@ -42,6 +43,7 @@ public class Mileage extends Activity {
 	private EditText m_amountEdit;
 	private EditText m_mileageEdit;
 	private Spinner m_vehicleSpinner;
+	private DatePickerDialog m_dateDlg = null;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -186,13 +188,6 @@ public class Mileage extends Activity {
 		m_amountEdit.setText(getString(R.string.gallons));
 		m_mileageEdit.setText(getString(R.string.odometer));
 
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(new Date());
-		m_month = cal.get(Calendar.MONTH);
-		m_year = cal.get(Calendar.YEAR);
-		m_day = cal.get(Calendar.DAY_OF_MONTH);
-		updateDate();
-
 		getIntent().setData(FillUps.CONTENT_URI);
 	}
 
@@ -226,6 +221,9 @@ public class Mileage extends Activity {
 		changedText.append(" (").append(getString(R.string.custom_date)).append(")");
 
 		m_customDateButton.setText(changedText.toString());
+		if (m_dateDlg != null) {
+			m_dateDlg.updateDate(m_year, m_month, m_day);
+		}
 	}
 
 	private void showHistory() {
@@ -281,10 +279,26 @@ public class Mileage extends Activity {
 	protected Dialog onCreateDialog(int id) {
 		switch (id) {
 			case DATE_DIALOG_ID:
-				return new DatePickerDialog(this, m_dateSetListener, m_year, m_month, m_day);
+				if (m_dateDlg == null) {
+					m_dateDlg = new DatePickerDialog(this, m_dateSetListener, m_year, m_month, m_day);
+					m_dateDlg.updateDate(m_year, m_month, m_day);
+					m_dateDlg.setButton3(getString(R.string.today), m_todayListener);
+				}
+				return m_dateDlg;
 		}
 		return null;
 	}
+
+	private DialogInterface.OnClickListener m_todayListener = new DialogInterface.OnClickListener() {
+		public void onClick(DialogInterface intf, int which) {
+			Calendar cal = Calendar.getInstance();
+			cal.setTimeInMillis(System.currentTimeMillis());
+			m_year = cal.get(Calendar.YEAR);
+			m_month = cal.get(Calendar.MONTH);
+			m_day = cal.get(Calendar.DAY_OF_MONTH);
+			updateDate();
+		}
+	};
 
 	private DatePickerDialog.OnDateSetListener m_dateSetListener = new DatePickerDialog.OnDateSetListener() {
 		public void onDateSet(DatePicker view, int year, int month, int day) {

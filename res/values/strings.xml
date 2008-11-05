@@ -25,6 +25,7 @@
 	<string name="author">Evan Charlton</string>
 	<string name="contact">mileage@evancharlton.com</string>
 	<string name="website">http://evancharlton.com/projects/mileage</string>
+	<string name="today">Today</string>
 	
 	<string name="history_text1">:</string>
 	<string name="history_text2">gallons @ $</string>
