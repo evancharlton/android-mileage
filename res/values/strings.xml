@@ -56,6 +56,8 @@
 	<string name="stats_amount_minimum">Minimum gallons of fuel per fill-up:</string>
 	<string name="stats_amount_maximum">Maximum gallons of fuel per fill-up:</string>
 	<string name="stats_amount_average_cost">Average cost per fill-up:</string>
+	<string name="stats_amount_minimum_cost">Minimum cost per fill-up:</string>
+	<string name="stats_amount_maximum_cost">Maximum cost per fill-up:</string>
 	
 	<string name="import_export">Import / Export</string>
 	<string name="export_header">Export</string>	

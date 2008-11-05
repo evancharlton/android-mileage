@@ -27,29 +27,10 @@ public class StatisticsView extends Activity {
 	}
 
 	private void initUI() {
-		getTextView(R.id.stats_distance_average);
-		getTextView(R.id.stats_distance_maximum);
-		getTextView(R.id.stats_distance_minimum);
-		getTextView(R.id.stats_distance_running);
-		getTextView(R.id.stats_economy_average);
-		getTextView(R.id.stats_economy_maximum);
-		getTextView(R.id.stats_economy_minimum);
-		getTextView(R.id.stats_economy_running);
-		getTextView(R.id.stats_price_average);
-		getTextView(R.id.stats_price_latest);
-		getTextView(R.id.stats_price_maximum);
-		getTextView(R.id.stats_price_minimum);
-		getTextView(R.id.stats_price_running);
-		getTextView(R.id.stats_amount_average);
-		getTextView(R.id.stats_amount_average_cost);
-		getTextView(R.id.stats_amount_maximum);
-		getTextView(R.id.stats_amount_minimum);
-		getTextView(R.id.stats_amount_running);
-
 		m_vehicles = (Spinner) findViewById(R.id.stats_vehicle_spinner);
 		m_vehicles.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-				calculateStatistics();
+				calculateStatistics(m_vehicles.getSelectedItemId());
 			}
 
 			public void onNothingSelected(AdapterView<?> arg0) {
@@ -64,7 +45,8 @@ public class StatisticsView extends Activity {
 
 	private void populateSpinner() {
 		Cursor c = managedQuery(Vehicles.CONTENT_URI, new String[] {
-				Vehicles._ID, Vehicles.TITLE
+				Vehicles._ID,
+				Vehicles.TITLE
 		}, null, null, Vehicles.DEFAULT_SORT_ORDER);
 
 		SimpleCursorAdapter vehicleAdapter = new SimpleCursorAdapter(this, android.R.layout.simple_spinner_item, c, new String[] {
@@ -74,12 +56,19 @@ public class StatisticsView extends Activity {
 		});
 		vehicleAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		m_vehicles.setAdapter(vehicleAdapter);
+
+		if (vehicleAdapter.getCount() == 1) {
+			m_vehicles.setVisibility(View.GONE);
+			calculateStatistics(vehicleAdapter.getItemId(0));
+		}
 	}
 
-	private void calculateStatistics() {
-		long id = m_vehicles.getSelectedItemId();
+	private void calculateStatistics(long id) {
 		String[] projection = new String[] {
-				FillUps.AMOUNT, FillUps.COST, FillUps.DATE, FillUps.MILEAGE
+				FillUps.AMOUNT,
+				FillUps.COST,
+				FillUps.DATE,
+				FillUps.MILEAGE
 		};
 		Cursor c = managedQuery(FillUps.CONTENT_URI, projection, FillUps.VEHICLE_ID + " = ?", new String[] {
 			String.valueOf(id)
@@ -144,32 +133,44 @@ public class StatisticsView extends Activity {
 		double largest_fillup = 0.0D;
 		double smallest_fillup = Double.MAX_VALUE;
 		double total_cost = 0.0D;
+		double min_cost = Double.MAX_VALUE;
+		double max_cost = 0.0D;
 		double min_price = Double.MAX_VALUE;
 		double max_price = 0.0D;
 		for (int i = 0; i < amounts.size() - 1; i++) {
-			Double a = amounts.get(i);
-			total_fuel += a;
+			Double amt = amounts.get(i);
+			total_fuel += amt;
 			double diff = miles.get(i) - miles.get(i + 1);
-			double mileage = diff / a;
+			double mileage = diff / amt;
 			if (mileage > maximum_mileage) {
 				maximum_mileage = mileage;
-			} else if (mileage < minimum_mileage) {
+			}
+			if (mileage < minimum_mileage) {
 				minimum_mileage = mileage;
 			}
 
 			// volumes
-			if (a > largest_fillup) {
-				largest_fillup = a;
-			} else if (a < smallest_fillup) {
-				smallest_fillup = a;
+			if (amt > largest_fillup) {
+				largest_fillup = amt;
+			}
+			if (amt < smallest_fillup) {
+				smallest_fillup = amt;
 			}
 
 			// costs
 			Double cost = costs.get(i);
-			total_cost += (cost * amounts.get(i));
+			double this_cost = (cost * amounts.get(i));
+			if (this_cost < min_cost) {
+				min_cost = this_cost;
+			}
+			if (this_cost > max_cost) {
+				max_cost = this_cost;
+			}
+			total_cost += this_cost;
 			if (cost < min_price) {
 				min_price = cost;
-			} else if (cost > max_price) {
+			}
+			if (cost > max_price) {
 				max_price = cost;
 			}
 		}
@@ -177,8 +178,8 @@ public class StatisticsView extends Activity {
 		largest_fillup = (amounts.get(sz - 1) > largest_fillup) ? amounts.get(sz - 1) : largest_fillup;
 		smallest_fillup = (amounts.get(sz - 1) < smallest_fillup) ? amounts.get(sz - 1) : smallest_fillup;
 		double last_cost = (costs.get(sz - 1) * amounts.get(sz - 1));
-		min_price = (last_cost < min_price) ? last_cost : min_price;
-		max_price = (last_cost > max_price) ? last_cost : max_price;
+		min_cost = (last_cost < min_cost) ? last_cost : min_cost;
+		max_cost = (last_cost > max_cost) ? last_cost : max_cost;
 		total_cost += last_cost;
 		total_fuel += amounts.get(sz - 1);
 		double economy_avg = total_distance / total_fuel;
@@ -202,6 +203,8 @@ public class StatisticsView extends Activity {
 		double avg_cost_per_fillup = total_cost / amounts.size();
 		setText(R.id.stats_amount_average, avg_amount);
 		setText(R.id.stats_amount_average_cost, avg_cost_per_fillup, "$");
+		setText(R.id.stats_amount_minimum_cost, min_cost, "$");
+		setText(R.id.stats_amount_maximum_cost, max_cost, "$");
 		setText(R.id.stats_amount_maximum, largest_fillup);
 		setText(R.id.stats_amount_minimum, smallest_fillup);
 		setText(R.id.stats_amount_running, total_fuel);
@@ -217,6 +220,14 @@ public class StatisticsView extends Activity {
 		val = Math.round(val);
 		val /= 100;
 		String str = prefix + String.valueOf(val);
-		m_stats.get(id).setText(str);
+		TextView tv = m_stats.get(id);
+		if (tv == null) {
+			getTextView(id);
+			tv = m_stats.get(id);
+			if (tv == null) {
+				throw new IllegalArgumentException("Invalid ID: " + String.valueOf(id));
+			}
+		}
+		tv.setText(str);
 	}
 }
