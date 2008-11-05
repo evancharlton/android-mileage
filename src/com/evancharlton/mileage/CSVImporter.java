@@ -85,6 +85,7 @@ public class CSVImporter implements Runnable {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private void insertRows(ArrayList<HashMap<String, String>> rows) {
 		HashMap<String, String> fillupsProjection = FillUpsProvider.getFillUpsProjection();
 		Set<String> keySet = fillupsProjection.keySet();
@@ -94,7 +95,7 @@ public class CSVImporter implements Runnable {
 		for (HashMap<String, String> row : rows) {
 			StringBuilder sb = new StringBuilder();
 			sb.append("INSERT INTO ").append(FillUpsProvider.FILLUPS_TABLE_NAME).append(" (");
-			HashMap<String, String> rowClone = row;
+			HashMap<String, String> rowClone = (HashMap<String, String>) row.clone();
 			for (String key : row.keySet()) {
 				if (keySet.contains(key)) {
 					sb.append("'").append(key).append("', ");
@@ -130,7 +131,7 @@ public class CSVImporter implements Runnable {
 		// remove the quotes
 		for (int i = 0; i < columns.length; i++) {
 			int len = columns[i].length();
-			columns[i] = columns[i].substring(1, len - 2);
+			columns[i] = columns[i].substring(1, len - 1);
 		}
 
 		return columns;

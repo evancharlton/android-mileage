@@ -1,10 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/history_text"
-    android:layout_width="fill_parent"
-    android:layout_height="?android:attr/listPreferredItemHeight"
-    android:textAppearance="?android:attr/textAppearanceLarge"
-    android:gravity="center"
-    android:paddingLeft="5dip"
-    android:singleLine="true"
-/>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:gravity="center"
+>
+	<TextView
+	    android:id="@+id/history_gallons"
+	    android:layout_width="wrap_content"
+	    android:layout_height="?android:attr/listPreferredItemHeight"
+	    android:textAppearance="?android:attr/textAppearanceLarge"
+	    android:singleLine="true"
+	/>
+	<TextView
+	    android:id="@+id/history_text2"
+	    android:layout_width="wrap_content"
+	    android:layout_height="?android:attr/listPreferredItemHeight"
+	    android:textAppearance="?android:attr/textAppearanceLarge"
+	    android:paddingLeft="5dip"
+	    android:singleLine="true"
+	    android:text="@string/history_text2"
+	/>
+	<TextView
+	    android:id="@+id/history_price"
+	    android:layout_width="wrap_content"
+	    android:layout_height="?android:attr/listPreferredItemHeight"
+	    android:textAppearance="?android:attr/textAppearanceLarge"
+	    android:singleLine="true"
+	/>
+</LinearLayout>

@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.ContentValues;
@@ -87,12 +88,14 @@ public class Mileage extends Activity {
 				// save the new fill-up
 				ContentValues values = new ContentValues();
 				boolean error = false;
+				int errorMsg = 0;
 
 				try {
 					double cost = Double.parseDouble(m_priceEdit.getText().toString());
 					values.put(FillUps.COST, cost);
 				} catch (NumberFormatException nfe) {
 					error = true;
+					errorMsg = R.string.error_cost;
 				}
 
 				try {
@@ -100,6 +103,7 @@ public class Mileage extends Activity {
 					values.put(FillUps.AMOUNT, amount);
 				} catch (NumberFormatException nfe) {
 					error = true;
+					errorMsg = R.string.error_amount;
 				}
 
 				try {
@@ -107,9 +111,11 @@ public class Mileage extends Activity {
 					values.put(FillUps.MILEAGE, mileage);
 				} catch (NumberFormatException nfe) {
 					error = true;
+					errorMsg = R.string.error_mileage;
 				}
 
 				LocationManager location = (LocationManager) getSystemService(LOCATION_SERVICE);
+				boolean locationStored = false;
 				if (location != null) {
 					Criteria criteria = new Criteria();
 					criteria.setSpeedRequired(true);
@@ -117,16 +123,23 @@ public class Mileage extends Activity {
 					String provider = location.getBestProvider(criteria, true);
 					if (provider != null) {
 						Location loc = location.getLastKnownLocation(provider);
-						values.put(FillUps.LATITUDE, loc.getLatitude());
-						values.put(FillUps.LONGITUDE, loc.getLongitude());
-					} else {
-						values.put(FillUps.LATITUDE, 0D);
-						values.put(FillUps.LONGITUDE, 0D);
+						if (loc != null) {
+							values.put(FillUps.LATITUDE, loc.getLatitude());
+							values.put(FillUps.LONGITUDE, loc.getLongitude());
+							locationStored = true;
+						}
 					}
+				}
+				if (locationStored) {
+					values.put(FillUps.LATITUDE, 0D);
+					values.put(FillUps.LONGITUDE, 0D);
 				}
 
 				if (error) {
-					// TODO: show a dialog detailing the error?
+					AlertDialog dlg = new AlertDialog.Builder(Mileage.this).create();
+					dlg.setTitle(R.string.error);
+					dlg.setMessage(getString(errorMsg));
+					dlg.show();
 					return;
 				}
 

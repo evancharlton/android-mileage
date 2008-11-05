@@ -83,26 +83,39 @@ public class FillUpView extends Activity {
 			public void onClick(View v) {
 				// save the changes
 				ContentValues values = new ContentValues();
+				boolean error = false;
+				int errorMsg = 0;
 
 				try {
 					double cost = Double.parseDouble(m_priceEdit.getText().toString());
 					values.put(FillUps.COST, cost);
 				} catch (NumberFormatException nfe) {
-					values.put(FillUps.COST, 0.00);
+					error = true;
+					errorMsg = R.string.error_cost;
 				}
 
 				try {
 					double amount = Double.parseDouble(m_amountEdit.getText().toString());
 					values.put(FillUps.AMOUNT, amount);
 				} catch (NumberFormatException nfe) {
-					values.put(FillUps.AMOUNT, 0.00);
+					error = true;
+					errorMsg = R.string.error_amount;
 				}
 
 				try {
 					int mileage = Integer.parseInt(m_mileageEdit.getText().toString());
 					values.put(FillUps.MILEAGE, mileage);
 				} catch (NumberFormatException nfe) {
-					values.put(FillUps.MILEAGE, 0);
+					error = true;
+					errorMsg = R.string.error_mileage;
+				}
+
+				if (error) {
+					AlertDialog dlg = new AlertDialog.Builder(FillUpView.this).create();
+					dlg.setTitle(R.string.error);
+					dlg.setMessage(getString(errorMsg));
+					dlg.show();
+					return;
 				}
 
 				values.put(FillUps.VEHICLE_ID, m_vehicleSpinner.getSelectedItemId());

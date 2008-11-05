@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="app_name">Mileage</string>
+	<string name="app_version">1.0</string>
 	<string name="price_per_gallon">Price per gallon</string>
 	<string name="gallons">Gallons of Fuel</string>
 	<string name="odometer">Current Mileage</string>
@@ -24,6 +25,9 @@
 	<string name="author">Evan Charlton</string>
 	<string name="contact">mileage@evancharlton.com</string>
 	<string name="website">http://evancharlton.com/projects/mileage</string>
+	
+	<string name="history_text1">:</string>
+	<string name="history_text2">gallons @ $</string>
 	
 	<string name="vehicles">Vehicles</string>
 	<string name="vehicle_make">Make</string>
@@ -71,6 +75,11 @@
 	<string name="sqlite">SQLite DB</string>
 	<string name="sql_file">SQL</string>
 	<string name="csv_file">CSV</string>
+	
+	<string name="error">Error!</string>
+	<string name="error_cost">Invalid number format for price of fuel.</string>
+	<string name="error_amount">Invalid number format for amount of fuel.</string>
+	<string name="error_mileage">Invalid number format for mileage reading.</string>
 	
 	<string name="help">Help</string>
 	<string name="help_title_import_export">Import/Export Help</string>

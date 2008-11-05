@@ -16,8 +16,8 @@ public class AboutDialog extends Dialog {
 				dismiss();
 			}
 		});
-
-		setTitle(R.string.app_name);
+		String title = getContext().getString(R.string.app_name) + " : " + getContext().getString(R.string.app_version);
+		setTitle(title);
 	}
 
 	public static AboutDialog create(Context context) {

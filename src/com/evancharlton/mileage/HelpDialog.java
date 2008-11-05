@@ -69,7 +69,7 @@ public class HelpDialog extends Dialog {
 	}
 
 	public static boolean injectHelp(Menu menu, char number, char letter) {
-		menu.add(Menu.NONE, MENU_HELP, MENU_GROUP, R.string.help).setShortcut(number, letter).setIcon(R.drawable.help);
+		menu.add(Menu.NONE, MENU_HELP, MENU_GROUP, R.string.help).setShortcut(number, letter);
 		return true;
 	}
 }

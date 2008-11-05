@@ -1,9 +1,9 @@
 package com.evancharlton.mileage;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.channels.FileChannel;
 
 import android.os.Handler;
 import android.os.Message;
@@ -16,19 +16,21 @@ public class DBImporter implements Runnable {
 	}
 
 	public void run() {
-		FileReader in = null;
-		FileWriter out = null;
+		FileInputStream in = null;
+		FileOutputStream out = null;
 		try {
-			File input = new File("/sdcard/" + FillUpsProvider.DATABASE_NAME);
-			File output = new File("/data/data/" + Mileage.PACKAGE + "/databases/" + FillUpsProvider.DATABASE_NAME);
+			in = new FileInputStream("/sdcard/" + FillUpsProvider.DATABASE_NAME);
+			out = new FileOutputStream("/data/data/" + Mileage.PACKAGE + "/databases/" + FillUpsProvider.DATABASE_NAME);
 
-			in = new FileReader(input);
-			out = new FileWriter(output);
+			FileChannel inChannel = in.getChannel();
+			FileChannel outChannel = out.getChannel();
 
-			int c;
-			while ((c = in.read()) != -1) {
-				out.write(c);
-			}
+			outChannel.transferFrom(inChannel, 0, inChannel.size());
+
+			inChannel.close();
+			outChannel.close();
+			in.close();
+			out.close();
 		} catch (final IOException ioe) {
 			m_handler.post(new Runnable() {
 				public void run() {
@@ -40,17 +42,6 @@ public class DBImporter implements Runnable {
 				}
 			});
 			return;
-		} finally {
-			try {
-				if (in != null) {
-					in.close();
-				}
-				if (out != null) {
-					out.close();
-				}
-			} catch (IOException e) {
-				// meh, nothing to do
-			}
 		}
 		m_handler.post(new Runnable() {
 			public void run() {

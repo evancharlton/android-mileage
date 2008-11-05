@@ -1,5 +1,6 @@
 package com.evancharlton.mileage;
 
+import java.util.Calendar;
 import java.util.HashMap;
 
 import android.content.ContentProvider;
@@ -13,12 +14,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
-import android.util.Log;
 
 public class FillUpsProvider extends ContentProvider {
 
-	private static final String TAG = "FillUpsProvider";
+	// private static final String TAG = "FillUpsProvider";
 	public static final String DATABASE_NAME = "mileage.db";
 	public static final int DATABASE_VERSION = 1;
 	public static final String FILLUPS_TABLE_NAME = "fillups";
@@ -94,19 +96,28 @@ public class FillUpsProvider extends ContentProvider {
 			sql.append("INSERT INTO ").append(VEHICLES_TABLE_NAME).append(" (");
 			sql.append(Vehicles.MAKE).append(", ").append(Vehicles.MODEL).append(", ");
 			sql.append(Vehicles.YEAR).append(", ").append(Vehicles.TITLE);
-			sql.append(") VALUES ('Default', 'Default', '2008', 'Default Vehicle');");
+			sql.append(") VALUES ('Default', 'Default', '");
+			sql.append(Calendar.getInstance().get(Calendar.YEAR));
+			sql.append("', 'Default Vehicle');");
 			db.execSQL(sql.toString());
 		}
 
 		@Override
-		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-			Log.w(TAG, "Upgrading database from " + oldVersion + " to " + newVersion + " will destroy all your data");
-			StringBuilder sb = new StringBuilder();
-			sb.append("DROP TABLE IF EXISTS ").append(FILLUPS_TABLE_NAME).append(";");
-			sb.append("DROP TABLE IF EXISTS ").append(VEHICLES_TABLE_NAME).append(";");
+		public void onUpgrade(final SQLiteDatabase db, int oldVersion, int newVersion) {
+			Handler handler = new Handler() {
+				public void handleMessage(Message msg) {
+					StringBuilder sb = new StringBuilder();
+					sb.append("DROP TABLE IF EXISTS ").append(FILLUPS_TABLE_NAME).append(";");
+					sb.append("DROP TABLE IF EXISTS ").append(VEHICLES_TABLE_NAME).append(";");
 
-			db.execSQL(sb.toString());
-			onCreate(db);
+					db.execSQL(sb.toString());
+					onCreate(db);
+				}
+			};
+			// create a backup of the existing database
+			DBExporter exporter = new DBExporter(handler);
+			Thread t = new Thread(exporter);
+			t.start();
 		}
 	}
 
