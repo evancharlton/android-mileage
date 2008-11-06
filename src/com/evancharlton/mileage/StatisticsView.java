@@ -20,7 +20,7 @@ public class StatisticsView extends Activity {
 	private Spinner m_vehicles;
 	private ArrayList<Double> m_amounts;
 	private ArrayList<Double> m_costs;
-	private ArrayList<String> m_dates;
+	private ArrayList<Long> m_dates;
 	private ArrayList<Double> m_miles;
 
 	public void onCreate(Bundle savedInstanceState) {
@@ -84,7 +84,7 @@ public class StatisticsView extends Activity {
 
 		m_amounts = new ArrayList<Double>();
 		m_costs = new ArrayList<Double>();
-		m_dates = new ArrayList<String>();
+		m_dates = new ArrayList<Long>();
 		m_miles = new ArrayList<Double>();
 
 		int count = 0;
@@ -94,7 +94,7 @@ public class StatisticsView extends Activity {
 			try {
 				m_amounts.add(c.getDouble(0));
 				m_costs.add(c.getDouble(1));
-				m_dates.add(c.getString(2));
+				m_dates.add(c.getLong(2));
 				m_miles.add(c.getDouble(3));
 				c.moveToNext();
 			} catch (CursorIndexOutOfBoundsException e) {
@@ -198,9 +198,10 @@ public class StatisticsView extends Activity {
 		double lowest_cost = Double.MAX_VALUE;
 		double highest_cost = 0.0D;
 		double total_expense = 0.0D;
+		double thirty_day_cost = 0.0D;
+		long then = System.currentTimeMillis() - (30 * 24 * 60 * 60 * 1000);
 
 		for (int i = 0; i < m_costs.size(); i++) {
-
 			double cost_ppg = m_costs.get(i);
 			if (cost_ppg > highest_ppg) {
 				highest_ppg = cost_ppg;
@@ -225,11 +226,17 @@ public class StatisticsView extends Activity {
 				lowest_cost = cost;
 			}
 
+			double date = m_dates.get(i);
+			if (date > then) {
+				thirty_day_cost += cost;
+			}
+
 			total_cost += cost_ppg;
 			total_fuel += amount;
 			total_expense += cost;
 		}
 
+		data.put(R.id.stats_price_thirty_days, string(thirty_day_cost, "$"));
 		data.put(R.id.stats_price_latest, string(m_costs.get(0), "$"));
 		data.put(R.id.stats_price_average, string(total_cost / m_costs.size(), "$"));
 		data.put(R.id.stats_price_running, string(total_expense, "$"));
@@ -263,7 +270,7 @@ public class StatisticsView extends Activity {
 	}
 
 	private String string(double val, String prefix) {
-		DecimalFormat format = new DecimalFormat("###.00");
+		DecimalFormat format = new DecimalFormat("##0.00");
 		String str = prefix + format.format(val);
 		return str;
 	}

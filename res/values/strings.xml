@@ -49,6 +49,7 @@
 	<string name="stats_economy_minimum">Minimum fuel economy:</string>
 	<string name="stats_economy_maximum">Maximum fuel economy:</string>
 	<string name="stats_price_running">Total cost of fuel:</string>
+	<string name="stats_price_thirty_days">Cost of fuel in the last 30 days:</string>
 	<string name="stats_price_latest">Last price per gallon:</string>
 	<string name="stats_price_average">Average price per gallon:</string>
 	<string name="stats_price_minimum">Lowest price per gallon:</string>
