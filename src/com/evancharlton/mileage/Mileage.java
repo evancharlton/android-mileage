@@ -210,8 +210,8 @@ public class Mileage extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
 
-		menu.add(Menu.NONE, MENU_HISTORY, 0, R.string.fillup_history).setShortcut('1', 'i').setIcon(R.drawable.history_i);
-		menu.add(Menu.NONE, MENU_VEHICLES, 0, R.string.vehicles).setShortcut('2', 'v').setIcon(R.drawable.vehicles_i);
+		menu.add(Menu.NONE, MENU_HISTORY, 0, R.string.fillup_history).setShortcut('1', 'i');
+		menu.add(Menu.NONE, MENU_VEHICLES, 0, R.string.vehicles).setShortcut('2', 'v');
 		menu.add(Menu.NONE, MENU_STATISTICS, 0, R.string.statistics).setShortcut('3', 's');
 		HelpDialog.injectHelp(menu, 'h');
 

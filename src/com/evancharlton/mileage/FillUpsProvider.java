@@ -14,8 +14,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
-import android.os.Handler;
-import android.os.Message;
 import android.text.TextUtils;
 
 public class FillUpsProvider extends ContentProvider {
@@ -79,7 +77,8 @@ public class FillUpsProvider extends ContentProvider {
 			sql.append(FillUps.VEHICLE_ID).append(" INTEGER,");
 			sql.append(FillUps.DATE).append(" INTEGER,");
 			sql.append(FillUps.LATITUDE).append(" DOUBLE,");
-			sql.append(FillUps.LONGITUDE).append(" DOUBLE");
+			sql.append(FillUps.LONGITUDE).append(" DOUBLE,");
+			sql.append(FillUps.COMMENT).append(" TEXT");
 			sql.append(");");
 			db.execSQL(sql.toString());
 
@@ -105,25 +104,18 @@ public class FillUpsProvider extends ContentProvider {
 
 		@Override
 		public void onUpgrade(final SQLiteDatabase db, final int oldVersion, final int newVersion) {
-			Handler handler = new Handler() {
-				public void handleMessage(Message msg) {
-					StringBuilder sb = new StringBuilder();
-					// TODO: Abstract this out once we get more DB versions
-					if (oldVersion == 1 && newVersion == 2) {
-						sb.append("ALTER TABLE ").append(FILLUPS_TABLE_NAME).append(" ADD COLUMN comment TEXT;");
-					} else {
-						sb.append("DROP TABLE IF EXISTS ").append(FILLUPS_TABLE_NAME).append(";");
-						sb.append("DROP TABLE IF EXISTS ").append(VEHICLES_TABLE_NAME).append(";");
-					}
+			StringBuilder sb = new StringBuilder();
+			// TODO: Abstract this out once we get more DB versions
+			if (oldVersion == 1 && newVersion == 2) {
+				sb.append("ALTER TABLE ").append(FILLUPS_TABLE_NAME).append(" ADD COLUMN comment TEXT;");
 
-					db.execSQL(sb.toString());
-					onCreate(db);
-				}
-			};
-			// create a backup of the existing database
-			DBExporter exporter = new DBExporter(handler);
-			Thread t = new Thread(exporter);
-			t.start();
+				db.execSQL(sb.toString());
+			} else {
+				sb.append("DROP TABLE IF EXISTS ").append(FILLUPS_TABLE_NAME).append(";");
+				sb.append("DROP TABLE IF EXISTS ").append(VEHICLES_TABLE_NAME).append(";");
+				db.execSQL(sb.toString());
+				onCreate(db);
+			}
 		}
 	}
 
