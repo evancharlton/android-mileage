@@ -38,6 +38,12 @@
 		android:layout_height="wrap_content"
 		android:hint="@string/vehicle_title"
 	/>
+	<CheckBox
+		android:id="@+id/vehicle_default"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/make_default"
+	/>
 	<Button
 		android:id="@+id/vehicle_add"
 		android:layout_width="fill_parent"

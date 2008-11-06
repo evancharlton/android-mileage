@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.SimpleCursorAdapter;
 
@@ -23,6 +24,7 @@ public class EditVehicleView extends Activity {
 	private Button m_save;
 	private AlertDialog m_deleteDialog;
 	private SimpleCursorAdapter m_vehicleAdapter;
+	private CheckBox m_default;
 
 	private static final int DELETE_DIALOG_ID = 1;
 	private static final int MENU_CANCEL = 2;
@@ -43,6 +45,7 @@ public class EditVehicleView extends Activity {
 		m_model = (EditText) findViewById(R.id.vehicle_edit_model);
 		m_title = (EditText) findViewById(R.id.vehicle_edit_title);
 		m_save = (Button) findViewById(R.id.vehicle_edit_save_btn);
+		m_default = (CheckBox) findViewById(R.id.vehicle_edit_default);
 
 		m_deleteDialog = new AlertDialog.Builder(this).create();
 		m_deleteDialog.setMessage(getString(R.string.confirm_delete));
@@ -53,15 +56,7 @@ public class EditVehicleView extends Activity {
 		// set up the handlers
 		m_save.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				// save the changes
-				ContentValues values = new ContentValues();
-				values.put(Vehicles.YEAR, m_year.getText().toString().trim());
-				values.put(Vehicles.MAKE, m_make.getText().toString().trim());
-				values.put(Vehicles.MODEL, m_model.getText().toString().trim());
-				values.put(Vehicles.TITLE, m_title.getText().toString().trim());
-
-				getContentResolver().update(getIntent().getData(), values, null, null);
-				finish();
+				save();
 			}
 		});
 
@@ -96,10 +91,58 @@ public class EditVehicleView extends Activity {
 		m_make.setText(c.getString(2));
 		m_model.setText(c.getString(3));
 		m_title.setText(c.getString(4));
+
+		if (m_vehicleAdapter.getItemId(0) == c.getLong(0)) {
+			m_default.setChecked(true);
+		}
 	}
 
 	private void delete() {
 		getContentResolver().delete(getIntent().getData(), null, null);
+	}
+
+	private void save() {
+		// do some error checking
+		String year = m_year.getText().toString().trim();
+		String make = m_make.getText().toString().trim();
+		String model = m_model.getText().toString().trim();
+		String title = m_title.getText().toString().trim();
+
+		int error = 0;
+		if (year.length() == 0) {
+			error = R.string.error_year;
+		}
+		if (make.length() == 0) {
+			error = R.string.error_make;
+		}
+		if (model.length() == 0) {
+			error = R.string.error_model;
+		}
+		if (title.length() == 0) {
+			error = R.string.error_title;
+		}
+
+		if (error != 0) {
+			AlertDialog dlg = new AlertDialog.Builder(EditVehicleView.this).create();
+			dlg.setTitle(R.string.error);
+			dlg.setMessage(getString(error));
+			dlg.show();
+			return;
+		}
+
+		// save the changes
+		ContentValues values = new ContentValues();
+		values.put(Vehicles.YEAR, m_year.getText().toString().trim());
+		values.put(Vehicles.MAKE, m_make.getText().toString().trim());
+		values.put(Vehicles.MODEL, m_model.getText().toString().trim());
+		values.put(Vehicles.TITLE, m_title.getText().toString().trim());
+
+		if (m_default.isChecked()) {
+			values.put(Vehicles.DEFAULT, System.currentTimeMillis());
+		}
+
+		getContentResolver().update(getIntent().getData(), values, null, null);
+		finish();
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {

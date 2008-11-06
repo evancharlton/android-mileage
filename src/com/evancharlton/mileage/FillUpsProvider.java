@@ -88,17 +88,19 @@ public class FillUpsProvider extends ContentProvider {
 			sql.append(Vehicles.MAKE).append(" TEXT,");
 			sql.append(Vehicles.MODEL).append(" TEXT,");
 			sql.append(Vehicles.TITLE).append(" TEXT,");
-			sql.append(Vehicles.YEAR).append(" TEXT");
+			sql.append(Vehicles.YEAR).append(" TEXT,");
+			sql.append(Vehicles.DEFAULT).append(" INTEGER");
 			sql.append(");");
 			db.execSQL(sql.toString());
 
 			sql = new StringBuilder();
 			sql.append("INSERT INTO ").append(VEHICLES_TABLE_NAME).append(" (");
 			sql.append(Vehicles.MAKE).append(", ").append(Vehicles.MODEL).append(", ");
-			sql.append(Vehicles.YEAR).append(", ").append(Vehicles.TITLE);
+			sql.append(Vehicles.YEAR).append(", ").append(Vehicles.TITLE).append(", ");
+			sql.append(Vehicles.DEFAULT);
 			sql.append(") VALUES ('Make', 'Model', '");
 			sql.append(Calendar.getInstance().get(Calendar.YEAR));
-			sql.append("', 'Default Vehicle');");
+			sql.append("', 'Default Vehicle', '").append(System.currentTimeMillis()).append("');");
 			db.execSQL(sql.toString());
 		}
 
@@ -107,8 +109,8 @@ public class FillUpsProvider extends ContentProvider {
 			StringBuilder sb = new StringBuilder();
 			// TODO: Abstract this out once we get more DB versions
 			if (oldVersion == 1 && newVersion == 2) {
-				sb.append("ALTER TABLE ").append(FILLUPS_TABLE_NAME).append(" ADD COLUMN comment TEXT;");
-
+				sb.append("ALTER TABLE ").append(FILLUPS_TABLE_NAME).append(" ADD COLUMN ").append(FillUps.COMMENT).append(" TEXT;");
+				sb.append("ALTER TABLE ").append(VEHICLES_TABLE_NAME).append(" ADD COLUMN ").append(Vehicles.DEFAULT).append(" INTEGER;");
 				db.execSQL(sb.toString());
 			} else {
 				sb.append("DROP TABLE IF EXISTS ").append(FILLUPS_TABLE_NAME).append(";");
