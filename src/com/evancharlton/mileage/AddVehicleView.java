@@ -45,30 +45,6 @@ public class AddVehicleView extends Activity {
 				finish();
 			}
 		});
-
-		m_year.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-			public void onFocusChange(View v, boolean hasFocus) {
-				setTextOnFocus(m_year, R.string.vehicle_year, hasFocus);
-			}
-		});
-
-		m_make.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-			public void onFocusChange(View v, boolean hasFocus) {
-				setTextOnFocus(m_make, R.string.vehicle_make, hasFocus);
-			}
-		});
-
-		m_model.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-			public void onFocusChange(View v, boolean hasFocus) {
-				setTextOnFocus(m_model, R.string.vehicle_model, hasFocus);
-			}
-		});
-
-		m_title.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-			public void onFocusChange(View v, boolean hasFocus) {
-				setTextOnFocus(m_title, R.string.vehicle_title, hasFocus);
-			}
-		});
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -83,19 +59,5 @@ public class AddVehicleView extends Activity {
 				break;
 		}
 		return super.onOptionsItemSelected(item);
-	}
-
-	private void setTextOnFocus(EditText editor, int defaultString, boolean hasFocus) {
-		String text = editor.getText().toString();
-		text = text.trim();
-		if (hasFocus) {
-			if (text.equals(getString(defaultString))) {
-				editor.setText("");
-			}
-		} else {
-			if (text.length() == 0) {
-				editor.setText(getString(defaultString));
-			}
-		}
 	}
 }

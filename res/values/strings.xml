@@ -4,7 +4,7 @@
 	<string name="app_version">1.0</string>
 	<string name="price_per_gallon">Price per gallon</string>
 	<string name="gallons">Gallons of Fuel</string>
-	<string name="odometer">Current Mileage</string>
+	<string name="odometer">Odometer</string>
 	<string name="custom_date">Change Date</string>
 	<string name="add_fillup">Record Fill-up</string>
 	<string name="fillup">Fill Up</string>
@@ -26,14 +26,15 @@
 	<string name="contact">mileage@evancharlton.com</string>
 	<string name="website">http://evancharlton.com/projects/mileage</string>
 	<string name="today">Today</string>
+	<string name="comment">Comment (optional)</string>
 	
 	<string name="history_text1">:</string>
 	<string name="history_text2">gallons @ $</string>
 	
 	<string name="vehicles">Vehicles</string>
 	<string name="vehicle_make">Make</string>
-	<string name="vehicle_model">Model (e.g. Explorer)</string>
-	<string name="vehicle_year">Year (YYYY)</string>
+	<string name="vehicle_model">Model</string>
+	<string name="vehicle_year">Year</string>
 	<string name="vehicle_title">Title (e.g. Mom's car)</string>
 	<string name="vehicle_add">Add Vehicle</string>
 	<string name="vehicle_save">Save Vehicle</string>

@@ -15,27 +15,28 @@
 			android:layout_width="0dip"
 	   		android:layout_weight="1"
 			android:layout_height="wrap_content"
-			android:text="@string/vehicle_year"
+			android:hint="@string/vehicle_year"
+			android:digits="0123456789"
 		/>
 		<EditText
 			android:id="@+id/vehicle_make"
 			android:layout_width="0dip"
 	   		android:layout_weight="1"
 			android:layout_height="wrap_content"
-			android:text="@string/vehicle_make"
+			android:hint="@string/vehicle_make"
 		/>
 	</LinearLayout>
 	<EditText
 		android:id="@+id/vehicle_model"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:text="@string/vehicle_model"
+		android:hint="@string/vehicle_model"
 	/>
 	<EditText
 		android:id="@+id/vehicle_title"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:text="@string/vehicle_title"
+		android:hint="@string/vehicle_title"
 	/>
 	<Button
 		android:id="@+id/vehicle_add"

@@ -22,7 +22,7 @@ public class FillUpsProvider extends ContentProvider {
 
 	// private static final String TAG = "FillUpsProvider";
 	public static final String DATABASE_NAME = "mileage.db";
-	public static final int DATABASE_VERSION = 1;
+	public static final int DATABASE_VERSION = 2;
 	public static final String FILLUPS_TABLE_NAME = "fillups";
 	public static final String VEHICLES_TABLE_NAME = "vehicles";
 
@@ -53,6 +53,7 @@ public class FillUpsProvider extends ContentProvider {
 		s_fillUpsProjectionMap.put(FillUps.DATE, FillUps.DATE);
 		s_fillUpsProjectionMap.put(FillUps.LATITUDE, FillUps.LATITUDE);
 		s_fillUpsProjectionMap.put(FillUps.LONGITUDE, FillUps.LONGITUDE);
+		s_fillUpsProjectionMap.put(FillUps.COMMENT, FillUps.COMMENT);
 
 		s_vehiclesProjectionMap = new HashMap<String, String>();
 		s_vehiclesProjectionMap.put(Vehicles._ID, Vehicles._ID);
@@ -96,19 +97,24 @@ public class FillUpsProvider extends ContentProvider {
 			sql.append("INSERT INTO ").append(VEHICLES_TABLE_NAME).append(" (");
 			sql.append(Vehicles.MAKE).append(", ").append(Vehicles.MODEL).append(", ");
 			sql.append(Vehicles.YEAR).append(", ").append(Vehicles.TITLE);
-			sql.append(") VALUES ('Default', 'Default', '");
+			sql.append(") VALUES ('Make', 'Model', '");
 			sql.append(Calendar.getInstance().get(Calendar.YEAR));
 			sql.append("', 'Default Vehicle');");
 			db.execSQL(sql.toString());
 		}
 
 		@Override
-		public void onUpgrade(final SQLiteDatabase db, int oldVersion, int newVersion) {
+		public void onUpgrade(final SQLiteDatabase db, final int oldVersion, final int newVersion) {
 			Handler handler = new Handler() {
 				public void handleMessage(Message msg) {
 					StringBuilder sb = new StringBuilder();
-					sb.append("DROP TABLE IF EXISTS ").append(FILLUPS_TABLE_NAME).append(";");
-					sb.append("DROP TABLE IF EXISTS ").append(VEHICLES_TABLE_NAME).append(";");
+					// TODO: Abstract this out once we get more DB versions
+					if (oldVersion == 1 && newVersion == 2) {
+						sb.append("ALTER TABLE ").append(FILLUPS_TABLE_NAME).append(" ADD COLUMN comment TEXT;");
+					} else {
+						sb.append("DROP TABLE IF EXISTS ").append(FILLUPS_TABLE_NAME).append(";");
+						sb.append("DROP TABLE IF EXISTS ").append(VEHICLES_TABLE_NAME).append(";");
+					}
 
 					db.execSQL(sb.toString());
 					onCreate(db);
@@ -227,6 +233,10 @@ public class FillUpsProvider extends ContentProvider {
 
 		if (values.containsKey(FillUps.LONGITUDE) == false) {
 			values.put(FillUps.LONGITUDE, "0.00");
+		}
+
+		if (values.containsKey(FillUps.COMMENT) == false) {
+			values.put(FillUps.COMMENT, "");
 		}
 
 		SQLiteDatabase db = m_helper.getWritableDatabase();

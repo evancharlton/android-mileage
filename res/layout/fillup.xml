@@ -15,7 +15,7 @@
 		    android:layout_width="0dip"
 	   		android:layout_weight="1"
 		    android:layout_height="wrap_content" 
-		    android:text="@string/price_per_gallon"
+		    android:hint="@string/price_per_gallon"
 		    android:digits="1234567890."
 		/>
 		<EditText
@@ -23,7 +23,7 @@
 			android:layout_width="0dip"
 	   		android:layout_weight="1"
 			android:layout_height="wrap_content"
-			android:text="@string/gallons"
+			android:hint="@string/gallons"
 		    android:digits="1234567890."
 		/>
 	</LinearLayout>
@@ -37,7 +37,7 @@
 			android:layout_width="0dip"
 	   		android:layout_weight="1"
 			android:layout_height="wrap_content"
-			android:text="@string/odometer"
+			android:hint="@string/odometer"
 		    android:digits="1234567890."
 		/>
 		<Button
@@ -67,4 +67,10 @@
 			android:text="@string/save_changes"
 		/>
 	</LinearLayout>
+	<EditText
+		android:id="@+id/comment_edit"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:hint="@string/comment"
+	/>
 </LinearLayout>

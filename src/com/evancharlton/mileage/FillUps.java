@@ -19,5 +19,5 @@ public class FillUps implements BaseColumns {
 	public static final String VEHICLE_ID = "vehicle_id";
 	public static final String LATITUDE = "latitude";
 	public static final String LONGITUDE = "longitude";
-	public static final String HISTORY = "ROUND(" + AMOUNT + ", 2) || \" gallons @ $\" || ROUND(" + COST + ", 2)";
+	public static final String COMMENT = "comment";
 }

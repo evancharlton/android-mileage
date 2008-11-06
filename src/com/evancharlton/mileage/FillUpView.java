@@ -34,6 +34,7 @@ public class FillUpView extends Activity {
 	private EditText m_priceEdit;
 	private EditText m_amountEdit;
 	private EditText m_mileageEdit;
+	private EditText m_commentEdit;
 	private Button m_dateButton;
 	private Button m_saveButton;
 	private AlertDialog m_deleteDialog;
@@ -57,6 +58,7 @@ public class FillUpView extends Activity {
 		m_priceEdit = (EditText) findViewById(R.id.price_edit);
 		m_amountEdit = (EditText) findViewById(R.id.amount_edit);
 		m_mileageEdit = (EditText) findViewById(R.id.odometer_edit);
+		m_commentEdit = (EditText) findViewById(R.id.comment_edit);
 		m_dateButton = (Button) findViewById(R.id.change_date_btn);
 		m_saveButton = (Button) findViewById(R.id.save_btn);
 		m_vehicleSpinner = (Spinner) findViewById(R.id.vehicle_spinner);
@@ -118,6 +120,7 @@ public class FillUpView extends Activity {
 					return;
 				}
 
+				values.put(FillUps.COMMENT, m_commentEdit.getText().toString().trim());
 				values.put(FillUps.VEHICLE_ID, m_vehicleSpinner.getSelectedItemId());
 
 				Calendar c = new GregorianCalendar(m_year, m_month, m_day);
@@ -154,7 +157,8 @@ public class FillUpView extends Activity {
 				FillUps.AMOUNT,
 				FillUps.MILEAGE,
 				FillUps.DATE,
-				FillUps.VEHICLE_ID
+				FillUps.VEHICLE_ID,
+				FillUps.COMMENT
 		};
 
 		Cursor c = managedQuery(data.getData(), projections, null, null, null);
@@ -163,6 +167,7 @@ public class FillUpView extends Activity {
 		m_priceEdit.setText(c.getString(1));
 		m_amountEdit.setText(c.getString(2));
 		m_mileageEdit.setText(c.getString(3));
+		m_commentEdit.setText(c.getString(6));
 		int vehicleId = c.getInt(5);
 
 		Calendar cal = Calendar.getInstance();

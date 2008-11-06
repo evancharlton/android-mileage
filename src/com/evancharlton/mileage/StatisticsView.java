@@ -1,7 +1,9 @@
 package com.evancharlton.mileage;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import android.app.Activity;
 import android.database.Cursor;
@@ -16,6 +18,10 @@ import android.widget.TextView;
 public class StatisticsView extends Activity {
 	private HashMap<Integer, TextView> m_stats = new HashMap<Integer, TextView>();
 	private Spinner m_vehicles;
+	private ArrayList<Double> m_amounts;
+	private ArrayList<Double> m_costs;
+	private ArrayList<String> m_dates;
+	private ArrayList<Double> m_miles;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -74,20 +80,22 @@ public class StatisticsView extends Activity {
 			String.valueOf(id)
 		}, FillUps.DATE + " DESC, " + FillUps.MILEAGE + " DESC");
 
-		ArrayList<Double> amounts = new ArrayList<Double>();
-		ArrayList<Double> costs = new ArrayList<Double>();
-		ArrayList<String> dates = new ArrayList<String>();
-		ArrayList<Double> miles = new ArrayList<Double>();
+		HashMap<Integer, String> calculatedData = new HashMap<Integer, String>();
+
+		m_amounts = new ArrayList<Double>();
+		m_costs = new ArrayList<Double>();
+		m_dates = new ArrayList<String>();
+		m_miles = new ArrayList<Double>();
 
 		int count = 0;
 		c.moveToFirst();
 		int num = c.getCount();
 		while (num > 0) {
 			try {
-				amounts.add(c.getDouble(0));
-				costs.add(c.getDouble(1));
-				dates.add(c.getString(2));
-				miles.add(c.getDouble(3));
+				m_amounts.add(c.getDouble(0));
+				m_costs.add(c.getDouble(1));
+				m_dates.add(c.getString(2));
+				m_miles.add(c.getDouble(3));
 				c.moveToNext();
 			} catch (CursorIndexOutOfBoundsException e) {
 				break;
@@ -100,126 +108,145 @@ public class StatisticsView extends Activity {
 			return;
 		}
 
-		// calculate the distance stats
-		double distance_running = 0.0D;
-		if (miles.size() == 1) {
-			distance_running = miles.get(0);
-		} else {
-			distance_running = miles.get(0) - miles.get(1);
+		calculatedData.putAll(distanceStats());
+		calculatedData.putAll(economyStats());
+		calculatedData.putAll(costStats());
+
+		// update the text
+		for (Integer dataId : calculatedData.keySet()) {
+			setText(dataId, calculatedData.get(dataId));
 		}
-		setText(R.id.stats_distance_running, distance_running);
+	}
+
+	private Map<Integer, String> distanceStats() {
+		HashMap<Integer, String> data = new HashMap<Integer, String>();
+		// total distance tracked
+		double total_distance = 0.0D;
+		// distance between last two fill-ups
+		double running_distance = 0.0D;
+		if (m_miles.size() > 1) {
+			running_distance = Math.abs(m_miles.get(0) - m_miles.get(1));
+			total_distance = Math.abs(m_miles.get(0) - m_miles.get(m_miles.size() - 1));
+		}
 
 		double max_distance = 0.0D;
 		double min_distance = Double.MAX_VALUE;
-		for (int i = 0; i < miles.size() - 1; i++) {
-			double diff = miles.get(i) - miles.get(i + 1);
+		for (int i = 0; i < m_miles.size() - 1; i++) {
+			double diff = m_miles.get(i) - m_miles.get(i + 1);
 			if (diff > max_distance) {
 				max_distance = diff;
-			} else if (diff < min_distance) {
+			}
+			if (diff < min_distance) {
 				min_distance = diff;
 			}
 		}
-		double total_distance = miles.get(0) - miles.get(miles.size() - 1);
-		double avg_distance = total_distance / miles.size();
-		setText(R.id.stats_distance_average, avg_distance);
-		setText(R.id.stats_distance_maximum, max_distance);
-		setText(R.id.stats_distance_minimum, min_distance);
+		double avg_distance = total_distance / m_miles.size();
+		data.put(R.id.stats_distance_running, string(running_distance));
+		data.put(R.id.stats_distance_average, string(avg_distance));
+		data.put(R.id.stats_distance_maximum, string(max_distance));
+		data.put(R.id.stats_distance_minimum, string(min_distance));
+		return data;
+	}
 
-		// calculate the stats on fuel economy
+	private Map<Integer, String> economyStats() {
+		HashMap<Integer, String> data = new HashMap<Integer, String>();
+		double average_mpg = 0.0D;
+		double minimum_mpg = Double.MAX_VALUE;
+		double maximum_mpg = 0.0D;
+		double total_miles = 0.0D;
 		double total_fuel = 0.0D;
-		double maximum_mileage = 0.0D;
-		double minimum_mileage = Double.MAX_VALUE;
-		double running_mileage = distance_running / amounts.get(0);
-		double largest_fillup = 0.0D;
-		double smallest_fillup = Double.MAX_VALUE;
-		double total_cost = 0.0D;
-		double min_cost = Double.MAX_VALUE;
-		double max_cost = 0.0D;
-		double min_price = Double.MAX_VALUE;
-		double max_price = 0.0D;
-		for (int i = 0; i < amounts.size() - 1; i++) {
-			Double amt = amounts.get(i);
-			total_fuel += amt;
-			double diff = miles.get(i) - miles.get(i + 1);
-			double mileage = diff / amt;
-			if (mileage > maximum_mileage) {
-				maximum_mileage = mileage;
+		double running_mpg = 0.0D;
+
+		for (int i = 0; i < m_amounts.size() - 1; i++) {
+			total_fuel += m_amounts.get(i);
+			double mile_diff = m_miles.get(i) - m_miles.get(i + 1);
+			total_miles += mile_diff;
+			double mpg = mile_diff / m_amounts.get(i);
+			if (mpg > maximum_mpg) {
+				maximum_mpg = mpg;
 			}
-			if (mileage < minimum_mileage) {
-				minimum_mileage = mileage;
+			if (mpg < minimum_mpg) {
+				minimum_mpg = mpg;
 			}
 
-			// volumes
-			if (amt > largest_fillup) {
-				largest_fillup = amt;
-			}
-			if (amt < smallest_fillup) {
-				smallest_fillup = amt;
-			}
-
-			// costs
-			Double cost = costs.get(i);
-			double this_cost = (cost * amounts.get(i));
-			if (this_cost < min_cost) {
-				min_cost = this_cost;
-			}
-			if (this_cost > max_cost) {
-				max_cost = this_cost;
-			}
-			total_cost += this_cost;
-			if (cost < min_price) {
-				min_price = cost;
-			}
-			if (cost > max_price) {
-				max_price = cost;
+			if (i == 0) {
+				running_mpg = mpg;
 			}
 		}
-		int sz = amounts.size();
-		largest_fillup = (amounts.get(sz - 1) > largest_fillup) ? amounts.get(sz - 1) : largest_fillup;
-		smallest_fillup = (amounts.get(sz - 1) < smallest_fillup) ? amounts.get(sz - 1) : smallest_fillup;
-		double last_cost = (costs.get(sz - 1) * amounts.get(sz - 1));
-		min_cost = (last_cost < min_cost) ? last_cost : min_cost;
-		max_cost = (last_cost > max_cost) ? last_cost : max_cost;
-		total_cost += last_cost;
-		total_fuel += amounts.get(sz - 1);
-		double economy_avg = total_distance / total_fuel;
-		setText(R.id.stats_economy_average, economy_avg);
-		setText(R.id.stats_economy_maximum, maximum_mileage);
-		setText(R.id.stats_economy_minimum, minimum_mileage);
-		setText(R.id.stats_economy_running, running_mileage);
+		// note that you don't sum up ALL of m_amounts because the last one
+		// (which is the oldest in history terms) does not relate to the average
+		// mileage.
 
-		// calculate gas statistics
-		double avg_price = total_cost / total_fuel;
-		double latest_price = costs.get(0);
+		average_mpg = total_miles / total_fuel;
 
-		setText(R.id.stats_price_average, avg_price, "$");
-		setText(R.id.stats_price_latest, latest_price, "$");
-		setText(R.id.stats_price_maximum, max_price, "$");
-		setText(R.id.stats_price_minimum, min_price, "$");
-		setText(R.id.stats_price_running, total_cost, "$");
+		data.put(R.id.stats_economy_average, string(average_mpg));
+		data.put(R.id.stats_economy_maximum, string(maximum_mpg));
+		data.put(R.id.stats_economy_minimum, string(minimum_mpg));
+		data.put(R.id.stats_economy_running, string(running_mpg));
 
-		// calculate stats on the volume of gasoline used
-		double avg_amount = total_fuel / amounts.size();
-		double avg_cost_per_fillup = total_cost / amounts.size();
-		setText(R.id.stats_amount_average, avg_amount);
-		setText(R.id.stats_amount_average_cost, avg_cost_per_fillup, "$");
-		setText(R.id.stats_amount_minimum_cost, min_cost, "$");
-		setText(R.id.stats_amount_maximum_cost, max_cost, "$");
-		setText(R.id.stats_amount_maximum, largest_fillup);
-		setText(R.id.stats_amount_minimum, smallest_fillup);
-		setText(R.id.stats_amount_running, total_fuel);
+		return data;
 	}
 
-	private void setText(int id, double val) {
-		setText(id, val, "");
+	private Map<Integer, String> costStats() {
+		HashMap<Integer, String> data = new HashMap<Integer, String>();
+		double total_cost = 0.0D;
+		double lowest_ppg = Double.MAX_VALUE;
+		double highest_ppg = 0.0D;
+		double total_fuel = 0.0D;
+		double highest_amt = 0.0D;
+		double lowest_amt = Double.MAX_VALUE;
+		double lowest_cost = Double.MAX_VALUE;
+		double highest_cost = 0.0D;
+		double total_expense = 0.0D;
+
+		for (int i = 0; i < m_costs.size(); i++) {
+
+			double cost_ppg = m_costs.get(i);
+			if (cost_ppg > highest_ppg) {
+				highest_ppg = cost_ppg;
+			}
+			if (cost_ppg < lowest_ppg) {
+				lowest_ppg = cost_ppg;
+			}
+
+			double amount = m_amounts.get(i);
+			if (amount > highest_amt) {
+				highest_amt = amount;
+			}
+			if (amount < lowest_amt) {
+				lowest_amt = amount;
+			}
+
+			double cost = cost_ppg * amount;
+			if (cost > highest_cost) {
+				highest_cost = cost;
+			}
+			if (cost < lowest_cost) {
+				lowest_cost = cost;
+			}
+
+			total_cost += cost_ppg;
+			total_fuel += amount;
+			total_expense += cost;
+		}
+
+		data.put(R.id.stats_price_latest, string(m_costs.get(0), "$"));
+		data.put(R.id.stats_price_average, string(total_cost / m_costs.size(), "$"));
+		data.put(R.id.stats_price_running, string(total_expense, "$"));
+		data.put(R.id.stats_price_minimum, string(lowest_ppg, "$"));
+		data.put(R.id.stats_price_maximum, string(highest_ppg, "$"));
+		data.put(R.id.stats_amount_running, string(total_fuel));
+		data.put(R.id.stats_amount_average, string(total_fuel / m_amounts.size()));
+		data.put(R.id.stats_amount_average_cost, string(total_expense / m_costs.size(), "$"));
+		data.put(R.id.stats_amount_maximum, string(highest_amt));
+		data.put(R.id.stats_amount_minimum, string(lowest_amt));
+		data.put(R.id.stats_amount_maximum_cost, string(highest_cost, "$"));
+		data.put(R.id.stats_amount_minimum_cost, string(lowest_cost, "$"));
+
+		return data;
 	}
 
-	private void setText(int id, double val, String prefix) {
-		// set the precision
-		val *= 100;
-		val = Math.round(val);
-		val /= 100;
-		String str = prefix + String.valueOf(val);
+	private void setText(int id, String text) {
 		TextView tv = m_stats.get(id);
 		if (tv == null) {
 			getTextView(id);
@@ -228,6 +255,16 @@ public class StatisticsView extends Activity {
 				throw new IllegalArgumentException("Invalid ID: " + String.valueOf(id));
 			}
 		}
-		tv.setText(str);
+		tv.setText(text);
+	}
+
+	private String string(double val) {
+		return string(val, "");
+	}
+
+	private String string(double val, String prefix) {
+		DecimalFormat format = new DecimalFormat("###.00");
+		String str = prefix + format.format(val);
+		return str;
 	}
 }

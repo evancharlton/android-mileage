@@ -44,6 +44,7 @@ public class Mileage extends Activity {
 	private EditText m_mileageEdit;
 	private Spinner m_vehicleSpinner;
 	private DatePickerDialog m_dateDlg = null;
+	private EditText m_commentEdit;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -68,6 +69,7 @@ public class Mileage extends Activity {
 		m_mileageEdit = (EditText) findViewById(R.id.odometer_edit);
 		m_amountEdit = (EditText) findViewById(R.id.amount_edit);
 		m_priceEdit = (EditText) findViewById(R.id.price_edit);
+		m_commentEdit = (EditText) findViewById(R.id.comment);
 		m_vehicleSpinner = (Spinner) findViewById(R.id.vehicle_spinner);
 
 		Cursor c = managedQuery(Vehicles.CONTENT_URI, new String[] {
@@ -145,6 +147,7 @@ public class Mileage extends Activity {
 					return;
 				}
 
+				values.put(FillUps.COMMENT, m_commentEdit.getText().toString().trim());
 				values.put(FillUps.VEHICLE_ID, m_vehicleSpinner.getSelectedItemId());
 
 				Calendar c = new GregorianCalendar(m_year, m_month, m_day);
@@ -161,56 +164,15 @@ public class Mileage extends Activity {
 				showDialog(DATE_DIALOG_ID);
 			}
 		});
-
-		m_priceEdit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-			public void onFocusChange(View v, boolean hasFocus) {
-				setTextOnFocus((EditText) v.findViewById(R.id.price_edit), R.string.price_per_gallon, hasFocus, false);
-			}
-		});
-
-		m_amountEdit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-			public void onFocusChange(View v, boolean hasFocus) {
-				setTextOnFocus((EditText) v.findViewById(R.id.amount_edit), R.string.gallons, hasFocus, false);
-			}
-		});
-
-		m_mileageEdit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-			public void onFocusChange(View v, boolean hasFocus) {
-				setTextOnFocus((EditText) v.findViewById(R.id.odometer_edit), R.string.odometer, hasFocus, true);
-			}
-		});
 	}
 
 	private void resetForm(View v) {
-		// reset the form, discard the URI
-		m_saveButton.setText(getString(R.string.add_fillup));
-		m_priceEdit.setText(getString(R.string.price_per_gallon));
-		m_amountEdit.setText(getString(R.string.gallons));
-		m_mileageEdit.setText(getString(R.string.odometer));
+		m_amountEdit.setText("");
+		m_priceEdit.setText("");
+		m_mileageEdit.setText("");
+		m_commentEdit.setText("");
 
 		getIntent().setData(FillUps.CONTENT_URI);
-	}
-
-	private void setTextOnFocus(EditText editor, int defaultString, boolean hasFocus, boolean isInt) {
-		String text = editor.getText().toString();
-		text = text.trim();
-		if (hasFocus) {
-			try {
-				if (isInt) {
-					int tmp = Integer.parseInt(text);
-					editor.setText(String.valueOf(tmp));
-				} else {
-					double tmp = Double.parseDouble(text);
-					editor.setText(String.valueOf(tmp));
-				}
-			} catch (NumberFormatException nfe) {
-				editor.setText("");
-			}
-		} else {
-			if (text.length() == 0) {
-				editor.setText(getString(defaultString));
-			}
-		}
 	}
 
 	private void updateDate() {
@@ -248,8 +210,8 @@ public class Mileage extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
 
-		menu.add(Menu.NONE, MENU_HISTORY, 0, R.string.fillup_history).setShortcut('1', 'i');
-		menu.add(Menu.NONE, MENU_VEHICLES, 0, R.string.vehicles).setShortcut('2', 'v');
+		menu.add(Menu.NONE, MENU_HISTORY, 0, R.string.fillup_history).setShortcut('1', 'i').setIcon(R.drawable.history_i);
+		menu.add(Menu.NONE, MENU_VEHICLES, 0, R.string.vehicles).setShortcut('2', 'v').setIcon(R.drawable.vehicles_i);
 		menu.add(Menu.NONE, MENU_STATISTICS, 0, R.string.statistics).setShortcut('3', 's');
 		HelpDialog.injectHelp(menu, 'h');
 
