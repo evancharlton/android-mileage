@@ -1,5 +1,8 @@
 package com.evancharlton.mileage;
 
+import java.text.DateFormat;
+import java.util.Date;
+
 import android.app.ListActivity;
 import android.content.ContentUris;
 import android.content.Intent;
@@ -11,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 
 public class HistoryView extends ListActivity {
 	public static final int MENU_IMPORT_EXPORT = Menu.FIRST;
@@ -28,7 +32,8 @@ public class HistoryView extends ListActivity {
 			FillUps._ID,
 			FillUps.AMOUNT,
 			FillUps.COST,
-			FillUps.DATE
+			FillUps.DATE,
+			FillUps.COMMENT
 	};
 
 	@Override
@@ -43,19 +48,22 @@ public class HistoryView extends ListActivity {
 		}
 
 		getListView().setOnCreateContextMenuListener(this);
-
 		String[] from = new String[] {
 				FillUps.AMOUNT,
-				FillUps.COST
+				FillUps.COST,
+				FillUps.DATE,
+				FillUps.COMMENT
 		};
-
 		int[] to = new int[] {
-				R.id.history_gallons,
-				R.id.history_price
+				R.id.history_amount,
+				R.id.history_price,
+				R.id.history_date,
+				R.id.history_comment
 		};
 
 		Cursor historyCursor = managedQuery(FillUps.CONTENT_URI, PROJECTIONS, null, null, FillUps.DEFAULT_SORT_ORDER);
 		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.history, historyCursor, from, to);
+		adapter.setViewBinder(m_viewBinder);
 		setListAdapter(adapter);
 	}
 
@@ -91,4 +99,32 @@ public class HistoryView extends ListActivity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+
+	private SimpleCursorAdapter.ViewBinder m_viewBinder = new SimpleCursorAdapter.ViewBinder() {
+		public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
+			if (columnIndex == 1) {
+				String val = cursor.getString(columnIndex) + " g";
+				((TextView) view).setText(val);
+				return true;
+			} else if (columnIndex == 2) {
+				String val = "$" + cursor.getString(columnIndex) + "/g";
+				((TextView) view).setText(val);
+				return true;
+			} else if (columnIndex == 3) {
+				long time = cursor.getLong(columnIndex);
+				Date date = new Date(time);
+				DateFormat format = DateFormat.getDateInstance(DateFormat.SHORT);
+				String text = format.format(date);
+				((TextView) view).setText(text);
+				return true;
+			} else if (columnIndex == 4) {
+				String val = cursor.getString(columnIndex);
+				if (val.trim().length() == 0) {
+					view.setVisibility(View.GONE);
+					return true;
+				}
+			}
+			return false;
+		}
+	};
 }
