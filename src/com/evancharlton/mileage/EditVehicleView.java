@@ -92,8 +92,12 @@ public class EditVehicleView extends Activity {
 		m_model.setText(c.getString(3));
 		m_title.setText(c.getString(4));
 
-		if (m_vehicleAdapter.getItemId(0) == c.getLong(0)) {
-			m_default.setChecked(true);
+		if (m_vehicleAdapter.getCount() == 1) {
+			m_default.setVisibility(View.GONE);
+		} else {
+			if (m_vehicleAdapter.getItemId(0) == c.getLong(0)) {
+				m_default.setChecked(true);
+			}
 		}
 	}
 
