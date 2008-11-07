@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="com.evancharlton.mileage" android:versionCode="1"
-	android:versionName="1.0.0">
+	package="com.evancharlton.mileage" android:versionCode="2"
+	android:versionName="1.1.0">
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 	<application android:debuggable="true" android:label="@string/app_name" android:icon="@drawable/gasbuttonx">
 		<activity android:name=".Mileage" android:label="@string/app_name" android:screenOrientation="sensor">

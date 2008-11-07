@@ -45,6 +45,8 @@ public class Mileage extends Activity {
 	private Spinner m_vehicleSpinner;
 	private DatePickerDialog m_dateDlg = null;
 	private EditText m_commentEdit;
+	private Button m_statisticsBtn;
+	private Button m_historyBtn;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -71,6 +73,8 @@ public class Mileage extends Activity {
 		m_priceEdit = (EditText) findViewById(R.id.price_edit);
 		m_commentEdit = (EditText) findViewById(R.id.comment);
 		m_vehicleSpinner = (Spinner) findViewById(R.id.vehicle_spinner);
+		m_historyBtn = (Button) findViewById(R.id.history_btn);
+		m_statisticsBtn = (Button) findViewById(R.id.statistics_btn);
 
 		Cursor c = managedQuery(Vehicles.CONTENT_URI, new String[] {
 				Vehicles._ID,
@@ -162,6 +166,18 @@ public class Mileage extends Activity {
 			public void onClick(View v) {
 				// show a date picker
 				showDialog(DATE_DIALOG_ID);
+			}
+		});
+
+		m_historyBtn.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				showHistory();
+			}
+		});
+
+		m_statisticsBtn.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				showStatistics();
 			}
 		});
 
