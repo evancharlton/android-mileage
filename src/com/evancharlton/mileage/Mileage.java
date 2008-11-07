@@ -76,7 +76,6 @@ public class Mileage extends Activity {
 				Vehicles._ID,
 				Vehicles.TITLE
 		}, null, null, Vehicles.DEFAULT_SORT_ORDER);
-
 		SimpleCursorAdapter vehicleAdapter = new SimpleCursorAdapter(this, android.R.layout.simple_spinner_item, c, new String[] {
 			Vehicles.TITLE
 		}, new int[] {
@@ -84,6 +83,7 @@ public class Mileage extends Activity {
 		});
 		vehicleAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		m_vehicleSpinner.setAdapter(vehicleAdapter);
+
 	}
 
 	private void initHandlers() {

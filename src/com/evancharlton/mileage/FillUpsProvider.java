@@ -20,7 +20,7 @@ public class FillUpsProvider extends ContentProvider {
 
 	// private static final String TAG = "FillUpsProvider";
 	public static final String DATABASE_NAME = "mileage.db";
-	public static final int DATABASE_VERSION = 2;
+	public static final int DATABASE_VERSION = 3;
 	public static final String FILLUPS_TABLE_NAME = "fillups";
 	public static final String VEHICLES_TABLE_NAME = "vehicles";
 
@@ -105,14 +105,18 @@ public class FillUpsProvider extends ContentProvider {
 		}
 
 		@Override
-		public void onUpgrade(final SQLiteDatabase db, final int oldVersion, final int newVersion) {
-			StringBuilder sb = new StringBuilder();
+		public void onUpgrade(SQLiteDatabase db, final int oldVersion, final int newVersion) {
 			// TODO: Abstract this out once we get more DB versions
-			if (oldVersion == 1 && newVersion == 2) {
+			if (newVersion == DATABASE_VERSION) {
+				StringBuilder sb = new StringBuilder();
 				sb.append("ALTER TABLE ").append(FILLUPS_TABLE_NAME).append(" ADD COLUMN ").append(FillUps.COMMENT).append(" TEXT;");
+				db.execSQL(sb.toString());
+
+				sb = new StringBuilder();
 				sb.append("ALTER TABLE ").append(VEHICLES_TABLE_NAME).append(" ADD COLUMN ").append(Vehicles.DEFAULT).append(" INTEGER;");
 				db.execSQL(sb.toString());
 			} else {
+				StringBuilder sb = new StringBuilder();
 				sb.append("DROP TABLE IF EXISTS ").append(FILLUPS_TABLE_NAME).append(";");
 				sb.append("DROP TABLE IF EXISTS ").append(VEHICLES_TABLE_NAME).append(";");
 				db.execSQL(sb.toString());

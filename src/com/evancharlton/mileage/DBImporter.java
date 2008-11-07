@@ -10,16 +10,18 @@ import android.os.Message;
 
 public class DBImporter implements Runnable {
 	private Handler m_handler;
+	private String m_filename;
 
-	public DBImporter(Handler handler) {
+	public DBImporter(Handler handler, String filename) {
 		m_handler = handler;
+		m_filename = filename;
 	}
 
 	public void run() {
 		FileInputStream in = null;
 		FileOutputStream out = null;
 		try {
-			in = new FileInputStream("/sdcard/" + FillUpsProvider.DATABASE_NAME);
+			in = new FileInputStream(m_filename);
 			out = new FileOutputStream("/data/data/" + Mileage.PACKAGE + "/databases/" + FillUpsProvider.DATABASE_NAME);
 
 			FileChannel inChannel = in.getChannel();

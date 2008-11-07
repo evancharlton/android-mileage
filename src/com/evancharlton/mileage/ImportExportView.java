@@ -98,7 +98,7 @@ public class ImportExportView extends Activity {
 					title = R.string.importing_title;
 					break;
 				case IMPORT_DB:
-					t = new Thread(new DBImporter(m_handler));
+					t = new Thread(new DBImporter(m_handler, "/sdcard/mileage.db"));
 					title = R.string.importing_title;
 					break;
 			}
