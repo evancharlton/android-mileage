@@ -59,6 +59,7 @@ public class FillUpsProvider extends ContentProvider {
 		s_vehiclesProjectionMap.put(Vehicles.MODEL, Vehicles.MODEL);
 		s_vehiclesProjectionMap.put(Vehicles.TITLE, Vehicles.TITLE);
 		s_vehiclesProjectionMap.put(Vehicles.YEAR, Vehicles.YEAR);
+		s_vehiclesProjectionMap.put(Vehicles.DEFAULT, Vehicles.DEFAULT);
 	}
 
 	private static class DatabaseHelper extends SQLiteOpenHelper {

@@ -2,6 +2,7 @@ package com.evancharlton.mileage;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -199,7 +200,9 @@ public class StatisticsView extends Activity {
 		double highest_cost = 0.0D;
 		double total_expense = 0.0D;
 		double thirty_day_cost = 0.0D;
-		long then = System.currentTimeMillis() - (30 * 24 * 60 * 60 * 1000);
+		long then = System.currentTimeMillis() - (30L * 24L * 60L * 60L * 1000L);
+		Calendar then_c = Calendar.getInstance();
+		then_c.setTimeInMillis(then);
 
 		for (int i = 0; i < m_costs.size(); i++) {
 			double cost_ppg = m_costs.get(i);
@@ -226,7 +229,7 @@ public class StatisticsView extends Activity {
 				lowest_cost = cost;
 			}
 
-			double date = m_dates.get(i);
+			long date = m_dates.get(i);
 			if (date > then) {
 				thirty_day_cost += cost;
 			}
