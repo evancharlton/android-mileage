@@ -131,10 +131,10 @@ public class FillUpView extends Activity {
 			}
 		});
 
-		m_priceEdit.setKeyListener(new KeyFocuser(m_amountEdit));
-		m_amountEdit.setKeyListener(new KeyFocuser(m_mileageEdit));
-		m_mileageEdit.setKeyListener(new KeyFocuser(m_commentEdit));
-		m_commentEdit.setKeyListener(new KeyFocuser(m_saveButton));
+		// m_priceEdit.setKeyListener(new KeyFocuser(m_amountEdit));
+		// m_amountEdit.setKeyListener(new KeyFocuser(m_mileageEdit));
+		// m_mileageEdit.setKeyListener(new KeyFocuser(m_commentEdit));
+		// m_commentEdit.setKeyListener(new KeyFocuser(m_saveButton));
 	}
 
 	private void delete() {

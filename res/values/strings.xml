@@ -114,22 +114,23 @@
 	<string name="help_title_vehicle_edit">Editing Vehicle Help</string>
 	<string name="help_vehicle_edit">From here, you can change attributes about an existing vehicle. If you decide
 	to not save your changes, simply select Cancel Changes to undo the changes. Note that there must always be at least one vehicle, so you
-	can not delete the last vehicle.</string>
+	can not delete the last vehicle. If you have multiple vehicles, you can choose to set this vehicle as default, so that it is always first
+	in the list.</string>
 	
 	<string name="help_title_vehicle_add">Adding Vehicle Help</string>
 	<string name="help_vehicle_add">This allows you to add new vehicles to your database. This may be helpful if you drive two vehicles, or
-	multiple vehicles share a database.</string>
+	multiple vehicles share a database. You can optionally set this vehicle to be the default vehicle.</string>
 	
 	<string name="help_title_fillup_new">Recording Fill-Up Help</string>
 	<string name="help_fillup_new">This allows you to add a new fill-up into the database. Note that you can select any date you wish, so you can
 	enter past fill-ups. Alternatively, you can import old fill-ups from a spreadsheet or database; go to History, then to Import/Export for more
-	details.</string>
+	details. You can fill in an optional comment.</string>
 	
 	<string name="help_title_history">History Help</string>
-	<string name="help_history">The history browser lets you view a past fill-ups, of all vehicles. Once a fill-up is selected, you can edit or
+	<string name="help_history">The history browser lets you view a list of past fill-ups, of all vehicles. Once a fill-up is selected, you can edit or
 	delete individual entries. Additionally, you can import or export data.</string>
 	
 	<string name="help_title_fillup_edit">Editing Fill-Up Help</string>
 	<string name="help_fillup_edit">From here, you can edit a previously-recorded fill-up, or delete it altogether. Select Cancel Changes to undo
-	any changes you have made and return to the history browser.</string>
+	any changes you have made and return to the history browser. You can fill in an optional comment, if you want to.</string>
 </resources>
