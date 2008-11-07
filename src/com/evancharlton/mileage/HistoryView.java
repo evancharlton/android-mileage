@@ -119,7 +119,7 @@ public class HistoryView extends ListActivity {
 				return true;
 			} else if (columnIndex == 4) {
 				String val = cursor.getString(columnIndex);
-				if (val.trim().length() == 0) {
+				if (val == null || val.trim().length() == 0) {
 					view.setVisibility(View.GONE);
 					return true;
 				}

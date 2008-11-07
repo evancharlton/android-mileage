@@ -164,6 +164,11 @@ public class Mileage extends Activity {
 				showDialog(DATE_DIALOG_ID);
 			}
 		});
+
+		m_priceEdit.setKeyListener(new KeyFocuser(m_amountEdit));
+		m_amountEdit.setKeyListener(new KeyFocuser(m_mileageEdit));
+		m_mileageEdit.setKeyListener(new KeyFocuser(m_commentEdit));
+		m_commentEdit.setKeyListener(new KeyFocuser(m_saveButton));
 	}
 
 	private void resetForm(View v) {
