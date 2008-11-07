@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="app_name">Mileage</string>
-	<string name="app_version">1.0</string>
+	<string name="app_version">1.1</string>
 	<string name="price_per_gallon">Price per gallon</string>
 	<string name="gallons">Gallons of Fuel</string>
 	<string name="odometer">Odometer</string>
@@ -28,6 +28,7 @@
 	<string name="today">Today</string>
 	<string name="comment">Comment (optional)</string>
 	<string name="make_default">Make this vehicle the default</string>
+	<string name="gallons_abbr">gal</string>
 	
 	<string name="history_text1">:</string>
 	<string name="history_text2">gallons @ $</string>

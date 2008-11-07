@@ -1,6 +1,7 @@
 package com.evancharlton.mileage;
 
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.util.Date;
 
 import android.app.ListActivity;
@@ -27,6 +28,7 @@ public class HistoryView extends ListActivity {
 	public static final int MENU_IMPORT_SQL = Menu.FIRST + 6;
 	public static final int MENU_IMPORT_CSV = Menu.FIRST + 7;
 	public static final String TAG = "HistoryList";
+	private DecimalFormat m_formatter = new DecimalFormat("##0.00");
 
 	private static final String[] PROJECTIONS = new String[] {
 			FillUps._ID,
@@ -103,11 +105,13 @@ public class HistoryView extends ListActivity {
 	private SimpleCursorAdapter.ViewBinder m_viewBinder = new SimpleCursorAdapter.ViewBinder() {
 		public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
 			if (columnIndex == 1) {
-				String val = cursor.getString(columnIndex) + " g";
+				double gallons = cursor.getDouble(columnIndex);
+				String val = m_formatter.format(gallons) + " " + getString(R.string.gallons_abbr);
 				((TextView) view).setText(val);
 				return true;
 			} else if (columnIndex == 2) {
-				String val = "$" + cursor.getString(columnIndex) + "/g";
+				double price = cursor.getDouble(columnIndex);
+				String val = "$" + m_formatter.format(price) + "/" + getString(R.string.gallons_abbr);
 				((TextView) view).setText(val);
 				return true;
 			} else if (columnIndex == 3) {
