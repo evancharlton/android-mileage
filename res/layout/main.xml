@@ -67,7 +67,6 @@
 	   		android:layout_weight="1"
 			android:layout_height="wrap_content"
 			android:text="@string/add_fillup"
-			android:focusable="true"
 		/>
 	</LinearLayout>
 	<EditText
