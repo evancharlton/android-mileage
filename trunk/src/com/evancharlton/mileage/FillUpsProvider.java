@@ -119,6 +119,9 @@ public class FillUpsProvider extends ContentProvider {
 			} else {
 				StringBuilder sb = new StringBuilder();
 				sb.append("DROP TABLE IF EXISTS ").append(FILLUPS_TABLE_NAME).append(";");
+				db.execSQL(sb.toString());
+
+				sb = new StringBuilder();
 				sb.append("DROP TABLE IF EXISTS ").append(VEHICLES_TABLE_NAME).append(";");
 				db.execSQL(sb.toString());
 				onCreate(db);
