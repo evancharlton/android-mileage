@@ -3,6 +3,8 @@ package com.evancharlton.mileage;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import android.app.ListActivity;
 import android.content.ContentUris;
@@ -28,14 +30,19 @@ public class HistoryView extends ListActivity {
 	public static final int MENU_IMPORT_SQL = Menu.FIRST + 6;
 	public static final int MENU_IMPORT_CSV = Menu.FIRST + 7;
 	public static final String TAG = "HistoryList";
+
+	private double m_avgMpg = 0.0D;
 	private DecimalFormat m_formatter = new DecimalFormat("##0.00");
+	private Map<Integer, String> m_vehicleTitles = new HashMap<Integer, String>();
 
 	private static final String[] PROJECTIONS = new String[] {
 			FillUps._ID,
 			FillUps.AMOUNT,
 			FillUps.COST,
 			FillUps.DATE,
-			FillUps.COMMENT
+			FillUps.COMMENT,
+			FillUps.VEHICLE_ID,
+			FillUps.MILEAGE
 	};
 
 	@Override
@@ -54,16 +61,50 @@ public class HistoryView extends ListActivity {
 				FillUps.AMOUNT,
 				FillUps.COST,
 				FillUps.DATE,
-				FillUps.COMMENT
+				FillUps.COMMENT,
+				FillUps.VEHICLE_ID,
+				FillUps.MILEAGE
 		};
 		int[] to = new int[] {
 				R.id.history_amount,
 				R.id.history_price,
 				R.id.history_date,
-				R.id.history_comment
+				R.id.history_comment,
+				R.id.history_vehicle,
+				R.id.history_mileage
 		};
 
+		String[] projection = new String[] {
+				Vehicles._ID,
+				Vehicles.TITLE
+		};
+
+		Cursor vehicleCursor = managedQuery(Vehicles.CONTENT_URI, projection, null, null, Vehicles.DEFAULT_SORT_ORDER);
+		vehicleCursor.moveToFirst();
+		while (vehicleCursor.isAfterLast() == false) {
+			String title = vehicleCursor.getString(1);
+			int index = vehicleCursor.getInt(0);
+			m_vehicleTitles.put(index, title);
+			vehicleCursor.moveToNext();
+		}
+
 		Cursor historyCursor = managedQuery(FillUps.CONTENT_URI, PROJECTIONS, null, null, FillUps.DEFAULT_SORT_ORDER);
+		if (historyCursor.getCount() > 0) {
+			// we need to calculate the average MPG
+			double total_distance = 0.0D;
+			double total_fuel = 0.0D;
+			historyCursor.moveToFirst();
+			total_distance = historyCursor.getDouble(6);
+			while (historyCursor.isLast() == false) {
+				total_fuel += historyCursor.getDouble(1);
+				historyCursor.moveToNext();
+			}
+			total_distance -= historyCursor.getDouble(6);
+			total_fuel += historyCursor.getDouble(1);
+			historyCursor.moveToFirst();
+			m_avgMpg = total_distance / total_fuel;
+		}
+
 		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.history, historyCursor, from, to);
 		adapter.setViewBinder(m_viewBinder);
 		setListAdapter(adapter);
@@ -104,29 +145,68 @@ public class HistoryView extends ListActivity {
 
 	private SimpleCursorAdapter.ViewBinder m_viewBinder = new SimpleCursorAdapter.ViewBinder() {
 		public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
-			if (columnIndex == 1) {
-				double gallons = cursor.getDouble(columnIndex);
-				String val = m_formatter.format(gallons) + " " + getString(R.string.gallons_abbr);
-				((TextView) view).setText(val);
-				return true;
-			} else if (columnIndex == 2) {
-				double price = cursor.getDouble(columnIndex);
-				String val = "$" + m_formatter.format(price) + "/" + getString(R.string.gallons_abbr);
-				((TextView) view).setText(val);
-				return true;
-			} else if (columnIndex == 3) {
-				long time = cursor.getLong(columnIndex);
-				Date date = new Date(time);
-				DateFormat format = DateFormat.getDateInstance(DateFormat.SHORT);
-				String text = format.format(date);
-				((TextView) view).setText(text);
-				return true;
-			} else if (columnIndex == 4) {
-				String val = cursor.getString(columnIndex);
-				if (val == null || val.trim().length() == 0) {
-					view.setVisibility(View.GONE);
+			String val;
+			switch (columnIndex) {
+				case 1:
+					double gallons = cursor.getDouble(columnIndex);
+					val = m_formatter.format(gallons) + " " + getString(R.string.gallons_abbr);
+					((TextView) view).setText(val);
 					return true;
-				}
+				case 2:
+					double price = cursor.getDouble(columnIndex);
+					val = "$" + m_formatter.format(price) + "/" + getString(R.string.gallons_abbr);
+					((TextView) view).setText(val);
+					return true;
+				case 3:
+					long time = cursor.getLong(columnIndex);
+					Date date = new Date(time);
+					DateFormat format = DateFormat.getDateInstance(DateFormat.SHORT);
+					String text = format.format(date);
+					((TextView) view).setText(text);
+					return true;
+				case 4:
+					val = cursor.getString(columnIndex);
+					if (val == null || val.trim().length() == 0) {
+						view.setVisibility(View.GONE);
+						return true;
+					}
+					break;
+				case 5:
+					int id = cursor.getInt(columnIndex);
+					val = m_vehicleTitles.get(id);
+					boolean hide = true;
+					if (val != null) {
+						((TextView) view).setText(val);
+						hide = false;
+					}
+					if (m_vehicleTitles.size() == 1) {
+						hide = true;
+					}
+					if (hide) {
+						view.setVisibility(View.GONE);
+					}
+					return true;
+				case 6:
+					double mileage = cursor.getDouble(columnIndex);
+					int position = cursor.getPosition();
+					if (position != cursor.getCount() - 1) {
+						cursor.moveToNext();
+						double next_mileage = cursor.getDouble(columnIndex);
+						double diff = mileage - next_mileage;
+						double amount = cursor.getDouble(1);
+						double mpg = diff / amount;
+						TextView tv = (TextView) view;
+						int color = 0xFF666666;
+						if (mpg >= m_avgMpg) {
+							color = 0xFF0AB807;
+						} else {
+							color = 0xFFD90000;
+						}
+						tv.setTextColor(color);
+						tv.setText(m_formatter.format(mpg) + " " + getString(R.string.mpg));
+						cursor.moveToPrevious();
+					}
+					return true;
 			}
 			return false;
 		}

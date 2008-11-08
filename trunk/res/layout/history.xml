@@ -4,22 +4,35 @@
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content"
 	android:gravity="center"
+	android:paddingBottom="5dip"
 >
 	<LinearLayout
 		android:orientation="vertical"
 		android:layout_width="wrap_content"
 		android:layout_height="fill_parent"
 		android:layout_weight="1"
-		android:gravity="center_vertical"
+		android:gravity="top"
 	>
-		<TextView
-			android:id="@+id/history_date"
+		<LinearLayout
 			android:layout_width="wrap_content"
 			android:paddingLeft="5dip"
-			android:textAppearance="?android:attr/textAppearanceLarge"
 			android:layout_height="0dip"
 			android:layout_weight="1"
-		/>
+		>
+			<TextView
+				android:id="@+id/history_date"
+				android:layout_width="wrap_content"
+				android:textAppearance="?android:attr/textAppearanceLarge"
+				android:layout_height="wrap_content"
+			/>
+			<TextView
+				android:id="@+id/history_vehicle"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:paddingLeft="5dip"
+				android:layout_weight="1"
+			/>
+		</LinearLayout>
 		<TextView
 			android:id="@+id/history_comment"
 			android:layout_width="wrap_content"
@@ -29,24 +42,38 @@
 		/>
 	</LinearLayout>
 	<LinearLayout
-		android:orientation="vertical"
+		android:orientation="horizontal"
 		android:layout_width="wrap_content"
 		android:layout_height="fill_parent"
-		android:gravity="right"
+		android:gravity="right|center_vertical"
 	>
 		<TextView
-			android:id="@+id/history_amount"
+			android:id="@+id/history_mileage"
 			android:layout_width="wrap_content"
-			android:paddingRight="5dip"
-			android:layout_height="0dip"
+			android:layout_height="wrap_content"
 			android:layout_weight="1"
+			android:paddingRight="5dip"
 		/>
-		<TextView
-			android:id="@+id/history_price"
+		<LinearLayout
+			android:orientation="vertical"
 			android:layout_width="wrap_content"
-			android:paddingRight="5dip"
-			android:layout_height="0dip"
-			android:layout_weight="1"
-		/>
+			android:layout_height="fill_parent"
+			android:gravity="right"
+		>
+			<TextView
+				android:id="@+id/history_amount"
+				android:layout_width="wrap_content"
+				android:paddingRight="5dip"
+				android:layout_height="0dip"
+				android:layout_weight="1"
+			/>
+			<TextView
+				android:id="@+id/history_price"
+				android:layout_width="wrap_content"
+				android:paddingRight="5dip"
+				android:layout_height="0dip"
+				android:layout_weight="1"
+			/>
+		</LinearLayout>
 	</LinearLayout>
 </LinearLayout>

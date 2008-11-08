@@ -29,6 +29,7 @@
 	<string name="comment">Comment (optional)</string>
 	<string name="make_default">Make this vehicle the default</string>
 	<string name="gallons_abbr">gal</string>
+	<string name="mpg">mpg</string>
 	
 	<string name="history_text1">:</string>
 	<string name="history_text2">gallons @ $</string>
