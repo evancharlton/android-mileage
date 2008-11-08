@@ -28,13 +28,10 @@ public class SQLImporter implements Runnable {
 			keySet.remove(FillUps._ID);
 			SQLiteDatabase db = SQLiteDatabase.openDatabase("/data/data/" + Mileage.PACKAGE + "/databases/" + FillUpsProvider.DATABASE_NAME, null, SQLiteDatabase.OPEN_READWRITE);
 
-			StringBuilder sb = new StringBuilder();
 			String line;
 			while ((line = in.readLine()) != null) {
-				sb.append(line).append("\n");
+				db.execSQL(line);
 			}
-
-			db.execSQL(sb.toString());
 			db.close();
 
 			m_handler.post(new Runnable() {
