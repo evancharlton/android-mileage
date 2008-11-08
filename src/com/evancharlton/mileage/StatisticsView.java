@@ -141,7 +141,7 @@ public class StatisticsView extends Activity {
 				min_distance = diff;
 			}
 		}
-		double avg_distance = total_distance / m_miles.size();
+		double avg_distance = total_distance / (m_miles.size() - 1);
 		data.put(R.id.stats_distance_running, string(running_distance));
 		data.put(R.id.stats_distance_average, string(avg_distance));
 		data.put(R.id.stats_distance_maximum, string(max_distance));
