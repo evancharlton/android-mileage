@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="app_name">Mileage</string>
-	<string name="app_version">1.1.1</string>
+	<string name="app_version">1.2.0</string>
 	<string name="price_per_gallon">Price per gallon</string>
 	<string name="gallons">Gallons of Fuel</string>
 	<string name="odometer">Odometer</string>
@@ -100,7 +100,8 @@
 	All local changes will be lost forever. The file that will be imported needs to be on your SD card as "mileage.db"</string>
 	<string name="help_import_csv">Importing comma-separated value (CSV) files is useful for providing spreadsheet integration. Note that the format
 	is pretty specific; if you are not sure of the format, it's highly recommended that you export a CSV, open it in Excel, insert your values, and
-	then import the resulting spreadsheet. Note that the input file needs to be on your SD card as "mileage.csv"</string>
+	then import the resulting spreadsheet. Note that the input file needs to be on your SD card as "mileage.csv". Dates need to be in milliseconds 
+	since 1/1/1970.</string>
 	<string name="help_import_sql">Importing SQL is highly dependent on the database schema. If you do not know what you're doing with this, it is
 	recommended you use another option. The file that is imported needs to be on your SD card as "mileage.sql"</string>
 	<string name="help_export_db">Exporting the SQLite database will create a direct copy of your current SQLite database and place the resulting
@@ -131,7 +132,8 @@
 	
 	<string name="help_title_history">History Help</string>
 	<string name="help_history">The history browser lets you view a list of past fill-ups, of all vehicles. Once a fill-up is selected, you can edit or
-	delete individual entries. Additionally, you can import or export data.</string>
+	delete individual entries. If the miles per gallon is in red, then it is below your average MPG. Green indicates a value above your average MPG.
+	Additionally, you can import or export data.</string>
 	
 	<string name="help_title_fillup_edit">Editing Fill-Up Help</string>
 	<string name="help_fillup_edit">From here, you can edit a previously-recorded fill-up, or delete it altogether. Select Cancel Changes to undo
