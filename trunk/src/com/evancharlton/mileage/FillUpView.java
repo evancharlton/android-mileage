@@ -105,7 +105,7 @@ public class FillUpView extends Activity {
 				}
 
 				try {
-					int mileage = Integer.parseInt(m_mileageEdit.getText().toString());
+					double mileage = Double.parseDouble(m_mileageEdit.getText().toString());
 					values.put(FillUps.MILEAGE, mileage);
 				} catch (NumberFormatException nfe) {
 					error = true;

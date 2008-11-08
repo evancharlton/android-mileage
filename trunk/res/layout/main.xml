@@ -50,7 +50,7 @@
 			   		android:layout_weight="1"
 					android:layout_height="wrap_content"
 					android:hint="@string/odometer"
-				    android:digits="1234567890"
+				    android:digits="1234567890."
 				/>
 				<Button
 					android:id="@+id/change_date_btn"

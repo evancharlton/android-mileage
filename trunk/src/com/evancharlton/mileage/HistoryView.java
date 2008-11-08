@@ -164,13 +164,6 @@ public class HistoryView extends ListActivity {
 					String text = format.format(date);
 					((TextView) view).setText(text);
 					return true;
-				case 4:
-					val = cursor.getString(columnIndex);
-					if (val == null || val.trim().length() == 0) {
-						view.setVisibility(View.GONE);
-						return true;
-					}
-					return false;
 				case 5:
 					int id = cursor.getInt(columnIndex);
 					val = m_vehicleTitles.get(id);
