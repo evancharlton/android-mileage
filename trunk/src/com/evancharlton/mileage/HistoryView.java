@@ -170,17 +170,18 @@ public class HistoryView extends ListActivity {
 						view.setVisibility(View.GONE);
 						return true;
 					}
-					break;
+					return false;
 				case 5:
 					int id = cursor.getInt(columnIndex);
 					val = m_vehicleTitles.get(id);
 					boolean hide = true;
-					if (val != null) {
-						((TextView) view).setText(val);
-						hide = false;
-					}
 					if (m_vehicleTitles.size() == 1) {
 						hide = true;
+					} else {
+						if (val != null) {
+							((TextView) view).setText(val);
+							hide = false;
+						}
 					}
 					if (hide) {
 						view.setVisibility(View.GONE);

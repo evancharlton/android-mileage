@@ -79,6 +79,7 @@ public class ImportExportView extends Activity {
 		public void onClick(View v) {
 			Thread t = null;
 			int title = R.string.exporting_title;
+			int message = R.string.exporting;
 			switch (m_btn) {
 				case EXPORT_DB:
 					t = new Thread(new DBExporter(m_handler));
@@ -92,19 +93,22 @@ public class ImportExportView extends Activity {
 				case IMPORT_CSV:
 					t = new Thread(new CSVImporter(m_handler));
 					title = R.string.importing_title;
+					message = R.string.importing;
 					break;
 				case IMPORT_SQL:
 					t = new Thread(new SQLImporter(m_handler));
 					title = R.string.importing_title;
+					message = R.string.importing;
 					break;
 				case IMPORT_DB:
 					t = new Thread(new DBImporter(m_handler, "/sdcard/mileage.db"));
 					title = R.string.importing_title;
+					message = R.string.importing;
 					break;
 			}
 			if (t != null) {
 				m_progress = new ProgressDialog(ImportExportView.this);
-				m_progress.setMessage(getString(R.string.exporting));
+				m_progress.setMessage(getString(message));
 				m_progress.setIndeterminate(true);
 				m_progress.setTitle(title);
 				m_progress.show();

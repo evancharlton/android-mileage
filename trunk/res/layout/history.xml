@@ -28,9 +28,10 @@
 			<TextView
 				android:id="@+id/history_vehicle"
 				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
+				android:layout_height="fill_parent"
 				android:paddingLeft="5dip"
-				android:layout_weight="1"
+				android:gravity="center"
+				android:layout_weight="2"
 			/>
 		</LinearLayout>
 		<TextView
@@ -42,38 +43,31 @@
 		/>
 	</LinearLayout>
 	<LinearLayout
-		android:orientation="horizontal"
+		android:orientation="vertical"
 		android:layout_width="wrap_content"
 		android:layout_height="fill_parent"
-		android:gravity="right|center_vertical"
+		android:gravity="right"
 	>
+		<TextView
+			android:id="@+id/history_amount"
+			android:layout_width="wrap_content"
+			android:paddingRight="5dip"
+			android:layout_height="0dip"
+			android:layout_weight="1"
+		/>
+		<TextView
+			android:id="@+id/history_price"
+			android:layout_width="wrap_content"
+			android:paddingRight="5dip"
+			android:layout_height="0dip"
+			android:layout_weight="1"
+		/>
 		<TextView
 			android:id="@+id/history_mileage"
 			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
+			android:layout_height="0dip"
 			android:layout_weight="1"
 			android:paddingRight="5dip"
 		/>
-		<LinearLayout
-			android:orientation="vertical"
-			android:layout_width="wrap_content"
-			android:layout_height="fill_parent"
-			android:gravity="right"
-		>
-			<TextView
-				android:id="@+id/history_amount"
-				android:layout_width="wrap_content"
-				android:paddingRight="5dip"
-				android:layout_height="0dip"
-				android:layout_weight="1"
-			/>
-			<TextView
-				android:id="@+id/history_price"
-				android:layout_width="wrap_content"
-				android:paddingRight="5dip"
-				android:layout_height="0dip"
-				android:layout_weight="1"
-			/>
-		</LinearLayout>
 	</LinearLayout>
 </LinearLayout>

@@ -71,6 +71,7 @@
 	<string name="export_finished">Export completed successfully!</string>
 	<string name="export_finished_msg">The exported file is on your SD card in the file:</string>
 	<string name="exporting">Exporting database</string>
+	<string name="importing">Importing into database</string>
 	<string name="exporting_title">Exporting...</string>
 	<string name="importing_title">Importing...</string>
 	<string name="import_header">Import</string>
