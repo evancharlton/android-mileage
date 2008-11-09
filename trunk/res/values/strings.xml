@@ -34,38 +34,39 @@
 	<string name="vehicle_add">Add Vehicle</string>
 	<string name="vehicle_save">Save Vehicle</string>
 	
-	<string name="header_distance">Distance Statistics</string>
-	<string name="header_economy">Fuel Economy Statistics</string>
-	<string name="header_price">Fuel Price Statistics</string>
-	<string name="header_amount">Fuel Amount Statistics</string>
-	<string name="header_costs">Fill-Up Cost Statistics</string>
+	<string name="header_distance">Distance Between Fill-Ups</string>
+	<string name="header_economy">Fuel Economy</string>
+	<string name="header_price">Fuel Prices</string>
+	<string name="header_amount">Fuel Amounts</string>
+	<string name="header_costs">Fill-Up Costs</string>
+	<string name="header_expenses">Fuel Expenses</string>
 	<string name="stats_default">--</string>
-	<string name="stats_distance_running">Distance between last fill-ups:</string>
-	<string name="stats_distance_average">Average distance between fill-ups:</string>
-	<string name="stats_distance_maximum">Maximum distance between fill-ups:</string>
-	<string name="stats_distance_minimum">Minimum distance between fill-ups:</string>
-	<string name="stats_economy_running">Fuel economy for last fill-up:</string>
-	<string name="stats_economy_average">Average fuel economy:</string>
-	<string name="stats_economy_minimum">Minimum fuel economy:</string>
-	<string name="stats_economy_maximum">Maximum fuel economy:</string>
-	<string name="stats_price_running">Total cost of fuel:</string>
-	<string name="stats_price_thirty_days">Cost of fuel in the last 30 days:</string>
-	<string name="stats_price_latest">Last price per gallon:</string>
-	<string name="stats_price_average">Average price per gallon:</string>
-	<string name="stats_price_minimum">Lowest price per gallon:</string>
-	<string name="stats_price_maximum">Highest price per gallon:</string>
-	<string name="stats_amount_running">Total gallons of fuel:</string>
-	<string name="stats_amount_average">Average gallons of fuel per fill-up:</string>
-	<string name="stats_amount_minimum">Minimum gallons of fuel per fill-up:</string>
-	<string name="stats_amount_maximum">Maximum gallons of fuel per fill-up:</string>
-	<string name="stats_amount_average_cost">Average cost per fill-up:</string>
-	<string name="stats_amount_minimum_cost">Minimum cost per fill-up:</string>
-	<string name="stats_amount_maximum_cost">Maximum cost per fill-up:</string>
+	<string name="stats_distance_running">Last:</string>
+	<string name="stats_distance_average">Average:</string>
+	<string name="stats_distance_maximum">Maximum:</string>
+	<string name="stats_distance_minimum">Minimum:</string>
+	<string name="stats_economy_running">Last:</string>
+	<string name="stats_economy_average">Average:</string>
+	<string name="stats_economy_minimum">Minimum:</string>
+	<string name="stats_economy_maximum">Maximum:</string>
+	<string name="stats_price_latest">Last:</string>
+	<string name="stats_price_average">Average:</string>
+	<string name="stats_price_minimum">Lowest:</string>
+	<string name="stats_price_maximum">Highest:</string>
+	<string name="stats_amount_running">Total:</string>
+	<string name="stats_amount_average">Average:</string>
+	<string name="stats_amount_minimum">Minimum:</string>
+	<string name="stats_amount_maximum">Maximum:</string>
+	<string name="stats_amount_average_cost">Average:</string>
+	<string name="stats_amount_minimum_cost">Minimum:</string>
+	<string name="stats_amount_maximum_cost">Maximum:</string>
+	<string name="stats_expense_running">Total:</string>
+	<string name="stats_expense_thirty_days">30-day cost:</string>
 	
 	<string name="import_export">Import / Export</string>
 	<string name="export_header">Export</string>	
 	<string name="error_exporting_data">Error while exporting</string>
-	<string name="export_finished">Export completed successfully!</string>
+	<string name="export_finished">Success!</string>
 	<string name="export_finished_msg">The exported file is on your SD card in the file:</string>
 	<string name="exporting">Exporting database</string>
 	<string name="importing">Importing into database</string>
@@ -75,7 +76,7 @@
 	<string name="import_db">DB</string>
 	<string name="import_sql">SQL</string>
 	<string name="import_csv">CSV</string>
-	<string name="import_done">Finished importing!</string>
+	<string name="import_done">Success!</string>
 	<string name="import_done_msg">The data in the following file has been imported:</string>
 	<string name="error_importing_data">Error while importing</string>
 	<string name="sqlite">SQLite DB</string>
@@ -87,6 +88,7 @@
 	<string name="settings_number_format">Numbers:</string>
 	<string name="settings_header_system">System of Measure</string>
 	<string name="settings_system">System:</string>
+	<string name="settings_currency">Currency:</string>
 		
 	<string name="error">Error!</string>
 	<string name="error_cost">Invalid number format for price of fuel.</string>
@@ -141,4 +143,7 @@
 	<string name="help_title_fillup_edit">Editing Fill-Up Help</string>
 	<string name="help_fillup_edit">From here, you can edit a previously-recorded fill-up, or delete it altogether. Select Cancel Changes to undo
 	any changes you have made and return to the history browser. You can fill in an optional comment, if you want to.</string>
+	
+	<string name="help_title_settings">Settings Help</string>
+	<string name="help_settings">From this screen, you can set preferences to fit your usage.</string>
 </resources>

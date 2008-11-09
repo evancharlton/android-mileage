@@ -5,9 +5,17 @@ public abstract class CalculationEngine {
 
 	abstract String getEconomyUnits();
 
+	abstract double getWorstEconomy();
+
+	abstract double getBestEconomy();
+
 	abstract String getVolumeUnits();
 
 	abstract String getVolumeUnitsAbbr();
+
+	abstract String getDistanceUnits();
+
+	abstract String getDistanceUnitsAbbr();
 
 	/**
 	 * See if one is better than two.

@@ -108,6 +108,10 @@ public class PreferencesProvider {
 		}
 	}
 
+	public String getCurrency() {
+		return getString(R.array.currencies, SettingsView.CURRENCY);
+	}
+
 	public CalculationEngine getCalculator() {
 		int calc = getInt(SettingsView.CALCULATIONS, 0);
 		if (calc == US_ENGINE) {

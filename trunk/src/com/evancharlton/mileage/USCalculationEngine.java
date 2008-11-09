@@ -5,6 +5,14 @@ public class USCalculationEngine extends CalculationEngine {
 		return distance / fuel;
 	}
 
+	public double getWorstEconomy() {
+		return 0.0D;
+	}
+
+	public double getBestEconomy() {
+		return Double.MAX_VALUE;
+	}
+
 	public boolean better(double one, double two) {
 		return one > two;
 	}
@@ -14,14 +22,22 @@ public class USCalculationEngine extends CalculationEngine {
 	}
 
 	public String getEconomyUnits() {
-		return "mpg";
+		return " mpg";
 	}
 
 	public String getVolumeUnits() {
-		return "Gallons";
+		return " Gallons";
 	}
 
 	public String getVolumeUnitsAbbr() {
-		return "gal";
+		return " gal";
+	}
+
+	public String getDistanceUnits() {
+		return " miles";
+	}
+
+	public String getDistanceUnitsAbbr() {
+		return " mi";
 	}
 }

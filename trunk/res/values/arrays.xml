@@ -4,6 +4,11 @@
     	<item>American (mpg)</item>
     	<item>Metric (l/100km)</item>
     </string-array>
+    <string-array name="currencies">
+    	<item>$</item>
+    	<item>€</item>
+    	<item>£</item>
+    </string-array>
     <string-array name="date_formats">
     	<item>MM/DD/YY</item>
     	<item>MM/DD/YYYY</item>

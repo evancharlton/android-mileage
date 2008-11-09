@@ -148,12 +148,12 @@ public class HistoryView extends ListActivity {
 			switch (columnIndex) {
 				case 1:
 					double gallons = cursor.getDouble(columnIndex);
-					val = prefs.format(gallons) + " " + engine.getVolumeUnitsAbbr();
+					val = prefs.format(gallons) + engine.getVolumeUnitsAbbr();
 					((TextView) view).setText(val);
 					return true;
 				case 2:
 					double price = cursor.getDouble(columnIndex);
-					val = "$" + prefs.format(price) + "/" + engine.getVolumeUnitsAbbr();
+					val = prefs.getCurrency() + prefs.format(price) + "/" + engine.getVolumeUnitsAbbr().trim();
 					((TextView) view).setText(val);
 					return true;
 				case 3:
@@ -195,7 +195,7 @@ public class HistoryView extends ListActivity {
 							color = 0xFFD90000;
 						}
 						tv.setTextColor(color);
-						tv.setText(prefs.format(mpg) + " " + engine.getEconomyUnits());
+						tv.setText(prefs.format(mpg) + engine.getEconomyUnits());
 						cursor.moveToPrevious();
 					}
 					return true;

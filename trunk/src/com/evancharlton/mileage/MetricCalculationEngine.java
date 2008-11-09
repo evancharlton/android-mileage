@@ -5,16 +5,32 @@ public class MetricCalculationEngine extends CalculationEngine {
 		return 100D * (fuel / distance);
 	}
 
+	public double getWorstEconomy() {
+		return Double.MAX_VALUE;
+	}
+
+	public double getBestEconomy() {
+		return 0.0D;
+	}
+
 	public String getEconomyUnits() {
-		return "l/100km";
+		return " L/100km";
 	}
 
 	public String getVolumeUnits() {
-		return "Litres";
+		return " Litres";
 	}
 
 	public String getVolumeUnitsAbbr() {
-		return "L";
+		return " L";
+	}
+
+	public String getDistanceUnits() {
+		return " Kilometers";
+	}
+
+	public String getDistanceUnitsAbbr() {
+		return " K";
 	}
 
 	public boolean better(double economy_one, double economy_two) {

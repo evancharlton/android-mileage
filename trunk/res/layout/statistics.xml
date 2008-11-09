@@ -238,46 +238,6 @@
 					android:layout_weight="1"
 					android:layout_width="wrap_content"
 				    android:layout_height="wrap_content"
-					android:text="@string/stats_price_running"
-				/>
-				<TextView
-					android:id="@+id/stats_price_running"
-					style="@style/StatisticText"
-					android:layout_width="wrap_content"
-				    android:layout_height="wrap_content"
-					android:text="@string/stats_default"
-				/>
-			</LinearLayout>
-			<LinearLayout
-				android:orientation="horizontal"
-				android:layout_width="fill_parent"
-				android:layout_height="wrap_content"
-			>
-				<TextView
-					style="@style/LabelText"
-					android:layout_weight="1"
-					android:layout_width="wrap_content"
-				    android:layout_height="wrap_content"
-					android:text="@string/stats_price_thirty_days"
-				/>
-				<TextView
-					android:id="@+id/stats_price_thirty_days"
-					style="@style/StatisticText"
-					android:layout_width="wrap_content"
-				    android:layout_height="wrap_content"
-					android:text="@string/stats_default"
-				/>
-			</LinearLayout>
-			<LinearLayout
-				android:orientation="horizontal"
-				android:layout_width="fill_parent"
-				android:layout_height="wrap_content"
-			>
-				<TextView
-					style="@style/LabelText"
-					android:layout_weight="1"
-					android:layout_width="wrap_content"
-				    android:layout_height="wrap_content"
 					android:text="@string/stats_price_average"
 				/>
 				<TextView
@@ -476,6 +436,53 @@
 				/>
 				<TextView
 					android:id="@+id/stats_amount_maximum"
+					style="@style/StatisticText"
+					android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+					android:text="@string/stats_default"
+				/>
+			</LinearLayout>
+			<!-- fuel expense statistics -->
+			<TextView
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				style="@style/SeparatorText"
+				android:text="@string/header_expenses"
+			/>
+			<LinearLayout
+				android:orientation="horizontal"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+			>
+				<TextView
+					style="@style/LabelText"
+					android:layout_weight="1"
+					android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+					android:text="@string/stats_expense_running"
+				/>
+				<TextView
+					android:id="@+id/stats_expense_running"
+					style="@style/StatisticText"
+					android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+					android:text="@string/stats_default"
+				/>
+			</LinearLayout>
+			<LinearLayout
+				android:orientation="horizontal"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+			>
+				<TextView
+					style="@style/LabelText"
+					android:layout_weight="1"
+					android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+					android:text="@string/stats_expense_thirty_days"
+				/>
+				<TextView
+					android:id="@+id/stats_expense_thirty_days"
 					style="@style/StatisticText"
 					android:layout_width="wrap_content"
 				    android:layout_height="wrap_content"

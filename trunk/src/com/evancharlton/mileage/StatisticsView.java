@@ -1,6 +1,5 @@
 package com.evancharlton.mileage;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -23,11 +22,15 @@ public class StatisticsView extends Activity {
 	private ArrayList<Double> m_costs;
 	private ArrayList<Long> m_dates;
 	private ArrayList<Double> m_miles;
+	private PreferencesProvider m_pref;
+	private CalculationEngine m_engine;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.statistics);
+		m_pref = PreferencesProvider.getInstance(this);
+		m_engine = m_pref.getCalculator();
 
 		initUI();
 		populateSpinner();
@@ -142,33 +145,31 @@ public class StatisticsView extends Activity {
 			}
 		}
 		double avg_distance = total_distance / (m_miles.size() - 1);
-		data.put(R.id.stats_distance_running, string(running_distance));
-		data.put(R.id.stats_distance_average, string(avg_distance));
-		data.put(R.id.stats_distance_maximum, string(max_distance));
-		data.put(R.id.stats_distance_minimum, string(min_distance));
+		data.put(R.id.stats_distance_running, string(running_distance, m_engine.getDistanceUnitsAbbr()));
+		data.put(R.id.stats_distance_average, string(avg_distance, m_engine.getDistanceUnitsAbbr()));
+		data.put(R.id.stats_distance_maximum, string(max_distance, m_engine.getDistanceUnitsAbbr()));
+		data.put(R.id.stats_distance_minimum, string(min_distance, m_engine.getDistanceUnitsAbbr()));
 		return data;
 	}
 
 	private Map<Integer, String> economyStats() {
 		HashMap<Integer, String> data = new HashMap<Integer, String>();
 		double average_mpg = 0.0D;
-		double minimum_mpg = Double.MAX_VALUE;
-		double maximum_mpg = 0.0D;
+		double minimum_mpg = m_engine.getBestEconomy();
+		double maximum_mpg = m_engine.getWorstEconomy();
 		double total_miles = 0.0D;
 		double total_fuel = 0.0D;
 		double running_mpg = 0.0D;
-		PreferencesProvider prefs = PreferencesProvider.getInstance(this);
-		CalculationEngine engine = prefs.getCalculator();
 
 		for (int i = 0; i < m_amounts.size() - 1; i++) {
 			total_fuel += m_amounts.get(i);
 			double mile_diff = m_miles.get(i) - m_miles.get(i + 1);
 			total_miles += mile_diff;
-			double mpg = engine.calculateEconomy(mile_diff, m_amounts.get(i));
-			if (engine.better(mpg, maximum_mpg)) {
+			double mpg = m_engine.calculateEconomy(mile_diff, m_amounts.get(i));
+			if (m_engine.better(mpg, maximum_mpg)) {
 				maximum_mpg = mpg;
 			}
-			if (engine.worse(mpg, minimum_mpg)) {
+			if (m_engine.worse(mpg, minimum_mpg)) {
 				minimum_mpg = mpg;
 			}
 
@@ -180,12 +181,12 @@ public class StatisticsView extends Activity {
 		// (which is the oldest in history terms) does not relate to the average
 		// mileage.
 
-		average_mpg = engine.calculateEconomy(total_miles, total_fuel);
+		average_mpg = m_engine.calculateEconomy(total_miles, total_fuel);
 
-		data.put(R.id.stats_economy_average, string(average_mpg));
-		data.put(R.id.stats_economy_maximum, string(maximum_mpg));
-		data.put(R.id.stats_economy_minimum, string(minimum_mpg));
-		data.put(R.id.stats_economy_running, string(running_mpg));
+		data.put(R.id.stats_economy_average, string(average_mpg, m_engine.getEconomyUnits()));
+		data.put(R.id.stats_economy_maximum, string(maximum_mpg, m_engine.getEconomyUnits()));
+		data.put(R.id.stats_economy_minimum, string(minimum_mpg, m_engine.getEconomyUnits()));
+		data.put(R.id.stats_economy_running, string(running_mpg, m_engine.getEconomyUnits()));
 
 		return data;
 	}
@@ -241,19 +242,19 @@ public class StatisticsView extends Activity {
 			total_expense += cost;
 		}
 
-		data.put(R.id.stats_price_thirty_days, string(thirty_day_cost, "$"));
-		data.put(R.id.stats_price_latest, string(m_costs.get(0), "$"));
-		data.put(R.id.stats_price_average, string(total_cost / m_costs.size(), "$"));
-		data.put(R.id.stats_price_running, string(total_expense, "$"));
-		data.put(R.id.stats_price_minimum, string(lowest_ppg, "$"));
-		data.put(R.id.stats_price_maximum, string(highest_ppg, "$"));
-		data.put(R.id.stats_amount_running, string(total_fuel));
-		data.put(R.id.stats_amount_average, string(total_fuel / m_amounts.size()));
-		data.put(R.id.stats_amount_average_cost, string(total_expense / m_costs.size(), "$"));
-		data.put(R.id.stats_amount_maximum, string(highest_amt));
-		data.put(R.id.stats_amount_minimum, string(lowest_amt));
-		data.put(R.id.stats_amount_maximum_cost, string(highest_cost, "$"));
-		data.put(R.id.stats_amount_minimum_cost, string(lowest_cost, "$"));
+		data.put(R.id.stats_price_latest, string(m_pref.getCurrency(), m_costs.get(0), "/" + m_engine.getVolumeUnitsAbbr().trim()));
+		data.put(R.id.stats_price_average, string(m_pref.getCurrency(), total_cost / m_costs.size(), "/" + m_engine.getVolumeUnitsAbbr().trim()));
+		data.put(R.id.stats_price_minimum, string(m_pref.getCurrency(), lowest_ppg, "/" + m_engine.getVolumeUnitsAbbr().trim()));
+		data.put(R.id.stats_price_maximum, string(m_pref.getCurrency(), highest_ppg, "/" + m_engine.getVolumeUnitsAbbr().trim()));
+		data.put(R.id.stats_amount_running, string(total_fuel, m_engine.getVolumeUnitsAbbr()));
+		data.put(R.id.stats_amount_average, string(total_fuel / m_amounts.size(), m_engine.getVolumeUnitsAbbr()));
+		data.put(R.id.stats_amount_average_cost, string(m_pref.getCurrency(), total_expense / m_costs.size()));
+		data.put(R.id.stats_amount_maximum, string(highest_amt, m_engine.getVolumeUnitsAbbr()));
+		data.put(R.id.stats_amount_minimum, string(lowest_amt, m_engine.getVolumeUnitsAbbr()));
+		data.put(R.id.stats_amount_maximum_cost, string(m_pref.getCurrency(), highest_cost));
+		data.put(R.id.stats_amount_minimum_cost, string(m_pref.getCurrency(), lowest_cost));
+		data.put(R.id.stats_expense_thirty_days, string(m_pref.getCurrency(), thirty_day_cost));
+		data.put(R.id.stats_expense_running, string(m_pref.getCurrency(), total_expense));
 
 		return data;
 	}
@@ -270,13 +271,16 @@ public class StatisticsView extends Activity {
 		tv.setText(text);
 	}
 
-	private String string(double val) {
-		return string(val, "");
+	private String string(double val, String postfix) {
+		return string("", val, postfix);
 	}
 
-	private String string(double val, String prefix) {
-		DecimalFormat format = new DecimalFormat("##0.00");
-		String str = prefix + format.format(val);
+	private String string(String prefix, double val) {
+		return string(prefix, val, "");
+	}
+
+	private String string(String prefix, double val, String postfix) {
+		String str = prefix + m_pref.format(val) + postfix;
 		return str;
 	}
 }

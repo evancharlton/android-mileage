@@ -28,10 +28,8 @@ import android.widget.Spinner;
 public class Mileage extends Activity {
 	public static final String PACKAGE = "com.evancharlton.mileage";
 	public static final int DATE_DIALOG_ID = 0;
-	public static final int MENU_HISTORY = Menu.FIRST;
-	public static final int MENU_VEHICLES = Menu.FIRST + 1;
-	public static final int MENU_STATISTICS = Menu.FIRST + 2;
-	public static final int MENU_SETTINGS = Menu.FIRST + 3;
+	public static final int MENU_VEHICLES = Menu.FIRST;
+	public static final int MENU_SETTINGS = Menu.FIRST + 1;
 
 	private int m_year;
 	private int m_month;
@@ -63,12 +61,14 @@ public class Mileage extends Activity {
 		initData();
 		initHandlers();
 		updateDate();
+		loadPrefs();
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
 		updateDate();
+		loadPrefs();
 	}
 
 	private void initData() {
@@ -94,6 +94,12 @@ public class Mileage extends Activity {
 		vehicleAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		m_vehicleSpinner.setAdapter(vehicleAdapter);
 
+	}
+
+	private void loadPrefs() {
+		PreferencesProvider prefs = PreferencesProvider.getInstance(Mileage.this);
+		m_priceEdit.setHint(prefs.getString(R.array.unit_price_hints, SettingsView.CALCULATIONS));
+		m_amountEdit.setHint(prefs.getString(R.array.unit_amount_hints, SettingsView.CALCULATIONS));
 	}
 
 	private void initHandlers() {
@@ -187,11 +193,6 @@ public class Mileage extends Activity {
 			}
 		});
 
-		PreferencesProvider prefs = PreferencesProvider.getInstance(Mileage.this);
-
-		m_priceEdit.setHint(prefs.getString(R.array.unit_price_hints, SettingsView.CALCULATIONS));
-		m_amountEdit.setHint(prefs.getString(R.array.unit_amount_hints, SettingsView.CALCULATIONS));
-
 		// m_priceEdit.setKeyListener(new KeyFocuser(m_amountEdit));
 		// m_amountEdit.setKeyListener(new KeyFocuser(m_mileageEdit));
 		// m_mileageEdit.setKeyListener(new KeyFocuser(m_commentEdit));
@@ -245,9 +246,7 @@ public class Mileage extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
 
-		menu.add(Menu.NONE, MENU_HISTORY, 0, R.string.fillup_history).setShortcut('1', 'i');
 		menu.add(Menu.NONE, MENU_VEHICLES, 0, R.string.vehicles).setShortcut('2', 'v');
-		menu.add(Menu.NONE, MENU_STATISTICS, 0, R.string.statistics).setShortcut('3', 's');
 		menu.add(Menu.NONE, MENU_SETTINGS, 0, R.string.settings).setShortcut('4', 'e');
 		HelpDialog.injectHelp(menu, 'h');
 
@@ -257,14 +256,8 @@ public class Mileage extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-			case MENU_HISTORY:
-				showHistory();
-				break;
 			case MENU_VEHICLES:
 				showVehicles();
-				break;
-			case MENU_STATISTICS:
-				showStatistics();
 				break;
 			case HelpDialog.MENU_HELP:
 				HelpDialog.create(this, R.string.help_title_fillup_new, R.string.help_fillup_new);
