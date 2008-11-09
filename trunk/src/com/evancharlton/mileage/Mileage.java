@@ -190,6 +190,7 @@ public class Mileage extends Activity {
 		PreferencesProvider prefs = PreferencesProvider.getInstance(Mileage.this);
 
 		m_priceEdit.setHint(prefs.getString(R.array.unit_price_hints, SettingsView.CALCULATIONS));
+		m_amountEdit.setHint(prefs.getString(R.array.unit_amount_hints, SettingsView.CALCULATIONS));
 
 		// m_priceEdit.setKeyListener(new KeyFocuser(m_amountEdit));
 		// m_amountEdit.setKeyListener(new KeyFocuser(m_mileageEdit));
