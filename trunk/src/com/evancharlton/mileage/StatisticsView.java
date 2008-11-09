@@ -11,6 +11,8 @@ import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.CursorIndexOutOfBoundsException;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.SimpleCursorAdapter;
@@ -36,6 +38,21 @@ public class StatisticsView extends Activity {
 
 		initUI();
 		populateSpinner();
+	}
+
+	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
+		HelpDialog.injectHelp(menu, 'h');
+		return true;
+	}
+
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case HelpDialog.MENU_HELP:
+				HelpDialog.create(this, R.string.help_title_statistics, R.string.help_statistics);
+				break;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	private void initUI() {

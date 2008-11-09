@@ -95,7 +95,7 @@
 	<string name="error">Error!</string>
 	<string name="error_cost">Invalid number format for price of fuel.</string>
 	<string name="error_amount">Invalid number format for amount of fuel.</string>
-	<string name="error_mileage">Invalid number format for mileage reading.</string>
+	<string name="error_mileage">Invalid number format for odometer reading.</string>
 	<string name="error_year">Year can not be blank!</string>
 	<string name="error_make">Make can not be blank!</string>
 	<string name="error_model">Model can not be blank!</string>
@@ -124,7 +124,7 @@
 	
 	<string name="help_title_vehicle_edit">Editing Vehicle Help</string>
 	<string name="help_vehicle_edit">From here, you can change attributes about an existing vehicle. If you decide
-	to not save your changes, simply select Cancel Changes to undo the changes. Note that there must always be at least one vehicle, so you
+	to not save your changes, simply press the back button to undo the changes. Note that there must always be at least one vehicle, so you
 	can not delete the last vehicle. If you have multiple vehicles, you can choose to set this vehicle as default, so that it is always first
 	in the list.</string>
 	
@@ -139,13 +139,19 @@
 	
 	<string name="help_title_history">History Help</string>
 	<string name="help_history">The history browser lets you view a list of past fill-ups, of all vehicles. Once a fill-up is selected, you can edit or
-	delete individual entries. If the miles per gallon is in red, then it is below your average MPG. Green indicates a value above your average MPG.
-	Additionally, you can import or export data.</string>
+	delete individual entries. If the economy is in red, then it is below your average economy value. Green indicates a value above your average 
+	economy value. Additionally, you can import or export data.</string>
 	
 	<string name="help_title_fillup_edit">Editing Fill-Up Help</string>
-	<string name="help_fillup_edit">From here, you can edit a previously-recorded fill-up, or delete it altogether. Select Cancel Changes to undo
+	<string name="help_fillup_edit">From here, you can edit a previously-recorded fill-up, or delete it altogether. Press the back button to undo
 	any changes you have made and return to the history browser. You can fill in an optional comment, if you want to.</string>
 	
 	<string name="help_title_settings">Settings Help</string>
-	<string name="help_settings">From this screen, you can set preferences to fit your usage.</string>
+	<string name="help_settings">From this screen, you can set preferences to fit your usage. Note that switching between mpg and l/100km doesn't do
+	any unit conversion--it simply uses existing values to calculate statistics in a different way. 10 gallons becomes 10 litres, not 37.85 litres.</string>
+	
+	<string name="help_title_statistics">Statistics Help</string>
+	<string name="help_statistics">This screen shows a wide range of calculated statistics on a per-vehicle basis. If you have multiple vehicles,
+	a drop-down will show, and you can switch between vehicles. Note that statistics can not be calculated on vehicles without any fill-up data stored,
+	so you will just get an error message.</string>
 </resources>

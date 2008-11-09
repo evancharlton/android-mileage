@@ -163,11 +163,13 @@ public final class R {
         public static final int help_import_db=0x7f050061;
         public static final int help_import_sql=0x7f050063;
         public static final int help_settings=0x7f050074;
+        public static final int help_statistics=0x7f050076;
         public static final int help_title_fillup_edit=0x7f050071;
         public static final int help_title_fillup_new=0x7f05006d;
         public static final int help_title_history=0x7f05006f;
         public static final int help_title_import_export=0x7f050060;
         public static final int help_title_settings=0x7f050073;
+        public static final int help_title_statistics=0x7f050075;
         public static final int help_title_vehicle_add=0x7f05006b;
         public static final int help_title_vehicle_edit=0x7f050069;
         public static final int help_title_vehicles=0x7f050067;
