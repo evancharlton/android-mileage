@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.CursorIndexOutOfBoundsException;
 import android.os.Bundle;
@@ -109,6 +111,16 @@ public class StatisticsView extends Activity {
 		}
 
 		if (count == 0) {
+			// throw up a notice
+			AlertDialog dlg = new AlertDialog.Builder(this).create();
+			dlg.setTitle(R.string.statistics_no_data);
+			dlg.setMessage(getString(R.string.statistics_no_data_msg));
+			dlg.setButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int which) {
+					dialog.dismiss();
+				}
+			});
+			dlg.show();
 			return;
 		}
 
