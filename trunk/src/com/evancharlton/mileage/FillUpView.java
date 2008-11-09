@@ -1,6 +1,5 @@
 package com.evancharlton.mileage;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -28,8 +27,7 @@ public class FillUpView extends Activity {
 	private static final int DATE_DIALOG_ID = 0;
 	private static final int DELETE_DIALOG_ID = 1;
 
-	public static final int MENU_CANCEL = Menu.FIRST;
-	public static final int MENU_DELETE = Menu.FIRST + 1;
+	public static final int MENU_DELETE = Menu.FIRST;
 
 	private EditText m_priceEdit;
 	private EditText m_amountEdit;
@@ -39,6 +37,7 @@ public class FillUpView extends Activity {
 	private Button m_saveButton;
 	private AlertDialog m_deleteDialog;
 	private Spinner m_vehicleSpinner;
+	private DatePickerDialog m_dateDlg = null;
 
 	private int m_day;
 	private int m_year;
@@ -142,13 +141,13 @@ public class FillUpView extends Activity {
 	}
 
 	private void updateDate() {
-		SimpleDateFormat sdf = new SimpleDateFormat("MMMM dd");
+		GregorianCalendar gc = new GregorianCalendar(m_year, m_month, m_day);
+		Date d = new Date(gc.getTimeInMillis());
 
-		StringBuilder changedText = new StringBuilder();
-		changedText.append(sdf.format(new Date(m_year, m_month, m_day)));
-		changedText.append(" (").append(getString(R.string.custom_date)).append(")");
-
-		m_dateButton.setText(changedText.toString());
+		m_dateButton.setText(PreferencesProvider.getInstance(FillUpView.this).format(d));
+		if (m_dateDlg != null) {
+			m_dateDlg.updateDate(m_year, m_month, m_day);
+		}
 	}
 
 	private void loadData() {
@@ -207,8 +206,7 @@ public class FillUpView extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
 
-		menu.add(Menu.NONE, MENU_CANCEL, Menu.NONE, R.string.cancel_changes).setShortcut('1', 'c');
-		menu.add(Menu.NONE, MENU_DELETE, Menu.NONE, R.string.delete).setShortcut('2', 'd');
+		menu.add(Menu.NONE, MENU_DELETE, Menu.NONE, R.string.delete).setShortcut('1', 'd');
 		HelpDialog.injectHelp(menu, 'h');
 
 		return true;
@@ -216,9 +214,6 @@ public class FillUpView extends Activity {
 
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-			case MENU_CANCEL:
-				finish();
-				break;
 			case MENU_DELETE:
 				showDialog(DELETE_DIALOG_ID);
 				break;
@@ -233,12 +228,28 @@ public class FillUpView extends Activity {
 	protected Dialog onCreateDialog(int id) {
 		switch (id) {
 			case DATE_DIALOG_ID:
-				return new DatePickerDialog(this, m_dateSetListener, m_year, m_month, m_day);
+				if (m_dateDlg == null) {
+					m_dateDlg = new DatePickerDialog(this, m_dateSetListener, m_year, m_month, m_day);
+					m_dateDlg.updateDate(m_year, m_month, m_day);
+					m_dateDlg.setButton3(getString(R.string.today), m_todayListener);
+				}
+				return m_dateDlg;
 			case DELETE_DIALOG_ID:
 				return m_deleteDialog;
 		}
 		return null;
 	}
+
+	private DialogInterface.OnClickListener m_todayListener = new DialogInterface.OnClickListener() {
+		public void onClick(DialogInterface intf, int which) {
+			Calendar cal = Calendar.getInstance();
+			cal.setTimeInMillis(System.currentTimeMillis());
+			m_year = cal.get(Calendar.YEAR);
+			m_month = cal.get(Calendar.MONTH);
+			m_day = cal.get(Calendar.DAY_OF_MONTH);
+			updateDate();
+		}
+	};
 
 	private DatePickerDialog.OnDateSetListener m_dateSetListener = new DatePickerDialog.OnDateSetListener() {
 		public void onDateSet(DatePicker view, int year, int month, int day) {

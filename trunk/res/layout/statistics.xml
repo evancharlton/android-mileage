@@ -20,87 +20,107 @@
 			android:layout_height="wrap_content"
 		>
 			<!-- distance between refills -->
-			<LinearLayout
-				android:orientation="horizontal"
+			<TextView
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
-			>
-				<TextView
-					style="@style/LabelText"
-					android:layout_weight="1"
-					android:layout_width="wrap_content"
-				    android:layout_height="wrap_content"
-					android:text="@string/stats_distance_running"
-				/>
-				<TextView
-					android:id="@+id/stats_distance_running"
-					style="@style/StatisticText"
-					android:layout_width="wrap_content"
-				    android:layout_height="wrap_content"
-					android:text="@string/stats_default"
-				/>
-			</LinearLayout>
+				style="@style/SeparatorText"
+				android:text="@string/header_distance"
+				android:id="@+id/stats_distance_header"
+			/>
 			<LinearLayout
-				android:orientation="horizontal"
+				android:orientation="vertical"
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
+				android:id="@+id/stats_distance_body"
 			>
-				<TextView
-					style="@style/LabelText"
-					android:layout_weight="1"
-					android:layout_width="wrap_content"
-				    android:layout_height="wrap_content"
-					android:text="@string/stats_distance_average"
-				/>
-				<TextView
-					android:id="@+id/stats_distance_average"
-					style="@style/StatisticText"
-					android:layout_width="wrap_content"
-				    android:layout_height="wrap_content"
-					android:text="@string/stats_default"
-				/>
-			</LinearLayout>
-			<LinearLayout
-				android:orientation="horizontal"
-				android:layout_width="fill_parent"
-				android:layout_height="wrap_content"
-			>
-				<TextView
-					style="@style/LabelText"
-					android:layout_weight="1"
-					android:layout_width="wrap_content"
-				    android:layout_height="wrap_content"
-					android:text="@string/stats_distance_maximum"
-				/>
-				<TextView
-					android:id="@+id/stats_distance_maximum"
-					style="@style/StatisticText"
-					android:layout_width="wrap_content"
-				    android:layout_height="wrap_content"
-					android:text="@string/stats_default"
-				/>
-			</LinearLayout>
-			<LinearLayout
-				android:orientation="horizontal"
-				android:layout_width="fill_parent"
-				android:layout_height="wrap_content"
-			>
-				<TextView
-					style="@style/LabelText"
-					android:layout_weight="1"
-					android:layout_width="wrap_content"
-				    android:layout_height="wrap_content"
-					android:text="@string/stats_distance_minimum"
-				/>
-				<TextView
-					android:id="@+id/stats_distance_minimum"
-					style="@style/StatisticText"
-					android:layout_width="wrap_content"
-				    android:layout_height="wrap_content"
-					android:text="@string/stats_default"
-				/>
+				<LinearLayout
+					android:orientation="horizontal"
+					android:layout_width="fill_parent"
+					android:layout_height="wrap_content"
+				>
+					<TextView
+						style="@style/LabelText"
+						android:layout_weight="1"
+						android:layout_width="wrap_content"
+					    android:layout_height="wrap_content"
+						android:text="@string/stats_distance_running"
+					/>
+					<TextView
+						android:id="@+id/stats_distance_running"
+						style="@style/StatisticText"
+						android:layout_width="wrap_content"
+					    android:layout_height="wrap_content"
+						android:text="@string/stats_default"
+					/>
+				</LinearLayout>
+				<LinearLayout
+					android:orientation="horizontal"
+					android:layout_width="fill_parent"
+					android:layout_height="wrap_content"
+				>
+					<TextView
+						style="@style/LabelText"
+						android:layout_weight="1"
+						android:layout_width="wrap_content"
+					    android:layout_height="wrap_content"
+						android:text="@string/stats_distance_average"
+					/>
+					<TextView
+						android:id="@+id/stats_distance_average"
+						style="@style/StatisticText"
+						android:layout_width="wrap_content"
+					    android:layout_height="wrap_content"
+						android:text="@string/stats_default"
+					/>
+				</LinearLayout>
+				<LinearLayout
+					android:orientation="horizontal"
+					android:layout_width="fill_parent"
+					android:layout_height="wrap_content"
+				>
+					<TextView
+						style="@style/LabelText"
+						android:layout_weight="1"
+						android:layout_width="wrap_content"
+					    android:layout_height="wrap_content"
+						android:text="@string/stats_distance_maximum"
+					/>
+					<TextView
+						android:id="@+id/stats_distance_maximum"
+						style="@style/StatisticText"
+						android:layout_width="wrap_content"
+					    android:layout_height="wrap_content"
+						android:text="@string/stats_default"
+					/>
+				</LinearLayout>
+				<LinearLayout
+					android:orientation="horizontal"
+					android:layout_width="fill_parent"
+					android:layout_height="wrap_content"
+				>
+					<TextView
+						style="@style/LabelText"
+						android:layout_weight="1"
+						android:layout_width="wrap_content"
+					    android:layout_height="wrap_content"
+						android:text="@string/stats_distance_minimum"
+					/>
+					<TextView
+						android:id="@+id/stats_distance_minimum"
+						style="@style/StatisticText"
+						android:layout_width="wrap_content"
+					    android:layout_height="wrap_content"
+						android:text="@string/stats_default"
+					/>
+				</LinearLayout>
 			</LinearLayout>
 			<!-- fuel economy -->
+			<TextView
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				style="@style/SeparatorText"
+				android:text="@string/header_economy"
+			/>
 			<LinearLayout
 				android:orientation="horizontal"
 				android:layout_width="fill_parent"
@@ -182,6 +202,12 @@
 				/>
 			</LinearLayout>
 			<!-- gas price stats -->
+			<TextView
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				style="@style/SeparatorText"
+				android:text="@string/header_price"
+			/>
 			<LinearLayout
 				android:orientation="horizontal"
 				android:layout_width="fill_parent"
@@ -302,46 +328,13 @@
 					android:text="@string/stats_default"
 				/>
 			</LinearLayout>
-			<LinearLayout
-				android:orientation="horizontal"
+			<!-- fill-up cost statistics -->
+			<TextView
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
-			>
-				<TextView
-					style="@style/LabelText"
-					android:layout_weight="1"
-					android:layout_width="wrap_content"
-				    android:layout_height="wrap_content"
-					android:text="@string/stats_amount_running"
-				/>
-				<TextView
-					android:id="@+id/stats_amount_running"
-					style="@style/StatisticText"
-					android:layout_width="wrap_content"
-				    android:layout_height="wrap_content"
-					android:text="@string/stats_default"
-				/>
-			</LinearLayout>
-			<LinearLayout
-				android:orientation="horizontal"
-				android:layout_width="fill_parent"
-				android:layout_height="wrap_content"
-			>
-				<TextView
-					style="@style/LabelText"
-					android:layout_weight="1"
-					android:layout_width="wrap_content"
-				    android:layout_height="wrap_content"
-					android:text="@string/stats_amount_average"
-				/>
-				<TextView
-					android:id="@+id/stats_amount_average"
-					style="@style/StatisticText"
-					android:layout_width="wrap_content"
-				    android:layout_height="wrap_content"
-					android:text="@string/stats_default"
-				/>
-			</LinearLayout>
+				style="@style/SeparatorText"
+				android:text="@string/header_costs"
+			/>
 			<LinearLayout
 				android:orientation="horizontal"
 				android:layout_width="fill_parent"
@@ -396,6 +389,53 @@
 				/>
 				<TextView
 					android:id="@+id/stats_amount_minimum_cost"
+					style="@style/StatisticText"
+					android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+					android:text="@string/stats_default"
+				/>
+			</LinearLayout>
+			<!-- gas amount statistics -->
+			<TextView
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				style="@style/SeparatorText"
+				android:text="@string/header_amount"
+			/>
+			<LinearLayout
+				android:orientation="horizontal"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+			>
+				<TextView
+					style="@style/LabelText"
+					android:layout_weight="1"
+					android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+					android:text="@string/stats_amount_running"
+				/>
+				<TextView
+					android:id="@+id/stats_amount_running"
+					style="@style/StatisticText"
+					android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+					android:text="@string/stats_default"
+				/>
+			</LinearLayout>
+			<LinearLayout
+				android:orientation="horizontal"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+			>
+				<TextView
+					style="@style/LabelText"
+					android:layout_weight="1"
+					android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+					android:text="@string/stats_amount_average"
+				/>
+				<TextView
+					android:id="@+id/stats_amount_average"
 					style="@style/StatisticText"
 					android:layout_width="wrap_content"
 				    android:layout_height="wrap_content"

@@ -26,9 +26,8 @@ public class EditVehicleView extends Activity {
 	private SimpleCursorAdapter m_vehicleAdapter;
 	private CheckBox m_default;
 
-	private static final int DELETE_DIALOG_ID = 1;
-	private static final int MENU_CANCEL = 2;
-	private static final int MENU_DELETE = 3;
+	private static final int DELETE_DIALOG_ID = Menu.FIRST;
+	private static final int MENU_DELETE = Menu.FIRST + 1;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -150,9 +149,8 @@ public class EditVehicleView extends Activity {
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.add(Menu.NONE, MENU_CANCEL, Menu.NONE, R.string.cancel_changes).setShortcut('1', 'c');
 		if (m_vehicleAdapter.getCount() > 1) {
-			menu.add(Menu.NONE, MENU_DELETE, Menu.NONE, R.string.delete).setShortcut('2', 'd');
+			menu.add(Menu.NONE, MENU_DELETE, Menu.NONE, R.string.delete).setShortcut('1', 'd');
 		}
 		HelpDialog.injectHelp(menu, 'h');
 		return super.onCreateOptionsMenu(menu);
@@ -162,10 +160,6 @@ public class EditVehicleView extends Activity {
 		switch (item.getItemId()) {
 			case MENU_DELETE:
 				showDialog(DELETE_DIALOG_ID);
-				break;
-			case MENU_CANCEL:
-				// TODO: add dirty check?
-				finish();
 				break;
 			case HelpDialog.MENU_HELP:
 				HelpDialog.create(this, R.string.help_title_vehicle_edit, R.string.help_vehicle_edit);

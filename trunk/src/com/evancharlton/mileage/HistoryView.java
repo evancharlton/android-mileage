@@ -1,7 +1,5 @@
 package com.evancharlton.mileage;
 
-import java.text.DateFormat;
-import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,7 +30,6 @@ public class HistoryView extends ListActivity {
 	public static final String TAG = "HistoryList";
 
 	private double m_avgMpg = 0.0D;
-	private DecimalFormat m_formatter = new DecimalFormat("##0.00");
 	private Map<Integer, String> m_vehicleTitles = new HashMap<Integer, String>();
 
 	private static final String[] PROJECTIONS = new String[] {
@@ -102,7 +99,7 @@ public class HistoryView extends ListActivity {
 			total_distance -= historyCursor.getDouble(6);
 			total_fuel += historyCursor.getDouble(1);
 			historyCursor.moveToFirst();
-			m_avgMpg = total_distance / total_fuel;
+			m_avgMpg = PreferencesProvider.getInstance(this).getCalculator().calculateEconomy(total_distance, total_fuel);
 		}
 
 		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.history, historyCursor, from, to);
@@ -145,23 +142,24 @@ public class HistoryView extends ListActivity {
 
 	private SimpleCursorAdapter.ViewBinder m_viewBinder = new SimpleCursorAdapter.ViewBinder() {
 		public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
+			PreferencesProvider prefs = PreferencesProvider.getInstance(HistoryView.this);
+			CalculationEngine engine = prefs.getCalculator();
 			String val;
 			switch (columnIndex) {
 				case 1:
 					double gallons = cursor.getDouble(columnIndex);
-					val = m_formatter.format(gallons) + " " + getString(R.string.gallons_abbr);
+					val = prefs.format(gallons) + " " + engine.getVolumeUnitsAbbr();
 					((TextView) view).setText(val);
 					return true;
 				case 2:
 					double price = cursor.getDouble(columnIndex);
-					val = "$" + m_formatter.format(price) + "/" + getString(R.string.gallons_abbr);
+					val = "$" + prefs.format(price) + "/" + engine.getVolumeUnitsAbbr();
 					((TextView) view).setText(val);
 					return true;
 				case 3:
 					long time = cursor.getLong(columnIndex);
 					Date date = new Date(time);
-					DateFormat format = DateFormat.getDateInstance(DateFormat.SHORT);
-					String text = format.format(date);
+					String text = prefs.format(date);
 					((TextView) view).setText(text);
 					return true;
 				case 5:
@@ -186,18 +184,18 @@ public class HistoryView extends ListActivity {
 					if (position != cursor.getCount() - 1) {
 						cursor.moveToNext();
 						double next_mileage = cursor.getDouble(columnIndex);
-						double diff = mileage - next_mileage;
+						double diff = Math.abs(mileage - next_mileage);
 						double amount = cursor.getDouble(1);
-						double mpg = diff / amount;
+						double mpg = engine.calculateEconomy(diff, amount);
 						TextView tv = (TextView) view;
 						int color = 0xFF666666;
-						if (mpg >= m_avgMpg) {
+						if (engine.better(mpg, m_avgMpg)) {
 							color = 0xFF0AB807;
 						} else {
 							color = 0xFFD90000;
 						}
 						tv.setTextColor(color);
-						tv.setText(m_formatter.format(mpg) + " " + getString(R.string.mpg));
+						tv.setText(prefs.format(mpg) + " " + engine.getEconomyUnits());
 						cursor.moveToPrevious();
 					}
 					return true;

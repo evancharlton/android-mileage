@@ -2,10 +2,7 @@
 <resources>
 	<string name="app_name">Mileage</string>
 	<string name="app_version">1.2.0</string>
-	<string name="price_per_gallon">Price per gallon</string>
-	<string name="gallons">Gallons of Fuel</string>
 	<string name="odometer">Odometer</string>
-	<string name="custom_date">Change Date</string>
 	<string name="add_fillup">Record Fill-up</string>
 	<string name="fillup">Fill Up</string>
 	<string name="fillup_history">History</string>
@@ -19,7 +16,6 @@
 	<string name="no">No</string>
 	<string name="ok">OK</string>
 	<string name="statistics">Statistics</string>
-	<string name="history_description">gal @ $</string>
 	<string name="close">Close</string>
 	<string name="about">About</string>
 	<string name="author">Evan Charlton</string>
@@ -28,11 +24,7 @@
 	<string name="today">Today</string>
 	<string name="comment">Comment (optional)</string>
 	<string name="make_default">Make this vehicle the default</string>
-	<string name="gallons_abbr">gal</string>
-	<string name="mpg">mpg</string>
-	
-	<string name="history_text1">:</string>
-	<string name="history_text2">gallons @ $</string>
+	<string name="settings">Settings</string>
 	
 	<string name="vehicles">Vehicles</string>
 	<string name="vehicle_make">Make</string>
@@ -42,6 +34,11 @@
 	<string name="vehicle_add">Add Vehicle</string>
 	<string name="vehicle_save">Save Vehicle</string>
 	
+	<string name="header_distance">Distance Statistics</string>
+	<string name="header_economy">Fuel Economy Statistics</string>
+	<string name="header_price">Fuel Price Statistics</string>
+	<string name="header_amount">Fuel Amount Statistics</string>
+	<string name="header_costs">Fill-Up Cost Statistics</string>
 	<string name="stats_default">--</string>
 	<string name="stats_distance_running">Distance between last fill-ups:</string>
 	<string name="stats_distance_average">Average distance between fill-ups:</string>
@@ -85,6 +82,12 @@
 	<string name="sql_file">SQL</string>
 	<string name="csv_file">CSV</string>
 	
+	<string name="settings_header_locale">Localization</string>
+	<string name="settings_date_format">Date:</string>
+	<string name="settings_number_format">Numbers:</string>
+	<string name="settings_header_system">System of Measure</string>
+	<string name="settings_system">System:</string>
+		
 	<string name="error">Error!</string>
 	<string name="error_cost">Invalid number format for price of fuel.</string>
 	<string name="error_amount">Invalid number format for amount of fuel.</string>

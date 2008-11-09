@@ -1,6 +1,5 @@
 package com.evancharlton.mileage;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -32,6 +31,7 @@ public class Mileage extends Activity {
 	public static final int MENU_HISTORY = Menu.FIRST;
 	public static final int MENU_VEHICLES = Menu.FIRST + 1;
 	public static final int MENU_STATISTICS = Menu.FIRST + 2;
+	public static final int MENU_SETTINGS = Menu.FIRST + 3;
 
 	private int m_year;
 	private int m_month;
@@ -62,6 +62,12 @@ public class Mileage extends Activity {
 
 		initData();
 		initHandlers();
+		updateDate();
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
 		updateDate();
 	}
 
@@ -181,6 +187,10 @@ public class Mileage extends Activity {
 			}
 		});
 
+		PreferencesProvider prefs = PreferencesProvider.getInstance(Mileage.this);
+
+		m_priceEdit.setHint(prefs.getString(R.array.unit_price_hints, SettingsView.CALCULATIONS));
+
 		// m_priceEdit.setKeyListener(new KeyFocuser(m_amountEdit));
 		// m_amountEdit.setKeyListener(new KeyFocuser(m_mileageEdit));
 		// m_mileageEdit.setKeyListener(new KeyFocuser(m_commentEdit));
@@ -197,13 +207,10 @@ public class Mileage extends Activity {
 	}
 
 	private void updateDate() {
-		SimpleDateFormat sdf = new SimpleDateFormat("MMMM dd");
+		GregorianCalendar gc = new GregorianCalendar(m_year, m_month, m_day);
+		Date d = new Date(gc.getTimeInMillis());
 
-		StringBuilder changedText = new StringBuilder();
-		changedText.append(sdf.format(new Date(m_year, m_month, m_day)));
-		changedText.append(" (").append(getString(R.string.custom_date)).append(")");
-
-		m_customDateButton.setText(changedText.toString());
+		m_customDateButton.setText(PreferencesProvider.getInstance(Mileage.this).format(d));
 		if (m_dateDlg != null) {
 			m_dateDlg.updateDate(m_year, m_month, m_day);
 		}
@@ -227,6 +234,12 @@ public class Mileage extends Activity {
 		startActivity(i);
 	}
 
+	private void showSettings() {
+		Intent i = new Intent();
+		i.setClass(Mileage.this, SettingsView.class);
+		startActivity(i);
+	}
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
@@ -234,6 +247,7 @@ public class Mileage extends Activity {
 		menu.add(Menu.NONE, MENU_HISTORY, 0, R.string.fillup_history).setShortcut('1', 'i');
 		menu.add(Menu.NONE, MENU_VEHICLES, 0, R.string.vehicles).setShortcut('2', 'v');
 		menu.add(Menu.NONE, MENU_STATISTICS, 0, R.string.statistics).setShortcut('3', 's');
+		menu.add(Menu.NONE, MENU_SETTINGS, 0, R.string.settings).setShortcut('4', 'e');
 		HelpDialog.injectHelp(menu, 'h');
 
 		return true;
@@ -253,6 +267,9 @@ public class Mileage extends Activity {
 				break;
 			case HelpDialog.MENU_HELP:
 				HelpDialog.create(this, R.string.help_title_fillup_new, R.string.help_fillup_new);
+				break;
+			case MENU_SETTINGS:
+				showSettings();
 				break;
 		}
 		return super.onOptionsItemSelected(item);

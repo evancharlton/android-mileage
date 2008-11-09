@@ -157,16 +157,18 @@ public class StatisticsView extends Activity {
 		double total_miles = 0.0D;
 		double total_fuel = 0.0D;
 		double running_mpg = 0.0D;
+		PreferencesProvider prefs = PreferencesProvider.getInstance(this);
+		CalculationEngine engine = prefs.getCalculator();
 
 		for (int i = 0; i < m_amounts.size() - 1; i++) {
 			total_fuel += m_amounts.get(i);
 			double mile_diff = m_miles.get(i) - m_miles.get(i + 1);
 			total_miles += mile_diff;
-			double mpg = mile_diff / m_amounts.get(i);
-			if (mpg > maximum_mpg) {
+			double mpg = engine.calculateEconomy(mile_diff, m_amounts.get(i));
+			if (engine.better(mpg, maximum_mpg)) {
 				maximum_mpg = mpg;
 			}
-			if (mpg < minimum_mpg) {
+			if (engine.worse(mpg, minimum_mpg)) {
 				minimum_mpg = mpg;
 			}
 
@@ -178,7 +180,7 @@ public class StatisticsView extends Activity {
 		// (which is the oldest in history terms) does not relate to the average
 		// mileage.
 
-		average_mpg = total_miles / total_fuel;
+		average_mpg = engine.calculateEconomy(total_miles, total_fuel);
 
 		data.put(R.id.stats_economy_average, string(average_mpg));
 		data.put(R.id.stats_economy_maximum, string(maximum_mpg));

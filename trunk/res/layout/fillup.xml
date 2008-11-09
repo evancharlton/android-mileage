@@ -15,7 +15,6 @@
 		    android:layout_width="0dip"
 	   		android:layout_weight="1"
 		    android:layout_height="wrap_content" 
-		    android:hint="@string/price_per_gallon"
 		    android:digits="1234567890."
 		/>
 		<EditText
@@ -23,7 +22,6 @@
 			android:layout_width="0dip"
 	   		android:layout_weight="1"
 			android:layout_height="wrap_content"
-			android:hint="@string/gallons"
 		    android:digits="1234567890."
 		/>
 	</LinearLayout>
@@ -45,7 +43,6 @@
 			android:layout_width="0dip"
 	   		android:layout_weight="1"
 			android:layout_height="wrap_content"
-			android:text="@string/custom_date"
 		/>
 	</LinearLayout>
 	<LinearLayout
