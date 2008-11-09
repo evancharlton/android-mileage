@@ -45,6 +45,11 @@ public class HistoryView extends ListActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		onResume();
+	}
+
+	public void onResume() {
+		super.onResume();
 
 		setDefaultKeyMode(DEFAULT_KEYS_SHORTCUT);
 

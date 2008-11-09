@@ -285,7 +285,7 @@
     	</exec>
     </target>
 	
-    <target name="i" depends="sign">
+    <target name="i" depends="sign,u">
         <echo>Installing ${out-unsigned-package} onto default emulator...</echo>
         <exec executable="${adb}" failonerror="true">
             <arg value="install" />
