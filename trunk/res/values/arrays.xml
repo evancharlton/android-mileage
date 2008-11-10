@@ -14,6 +14,8 @@
     	<item>MM/DD/YYYY</item>
     	<item>DD/MM/YY</item>
     	<item>DD/MM/YYYY</item>
+    	<item>DD.MM.YY</item>
+    	<item>DD.MM.YYYY</item>
     	<item>January 1, 1970</item>
     </string-array>
     <string-array name="date_patterns">
@@ -21,6 +23,8 @@
     	<item>MM/dd/yyyy</item>
     	<item>dd/MM/yy</item>
     	<item>dd/MM/yyyy</item>
+    	<item>dd.MM.yy</item>
+    	<item>dd.MM.yyyy</item>
     	<item>MMMM d, yyyy</item>
     </string-array>
     <string-array name="number_formats">
