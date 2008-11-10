@@ -1,6 +1,5 @@
 package com.evancharlton.mileage;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ContentValues;
@@ -11,20 +10,11 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.SimpleCursorAdapter;
 
-public class EditVehicleView extends Activity {
-	private EditText m_year;
-	private EditText m_make;
-	private EditText m_model;
-	private EditText m_title;
-	private Button m_save;
+public class EditVehicleView extends AddVehicleView {
 	private AlertDialog m_deleteDialog;
-	private SimpleCursorAdapter m_vehicleAdapter;
-	private CheckBox m_default;
+	private Cursor m_vehicleCursor;
+	private boolean m_vehicleWasDefault = false;
 
 	private static final int DELETE_DIALOG_ID = Menu.FIRST;
 	private static final int MENU_DELETE = Menu.FIRST + 1;
@@ -32,19 +22,23 @@ public class EditVehicleView extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.edit_vehicle);
-
-		initUI();
 		loadData();
 	}
 
-	private void initUI() {
-		m_year = (EditText) findViewById(R.id.vehicle_edit_year);
-		m_make = (EditText) findViewById(R.id.vehicle_edit_make);
-		m_model = (EditText) findViewById(R.id.vehicle_edit_model);
-		m_title = (EditText) findViewById(R.id.vehicle_edit_title);
-		m_save = (Button) findViewById(R.id.vehicle_edit_save_btn);
-		m_default = (CheckBox) findViewById(R.id.vehicle_edit_default);
+	protected void initUI() {
+		super.initUI();
+
+		m_save.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				ContentValues values = save();
+				if (values == null) {
+					return;
+				}
+
+				getContentResolver().update(getIntent().getData(), values, null, null);
+				finish();
+			}
+		});
 
 		m_deleteDialog = new AlertDialog.Builder(this).create();
 		m_deleteDialog.setMessage(getString(R.string.confirm_delete));
@@ -52,23 +46,20 @@ public class EditVehicleView extends Activity {
 		m_deleteDialog.setButton(getString(R.string.yes), m_deleteListener);
 		m_deleteDialog.setButton2(getString(R.string.no), m_deleteListener);
 
-		// set up the handlers
-		m_save.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				save();
-			}
-		});
-
-		Cursor c = managedQuery(Vehicles.CONTENT_URI, new String[] {
+		m_vehicleCursor = managedQuery(Vehicles.CONTENT_URI, new String[] {
 				Vehicles._ID,
 				Vehicles.TITLE
 		}, null, null, Vehicles.DEFAULT_SORT_ORDER);
+	}
 
-		m_vehicleAdapter = new SimpleCursorAdapter(this, android.R.layout.simple_spinner_item, c, new String[] {
-			Vehicles.TITLE
-		}, new int[] {
-			android.R.id.text1
-		});
+	protected ContentValues save() {
+		ContentValues values = super.save();
+		if (m_vehicleWasDefault && m_default.isChecked() == false) {
+			// remove it from being default, fall back to whatever was last
+			// default
+			values.put(Vehicles.DEFAULT, 0);
+		}
+		return values;
 	}
 
 	private void loadData() {
@@ -91,11 +82,13 @@ public class EditVehicleView extends Activity {
 		m_model.setText(c.getString(3));
 		m_title.setText(c.getString(4));
 
-		if (m_vehicleAdapter.getCount() == 1) {
+		if (m_vehicleCursor.getCount() == 1) {
 			m_default.setVisibility(View.GONE);
 		} else {
-			if (m_vehicleAdapter.getItemId(0) == c.getLong(0)) {
+			m_vehicleCursor.moveToFirst();
+			if (m_vehicleCursor.getLong(0) == c.getLong(0)) {
 				m_default.setChecked(true);
+				m_vehicleWasDefault = true;
 			}
 		}
 	}
@@ -104,55 +97,10 @@ public class EditVehicleView extends Activity {
 		getContentResolver().delete(getIntent().getData(), null, null);
 	}
 
-	private void save() {
-		// do some error checking
-		String year = m_year.getText().toString().trim();
-		String make = m_make.getText().toString().trim();
-		String model = m_model.getText().toString().trim();
-		String title = m_title.getText().toString().trim();
-
-		int error = 0;
-		if (year.length() == 0) {
-			error = R.string.error_year;
-		}
-		if (make.length() == 0) {
-			error = R.string.error_make;
-		}
-		if (model.length() == 0) {
-			error = R.string.error_model;
-		}
-		if (title.length() == 0) {
-			error = R.string.error_title;
-		}
-
-		if (error != 0) {
-			AlertDialog dlg = new AlertDialog.Builder(EditVehicleView.this).create();
-			dlg.setTitle(R.string.error);
-			dlg.setMessage(getString(error));
-			dlg.show();
-			return;
-		}
-
-		// save the changes
-		ContentValues values = new ContentValues();
-		values.put(Vehicles.YEAR, m_year.getText().toString().trim());
-		values.put(Vehicles.MAKE, m_make.getText().toString().trim());
-		values.put(Vehicles.MODEL, m_model.getText().toString().trim());
-		values.put(Vehicles.TITLE, m_title.getText().toString().trim());
-
-		if (m_default.isChecked()) {
-			values.put(Vehicles.DEFAULT, System.currentTimeMillis());
-		}
-
-		getContentResolver().update(getIntent().getData(), values, null, null);
-		finish();
-	}
-
 	public boolean onCreateOptionsMenu(Menu menu) {
-		if (m_vehicleAdapter.getCount() > 1) {
+		if (m_vehicleCursor.getCount() > 1) {
 			menu.add(Menu.NONE, MENU_DELETE, Menu.NONE, R.string.delete).setShortcut('1', 'd');
 		}
-		HelpDialog.injectHelp(menu, 'h');
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -160,10 +108,10 @@ public class EditVehicleView extends Activity {
 		switch (item.getItemId()) {
 			case MENU_DELETE:
 				showDialog(DELETE_DIALOG_ID);
-				break;
+				return true;
 			case HelpDialog.MENU_HELP:
 				HelpDialog.create(this, R.string.help_title_vehicle_edit, R.string.help_vehicle_edit);
-				break;
+				return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
