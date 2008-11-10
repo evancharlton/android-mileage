@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
 
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 
@@ -20,7 +21,7 @@ public class DBExporter implements Runnable {
 		FileOutputStream out = null;
 		try {
 			in = new FileInputStream("/data/data/" + Mileage.PACKAGE + "/databases/" + FillUpsProvider.DATABASE_NAME);
-			out = new FileOutputStream("/sdcard/" + FillUpsProvider.DATABASE_NAME);
+			out = new FileOutputStream(Environment.getExternalStorageDirectory() + "/" + FillUpsProvider.DATABASE_NAME);
 
 			FileChannel inChannel = in.getChannel();
 			FileChannel outChannel = out.getChannel();

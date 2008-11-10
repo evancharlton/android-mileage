@@ -313,11 +313,17 @@
 		</exec>
 	</target>
 	
+	<target name="run" depends="r">
+		<echo>Starting up ${application-package}.${ant.project.name}...</echo>
+		<exec executable="${adb}">
+			<arg line="shell am start -a android.intent.action.MAIN -c android.intent.category.LAUNCHER -n ${application-package}/${application-package}.${ant.project.name}"/>
+		</exec>
+	</target>
+	
 	<target name="test" depends="sign">
 		<echo>Running JUnit for ${application-package}.${ant.project.name}Suite...</echo>
 		<junit haltonfailure="yes" printsummary="yes" showoutput="yes">
 			<classpath>
-				<pathelement location="libs/junit.jar"/>
 				<pathelement path="bin/"/>
 				<pathelement location="bin/${out-signed-package}.apk"/>
 				<pathelement path="${java.class.path}"/>

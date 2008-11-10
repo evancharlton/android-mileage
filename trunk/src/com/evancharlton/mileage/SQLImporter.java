@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Set;
 
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 
@@ -20,7 +21,7 @@ public class SQLImporter implements Runnable {
 	}
 
 	public void run() {
-		File input = new File("/sdcard/mileage.sql");
+		File input = new File(Environment.getExternalStorageDirectory() + "/mileage.sql");
 		try {
 			BufferedReader in = new BufferedReader(new FileReader(input));
 			HashMap<String, String> fillupsProjection = FillUpsProvider.getFillUpsProjection();

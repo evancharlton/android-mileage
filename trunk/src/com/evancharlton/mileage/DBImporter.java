@@ -5,23 +5,22 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
 
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 
 public class DBImporter implements Runnable {
 	private Handler m_handler;
-	private String m_filename;
 
-	public DBImporter(Handler handler, String filename) {
+	public DBImporter(Handler handler) {
 		m_handler = handler;
-		m_filename = filename;
 	}
 
 	public void run() {
 		FileInputStream in = null;
 		FileOutputStream out = null;
 		try {
-			in = new FileInputStream(m_filename);
+			in = new FileInputStream(Environment.getExternalStorageDirectory() + "/mileage.db");
 			out = new FileOutputStream("/data/data/" + Mileage.PACKAGE + "/databases/" + FillUpsProvider.DATABASE_NAME);
 
 			FileChannel inChannel = in.getChannel();

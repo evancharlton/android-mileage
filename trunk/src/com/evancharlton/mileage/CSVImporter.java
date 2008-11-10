@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.List;
 
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import au.com.bytecode.opencsv.CSVReader;
@@ -20,7 +21,7 @@ public class CSVImporter implements Runnable {
 	@SuppressWarnings("unchecked")
 	public void run() {
 		try {
-			CSVReader csv = new CSVReader(new FileReader("/sdcard/mileage.csv"));
+			CSVReader csv = new CSVReader(new FileReader(Environment.getExternalStorageDirectory() + "/mileage.csv"));
 			List<String[]> data = csv.readAll();
 
 			// columns will be the first line

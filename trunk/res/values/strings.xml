@@ -4,7 +4,7 @@
 	<string name="app_version">1.3.0</string>
 	<string name="odometer">Odometer</string>
 	<string name="add_fillup">Save Fill-up</string>
-	<string name="fillup">Fill Up</string>
+	<string name="fillup">Fill-Up</string>
 	<string name="fillup_history">History</string>
 	<string name="graphs">Graphs</string>
 	<string name="save_changes">Save Changes</string>

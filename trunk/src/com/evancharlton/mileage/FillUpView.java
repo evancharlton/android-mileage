@@ -13,7 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-public class FillUpView extends Mileage {
+public class FillUpView extends AddFillUpView {
 	private static final int DELETE_DIALOG_ID = 1;
 
 	public static final int MENU_DELETE = Menu.FIRST;

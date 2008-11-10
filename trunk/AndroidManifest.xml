@@ -19,5 +19,6 @@
 		<activity android:name="StatisticsView"/>
 		<activity android:name="ImportExportView"/>
 		<activity android:name="SettingsView"/>
+		<activity android:name="AddFillUpView"/>
 	</application>
 </manifest> 

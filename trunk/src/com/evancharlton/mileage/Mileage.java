@@ -1,308 +1,67 @@
 package com.evancharlton.mileage;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.DatePickerDialog;
-import android.app.Dialog;
-import android.content.ContentValues;
-import android.content.DialogInterface;
+import android.app.TabActivity;
 import android.content.Intent;
-import android.database.Cursor;
-import android.location.Criteria;
-import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.SimpleCursorAdapter;
-import android.widget.Spinner;
+import android.view.Window;
+import android.widget.TabHost;
+import android.widget.TabHost.TabSpec;
 
-public class Mileage extends Activity {
+public class Mileage extends TabActivity {
+	public static final String EXTRA_IGNORE_STATE = "ignore-state";
 	public static final String PACKAGE = "com.evancharlton.mileage";
-	public static final int DATE_DIALOG_ID = 0;
-	public static final int MENU_VEHICLES = Menu.FIRST;
-	public static final int MENU_SETTINGS = Menu.FIRST + 1;
-	public static final int MENU_HISTORY = Menu.FIRST + 2;
-	public static final int MENU_STATISTICS = Menu.FIRST + 3;
+	private TabHost m_tabHost;
 
-	protected int m_year;
-	protected int m_month;
-	protected int m_day;
-
-	protected Button m_customDateButton;
-	protected Button m_saveButton;
-	protected EditText m_priceEdit;
-	protected EditText m_amountEdit;
-	protected EditText m_mileageEdit;
-	protected Spinner m_vehicleSpinner;
-	protected DatePickerDialog m_dateDlg = null;
-	protected EditText m_commentEdit;
-	protected SimpleCursorAdapter m_vehicleAdapter;
-
-	/** Called when the activity is first created. */
-	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		Calendar c = Calendar.getInstance();
-		m_year = c.get(Calendar.YEAR);
-		m_month = c.get(Calendar.MONTH);
-		m_day = c.get(Calendar.DAY_OF_MONTH);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		setContentView(R.layout.tabs);
 
-		setContentView(R.layout.fillup);
+		m_tabHost = getTabHost();
 
-		loadData();
-		initHandlers();
-		updateDate();
-		loadPrefs();
+		addFillUpTab();
+		addHistoryTab();
+		addStatisticsTab();
+
+		setCurrentTab(getIntent());
 	}
 
-	@Override
-	public void onResume() {
-		super.onResume();
-		updateDate();
-		loadPrefs();
+	private void addFillUpTab() {
+		Intent i = new Intent();
+		i.setClass(Mileage.this, AddFillUpView.class);
+
+		TabSpec spec = m_tabHost.newTabSpec("fillup");
+		spec.setIndicator(getString(R.string.fillup), getResources().getDrawable(R.drawable.history_i));
+		spec.setContent(i);
+		m_tabHost.addTab(spec);
 	}
 
-	protected void loadData() {
-		m_saveButton = (Button) findViewById(R.id.save_btn);
-		m_customDateButton = (Button) findViewById(R.id.change_date_btn);
-		m_mileageEdit = (EditText) findViewById(R.id.odometer_edit);
-		m_amountEdit = (EditText) findViewById(R.id.amount_edit);
-		m_priceEdit = (EditText) findViewById(R.id.price_edit);
-		m_commentEdit = (EditText) findViewById(R.id.comment_edit);
-		m_vehicleSpinner = (Spinner) findViewById(R.id.vehicle_spinner);
-
-		Cursor c = managedQuery(Vehicles.CONTENT_URI, new String[] {
-				Vehicles._ID,
-				Vehicles.TITLE
-		}, null, null, Vehicles.DEFAULT_SORT_ORDER);
-		m_vehicleAdapter = new SimpleCursorAdapter(this, android.R.layout.simple_spinner_item, c, new String[] {
-			Vehicles.TITLE
-		}, new int[] {
-			android.R.id.text1
-		});
-		m_vehicleAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		m_vehicleSpinner.setAdapter(m_vehicleAdapter);
-
-	}
-
-	protected void loadPrefs() {
-		PreferencesProvider prefs = PreferencesProvider.getInstance(Mileage.this);
-		m_priceEdit.setHint(prefs.getString(R.array.unit_price_hints, SettingsView.CALCULATIONS));
-		m_amountEdit.setHint(prefs.getString(R.array.unit_amount_hints, SettingsView.CALCULATIONS));
-	}
-
-	protected void initHandlers() {
-		m_saveButton.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				// save the new fill-up
-				ContentValues values = saveData();
-				if (values == null) {
-					return;
-				}
-
-				getContentResolver().insert(FillUps.CONTENT_URI, values);
-				resetForm(v);
-			}
-		});
-
-		m_customDateButton.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				// show a date picker
-				showDialog(DATE_DIALOG_ID);
-			}
-		});
-
-		// m_priceEdit.setKeyListener(new KeyFocuser(m_amountEdit));
-		// m_amountEdit.setKeyListener(new KeyFocuser(m_mileageEdit));
-		// m_mileageEdit.setKeyListener(new KeyFocuser(m_commentEdit));
-		// m_commentEdit.setKeyListener(new KeyFocuser(m_saveButton));
-	}
-
-	private void resetForm(View v) {
-		m_amountEdit.setText("");
-		m_priceEdit.setText("");
-		m_mileageEdit.setText("");
-		m_commentEdit.setText("");
-
-		getIntent().setData(FillUps.CONTENT_URI);
-	}
-
-	protected void updateDate() {
-		GregorianCalendar gc = new GregorianCalendar(m_year, m_month, m_day);
-		Date d = new Date(gc.getTimeInMillis());
-
-		m_customDateButton.setText(PreferencesProvider.getInstance(Mileage.this).format(d));
-		if (m_dateDlg != null) {
-			m_dateDlg.updateDate(m_year, m_month, m_day);
-		}
-	}
-
-	protected ContentValues saveData() {
-		ContentValues values = new ContentValues();
-		boolean error = false;
-		int errorMsg = 0;
-
-		try {
-			double cost = Double.parseDouble(m_priceEdit.getText().toString());
-			values.put(FillUps.COST, cost);
-		} catch (NumberFormatException nfe) {
-			error = true;
-			errorMsg = R.string.error_cost;
-		}
-
-		try {
-			double amount = Double.parseDouble(m_amountEdit.getText().toString());
-			values.put(FillUps.AMOUNT, amount);
-		} catch (NumberFormatException nfe) {
-			error = true;
-			errorMsg = R.string.error_amount;
-		}
-
-		try {
-			double mileage = Double.parseDouble(m_mileageEdit.getText().toString());
-			values.put(FillUps.MILEAGE, mileage);
-		} catch (NumberFormatException nfe) {
-			error = true;
-			errorMsg = R.string.error_mileage;
-		}
-
-		LocationManager location = (LocationManager) getSystemService(LOCATION_SERVICE);
-		boolean locationStored = false;
-		if (location != null) {
-			Criteria criteria = new Criteria();
-			criteria.setSpeedRequired(true);
-			criteria.setAccuracy(Criteria.ACCURACY_COARSE);
-			String provider = location.getBestProvider(criteria, true);
-			if (provider != null) {
-				Location loc = location.getLastKnownLocation(provider);
-				if (loc != null) {
-					values.put(FillUps.LATITUDE, loc.getLatitude());
-					values.put(FillUps.LONGITUDE, loc.getLongitude());
-					locationStored = true;
-				}
-			}
-		}
-		if (locationStored) {
-			values.put(FillUps.LATITUDE, 0D);
-			values.put(FillUps.LONGITUDE, 0D);
-		}
-
-		if (error) {
-			AlertDialog dlg = new AlertDialog.Builder(Mileage.this).create();
-			dlg.setTitle(R.string.error);
-			dlg.setMessage(getString(errorMsg));
-			dlg.show();
-			return null;
-		}
-
-		values.put(FillUps.COMMENT, m_commentEdit.getText().toString().trim());
-		values.put(FillUps.VEHICLE_ID, m_vehicleSpinner.getSelectedItemId());
-
-		Calendar c = new GregorianCalendar(m_year, m_month, m_day);
-		values.put(FillUps.DATE, c.getTimeInMillis());
-		return values;
-	}
-
-	private void showHistory() {
+	private void addHistoryTab() {
 		Intent i = new Intent();
 		i.setClass(Mileage.this, HistoryView.class);
-		startActivity(i);
+
+		TabSpec spec = m_tabHost.newTabSpec("fillup");
+		spec.setIndicator(getString(R.string.fillup_history), getResources().getDrawable(R.drawable.history_i));
+		spec.setContent(i);
+		m_tabHost.addTab(spec);
 	}
 
-	private void showVehicles() {
-		Intent i = new Intent();
-		i.setClass(Mileage.this, VehiclesView.class);
-		startActivity(i);
-	}
-
-	private void showStatistics() {
+	private void addStatisticsTab() {
 		Intent i = new Intent();
 		i.setClass(Mileage.this, StatisticsView.class);
-		startActivity(i);
+
+		TabSpec spec = m_tabHost.newTabSpec("fillup");
+		spec.setIndicator(getString(R.string.statistics), getResources().getDrawable(R.drawable.vehicles_i));
+		spec.setContent(i);
+		m_tabHost.addTab(spec);
 	}
 
-	private void showSettings() {
-		Intent i = new Intent();
-		i.setClass(Mileage.this, SettingsView.class);
-		startActivity(i);
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		super.onCreateOptionsMenu(menu);
-
-		menu.add(Menu.NONE, MENU_HISTORY, 0, R.string.fillup_history).setShortcut('1', 'i');
-		menu.add(Menu.NONE, MENU_STATISTICS, 0, R.string.statistics).setShortcut('2', 's');
-		menu.add(Menu.NONE, MENU_VEHICLES, 0, R.string.vehicles).setShortcut('3', 'v');
-		menu.add(Menu.NONE, MENU_SETTINGS, 0, R.string.settings).setShortcut('4', 'e');
-		HelpDialog.injectHelp(menu, 'h');
-
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-			case MENU_VEHICLES:
-				showVehicles();
-				break;
-			case HelpDialog.MENU_HELP:
-				HelpDialog.create(this, R.string.help_title_fillup_new, R.string.help_fillup_new);
-				break;
-			case MENU_SETTINGS:
-				showSettings();
-				break;
-			case MENU_STATISTICS:
-				showStatistics();
-				break;
-			case MENU_HISTORY:
-				showHistory();
-				break;
+	private void setCurrentTab(Intent intent) {
+		intent.putExtra(EXTRA_IGNORE_STATE, true);
+		if (intent.getComponent().getClassName().equals(getClass().getName())) {
+			m_tabHost.setCurrentTab(0);
 		}
-		return super.onOptionsItemSelected(item);
+		intent.putExtra(EXTRA_IGNORE_STATE, false);
 	}
-
-	@Override
-	protected Dialog onCreateDialog(int id) {
-		switch (id) {
-			case DATE_DIALOG_ID:
-				if (m_dateDlg == null) {
-					m_dateDlg = new DatePickerDialog(this, m_dateSetListener, m_year, m_month, m_day);
-					m_dateDlg.updateDate(m_year, m_month, m_day);
-					m_dateDlg.setButton3(getString(R.string.today), m_todayListener);
-				}
-				return m_dateDlg;
-		}
-		return null;
-	}
-
-	protected DialogInterface.OnClickListener m_todayListener = new DialogInterface.OnClickListener() {
-		public void onClick(DialogInterface intf, int which) {
-			Calendar cal = Calendar.getInstance();
-			cal.setTimeInMillis(System.currentTimeMillis());
-			m_year = cal.get(Calendar.YEAR);
-			m_month = cal.get(Calendar.MONTH);
-			m_day = cal.get(Calendar.DAY_OF_MONTH);
-			updateDate();
-		}
-	};
-
-	protected DatePickerDialog.OnDateSetListener m_dateSetListener = new DatePickerDialog.OnDateSetListener() {
-		public void onDateSet(DatePicker view, int year, int month, int day) {
-			m_year = year;
-			m_month = month;
-			m_day = day;
-			updateDate();
-		}
-	};
 }

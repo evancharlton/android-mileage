@@ -110,7 +110,8 @@ public final class R {
         public static final int importexport=0x7f030007;
         public static final int settings=0x7f030008;
         public static final int statistics=0x7f030009;
-        public static final int vehicles=0x7f03000a;
+        public static final int tabs=0x7f03000a;
+        public static final int vehicles=0x7f03000b;
     }
     public static final class string {
         public static final int about=0x7f050011;

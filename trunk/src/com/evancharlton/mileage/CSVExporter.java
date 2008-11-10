@@ -7,6 +7,7 @@ import java.util.Set;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import au.com.bytecode.opencsv.CSVWriter;
@@ -20,7 +21,7 @@ public class CSVExporter implements Runnable {
 
 	public void run() {
 		try {
-			CSVWriter csv = new CSVWriter(new FileWriter("/sdcard/mileage.csv"));
+			CSVWriter csv = new CSVWriter(new FileWriter(Environment.getExternalStorageDirectory() + "/mileage.csv"));
 
 			HashMap<String, String> fillupsProjection = FillUpsProvider.getFillUpsProjection();
 			Set<String> keySet = fillupsProjection.keySet();

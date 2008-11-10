@@ -8,6 +8,7 @@ import java.util.Set;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 
@@ -57,7 +58,7 @@ public class SQLExporter implements Runnable {
 
 		// write to a file
 		try {
-			File output = new File("/sdcard/mileage.sql");
+			File output = new File(Environment.getExternalStorageDirectory() + "/mileage.sql");
 			FileWriter out = new FileWriter(output);
 
 			out.write(sb.toString());
