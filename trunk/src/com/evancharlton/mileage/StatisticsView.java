@@ -2,6 +2,7 @@ package com.evancharlton.mileage;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -232,9 +233,13 @@ public class StatisticsView extends Activity {
 		double highest_cost = 0.0D;
 		double total_expense = 0.0D;
 		double thirty_day_cost = 0.0D;
-		long then = System.currentTimeMillis() - (30L * 24L * 60L * 60L * 1000L);
-		Calendar then_c = Calendar.getInstance();
-		then_c.setTimeInMillis(then);
+		double yearly_cost = 0.0D;
+
+		Calendar cal = Calendar.getInstance();
+		cal.setTimeInMillis(System.currentTimeMillis());
+
+		long month_then = new GregorianCalendar(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) - 1, cal.get(Calendar.DAY_OF_MONTH)).getTimeInMillis();
+		long year_then = new GregorianCalendar(cal.get(Calendar.YEAR) - 1, cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH)).getTimeInMillis();
 
 		for (int i = 0; i < m_costs.size(); i++) {
 			double cost_ppg = m_costs.get(i);
@@ -262,8 +267,12 @@ public class StatisticsView extends Activity {
 			}
 
 			long date = m_dates.get(i);
-			if (date > then) {
+			if (date > month_then) {
 				thirty_day_cost += cost;
+			}
+
+			if (date > year_then) {
+				yearly_cost += cost;
 			}
 
 			total_cost += cost_ppg;
@@ -275,7 +284,8 @@ public class StatisticsView extends Activity {
 		data.put(R.id.stats_price_average, string(m_pref.getCurrency(), total_cost / m_costs.size(), "/" + m_engine.getVolumeUnitsAbbr().trim()));
 		data.put(R.id.stats_price_minimum, string(m_pref.getCurrency(), lowest_ppg, "/" + m_engine.getVolumeUnitsAbbr().trim()));
 		data.put(R.id.stats_price_maximum, string(m_pref.getCurrency(), highest_ppg, "/" + m_engine.getVolumeUnitsAbbr().trim()));
-		data.put(R.id.stats_amount_running, string(total_fuel, m_engine.getVolumeUnitsAbbr()));
+		data.put(R.id.stats_amount_total, string(total_fuel, m_engine.getVolumeUnitsAbbr()));
+		data.put(R.id.stats_amount_last, string(m_amounts.get(0), m_engine.getVolumeUnitsAbbr()));
 		data.put(R.id.stats_amount_average, string(total_fuel / m_amounts.size(), m_engine.getVolumeUnitsAbbr()));
 		data.put(R.id.stats_amount_average_cost, string(m_pref.getCurrency(), total_expense / m_costs.size()));
 		data.put(R.id.stats_amount_maximum, string(highest_amt, m_engine.getVolumeUnitsAbbr()));
@@ -284,6 +294,8 @@ public class StatisticsView extends Activity {
 		data.put(R.id.stats_amount_minimum_cost, string(m_pref.getCurrency(), lowest_cost));
 		data.put(R.id.stats_expense_thirty_days, string(m_pref.getCurrency(), thirty_day_cost));
 		data.put(R.id.stats_expense_running, string(m_pref.getCurrency(), total_expense));
+		data.put(R.id.stats_expense_yearly, string(m_pref.getCurrency(), yearly_cost));
+		data.put(R.id.stats_cost_last, string(m_pref.getCurrency(), m_costs.get(0) * m_amounts.get(0)));
 
 		return data;
 	}

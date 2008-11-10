@@ -305,6 +305,26 @@
 					android:layout_weight="1"
 					android:layout_width="wrap_content"
 				    android:layout_height="wrap_content"
+					android:text="@string/stats_cost_last"
+				/>
+				<TextView
+					android:id="@+id/stats_cost_last"
+					style="@style/StatisticText"
+					android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+					android:text="@string/stats_default"
+				/>
+			</LinearLayout>
+			<LinearLayout
+				android:orientation="horizontal"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+			>
+				<TextView
+					style="@style/LabelText"
+					android:layout_weight="1"
+					android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
 					android:text="@string/stats_amount_average_cost"
 				/>
 				<TextView
@@ -372,10 +392,30 @@
 					android:layout_weight="1"
 					android:layout_width="wrap_content"
 				    android:layout_height="wrap_content"
-					android:text="@string/stats_amount_running"
+					android:text="@string/stats_amount_total"
 				/>
 				<TextView
-					android:id="@+id/stats_amount_running"
+					android:id="@+id/stats_amount_total"
+					style="@style/StatisticText"
+					android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+					android:text="@string/stats_default"
+				/>
+			</LinearLayout>
+			<LinearLayout
+				android:orientation="horizontal"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+			>
+				<TextView
+					style="@style/LabelText"
+					android:layout_weight="1"
+					android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+					android:text="@string/stats_amount_last"
+				/>
+				<TextView
+					android:id="@+id/stats_amount_last"
 					style="@style/StatisticText"
 					android:layout_width="wrap_content"
 				    android:layout_height="wrap_content"
@@ -463,6 +503,26 @@
 				/>
 				<TextView
 					android:id="@+id/stats_expense_running"
+					style="@style/StatisticText"
+					android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+					android:text="@string/stats_default"
+				/>
+			</LinearLayout>
+			<LinearLayout
+				android:orientation="horizontal"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+			>
+				<TextView
+					style="@style/LabelText"
+					android:layout_weight="1"
+					android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+					android:text="@string/stats_expense_yearly"
+				/>
+				<TextView
+					android:id="@+id/stats_expense_yearly"
 					style="@style/StatisticText"
 					android:layout_width="wrap_content"
 				    android:layout_height="wrap_content"

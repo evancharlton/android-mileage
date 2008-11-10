@@ -280,13 +280,14 @@
     	<exec executable="jarsigner" failonerror="true">
     		<arg line="${store.passwd}"/>
     		<arg line="${key.passwd}"/>
+    		<arg line="-signedjar ${out-signed-package}"/>
     		<arg value="${out-unsigned-package}"/>
     		<arg value="android"/>
     	</exec>
     </target>
 	
     <target name="i" depends="sign,u">
-        <echo>Installing ${out-unsigned-package} onto default emulator...</echo>
+        <echo>Installing ${out-signed-package} onto default emulator...</echo>
         <exec executable="${adb}" failonerror="true">
             <arg value="install" />
             <arg value="${out-signed-package}" />
@@ -294,7 +295,7 @@
     </target>
 
     <target name="r" depends="sign">
-        <echo>Reinstalling ${out-unsigned-package} onto default emulator...</echo>
+        <echo>Reinstalling ${out-signed-package} onto default emulator...</echo>
         <exec executable="${adb}" failonerror="true">
             <arg value="install" />
             <arg value="-r" />
