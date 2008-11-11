@@ -124,23 +124,20 @@ public class HistoryView extends ListActivity {
 
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
-
-		menu.add(0, MENU_IMPORT_EXPORT, Menu.NONE, R.string.import_export).setShortcut('1', 'i');
+		Mileage.createMenu(menu);
 		HelpDialog.injectHelp(menu, 'h');
-
 		return true;
 	}
 
 	public boolean onOptionsItemSelected(MenuItem item) {
+		boolean ret = Mileage.parseMenuItem(item, this);
+		if (ret) {
+			return true;
+		}
 		switch (item.getItemId()) {
-			case MENU_IMPORT_EXPORT:
-				Intent i = new Intent();
-				i.setClass(HistoryView.this, ImportExportView.class);
-				startActivity(i);
-				break;
 			case HelpDialog.MENU_HELP:
 				HelpDialog.create(this, R.string.help_title_history, R.string.help_history);
-				break;
+				return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}

@@ -43,11 +43,16 @@ public class StatisticsView extends Activity {
 
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
+		Mileage.createMenu(menu);
 		HelpDialog.injectHelp(menu, 'h');
 		return true;
 	}
 
 	public boolean onOptionsItemSelected(MenuItem item) {
+		boolean ret = Mileage.parseMenuItem(item, this);
+		if (ret) {
+			return true;
+		}
 		switch (item.getItemId()) {
 			case HelpDialog.MENU_HELP:
 				HelpDialog.create(this, R.string.help_title_statistics, R.string.help_statistics);

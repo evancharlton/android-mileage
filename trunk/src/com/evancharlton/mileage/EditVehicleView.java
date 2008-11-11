@@ -99,7 +99,7 @@ public class EditVehicleView extends AddVehicleView {
 
 	public boolean onCreateOptionsMenu(Menu menu) {
 		if (m_vehicleCursor.getCount() > 1) {
-			menu.add(Menu.NONE, MENU_DELETE, Menu.NONE, R.string.delete).setShortcut('1', 'd');
+			menu.add(Menu.NONE, MENU_DELETE, Menu.NONE, R.string.delete).setShortcut('1', 'd').setIcon(R.drawable.ic_menu_delete);
 		}
 		return super.onCreateOptionsMenu(menu);
 	}

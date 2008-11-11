@@ -27,9 +27,14 @@ public final class R {
         public static final int binary=0x7f020001;
         public static final int database=0x7f020002;
         public static final int gasbuttonx=0x7f020003;
-        public static final int history_i=0x7f020004;
-        public static final int spreadsheet=0x7f020005;
-        public static final int vehicles_i=0x7f020006;
+        public static final int help_i=0x7f020004;
+        public static final int history_i=0x7f020005;
+        public static final int ic_menu_add=0x7f020006;
+        public static final int ic_menu_delete=0x7f020007;
+        public static final int ic_menu_help=0x7f020008;
+        public static final int ic_menu_preferences=0x7f020009;
+        public static final int spreadsheet=0x7f02000a;
+        public static final int vehicles_i=0x7f02000b;
     }
     public static final class id {
         public static final int about_app_btn=0x7f07000f;

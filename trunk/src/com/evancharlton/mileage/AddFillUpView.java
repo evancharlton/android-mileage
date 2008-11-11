@@ -10,7 +10,6 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.database.Cursor;
 import android.location.Criteria;
 import android.location.Location;
@@ -215,24 +214,10 @@ public class AddFillUpView extends Activity {
 		return values;
 	}
 
-	private void showVehicles() {
-		Intent i = new Intent();
-		i.setClass(AddFillUpView.this, VehiclesView.class);
-		startActivity(i);
-	}
-
-	private void showSettings() {
-		Intent i = new Intent();
-		i.setClass(AddFillUpView.this, SettingsView.class);
-		startActivity(i);
-	}
-
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
-
-		menu.add(Menu.NONE, MENU_VEHICLES, 0, R.string.vehicles).setShortcut('1', 'v');
-		menu.add(Menu.NONE, MENU_SETTINGS, 0, R.string.settings).setShortcut('2', 'e');
+		Mileage.createMenu(menu);
 		HelpDialog.injectHelp(menu, 'h');
 
 		return true;
@@ -240,15 +225,13 @@ public class AddFillUpView extends Activity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		boolean ret = Mileage.parseMenuItem(item, this);
+		if (ret) {
+			return true;
+		}
 		switch (item.getItemId()) {
-			case MENU_VEHICLES:
-				showVehicles();
-				break;
 			case HelpDialog.MENU_HELP:
 				HelpDialog.create(this, R.string.help_title_fillup_new, R.string.help_fillup_new);
-				break;
-			case MENU_SETTINGS:
-				showSettings();
 				break;
 		}
 		return super.onOptionsItemSelected(item);
