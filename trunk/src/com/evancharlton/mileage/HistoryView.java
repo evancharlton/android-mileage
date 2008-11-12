@@ -4,20 +4,27 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.ContentUris;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 
-public class HistoryView extends ListActivity {
+public class HistoryView extends ListActivity implements View.OnCreateContextMenuListener {
 	public static final int MENU_IMPORT_EXPORT = Menu.FIRST;
 	public static final int MENU_EXPORT = Menu.FIRST;
 	public static final int MENU_EXPORT_DB = Menu.FIRST + 1;
@@ -27,6 +34,11 @@ public class HistoryView extends ListActivity {
 	public static final int MENU_IMPORT_DB = Menu.FIRST + 5;
 	public static final int MENU_IMPORT_SQL = Menu.FIRST + 6;
 	public static final int MENU_IMPORT_CSV = Menu.FIRST + 7;
+
+	public static final int MENU_DELETE = Menu.FIRST;
+	public static final int MENU_EDIT = Menu.FIRST + 1;
+	public static final int DELETE_DIALOG_ID = 1;
+
 	public static final String TAG = "HistoryList";
 
 	public static final int COL_ID = 0;
@@ -40,6 +52,8 @@ public class HistoryView extends ListActivity {
 	private Map<Integer, String> m_vehicleTitles = new HashMap<Integer, String>();
 	private Map<Integer, Double> m_avgEconomies = new HashMap<Integer, Double>();
 	private HashMap<Integer, HashMap<Double, Double>> m_history;
+	private AlertDialog m_deleteDialog;
+	private long m_deleteId;
 
 	private static final String[] PROJECTIONS = new String[] {
 			FillUps._ID,
@@ -54,6 +68,12 @@ public class HistoryView extends ListActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		m_deleteDialog = new AlertDialog.Builder(this).create();
+		m_deleteDialog.setMessage(getString(R.string.confirm_delete));
+		m_deleteDialog.setCancelable(false);
+		m_deleteDialog.setButton(getString(R.string.yes), m_deleteListener);
+		m_deleteDialog.setButton2(getString(R.string.no), m_deleteListener);
 	}
 
 	public void onResume() {
@@ -139,6 +159,10 @@ public class HistoryView extends ListActivity {
 			}
 		}
 
+		ListView list = getListView();
+		list.setFocusable(true);
+		list.setOnCreateContextMenuListener(this);
+
 		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.history, historyCursor, from, to);
 		adapter.setViewBinder(m_viewBinder);
 		setListAdapter(adapter);
@@ -161,6 +185,32 @@ public class HistoryView extends ListActivity {
 		return true;
 	}
 
+	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo info) {
+		menu.setHeaderTitle(R.string.operations);
+		menu.add(Menu.NONE, MENU_DELETE, Menu.NONE, R.string.delete);
+		menu.add(Menu.NONE, MENU_EDIT, Menu.NONE, R.string.edit_fillup);
+	}
+
+	public boolean onContextItemSelected(MenuItem item) {
+		AdapterView.AdapterContextMenuInfo info = null;
+		try {
+			info = (AdapterContextMenuInfo) item.getMenuInfo();
+			switch (item.getItemId()) {
+				case MENU_DELETE:
+					m_deleteId = getListAdapter().getItemId(info.position);
+					showDialog(DELETE_DIALOG_ID);
+					return true;
+				case MENU_EDIT:
+					long id = getListAdapter().getItemId(info.position);
+					onListItemClick(getListView(), info.targetView, info.position, id);
+					return true;
+			}
+		} catch (ClassCastException e) {
+			// fail gracefully?
+		}
+		return super.onContextItemSelected(item);
+	}
+
 	public boolean onOptionsItemSelected(MenuItem item) {
 		boolean ret = Mileage.parseMenuItem(item, this);
 		if (ret) {
@@ -172,6 +222,19 @@ public class HistoryView extends ListActivity {
 				return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	public Dialog onCreateDialog(int id) {
+		switch (id) {
+			case DELETE_DIALOG_ID:
+				return m_deleteDialog;
+		}
+		return super.onCreateDialog(id);
+	}
+
+	private void delete() {
+		Uri uri = ContentUris.withAppendedId(FillUps.CONTENT_URI, m_deleteId);
+		getContentResolver().delete(uri, null, null);
 	}
 
 	private SimpleCursorAdapter.ViewBinder m_viewBinder = new SimpleCursorAdapter.ViewBinder() {
@@ -235,6 +298,15 @@ public class HistoryView extends ListActivity {
 					return true;
 			}
 			return false;
+		}
+	};
+
+	private DialogInterface.OnClickListener m_deleteListener = new DialogInterface.OnClickListener() {
+		public void onClick(DialogInterface dialog, int which) {
+			dialog.dismiss();
+			if (which == Dialog.BUTTON1) {
+				delete();
+			}
 		}
 	};
 }
