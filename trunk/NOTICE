@@ -4,3 +4,4 @@ taken from the Android source:
 	res/drawable/ic_menu_delete.png
 	res/drawable/ic_menu_help.png
 	res/drawable/ic_menu_preferences.png
+	res/drawable/importexport_i.png was built from ic_menu_save.png

@@ -39,7 +39,7 @@ public class Mileage extends TabActivity {
 		i.setClass(Mileage.this, AddFillUpView.class);
 
 		TabSpec spec = m_tabHost.newTabSpec("fillup");
-		spec.setIndicator(getString(R.string.fillup), getResources().getDrawable(R.drawable.history_i));
+		spec.setIndicator(getString(R.string.fillup), getResources().getDrawable(R.drawable.gaspump_i));
 		spec.setContent(i);
 		m_tabHost.addTab(spec);
 	}
@@ -59,7 +59,7 @@ public class Mileage extends TabActivity {
 		i.setClass(Mileage.this, StatisticsView.class);
 
 		TabSpec spec = m_tabHost.newTabSpec("fillup");
-		spec.setIndicator(getString(R.string.statistics), getResources().getDrawable(R.drawable.vehicles_i));
+		spec.setIndicator(getString(R.string.statistics), getResources().getDrawable(R.drawable.statistics_i));
 		spec.setContent(i);
 		m_tabHost.addTab(spec);
 	}
@@ -75,7 +75,7 @@ public class Mileage extends TabActivity {
 	public static void createMenu(Menu menu) {
 		menu.add(Menu.NONE, MENU_VEHICLES, Menu.NONE, R.string.vehicles).setShortcut('1', 'v').setIcon(R.drawable.vehicles_i);
 		menu.add(Menu.NONE, MENU_SETTINGS, Menu.NONE, R.string.settings).setShortcut('2', 'e').setIcon(R.drawable.ic_menu_preferences);
-		menu.add(Menu.NONE, MENU_IMPORT_EXPORT, Menu.NONE, R.string.import_export).setShortcut('3', 'i');
+		menu.add(Menu.NONE, MENU_IMPORT_EXPORT, Menu.NONE, R.string.import_export).setShortcut('3', 'i').setIcon(R.drawable.importexport_i);
 	}
 
 	public static boolean parseMenuItem(MenuItem item, Activity base) {

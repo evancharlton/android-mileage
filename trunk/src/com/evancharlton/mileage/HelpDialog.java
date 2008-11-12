@@ -38,6 +38,8 @@ public class HelpDialog extends Dialog {
 		LinearLayout container = (LinearLayout) findViewById(R.id.help_container);
 		for (int i : strings) {
 			TextView text = new TextView(m_context);
+			String t = getContext().getString(i);
+			t = t.replaceAll("\\s+", " ");
 			text.setText(i);
 			text.setPadding(5, 10, 5, 10);
 			container.addView(text);

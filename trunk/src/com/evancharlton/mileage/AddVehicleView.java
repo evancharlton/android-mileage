@@ -35,6 +35,8 @@ public class AddVehicleView extends Activity {
 		m_save = (Button) findViewById(R.id.vehicle_save_btn);
 		m_default = (CheckBox) findViewById(R.id.vehicle_default);
 
+		m_year.requestFocus();
+
 		// set up the handlers
 		m_save.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {

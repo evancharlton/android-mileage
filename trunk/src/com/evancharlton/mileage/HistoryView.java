@@ -29,8 +29,17 @@ public class HistoryView extends ListActivity {
 	public static final int MENU_IMPORT_CSV = Menu.FIRST + 7;
 	public static final String TAG = "HistoryList";
 
-	private double m_avgMpg = 0.0D;
+	public static final int COL_ID = 0;
+	public static final int COL_AMOUNT = 1;
+	public static final int COL_COST = 2;
+	public static final int COL_DATE = 3;
+	public static final int COL_COMMENT = 4;
+	public static final int COL_VEHICLEID = 5;
+	public static final int COL_MILEAGE = 6;
+
 	private Map<Integer, String> m_vehicleTitles = new HashMap<Integer, String>();
+	private Map<Integer, Double> m_avgEconomies = new HashMap<Integer, Double>();
+	private HashMap<Integer, HashMap<Double, Double>> m_history;
 
 	private static final String[] PROJECTIONS = new String[] {
 			FillUps._ID,
@@ -45,7 +54,6 @@ public class HistoryView extends ListActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		onResume();
 	}
 
 	public void onResume() {
@@ -80,6 +88,10 @@ public class HistoryView extends ListActivity {
 				Vehicles._ID,
 				Vehicles.TITLE
 		};
+		PreferencesProvider prefs = PreferencesProvider.getInstance(this);
+		CalculationEngine engine = prefs.getCalculator();
+
+		m_history = new HashMap<Integer, HashMap<Double, Double>>();
 
 		Cursor vehicleCursor = managedQuery(Vehicles.CONTENT_URI, projection, null, null, Vehicles.DEFAULT_SORT_ORDER);
 		vehicleCursor.moveToFirst();
@@ -87,24 +99,44 @@ public class HistoryView extends ListActivity {
 			String title = vehicleCursor.getString(1);
 			int index = vehicleCursor.getInt(0);
 			m_vehicleTitles.put(index, title);
+			m_history.put(index, new HashMap<Double, Double>());
 			vehicleCursor.moveToNext();
 		}
 
 		Cursor historyCursor = managedQuery(FillUps.CONTENT_URI, PROJECTIONS, null, null, FillUps.DEFAULT_SORT_ORDER);
 		if (historyCursor.getCount() > 0) {
-			// we need to calculate the average MPG
-			double total_distance = 0.0D;
-			double total_fuel = 0.0D;
 			historyCursor.moveToFirst();
-			total_distance = historyCursor.getDouble(6);
-			while (historyCursor.isLast() == false) {
-				total_fuel += historyCursor.getDouble(1);
+			while (historyCursor.isAfterLast() == false) {
+				int vehicleId = historyCursor.getInt(COL_VEHICLEID);
+				HashMap<Double, Double> data = m_history.get(vehicleId);
+				double mileage = historyCursor.getDouble(COL_MILEAGE);
+				double amount = historyCursor.getDouble(COL_AMOUNT);
+				data.put(mileage, amount);
 				historyCursor.moveToNext();
 			}
-			total_distance -= historyCursor.getDouble(6);
-			total_fuel += historyCursor.getDouble(1);
 			historyCursor.moveToFirst();
-			m_avgMpg = PreferencesProvider.getInstance(this).getCalculator().calculateEconomy(total_distance, total_fuel);
+
+			// calculate their respective economies
+			for (Integer vehicleId : m_history.keySet()) {
+				HashMap<Double, Double> data = m_history.get(vehicleId);
+				Double[] keys = data.keySet().toArray(new Double[data.keySet().size()]);
+				if (keys.length == 1) {
+					// can't calculate the avg economy
+					data.put(keys[0], null);
+					continue;
+				}
+				double total_miles = Math.abs(keys[0] - keys[keys.length - 1]);
+				double total_fuel = 0.0D;
+				for (int i = keys.length - 1; i > 0; i--) {
+					double key = keys[i];
+					double miles = keys[i] - keys[i - 1];
+					double amount = data.get(key);
+					data.put(key, engine.calculateEconomy(miles, amount));
+					total_fuel += amount;
+				}
+				double mileage = engine.calculateEconomy(total_miles, total_fuel);
+				m_avgEconomies.put(vehicleId, mileage);
+			}
 		}
 
 		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.history, historyCursor, from, to);
@@ -180,25 +212,25 @@ public class HistoryView extends ListActivity {
 						view.setVisibility(View.GONE);
 					}
 					return true;
-				case 6:
+				case COL_MILEAGE:
 					double mileage = cursor.getDouble(columnIndex);
-					int position = cursor.getPosition();
-					if (position != cursor.getCount() - 1) {
-						cursor.moveToNext();
-						double next_mileage = cursor.getDouble(columnIndex);
-						double diff = Math.abs(mileage - next_mileage);
-						double amount = cursor.getDouble(1);
-						double mpg = engine.calculateEconomy(diff, amount);
+					if (!cursor.isLast()) {
+						int vehicleId = cursor.getInt(COL_VEHICLEID);
+						Double mpg = m_history.get(vehicleId).get(mileage);
+						if (mpg == null) {
+							// can't do anything
+							return true;
+						}
+						double avgMpg = m_avgEconomies.get(vehicleId);
 						TextView tv = (TextView) view;
 						int color = 0xFF666666;
-						if (engine.better(mpg, m_avgMpg)) {
+						if (engine.better(mpg, avgMpg)) {
 							color = 0xFF0AB807;
 						} else {
 							color = 0xFFD90000;
 						}
 						tv.setTextColor(color);
 						tv.setText(prefs.format(mpg) + engine.getEconomyUnits());
-						cursor.moveToPrevious();
 					}
 					return true;
 			}

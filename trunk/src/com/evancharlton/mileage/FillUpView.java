@@ -33,6 +33,8 @@ public class FillUpView extends AddFillUpView {
 				if (values == null) {
 					return;
 				}
+				double mileage = Double.parseDouble(m_mileageEdit.getText().toString().trim());
+				values.put(FillUps.MILEAGE, mileage);
 
 				getContentResolver().update(getIntent().getData(), values, null, null);
 				finish();

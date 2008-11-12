@@ -133,7 +133,7 @@ public class StatisticsView extends Activity {
 			num--;
 		}
 
-		if (count == 0) {
+		if (count < 2) {
 			// throw up a notice
 			AlertDialog dlg = new AlertDialog.Builder(this).create();
 			dlg.setTitle(R.string.statistics_no_data);

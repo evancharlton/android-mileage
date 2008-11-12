@@ -65,8 +65,8 @@
 	<string name="stats_expense_running">Total:</string>
 	<string name="stats_expense_thirty_days">30-day cost:</string>
 	<string name="stats_expense_yearly">Last year:</string>
-	<string name="statistics_no_data">No data!</string>
-	<string name="statistics_no_data_msg">There is no data stored for this vehicle; not calculating statistics.</string>
+	<string name="statistics_no_data">Not enough data!</string>
+	<string name="statistics_no_data_msg">There is not enough data stored for this vehicle; not calculating statistics.</string>
 	
 	<string name="import_export">Import / Export</string>
 	<string name="export_header">Export</string>	

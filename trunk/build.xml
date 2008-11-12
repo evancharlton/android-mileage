@@ -316,7 +316,7 @@
 	<target name="run" depends="r">
 		<echo>Starting up ${application-package}.${ant.project.name}...</echo>
 		<exec executable="${adb}">
-			<arg line="shell am start -a android.intent.action.MAIN -c android.intent.category.LAUNCHER -n ${application-package}/${application-package}.${ant.project.name}"/>
+			<arg line="shell am start -n ${application-package}/${application-package}.${ant.project.name}"/>
 		</exec>
 	</target>
 	

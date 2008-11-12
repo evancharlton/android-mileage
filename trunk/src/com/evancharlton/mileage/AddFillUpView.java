@@ -123,6 +123,8 @@ public class AddFillUpView extends Activity {
 			}
 		});
 
+		m_priceEdit.requestFocus();
+
 		// m_priceEdit.setKeyListener(new KeyFocuser(m_amountEdit));
 		// m_amountEdit.setKeyListener(new KeyFocuser(m_mileageEdit));
 		// m_mileageEdit.setKeyListener(new KeyFocuser(m_commentEdit));
@@ -153,6 +155,8 @@ public class AddFillUpView extends Activity {
 		boolean error = false;
 		int errorMsg = 0;
 
+		long vehicleId = m_vehicleSpinner.getSelectedItemId();
+
 		try {
 			double cost = Double.parseDouble(m_priceEdit.getText().toString());
 			values.put(FillUps.COST, cost);
@@ -170,7 +174,25 @@ public class AddFillUpView extends Activity {
 		}
 
 		try {
-			double mileage = Double.parseDouble(m_mileageEdit.getText().toString());
+			String miles = m_mileageEdit.getText().toString().trim();
+			double mileage = 0.0D;
+			if (miles.startsWith("+")) {
+				// we have an incremental mileage
+				String[] projection = new String[] {
+						FillUps._ID,
+						FillUps.MILEAGE
+				};
+				Cursor c = managedQuery(FillUps.CONTENT_URI, projection, FillUps.VEHICLE_ID + " = ?", new String[] {
+					String.valueOf(vehicleId)
+				}, FillUps.DEFAULT_SORT_ORDER);
+				if (c.getCount() > 0) {
+					c.moveToFirst();
+					double previous_miles = c.getDouble(1);
+					mileage = Double.parseDouble(miles.substring(1)) + previous_miles;
+				}
+			} else {
+				mileage = Double.parseDouble(miles);
+			}
 			values.put(FillUps.MILEAGE, mileage);
 		} catch (NumberFormatException nfe) {
 			error = true;
@@ -207,7 +229,7 @@ public class AddFillUpView extends Activity {
 		}
 
 		values.put(FillUps.COMMENT, m_commentEdit.getText().toString().trim());
-		values.put(FillUps.VEHICLE_ID, m_vehicleSpinner.getSelectedItemId());
+		values.put(FillUps.VEHICLE_ID, vehicleId);
 
 		Calendar c = new GregorianCalendar(m_year, m_month, m_day);
 		values.put(FillUps.DATE, c.getTimeInMillis());
