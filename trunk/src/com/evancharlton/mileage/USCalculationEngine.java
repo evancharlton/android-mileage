@@ -40,4 +40,8 @@ public class USCalculationEngine extends CalculationEngine {
 	public String getDistanceUnitsAbbr() {
 		return " mi";
 	}
+
+	public String help() {
+		return "";
+	}
 }

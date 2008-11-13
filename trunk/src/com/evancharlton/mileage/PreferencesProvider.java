@@ -21,6 +21,9 @@ public class PreferencesProvider {
 	private static final int STRING = 4;
 
 	private static final int US_ENGINE = 0;
+	private static final int UK_ENGINE = 1;
+	private static final int GAL_KM_ENGINE = 2;
+	private static final int LIT_MI_ENGINE = 3;
 
 	private PreferencesProvider(Activity activity) {
 		m_activity = activity;
@@ -114,10 +117,19 @@ public class PreferencesProvider {
 
 	public CalculationEngine getCalculator() {
 		int calc = getInt(SettingsView.CALCULATIONS, 0);
-		if (calc == US_ENGINE) {
-			m_calcEngine = new USCalculationEngine();
-		} else {
-			m_calcEngine = new MetricCalculationEngine();
+		switch (calc) {
+			case US_ENGINE:
+				m_calcEngine = new USCalculationEngine();
+				break;
+			case UK_ENGINE:
+				m_calcEngine = new MetricCalculationEngine();
+				break;
+			case GAL_KM_ENGINE:
+				m_calcEngine = new GallonToKilometerCalculationEngine();
+				break;
+			case LIT_MI_ENGINE:
+				m_calcEngine = new LitreToMileCalculationEngine();
+				break;
 		}
 		return m_calcEngine;
 	}

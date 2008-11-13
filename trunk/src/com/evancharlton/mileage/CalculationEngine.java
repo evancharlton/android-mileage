@@ -1,21 +1,21 @@
 package com.evancharlton.mileage;
 
 public abstract class CalculationEngine {
-	abstract double calculateEconomy(double distance, double fuel);
+	abstract public double calculateEconomy(double distance, double fuel);
 
-	abstract String getEconomyUnits();
+	abstract public String getEconomyUnits();
 
-	abstract double getWorstEconomy();
+	abstract public double getWorstEconomy();
 
-	abstract double getBestEconomy();
+	abstract public double getBestEconomy();
 
-	abstract String getVolumeUnits();
+	abstract public String getVolumeUnits();
 
-	abstract String getVolumeUnitsAbbr();
+	abstract public String getVolumeUnitsAbbr();
 
-	abstract String getDistanceUnits();
+	abstract public String getDistanceUnits();
 
-	abstract String getDistanceUnitsAbbr();
+	abstract public String getDistanceUnitsAbbr();
 
 	/**
 	 * See if one is better than two.
@@ -24,7 +24,7 @@ public abstract class CalculationEngine {
 	 * @param economy_two
 	 * @return
 	 */
-	abstract boolean better(double economy_one, double economy_two);
+	abstract public boolean better(double economy_one, double economy_two);
 
 	/**
 	 * Is one worse than two?
@@ -33,5 +33,7 @@ public abstract class CalculationEngine {
 	 * @param two
 	 * @return
 	 */
-	abstract boolean worse(double one, double two);
+	abstract public boolean worse(double one, double two);
+
+	abstract public String help();
 }

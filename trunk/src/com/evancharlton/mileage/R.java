@@ -9,16 +9,16 @@ package com.evancharlton.mileage;
 
 public final class R {
     public static final class array {
-        public static final int currencies=0x7f040001;
-        public static final int date_formats=0x7f040002;
-        public static final int date_patterns=0x7f040003;
-        public static final int number_formats=0x7f040004;
-        public static final int number_patterns=0x7f040005;
+        public static final int currencies=0x7f040003;
+        public static final int date_formats=0x7f040004;
+        public static final int date_patterns=0x7f040005;
+        public static final int number_formats=0x7f040006;
+        public static final int number_patterns=0x7f040007;
         public static final int systems=0x7f040000;
-        public static final int unit_amount_hints=0x7f040007;
+        public static final int unit_amount_hints=0x7f040002;
         /**  I know that this is terrible, but I don't have i18n, so I have to do this crap 
          */
-        public static final int unit_price_hints=0x7f040006;
+        public static final int unit_price_hints=0x7f040001;
     }
     public static final class attr {
     }
@@ -30,14 +30,15 @@ public final class R {
         public static final int gaspump_i=0x7f020004;
         public static final int help_i=0x7f020005;
         public static final int history_i=0x7f020006;
-        public static final int ic_menu_add=0x7f020007;
-        public static final int ic_menu_delete=0x7f020008;
-        public static final int ic_menu_help=0x7f020009;
-        public static final int ic_menu_preferences=0x7f02000a;
-        public static final int importexport_i=0x7f02000b;
-        public static final int spreadsheet=0x7f02000c;
-        public static final int statistics_i=0x7f02000d;
-        public static final int vehicles_i=0x7f02000e;
+        public static final int ic_btn_help=0x7f020007;
+        public static final int ic_menu_add=0x7f020008;
+        public static final int ic_menu_delete=0x7f020009;
+        public static final int ic_menu_help=0x7f02000a;
+        public static final int ic_menu_preferences=0x7f02000b;
+        public static final int importexport_i=0x7f02000c;
+        public static final int spreadsheet=0x7f02000d;
+        public static final int statistics_i=0x7f02000e;
+        public static final int vehicles_i=0x7f02000f;
     }
     public static final class id {
         public static final int about_app_btn=0x7f07000f;
@@ -62,37 +63,38 @@ public final class R {
         public static final int odometer_edit=0x7f07000a;
         public static final int price_edit=0x7f070008;
         public static final int save_btn=0x7f07000e;
-        public static final int settings_currency=0x7f07001f;
-        public static final int settings_date_format=0x7f07001e;
-        public static final int settings_save_changes=0x7f070020;
+        public static final int settings_currency=0x7f070020;
+        public static final int settings_date_format=0x7f07001f;
+        public static final int settings_help=0x7f07001e;
+        public static final int settings_save_changes=0x7f070021;
         public static final int settings_system=0x7f07001d;
-        public static final int stats_amount_average=0x7f070036;
-        public static final int stats_amount_average_cost=0x7f070031;
-        public static final int stats_amount_last=0x7f070035;
-        public static final int stats_amount_maximum=0x7f070038;
-        public static final int stats_amount_maximum_cost=0x7f070032;
-        public static final int stats_amount_minimum=0x7f070037;
-        public static final int stats_amount_minimum_cost=0x7f070033;
-        public static final int stats_amount_total=0x7f070034;
-        public static final int stats_cost_last=0x7f070030;
-        public static final int stats_distance_average=0x7f070025;
-        public static final int stats_distance_body=0x7f070023;
-        public static final int stats_distance_header=0x7f070022;
-        public static final int stats_distance_maximum=0x7f070026;
-        public static final int stats_distance_minimum=0x7f070027;
-        public static final int stats_distance_running=0x7f070024;
-        public static final int stats_economy_average=0x7f070029;
-        public static final int stats_economy_maximum=0x7f07002a;
-        public static final int stats_economy_minimum=0x7f07002b;
-        public static final int stats_economy_running=0x7f070028;
-        public static final int stats_expense_running=0x7f070039;
-        public static final int stats_expense_thirty_days=0x7f07003b;
-        public static final int stats_expense_yearly=0x7f07003a;
-        public static final int stats_price_average=0x7f07002d;
-        public static final int stats_price_latest=0x7f07002c;
-        public static final int stats_price_maximum=0x7f07002e;
-        public static final int stats_price_minimum=0x7f07002f;
-        public static final int stats_vehicle_spinner=0x7f070021;
+        public static final int stats_amount_average=0x7f070037;
+        public static final int stats_amount_average_cost=0x7f070032;
+        public static final int stats_amount_last=0x7f070036;
+        public static final int stats_amount_maximum=0x7f070039;
+        public static final int stats_amount_maximum_cost=0x7f070033;
+        public static final int stats_amount_minimum=0x7f070038;
+        public static final int stats_amount_minimum_cost=0x7f070034;
+        public static final int stats_amount_total=0x7f070035;
+        public static final int stats_cost_last=0x7f070031;
+        public static final int stats_distance_average=0x7f070026;
+        public static final int stats_distance_body=0x7f070024;
+        public static final int stats_distance_header=0x7f070023;
+        public static final int stats_distance_maximum=0x7f070027;
+        public static final int stats_distance_minimum=0x7f070028;
+        public static final int stats_distance_running=0x7f070025;
+        public static final int stats_economy_average=0x7f07002a;
+        public static final int stats_economy_maximum=0x7f07002b;
+        public static final int stats_economy_minimum=0x7f07002c;
+        public static final int stats_economy_running=0x7f070029;
+        public static final int stats_expense_running=0x7f07003a;
+        public static final int stats_expense_thirty_days=0x7f07003c;
+        public static final int stats_expense_yearly=0x7f07003b;
+        public static final int stats_price_average=0x7f07002e;
+        public static final int stats_price_latest=0x7f07002d;
+        public static final int stats_price_maximum=0x7f07002f;
+        public static final int stats_price_minimum=0x7f070030;
+        public static final int stats_vehicle_spinner=0x7f070022;
         public static final int vehicle_default=0x7f070006;
         public static final int vehicle_make=0x7f070003;
         public static final int vehicle_model=0x7f070004;

@@ -40,4 +40,8 @@ public class MetricCalculationEngine extends CalculationEngine {
 	public boolean worse(double economy_one, double economy_two) {
 		return economy_one > economy_two;
 	}
+
+	public String help() {
+		return "";
+	}
 }
