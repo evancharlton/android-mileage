@@ -154,8 +154,7 @@
 	any changes you have made and return to the history browser. You can fill in an optional comment, if you want to.</string>
 	
 	<string name="help_title_settings">Settings Help</string>
-	<string name="help_settings">From this screen, you can set preferences to fit your usage. Note that switching between mpg and l/100km doesn't do
-	any unit conversion--it simply uses existing values to calculate statistics in a different way. 10 gallons becomes 10 litres, not 37.85 litres.</string>
+	<string name="help_settings">From this screen, you can set preferences to fit your usage. Be sure to read the help for which measurement system you choose!</string>
 	
 	<string name="help_title_statistics">Statistics Help</string>
 	<string name="help_statistics">This screen shows a wide range of calculated statistics on a per-vehicle basis. If you have multiple vehicles,
