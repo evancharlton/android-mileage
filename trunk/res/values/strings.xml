@@ -147,7 +147,7 @@
 	<string name="help_title_history">History Help</string>
 	<string name="help_history">The history browser lets you view a list of past fill-ups, of all vehicles. Once a fill-up is selected, you can edit or
 	delete individual entries. If the economy is in red, then it is below your average economy value. Green indicates a value above your average 
-	economy value. Additionally, you can import or export data.</string>
+	economy value. Additionally, you can import or export data. Blue means that it is the same as your average fuel economy.</string>
 	
 	<string name="help_title_fillup_edit">Editing Fill-Up Help</string>
 	<string name="help_fillup_edit">From here, you can edit a previously-recorded fill-up, or delete it altogether. Press the back button to undo
