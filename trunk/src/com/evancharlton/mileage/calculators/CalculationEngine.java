@@ -1,6 +1,22 @@
-package com.evancharlton.mileage;
+package com.evancharlton.mileage.calculators;
 
 public abstract class CalculationEngine {
+	public double litresToGallons(double amount) {
+		return amount *= 0.264172052; // number of gallons per litre
+	}
+
+	public double gallonsToLitres(double amount) {
+		return amount *= 3.78541178; // number of litres per gallon
+	}
+
+	public double milesToKM(double amount) {
+		return amount *= 1.609344; // number of kilometers per mile
+	}
+
+	public double kmToMiles(double amount) {
+		return amount *= 0.621371192; // number of miles per kilometer
+	}
+
 	abstract public double calculateEconomy(double distance, double fuel);
 
 	abstract public String getEconomyUnits();

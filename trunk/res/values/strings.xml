@@ -97,6 +97,7 @@
 	<string name="settings_header_system">System of Measure</string>
 	<string name="settings_system">System:</string>
 	<string name="settings_currency">Currency:</string>
+	<string name="system_help">Calculation Help</string>
 		
 	<string name="error">Error!</string>
 	<string name="error_cost">Invalid number format for price of fuel.</string>

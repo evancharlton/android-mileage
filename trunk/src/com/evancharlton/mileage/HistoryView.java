@@ -24,6 +24,8 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
+import com.evancharlton.mileage.calculators.CalculationEngine;
+
 public class HistoryView extends ListActivity implements View.OnCreateContextMenuListener {
 	public static final int MENU_IMPORT_EXPORT = Menu.FIRST;
 	public static final int MENU_EXPORT = Menu.FIRST;

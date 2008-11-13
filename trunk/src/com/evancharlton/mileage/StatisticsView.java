@@ -20,6 +20,8 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.evancharlton.mileage.calculators.CalculationEngine;
+
 public class StatisticsView extends Activity {
 	private HashMap<Integer, TextView> m_stats = new HashMap<Integer, TextView>();
 	private Spinner m_vehicles;

@@ -1,4 +1,4 @@
-package com.evancharlton.mileage;
+package com.evancharlton.mileage.calculators;
 
 public class USCalculationEngine extends CalculationEngine {
 	public double calculateEconomy(double distance, double fuel) {
@@ -42,6 +42,6 @@ public class USCalculationEngine extends CalculationEngine {
 	}
 
 	public String help() {
-		return "";
+		return "The American system expects:\n fuel: gallons\n odometer: miles\n economy: miles per gallon";
 	}
 }

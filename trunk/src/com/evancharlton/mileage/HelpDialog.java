@@ -46,6 +46,14 @@ public class HelpDialog extends Dialog {
 		}
 	}
 
+	public void setContents(String contents) {
+		LinearLayout container = (LinearLayout) findViewById(R.id.help_container);
+		TextView text = new TextView(m_context);
+		text.setText(contents);
+		text.setPadding(5, 10, 5, 10);
+		container.addView(text);
+	}
+
 	public static HelpDialog create(Context context, int title, int content) {
 		return HelpDialog.create(context, title, new int[] {
 			content
@@ -53,6 +61,14 @@ public class HelpDialog extends Dialog {
 	}
 
 	public static HelpDialog create(Context context, int title, int[] contents) {
+		HelpDialog dlg = new HelpDialog(context);
+		dlg.setTitle(title);
+		dlg.setContents(contents);
+		dlg.show();
+		return dlg;
+	}
+
+	public static HelpDialog create(Context context, int title, String contents) {
 		HelpDialog dlg = new HelpDialog(context);
 		dlg.setTitle(title);
 		dlg.setContents(contents);

@@ -7,6 +7,16 @@ import java.util.Date;
 import android.app.Activity;
 import android.content.SharedPreferences;
 
+import com.evancharlton.mileage.calculators.CalculationEngine;
+import com.evancharlton.mileage.calculators.GallonToKilometerCalculationEngine;
+import com.evancharlton.mileage.calculators.GallonsKilometersToLPKCalculationEngine;
+import com.evancharlton.mileage.calculators.GallonsKilometersToMPGCalculationEngine;
+import com.evancharlton.mileage.calculators.LitreToMileCalculationEngine;
+import com.evancharlton.mileage.calculators.LitresMilesToKilometersCalculationEngine;
+import com.evancharlton.mileage.calculators.LitresMilesToMPGCalculationEngine;
+import com.evancharlton.mileage.calculators.MetricCalculationEngine;
+import com.evancharlton.mileage.calculators.USCalculationEngine;
+
 public class PreferencesProvider {
 	private static PreferencesProvider s_instance = null;
 	private Activity m_activity;
@@ -23,7 +33,11 @@ public class PreferencesProvider {
 	private static final int US_ENGINE = 0;
 	private static final int UK_ENGINE = 1;
 	private static final int GAL_KM_ENGINE = 2;
-	private static final int LIT_MI_ENGINE = 3;
+	private static final int G_K_KM_ENGINE = 3;
+	private static final int G_K_MI_ENGINE = 4;
+	private static final int LIT_MI_ENGINE = 5;
+	private static final int L_M_MI_ENGINE = 6;
+	private static final int L_M_KM_ENGINE = 7;
 
 	private PreferencesProvider(Activity activity) {
 		m_activity = activity;
@@ -117,21 +131,39 @@ public class PreferencesProvider {
 
 	public CalculationEngine getCalculator() {
 		int calc = getInt(SettingsView.CALCULATIONS, 0);
+		m_calcEngine = getCalculator(calc);
+		return m_calcEngine;
+	}
+
+	public CalculationEngine getCalculator(int calc) {
+		CalculationEngine engine = null;
 		switch (calc) {
 			case US_ENGINE:
-				m_calcEngine = new USCalculationEngine();
+				engine = new USCalculationEngine();
 				break;
 			case UK_ENGINE:
-				m_calcEngine = new MetricCalculationEngine();
+				engine = new MetricCalculationEngine();
 				break;
 			case GAL_KM_ENGINE:
-				m_calcEngine = new GallonToKilometerCalculationEngine();
+				engine = new GallonToKilometerCalculationEngine();
 				break;
 			case LIT_MI_ENGINE:
-				m_calcEngine = new LitreToMileCalculationEngine();
+				engine = new LitreToMileCalculationEngine();
+				break;
+			case G_K_MI_ENGINE:
+				engine = new GallonsKilometersToMPGCalculationEngine();
+				break;
+			case G_K_KM_ENGINE:
+				engine = new GallonsKilometersToLPKCalculationEngine();
+				break;
+			case L_M_MI_ENGINE:
+				engine = new LitresMilesToMPGCalculationEngine();
+				break;
+			case L_M_KM_ENGINE:
+				engine = new LitresMilesToKilometersCalculationEngine();
 				break;
 		}
-		return m_calcEngine;
+		return engine;
 	}
 
 	public String format(double number) {

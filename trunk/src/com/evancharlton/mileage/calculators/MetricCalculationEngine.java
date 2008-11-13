@@ -1,4 +1,4 @@
-package com.evancharlton.mileage;
+package com.evancharlton.mileage.calculators;
 
 public class MetricCalculationEngine extends CalculationEngine {
 	public double calculateEconomy(double distance, double fuel) {
@@ -42,6 +42,6 @@ public class MetricCalculationEngine extends CalculationEngine {
 	}
 
 	public String help() {
-		return "";
+		return "The Metric system expects:\n fuel: litres\n odometer: kilometers\n economy: litres / 100 km";
 	}
 }

@@ -6,7 +6,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Spinner;
+
+import com.evancharlton.mileage.calculators.CalculationEngine;
 
 public class SettingsView extends Activity {
 	public static final String DATE = "date_pref";
@@ -18,6 +21,7 @@ public class SettingsView extends Activity {
 	private Spinner m_dateSpinner;
 	private Spinner m_systemSpinner;
 	private Spinner m_currencySpinner;
+	private ImageButton m_helpBtn;
 
 	// private Spinner m_numberSpinner;
 
@@ -35,6 +39,7 @@ public class SettingsView extends Activity {
 		// m_numberSpinner = (Spinner)
 		// findViewById(R.id.settings_number_format);
 		m_systemSpinner = (Spinner) findViewById(R.id.settings_system);
+		m_helpBtn = (ImageButton) findViewById(R.id.settings_help);
 
 		m_saveBtn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
@@ -45,6 +50,14 @@ public class SettingsView extends Activity {
 				// prefs.write(SettingsView.NUMBER,
 				// m_numberSpinner.getSelectedItemPosition());
 				finish();
+			}
+		});
+
+		m_helpBtn.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				int calc = m_systemSpinner.getSelectedItemPosition();
+				CalculationEngine engine = PreferencesProvider.getInstance(SettingsView.this).getCalculator(calc);
+				HelpDialog.create(SettingsView.this, R.string.system_help, engine.help());
 			}
 		});
 
