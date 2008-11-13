@@ -289,7 +289,7 @@ public class HistoryView extends ListActivity implements View.OnCreateContextMen
 						double avgMpg = m_avgEconomies.get(vehicleId);
 						TextView tv = (TextView) view;
 						int color = 0xFF666666;
-						if (engine.better(mpg, avgMpg)) {
+						if (engine.better(mpg, avgMpg) || mpg == avgMpg) {
 							color = 0xFF0AB807;
 						} else {
 							color = 0xFFD90000;
