@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="app_name">Mileage</string>
-	<string name="app_version">1.3.0</string>
+	<string name="app_version">1.4.0</string>
 	<string name="odometer">Odometer</string>
 	<string name="add_fillup">Save Fill-up</string>
 	<string name="fillup">Fill-Up</string>
@@ -142,7 +142,8 @@
 	<string name="help_title_fillup_new">Recording Fill-Up Help</string>
 	<string name="help_fillup_new">This allows you to add a new fill-up into the database. Note that you can select any date you wish, so you can
 	enter past fill-ups. Alternatively, you can import old fill-ups from a spreadsheet or database; go to History, then to Import/Export for more
-	details. You can fill in an optional comment.</string>
+	details. You can fill in an optional comment. You can add incremental fill-ups (since the previous one) by prefixing your odometer with a '+'.
+	For example, if you have gone 300 miles since your last fillup, enter '+300'</string>
 	
 	<string name="help_title_history">History Help</string>
 	<string name="help_history">The history browser lets you view a list of past fill-ups, of all vehicles. Once a fill-up is selected, you can edit or
