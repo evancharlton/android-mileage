@@ -142,6 +142,10 @@ public class HistoryView extends ListActivity implements View.OnCreateContextMen
 			for (Integer vehicleId : m_history.keySet()) {
 				HashMap<Double, Double> data = m_history.get(vehicleId);
 				Double[] keys = data.keySet().toArray(new Double[data.keySet().size()]);
+				if (keys.length == 0) {
+					data.put(0D, null);
+					continue;
+				}
 				if (keys.length == 1) {
 					// can't calculate the avg economy
 					data.put(keys[0], null);
