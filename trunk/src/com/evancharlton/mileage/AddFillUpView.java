@@ -11,7 +11,6 @@ import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.database.Cursor;
-import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -202,20 +201,14 @@ public class AddFillUpView extends Activity {
 		LocationManager location = (LocationManager) getSystemService(LOCATION_SERVICE);
 		boolean locationStored = false;
 		if (location != null) {
-			Criteria criteria = new Criteria();
-			criteria.setSpeedRequired(true);
-			criteria.setAccuracy(Criteria.ACCURACY_COARSE);
-			String provider = location.getBestProvider(criteria, true);
-			if (provider != null) {
-				Location loc = location.getLastKnownLocation(provider);
-				if (loc != null) {
-					values.put(FillUps.LATITUDE, loc.getLatitude());
-					values.put(FillUps.LONGITUDE, loc.getLongitude());
-					locationStored = true;
-				}
+			Location loc = location.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+			if (loc != null) {
+				values.put(FillUps.LATITUDE, loc.getLatitude());
+				values.put(FillUps.LONGITUDE, loc.getLongitude());
+				locationStored = true;
 			}
 		}
-		if (locationStored) {
+		if (!locationStored) {
 			values.put(FillUps.LATITUDE, 0D);
 			values.put(FillUps.LONGITUDE, 0D);
 		}
