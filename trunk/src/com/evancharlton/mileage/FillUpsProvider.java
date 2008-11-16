@@ -94,15 +94,7 @@ public class FillUpsProvider extends ContentProvider {
 			sql.append(");");
 			db.execSQL(sql.toString());
 
-			sql = new StringBuilder();
-			sql.append("INSERT INTO ").append(VEHICLES_TABLE_NAME).append(" (");
-			sql.append(Vehicles.MAKE).append(", ").append(Vehicles.MODEL).append(", ");
-			sql.append(Vehicles.YEAR).append(", ").append(Vehicles.TITLE).append(", ");
-			sql.append(Vehicles.DEFAULT);
-			sql.append(") VALUES ('Make', 'Model', '");
-			sql.append(Calendar.getInstance().get(Calendar.YEAR));
-			sql.append("', 'Default Vehicle', '").append(System.currentTimeMillis()).append("');");
-			db.execSQL(sql.toString());
+			initTables(db);
 		}
 
 		@Override
@@ -127,6 +119,18 @@ public class FillUpsProvider extends ContentProvider {
 				onCreate(db);
 			}
 		}
+	}
+
+	public static void initTables(SQLiteDatabase db) {
+		StringBuilder sql = new StringBuilder();
+		sql.append("INSERT INTO ").append(VEHICLES_TABLE_NAME).append(" (");
+		sql.append(Vehicles.MAKE).append(", ").append(Vehicles.MODEL).append(", ");
+		sql.append(Vehicles.YEAR).append(", ").append(Vehicles.TITLE).append(", ");
+		sql.append(Vehicles.DEFAULT);
+		sql.append(") VALUES ('Make', 'Model', '");
+		sql.append(Calendar.getInstance().get(Calendar.YEAR));
+		sql.append("', 'Default Vehicle', '").append(System.currentTimeMillis()).append("');");
+		db.execSQL(sql.toString());
 	}
 
 	private DatabaseHelper m_helper;

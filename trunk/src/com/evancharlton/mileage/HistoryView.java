@@ -1,5 +1,6 @@
 package com.evancharlton.mileage;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -144,6 +145,7 @@ public class HistoryView extends ListActivity implements View.OnCreateContextMen
 			for (Integer vehicleId : m_history.keySet()) {
 				HashMap<Double, Double> data = m_history.get(vehicleId);
 				Double[] keys = data.keySet().toArray(new Double[data.keySet().size()]);
+				Arrays.sort(keys);
 				if (keys.length == 0) {
 					data.put(0D, null);
 					continue;

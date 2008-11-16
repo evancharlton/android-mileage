@@ -2,8 +2,10 @@ package com.evancharlton.mileage;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -20,7 +22,10 @@ public class ImportExportView extends Activity {
 	private static final int IMPORT_DB = 4;
 	private static final int IMPORT_SQL = 5;
 	private static final int IMPORT_CSV = 6;
-	private static final int MENU_HELP = Menu.FIRST;
+	private static final int MENU_ERASE = Menu.FIRST;
+	private static final int ERASE_DIALOG_ID = 0;
+
+	private AlertDialog m_eraseDialog;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -44,11 +49,17 @@ public class ImportExportView extends Activity {
 		exportDB.setOnClickListener(new ButtonHandler(EXPORT_DB));
 		exportSQL.setOnClickListener(new ButtonHandler(EXPORT_SQL));
 		exportCSV.setOnClickListener(new ButtonHandler(EXPORT_CSV));
+
+		m_eraseDialog = new AlertDialog.Builder(this).create();
+		m_eraseDialog.setMessage(getString(R.string.confirm_erase));
+		m_eraseDialog.setCancelable(false);
+		m_eraseDialog.setButton(getString(R.string.yes), m_eraseListener);
+		m_eraseDialog.setButton2(getString(R.string.no), m_eraseListener);
 	}
 
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-			case MENU_HELP:
+			case HelpDialog.MENU_HELP:
 				HelpDialog.create(this, R.string.help_title_import_export, new int[] {
 						R.string.help_import_db,
 						R.string.help_export_db,
@@ -58,15 +69,35 @@ public class ImportExportView extends Activity {
 						R.string.help_export_sql
 				});
 				break;
+			case MENU_ERASE:
+				showDialog(ERASE_DIALOG_ID);
+				break;
 		}
 		return super.onOptionsItemSelected(item);
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {
-
-		menu.add(Menu.NONE, MENU_HELP, Menu.NONE, R.string.help).setShortcut('1', 'h');
-
+		menu.add(Menu.NONE, MENU_ERASE, Menu.NONE, R.string.erase).setShortcut('0', 'e').setIcon(R.drawable.ic_menu_delete);
+		HelpDialog.injectHelp(menu, 'h');
 		return super.onCreateOptionsMenu(menu);
+	}
+
+	private void erase() {
+		SQLiteDatabase db = SQLiteDatabase.openDatabase("/data/data/" + Mileage.PACKAGE + "/databases/" + FillUpsProvider.DATABASE_NAME, null, SQLiteDatabase.OPEN_READWRITE);
+		String sql = "DELETE FROM " + FillUpsProvider.FILLUPS_TABLE_NAME;
+		db.execSQL(sql);
+		sql = "DELETE FROM " + FillUpsProvider.VEHICLES_TABLE_NAME;
+		db.execSQL(sql);
+		FillUpsProvider.initTables(db);
+		db.close();
+	}
+
+	protected Dialog onCreateDialog(int id) {
+		switch (id) {
+			case ERASE_DIALOG_ID:
+				return m_eraseDialog;
+		}
+		return null;
 	}
 
 	private class ButtonHandler implements View.OnClickListener {
@@ -133,6 +164,15 @@ public class ImportExportView extends Activity {
 				dlg.setMessage(getString(msg.arg1) + "\n" + msg.obj.toString());
 			}
 			dlg.show();
+		}
+	};
+
+	private DialogInterface.OnClickListener m_eraseListener = new DialogInterface.OnClickListener() {
+		public void onClick(DialogInterface dialog, int which) {
+			dialog.dismiss();
+			if (which == Dialog.BUTTON1) {
+				erase();
+			}
 		}
 	};
 }
