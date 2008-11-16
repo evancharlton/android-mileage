@@ -23,8 +23,6 @@ public class SettingsView extends Activity {
 	private Spinner m_distanceSpinner;
 	private Spinner m_economySpinner;
 
-	// private Spinner m_numberSpinner;
-
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.settings);
@@ -39,16 +37,16 @@ public class SettingsView extends Activity {
 		m_volumeSpinner = (Spinner) findViewById(R.id.settings_volume);
 		m_distanceSpinner = (Spinner) findViewById(R.id.settings_distance);
 		m_economySpinner = (Spinner) findViewById(R.id.settings_economy);
-		// m_numberSpinner = (Spinner)
-		// findViewById(R.id.settings_number_format);
 
 		m_saveBtn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				PreferencesProvider prefs = PreferencesProvider.getInstance(SettingsView.this);
 				prefs.write(SettingsView.DATE, m_dateSpinner.getSelectedItemPosition());
 				prefs.write(SettingsView.CURRENCY, m_currencySpinner.getSelectedItemPosition());
-				// prefs.write(SettingsView.NUMBER,
-				// m_numberSpinner.getSelectedItemPosition());
+				prefs.write(SettingsView.DISTANCE, m_distanceSpinner.getSelectedItemPosition());
+				prefs.write(SettingsView.VOLUME, m_volumeSpinner.getSelectedItemPosition());
+				prefs.write(SettingsView.ECONOMY, m_economySpinner.getSelectedItemPosition());
+
 				finish();
 			}
 		});
@@ -59,7 +57,6 @@ public class SettingsView extends Activity {
 		m_volumeSpinner.setSelection(prefs.getInt(VOLUME, 0));
 		m_distanceSpinner.setSelection(prefs.getInt(DISTANCE, 0));
 		m_economySpinner.setSelection(prefs.getInt(ECONOMY, 0));
-		// m_numberSpinner.setSelection(prefs.getInt(NUMBER, 0));
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {

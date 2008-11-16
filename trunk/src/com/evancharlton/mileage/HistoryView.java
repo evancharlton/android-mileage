@@ -56,6 +56,8 @@ public class HistoryView extends ListActivity implements View.OnCreateContextMen
 	private HashMap<Integer, HashMap<Double, Double>> m_history;
 	private AlertDialog m_deleteDialog;
 	private long m_deleteId;
+	private PreferencesProvider m_prefs;
+	private CalculationEngine m_calcEngine;
 
 	private static final String[] PROJECTIONS = new String[] {
 			FillUps._ID,
@@ -110,8 +112,8 @@ public class HistoryView extends ListActivity implements View.OnCreateContextMen
 				Vehicles._ID,
 				Vehicles.TITLE
 		};
-		PreferencesProvider prefs = PreferencesProvider.getInstance(this);
-		CalculationEngine engine = prefs.getCalculator();
+		m_prefs = PreferencesProvider.getInstance(this);
+		m_calcEngine = m_prefs.getCalculator();
 
 		m_history = new HashMap<Integer, HashMap<Double, Double>>();
 
@@ -157,10 +159,10 @@ public class HistoryView extends ListActivity implements View.OnCreateContextMen
 					double key = keys[i];
 					double miles = keys[i] - keys[i - 1];
 					double amount = data.get(key);
-					data.put(key, engine.calculateEconomy(miles, amount));
+					data.put(key, m_calcEngine.calculateEconomy(miles, amount));
 					total_fuel += amount;
 				}
-				double mileage = engine.calculateEconomy(total_miles, total_fuel);
+				double mileage = m_calcEngine.calculateEconomy(total_miles, total_fuel);
 				m_avgEconomies.put(vehicleId, mileage);
 			}
 		}
@@ -245,24 +247,22 @@ public class HistoryView extends ListActivity implements View.OnCreateContextMen
 
 	private SimpleCursorAdapter.ViewBinder m_viewBinder = new SimpleCursorAdapter.ViewBinder() {
 		public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
-			PreferencesProvider prefs = PreferencesProvider.getInstance(HistoryView.this);
-			CalculationEngine engine = prefs.getCalculator();
 			String val;
 			switch (columnIndex) {
 				case 1:
 					double gallons = cursor.getDouble(columnIndex);
-					val = prefs.format(gallons) + engine.getVolumeUnitsAbbr();
+					val = m_prefs.format(gallons) + m_calcEngine.getVolumeUnitsAbbr();
 					((TextView) view).setText(val);
 					return true;
 				case 2:
 					double price = cursor.getDouble(columnIndex);
-					val = prefs.getCurrency() + prefs.format(price) + "/" + engine.getVolumeUnitsAbbr().trim();
+					val = m_prefs.getCurrency() + m_prefs.format(price) + "/" + m_calcEngine.getVolumeUnitsAbbr().trim();
 					((TextView) view).setText(val);
 					return true;
 				case 3:
 					long time = cursor.getLong(columnIndex);
 					Date date = new Date(time);
-					String text = prefs.format(date);
+					String text = m_prefs.format(date);
 					((TextView) view).setText(text);
 					return true;
 				case 5:
@@ -293,7 +293,7 @@ public class HistoryView extends ListActivity implements View.OnCreateContextMen
 						double avgMpg = m_avgEconomies.get(vehicleId);
 						TextView tv = (TextView) view;
 						int color = 0xFF666666;
-						if (engine.better(mpg, avgMpg)) {
+						if (m_calcEngine.better(mpg, avgMpg)) {
 							color = 0xFF0AB807;
 						} else if (mpg == avgMpg) {
 							color = 0xFF2469FF;
@@ -301,7 +301,7 @@ public class HistoryView extends ListActivity implements View.OnCreateContextMen
 							color = 0xFFD90000;
 						}
 						tv.setTextColor(color);
-						tv.setText(prefs.format(mpg) + engine.getEconomyUnits());
+						tv.setText(m_prefs.format(mpg) + m_calcEngine.getEconomyUnits());
 					}
 					return true;
 			}

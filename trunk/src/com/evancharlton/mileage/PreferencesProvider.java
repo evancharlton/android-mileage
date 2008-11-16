@@ -28,7 +28,7 @@ public class PreferencesProvider {
 
 	public static final int MILES = 0;
 	public static final int KILOMETERS = 1;
-	public static final int KILOMETERS_100 = 1;
+	public static final int KILOMETERS_100 = -1;
 
 	public static final int MI_PER_GALLON = 0;
 	public static final int KM_PER_GALLON = 1;
@@ -139,12 +139,48 @@ public class PreferencesProvider {
 	}
 
 	public CalculationEngine getCalculator(int volume, int distance, int economy) {
+		if (m_calcEngine == null) {
+			m_calcEngine = new CalculationEngine();
+		}
 		m_calcEngine.setInputVolume(volume);
 		m_calcEngine.setInputDistance(distance);
+		m_calcEngine.setEconomy(economy);
 		switch (economy) {
 			case MI_PER_GALLON:
 				m_calcEngine.setOutputVolume(GALLONS);
 				m_calcEngine.setOutputDistance(MILES);
+				break;
+			case KM_PER_GALLON:
+				m_calcEngine.setOutputVolume(GALLONS);
+				m_calcEngine.setOutputDistance(KILOMETERS);
+				break;
+			case MI_PER_LITRE:
+				m_calcEngine.setOutputVolume(LITRES);
+				m_calcEngine.setOutputDistance(MILES);
+				break;
+			case KM_PER_LITRE:
+				m_calcEngine.setOutputVolume(LITRES);
+				m_calcEngine.setOutputDistance(KILOMETERS);
+				break;
+			case MI_PER_IMP_GALLON:
+				m_calcEngine.setOutputVolume(IMP_GALLONS);
+				m_calcEngine.setOutputDistance(MILES);
+				break;
+			case KM_PER_IMP_GALLON:
+				m_calcEngine.setOutputVolume(IMP_GALLONS);
+				m_calcEngine.setOutputDistance(KILOMETERS);
+				break;
+			case LITRES_PER_CKM:
+				m_calcEngine.setOutputVolume(LITRES);
+				m_calcEngine.setOutputDistance(KILOMETERS_100);
+				break;
+			case GALLONS_PER_CKM:
+				m_calcEngine.setOutputVolume(GALLONS);
+				m_calcEngine.setOutputDistance(KILOMETERS_100);
+				break;
+			case IMP_GALLONS_PER_CKM:
+				m_calcEngine.setOutputVolume(IMP_GALLONS);
+				m_calcEngine.setOutputDistance(KILOMETERS_100);
 				break;
 		}
 		return m_calcEngine;

@@ -71,16 +71,47 @@ public class CalculationEngine {
 	}
 
 	public void setEconomy(int economy) {
+		m_inverse = false;
 		switch (economy) {
 			case PreferencesProvider.MI_PER_GALLON:
 				setOutputDistance(PreferencesProvider.MILES);
 				setOutputVolume(PreferencesProvider.GALLONS);
-				m_inverse = false;
+				break;
+			case PreferencesProvider.MI_PER_IMP_GALLON:
+				setOutputDistance(PreferencesProvider.MILES);
+				setOutputVolume(PreferencesProvider.IMP_GALLONS);
+				break;
+			case PreferencesProvider.MI_PER_LITRE:
+				setOutputDistance(PreferencesProvider.MILES);
+				setOutputVolume(PreferencesProvider.LITRES);
+				break;
+			case PreferencesProvider.KM_PER_GALLON:
+				setOutputDistance(PreferencesProvider.KILOMETERS);
+				setOutputVolume(PreferencesProvider.GALLONS);
+				break;
+			case PreferencesProvider.KM_PER_LITRE:
+				setOutputDistance(PreferencesProvider.KILOMETERS);
+				setOutputVolume(PreferencesProvider.LITRES);
+				break;
+			case PreferencesProvider.KM_PER_IMP_GALLON:
+				setOutputDistance(PreferencesProvider.KILOMETERS);
+				setOutputVolume(PreferencesProvider.IMP_GALLONS);
 				break;
 			case PreferencesProvider.LITRES_PER_CKM:
 				setOutputDistance(PreferencesProvider.KILOMETERS_100);
 				setOutputVolume(PreferencesProvider.LITRES);
 				m_inverse = true;
+				break;
+			case PreferencesProvider.GALLONS_PER_CKM:
+				setOutputDistance(PreferencesProvider.KILOMETERS_100);
+				setOutputVolume(PreferencesProvider.GALLONS);
+				m_inverse = true;
+				break;
+			case PreferencesProvider.IMP_GALLONS_PER_CKM:
+				setOutputDistance(PreferencesProvider.KILOMETERS_100);
+				setOutputVolume(PreferencesProvider.IMP_GALLONS);
+				m_inverse = true;
+				break;
 		}
 	}
 
@@ -112,6 +143,9 @@ public class CalculationEngine {
 				distance = kmToMiles(kilometers);
 				break;
 			case PreferencesProvider.KILOMETERS:
+				distance = kilometers;
+				break;
+			case PreferencesProvider.KILOMETERS_100:
 				distance = kilometers * 100;
 				break;
 		}
@@ -160,9 +194,9 @@ public class CalculationEngine {
 				v = "";
 		}
 		if (m_inverse) {
-			return v + "/" + d;
+			return " " + v + "/" + d;
 		}
-		return d + "p" + v;
+		return " " + d + "p" + v;
 	}
 
 	public double getWorstEconomy() {
