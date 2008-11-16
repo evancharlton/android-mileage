@@ -33,15 +33,11 @@ public class MetricCalculationEngine extends CalculationEngine {
 		return " K";
 	}
 
-	public boolean better(double economy_one, double economy_two) {
-		return economy_one < economy_two;
+	public boolean better(double a, double b) {
+		return a < b;
 	}
 
 	public boolean worse(double economy_one, double economy_two) {
 		return economy_one > economy_two;
-	}
-
-	public String help() {
-		return "The Metric system expects:\n fuel: litres\n odometer: kilometers\n economy: litres / 100 km";
 	}
 }

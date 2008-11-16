@@ -16,8 +16,4 @@ public class LitresMilesToKilometersCalculationEngine extends MetricCalculationE
 	public String getDistanceUnitsAbbr() {
 		return " Mi";
 	}
-
-	public String help() {
-		return "This system expects:\n fuel: litres\n odometer: miles\n economy: litres / 100 km";
-	}
 }

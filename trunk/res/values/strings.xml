@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="app_name">Mileage</string>
-	<string name="app_version">1.4.1</string>
+	<string name="app_version">1.5.0</string>
 	<string name="odometer">Odometer</string>
 	<string name="add_fillup">Save Fill-up</string>
 	<string name="fillup">Fill-Up</string>
@@ -95,8 +95,10 @@
 	<string name="settings_date_format">Date:</string>
 	<string name="settings_number_format">Numbers:</string>
 	<string name="settings_header_system">System of Measure</string>
-	<string name="settings_system">System:</string>
-	<string name="settings_currency">Currency:</string>
+	<string name="settings_volume">Volume</string>
+	<string name="settings_distance">Distance</string>
+	<string name="settings_economy">Economy</string>
+	<string name="settings_currency">Currency</string>
 	<string name="system_help">Calculation Help</string>
 		
 	<string name="error">Error!</string>

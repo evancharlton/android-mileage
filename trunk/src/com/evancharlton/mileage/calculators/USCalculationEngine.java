@@ -17,8 +17,8 @@ public class USCalculationEngine extends CalculationEngine {
 		return one > two;
 	}
 
-	public boolean worse(double one, double two) {
-		return one < two;
+	public boolean worse(double a, double b) {
+		return a < b;
 	}
 
 	public String getEconomyUnits() {
@@ -39,9 +39,5 @@ public class USCalculationEngine extends CalculationEngine {
 
 	public String getDistanceUnitsAbbr() {
 		return " mi";
-	}
-
-	public String help() {
-		return "The American system expects:\n fuel: gallons\n odometer: miles\n economy: miles per gallon";
 	}
 }

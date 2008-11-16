@@ -16,8 +16,4 @@ public class GallonsKilometersToMPGCalculationEngine extends USCalculationEngine
 	public String getDistanceUnitsAbbr() {
 		return " K";
 	}
-
-	public String help() {
-		return "This system expects:\n fuel: gallons\n odometer: kilometers\n economy: miles per gallon";
-	}
 }

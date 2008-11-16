@@ -31,8 +31,4 @@ public class LitreToMileCalculationEngine extends USCalculationEngine {
 	public String getVolumeUnitsAbbr() {
 		return " L";
 	}
-
-	public String help() {
-		return "This system expects:\n fuel: litres\n odometer: kilometers\n economy: miles per gallon";
-	}
 }

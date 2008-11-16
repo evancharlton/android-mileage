@@ -32,8 +32,4 @@ public class GallonToKilometerCalculationEngine extends MetricCalculationEngine 
 	public String getVolumeUnitsAbbr() {
 		return " Gal";
 	}
-
-	public String help() {
-		return "This system expects:\n fuel: gallons\n odometer: miles\n economy: litres / 100 km";
-	}
 }

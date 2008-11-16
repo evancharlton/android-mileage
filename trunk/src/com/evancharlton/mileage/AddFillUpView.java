@@ -97,8 +97,8 @@ public class AddFillUpView extends Activity {
 
 	protected void loadPrefs() {
 		PreferencesProvider prefs = PreferencesProvider.getInstance(AddFillUpView.this);
-		m_priceEdit.setHint(prefs.getString(R.array.unit_price_hints, SettingsView.CALCULATIONS));
-		m_amountEdit.setHint(prefs.getString(R.array.unit_amount_hints, SettingsView.CALCULATIONS));
+		m_priceEdit.setHint(prefs.getString(R.array.unit_price_hints, SettingsView.VOLUME));
+		m_amountEdit.setHint(prefs.getString(R.array.unit_amount_hints, SettingsView.VOLUME));
 	}
 
 	protected void initHandlers() {

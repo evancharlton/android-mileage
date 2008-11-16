@@ -8,14 +8,6 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 
 import com.evancharlton.mileage.calculators.CalculationEngine;
-import com.evancharlton.mileage.calculators.GallonToKilometerCalculationEngine;
-import com.evancharlton.mileage.calculators.GallonsKilometersToLPKCalculationEngine;
-import com.evancharlton.mileage.calculators.GallonsKilometersToMPGCalculationEngine;
-import com.evancharlton.mileage.calculators.LitreToMileCalculationEngine;
-import com.evancharlton.mileage.calculators.LitresMilesToKilometersCalculationEngine;
-import com.evancharlton.mileage.calculators.LitresMilesToMPGCalculationEngine;
-import com.evancharlton.mileage.calculators.MetricCalculationEngine;
-import com.evancharlton.mileage.calculators.USCalculationEngine;
 
 public class PreferencesProvider {
 	private static PreferencesProvider s_instance = null;
@@ -30,14 +22,23 @@ public class PreferencesProvider {
 	private static final int LONG = 3;
 	private static final int STRING = 4;
 
-	private static final int US_ENGINE = 0;
-	private static final int UK_ENGINE = 1;
-	private static final int GAL_KM_ENGINE = 2;
-	private static final int G_K_KM_ENGINE = 3;
-	private static final int G_K_MI_ENGINE = 4;
-	private static final int LIT_MI_ENGINE = 5;
-	private static final int L_M_MI_ENGINE = 6;
-	private static final int L_M_KM_ENGINE = 7;
+	public static final int GALLONS = 0;
+	public static final int LITRES = 1;
+	public static final int IMP_GALLONS = 2;
+
+	public static final int MILES = 0;
+	public static final int KILOMETERS = 1;
+	public static final int KILOMETERS_100 = 1;
+
+	public static final int MI_PER_GALLON = 0;
+	public static final int KM_PER_GALLON = 1;
+	public static final int MI_PER_IMP_GALLON = 2;
+	public static final int KM_PER_IMP_GALLON = 3;
+	public static final int MI_PER_LITRE = 4;
+	public static final int KM_PER_LITRE = 5;
+	public static final int GALLONS_PER_CKM = 6;
+	public static final int LITRES_PER_CKM = 7;
+	public static final int IMP_GALLONS_PER_CKM = 8;
 
 	private PreferencesProvider(Activity activity) {
 		m_activity = activity;
@@ -130,40 +131,23 @@ public class PreferencesProvider {
 	}
 
 	public CalculationEngine getCalculator() {
-		int calc = getInt(SettingsView.CALCULATIONS, 0);
-		m_calcEngine = getCalculator(calc);
+		int volume = getInt(SettingsView.VOLUME, 0);
+		int distance = getInt(SettingsView.DISTANCE, 0);
+		int economy = getInt(SettingsView.ECONOMY, 0);
+		m_calcEngine = getCalculator(volume, distance, economy);
 		return m_calcEngine;
 	}
 
-	public CalculationEngine getCalculator(int calc) {
-		CalculationEngine engine = null;
-		switch (calc) {
-			case US_ENGINE:
-				engine = new USCalculationEngine();
-				break;
-			case UK_ENGINE:
-				engine = new MetricCalculationEngine();
-				break;
-			case GAL_KM_ENGINE:
-				engine = new GallonToKilometerCalculationEngine();
-				break;
-			case LIT_MI_ENGINE:
-				engine = new LitreToMileCalculationEngine();
-				break;
-			case G_K_MI_ENGINE:
-				engine = new GallonsKilometersToMPGCalculationEngine();
-				break;
-			case G_K_KM_ENGINE:
-				engine = new GallonsKilometersToLPKCalculationEngine();
-				break;
-			case L_M_MI_ENGINE:
-				engine = new LitresMilesToMPGCalculationEngine();
-				break;
-			case L_M_KM_ENGINE:
-				engine = new LitresMilesToKilometersCalculationEngine();
+	public CalculationEngine getCalculator(int volume, int distance, int economy) {
+		m_calcEngine.setInputVolume(volume);
+		m_calcEngine.setInputDistance(distance);
+		switch (economy) {
+			case MI_PER_GALLON:
+				m_calcEngine.setOutputVolume(GALLONS);
+				m_calcEngine.setOutputDistance(MILES);
 				break;
 		}
-		return engine;
+		return m_calcEngine;
 	}
 
 	public String format(double number) {

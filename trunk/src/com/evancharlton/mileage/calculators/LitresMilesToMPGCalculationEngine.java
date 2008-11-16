@@ -26,8 +26,4 @@ public class LitresMilesToMPGCalculationEngine extends USCalculationEngine {
 	public String getVolumeUnitsAbbr() {
 		return " L";
 	}
-
-	public String help() {
-		return "This system expects:\n fuel: litres\n odometer: miles\n economy: miles per gallon";
-	}
 }
