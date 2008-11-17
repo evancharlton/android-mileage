@@ -320,6 +320,13 @@
 		</exec>
 	</target>
 	
+	<target name="d">
+		<echo>Starting up ${application-package}.${ant.project.name}...</echo>
+		<exec executable="${adb}">
+			<arg line="shell am start -D -n ${application-package}/${application-package}.${ant.project.name}"/>
+		</exec>
+	</target>
+	
 	<target name="test" depends="sign">
 		<echo>Running JUnit for ${application-package}.${ant.project.name}Suite...</echo>
 		<junit haltonfailure="yes" printsummary="yes" showoutput="yes">

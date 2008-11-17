@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
@@ -19,6 +20,9 @@ public class Mileage extends TabActivity {
 	private static final int MENU_IMPORT_EXPORT = Menu.FIRST + 1;
 	private static final int MENU_VEHICLES = Menu.FIRST + 2;
 
+	private static final String CURRENT_TAB = "current_tab";
+	private static final String CURRENT_VIEW = "current_view";
+
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
@@ -31,7 +35,19 @@ public class Mileage extends TabActivity {
 		addHistoryTab();
 		addStatisticsTab();
 
-		setCurrentTab(getIntent());
+		if (savedInstanceState != null) {
+			m_tabHost.setCurrentTab(savedInstanceState.getInt(CURRENT_TAB, 0));
+			int id = savedInstanceState.getInt(CURRENT_VIEW, -1);
+			if (id != -1) {
+				View current = m_tabHost.getCurrentView();
+				if (current != null) {
+					View focus = current.findViewById(id);
+					if (focus != null) {
+						focus.requestFocus();
+					}
+				}
+			}
+		}
 	}
 
 	private void addFillUpTab() {
@@ -64,14 +80,6 @@ public class Mileage extends TabActivity {
 		m_tabHost.addTab(spec);
 	}
 
-	private void setCurrentTab(Intent intent) {
-		intent.putExtra(EXTRA_IGNORE_STATE, true);
-		if (intent.getComponent().getClassName().equals(getClass().getName())) {
-			m_tabHost.setCurrentTab(0);
-		}
-		intent.putExtra(EXTRA_IGNORE_STATE, false);
-	}
-
 	public static void createMenu(Menu menu) {
 		menu.add(Menu.NONE, MENU_VEHICLES, Menu.NONE, R.string.vehicles).setShortcut('1', 'v').setIcon(R.drawable.vehicles_i);
 		menu.add(Menu.NONE, MENU_SETTINGS, Menu.NONE, R.string.settings).setShortcut('2', 'e').setIcon(R.drawable.ic_menu_preferences);
@@ -95,5 +103,11 @@ public class Mileage extends TabActivity {
 				return true;
 		}
 		return false;
+	}
+
+	protected void onSaveInstanceState(Bundle outState) {
+		outState.putInt(CURRENT_TAB, m_tabHost.getCurrentTab());
+		View focused = getCurrentFocus();
+		outState.putInt(CURRENT_VIEW, focused.getId());
 	}
 }
