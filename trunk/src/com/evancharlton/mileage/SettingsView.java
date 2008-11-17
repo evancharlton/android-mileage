@@ -15,6 +15,7 @@ public class SettingsView extends Activity {
 	public static final String VOLUME = "volume_pref";
 	public static final String DISTANCE = "distance_pref";
 	public static final String ECONOMY = "economy_pref";
+	public static final String ORIENTATION = "orientation_pref";
 
 	private Button m_saveBtn;
 	private Spinner m_dateSpinner;
@@ -22,6 +23,7 @@ public class SettingsView extends Activity {
 	private Spinner m_volumeSpinner;
 	private Spinner m_distanceSpinner;
 	private Spinner m_economySpinner;
+	private Spinner m_orientationSpinner;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -37,6 +39,7 @@ public class SettingsView extends Activity {
 		m_volumeSpinner = (Spinner) findViewById(R.id.settings_volume);
 		m_distanceSpinner = (Spinner) findViewById(R.id.settings_distance);
 		m_economySpinner = (Spinner) findViewById(R.id.settings_economy);
+		m_orientationSpinner = (Spinner) findViewById(R.id.settings_orientation);
 
 		m_saveBtn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
@@ -46,6 +49,7 @@ public class SettingsView extends Activity {
 				prefs.write(SettingsView.DISTANCE, m_distanceSpinner.getSelectedItemPosition());
 				prefs.write(SettingsView.VOLUME, m_volumeSpinner.getSelectedItemPosition());
 				prefs.write(SettingsView.ECONOMY, m_economySpinner.getSelectedItemPosition());
+				prefs.write(SettingsView.ORIENTATION, m_orientationSpinner.getSelectedItemPosition());
 
 				finish();
 			}
@@ -57,6 +61,7 @@ public class SettingsView extends Activity {
 		m_volumeSpinner.setSelection(prefs.getInt(VOLUME, 0));
 		m_distanceSpinner.setSelection(prefs.getInt(DISTANCE, 0));
 		m_economySpinner.setSelection(prefs.getInt(ECONOMY, 0));
+		m_orientationSpinner.setSelection(prefs.getInt(ORIENTATION, 0));
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {

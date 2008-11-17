@@ -50,6 +50,11 @@ public class Mileage extends TabActivity {
 		}
 	}
 
+	public void onResume() {
+		super.onResume();
+		setRequestedOrientation(PreferencesProvider.getInstance(this).getOrientation());
+	}
+
 	private void addFillUpTab() {
 		Intent i = new Intent();
 		i.setClass(Mileage.this, AddFillUpView.class);

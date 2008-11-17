@@ -102,6 +102,8 @@
 	<string name="settings_economy">Economy</string>
 	<string name="settings_currency">Currency</string>
 	<string name="system_help">Calculation Help</string>
+	<string name="settings_header_application">Application</string>
+	<string name="settings_orientation">Orientation</string>
 		
 	<string name="error">Error!</string>
 	<string name="error_cost">Invalid number format for price of fuel.</string>
@@ -131,7 +133,8 @@
 	to the end user to create the necessary tables.</string>
 	
 	<string name="help_title_vehicles">Vehicles Help</string>
-	<string name="help_vehicles">From this screen, you can add a new vehicle, or select an existing vehicle to edit.</string>
+	<string name="help_vehicles">From this screen, you can add a new vehicle, or select an existing vehicle to edit. Note that you can long-press on
+	a vehicle in the list to bring up a context menu to perform some common operations.</string>
 	
 	<string name="help_title_vehicle_edit">Editing Vehicle Help</string>
 	<string name="help_vehicle_edit">From here, you can change attributes about an existing vehicle. If you decide
@@ -159,10 +162,11 @@
 	any changes you have made and return to the history browser. You can fill in an optional comment, if you want to.</string>
 	
 	<string name="help_title_settings">Settings Help</string>
-	<string name="help_settings">From this screen, you can set preferences to fit your usage. Be sure to read the help for which measurement system you choose!</string>
+	<string name="help_settings">From this screen, you can set preferences to fit your usage. The Orientation setting determines when the UI should rotate.
+	A setting of 'device' means that it will rotate when you rotate the device, whereas 'keyboard' will rotate when you open the keyboard tray.</string>
 	
 	<string name="help_title_statistics">Statistics Help</string>
 	<string name="help_statistics">This screen shows a wide range of calculated statistics on a per-vehicle basis. If you have multiple vehicles,
-	a drop-down will show, and you can switch between vehicles. Note that statistics can not be calculated on vehicles without any fill-up data stored,
-	so you will just get an error message.</string>
+	a drop-down will show, and you can switch between vehicles. Note that statistics can not be calculated on vehicles that don't have enough
+	data stored, so you'll get a warning about that.</string>
 </resources>

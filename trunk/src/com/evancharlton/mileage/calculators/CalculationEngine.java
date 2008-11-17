@@ -146,7 +146,7 @@ public class CalculationEngine {
 				distance = kilometers;
 				break;
 			case PreferencesProvider.KILOMETERS_100:
-				distance = kilometers * 100;
+				distance = kilometers / 100;
 				break;
 		}
 		switch (m_outputVolume) {
@@ -177,8 +177,12 @@ public class CalculationEngine {
 			case PreferencesProvider.KILOMETERS:
 				d = "km";
 				break;
+			case PreferencesProvider.KILOMETERS_100:
+				d = "100 km";
+				break;
 			default:
 				d = "";
+				break;
 		}
 		switch (m_outputVolume) {
 			case PreferencesProvider.GALLONS:
@@ -192,6 +196,7 @@ public class CalculationEngine {
 				break;
 			default:
 				v = "";
+				break;
 		}
 		if (m_inverse) {
 			return " " + v + "/" + d;
@@ -208,7 +213,7 @@ public class CalculationEngine {
 
 	public double getBestEconomy() {
 		if (m_inverse) {
-			return getWorstEconomy();
+			return 0D;
 		}
 		return Double.MAX_VALUE;
 	}

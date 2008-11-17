@@ -6,6 +6,7 @@ import java.util.Date;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 
 import com.evancharlton.mileage.calculators.CalculationEngine;
 
@@ -196,5 +197,14 @@ public class PreferencesProvider {
 		SimpleDateFormat format = new SimpleDateFormat();
 		format.applyPattern(getString(R.array.date_patterns, SettingsView.DATE));
 		return format.format(d);
+	}
+
+	public int getOrientation() {
+		int orientation = getInt(SettingsView.ORIENTATION, 0);
+		switch (orientation) {
+			case 1:
+				return ActivityInfo.SCREEN_ORIENTATION_USER;
+		}
+		return ActivityInfo.SCREEN_ORIENTATION_SENSOR;
 	}
 }

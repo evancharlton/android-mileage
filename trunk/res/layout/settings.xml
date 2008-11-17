@@ -117,7 +117,13 @@
 					android:layout_height="wrap_content"
 				/>
 			</LinearLayout>
-			<!--<LinearLayout
+			<TextView
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				style="@style/SeparatorText"
+				android:text="@string/settings_header_application"
+			/>
+			<LinearLayout
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
 			>
@@ -126,15 +132,15 @@
 					android:layout_height="wrap_content"
 					android:layout_weight="1"
 					android:textAppearance="?android:attr/textAppearanceLarge"
-					android:text="@string/settings_number_format"
+					android:text="@string/settings_orientation"
 				/>
 				<Spinner
-					android:id="@+id/settings_number_format"
-					android:entries="@array/number_formats"
+					android:id="@+id/settings_orientation"
+					android:entries="@array/orientations"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 				/>
-			</LinearLayout>-->
+			</LinearLayout>
 		</LinearLayout>
 	</ScrollView>
 	<Button
