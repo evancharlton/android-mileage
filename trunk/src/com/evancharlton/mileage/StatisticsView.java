@@ -37,6 +37,8 @@ public class StatisticsView extends Activity {
 	private CalculationEngine m_engine;
 	private Button m_fuelAmountBtn;
 	private Button m_fuelPriceBtn;
+	private Button m_economyBtn;
+	private Button m_distanceBtn;
 
 	// TODO: set chs to be the same as the display size
 	private static final String CHART_URL_BASE = "http://chart.apis.google.com/chart?cht=lc&chs=480x320&chd=t:";
@@ -86,6 +88,8 @@ public class StatisticsView extends Activity {
 
 		m_fuelPriceBtn = (Button) findViewById(R.id.fuel_price_btn);
 		m_fuelAmountBtn = (Button) findViewById(R.id.fuel_amount_btn);
+		m_distanceBtn = (Button) findViewById(R.id.delta_distance_btn);
+		m_economyBtn = (Button) findViewById(R.id.fuel_economy_btn);
 
 		m_fuelPriceBtn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
@@ -135,6 +139,70 @@ public class StatisticsView extends Activity {
 
 				setUpChart(data, 0, chart_max, avg, avgPercent);
 				showChart(data);
+			}
+		});
+		
+		m_economyBtn.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				StringBuilder data = new StringBuilder();
+				data.append(CHART_URL_BASE);
+				PreferencesProvider prefs = PreferencesProvider.getInstance(StatisticsView.this);
+				CalculationEngine engine = prefs.getCalculator();
+				double min = engine.getBestEconomy();
+				double max = engine.getWorstEconomy();
+				double fuel = 0D;
+				for(int i = 0; i < m_miles.size() - 1; i++) {
+					double distance = m_miles.get(i) - m_miles.get(i+1);
+					double economy = engine.calculateEconomy(distance, m_amounts.get(i));
+					if(economy > max) {
+						max = economy;
+					}
+					if(economy < min) {
+						min = economy;
+					}
+					fuel += m_amounts.get(i);
+					data.append(economy).append(",");
+				}
+				data.deleteCharAt(data.length() - 1);
+				
+				double chart_min = Math.floor(min);
+				double chart_max = Math.ceil(max);
+				double avg = engine.calculateEconomy(m_miles.get(0) - m_miles.get(m_miles.size() - 1), fuel);
+				double avg_percent = (avg - chart_min) / (chart_max - chart_min); 
+				
+				setUpChart(data, chart_min, chart_max, avg, avg_percent);
+				showChart(data);
+			}
+		});
+		
+		m_distanceBtn.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				StringBuilder builder = new StringBuilder();
+				builder.append(CHART_URL_BASE);
+				double min = Double.MAX_VALUE;
+				double max = 0D;
+				double total = 0D;
+				for(int i = 0; i < m_miles.size() - 1; i++) {
+					double distance = m_miles.get(i) - m_miles.get(i+1);
+					builder.append(distance).append(",");
+					total += distance;
+					
+					if(distance > max) {
+						max = distance;
+					}
+					if(distance < min) {
+						min = distance;
+					}
+				}
+				builder.deleteCharAt(builder.length() - 1);
+				
+				double chart_min = Math.floor(min);
+				double chart_max = Math.ceil(max);
+				double avg = total / (m_miles.size() - 1);
+				double avg_percent = (avg - chart_min) / (chart_max - chart_min);
+				
+				setUpChart(builder, chart_min, chart_max, avg, avg_percent);
+				showChart(builder);
 			}
 		});
 	}
