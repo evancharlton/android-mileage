@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="app_name">Mileage</string>
-	<string name="app_version">1.5.0</string>
+	<string name="app_version">1.6.0</string>
 	<string name="odometer">Odometer</string>
 	<string name="add_fillup">Save Fill-up</string>
 	<string name="fillup">Fill-Up</string>
@@ -45,6 +45,7 @@
 	<string name="header_amount">Fuel Amounts</string>
 	<string name="header_costs">Fill-Up Costs</string>
 	<string name="header_expenses">Fuel Expenses</string>
+	<string name="header_charts">Charts</string>
 	<string name="stats_default">--</string>
 	<string name="stats_distance_running">Last:</string>
 	<string name="stats_distance_average">Average:</string>
@@ -72,6 +73,10 @@
 	<string name="stats_expense_yearly">Last year:</string>
 	<string name="statistics_no_data">Not enough data!</string>
 	<string name="statistics_no_data_msg">There is not enough data stored for this vehicle; not calculating statistics.</string>
+	<string name="charts_fuel_price">Fuel Price</string>
+	<string name="charts_fuel_amount">Amount of Fuel</string>
+	<string name="charts_fuel_economy">Fuel Economy</string>
+	<string name="charts_delta_distance">Distance Between Fill-ups</string>
 	
 	<string name="import_export">Import / Export</string>
 	<string name="export_header">Export</string>	

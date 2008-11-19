@@ -1,5 +1,6 @@
 package com.evancharlton.mileage;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -9,13 +10,16 @@ import java.util.Map;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.CursorIndexOutOfBoundsException;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -31,6 +35,11 @@ public class StatisticsView extends Activity {
 	private ArrayList<Double> m_miles;
 	private PreferencesProvider m_pref;
 	private CalculationEngine m_engine;
+	private Button m_fuelAmountBtn;
+	private Button m_fuelPriceBtn;
+
+	// TODO: set chs to be the same as the display size
+	private static final String CHART_URL_BASE = "http://chart.apis.google.com/chart?cht=lc&chs=480x320&chd=t:";
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -74,6 +83,79 @@ public class StatisticsView extends Activity {
 				// uh, do nothing?
 			}
 		});
+
+		m_fuelPriceBtn = (Button) findViewById(R.id.fuel_price_btn);
+		m_fuelAmountBtn = (Button) findViewById(R.id.fuel_amount_btn);
+
+		m_fuelPriceBtn.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				StringBuilder data = new StringBuilder();
+				data.append(CHART_URL_BASE);
+				double total = 0D;
+				double max = 0D;
+				double min = Double.MAX_VALUE;
+				for (Double price : m_costs) {
+					data.append(price).append(",");
+					total += price;
+					if (price > max) {
+						max = price;
+					}
+					if (price < min) {
+						min = price;
+					}
+				}
+				double avg = total / m_costs.size();
+				double chart_max = Math.ceil(max);
+				double chart_min = Math.floor(min);
+				double avg_percent = ((avg - chart_min) / (chart_max - chart_min));
+				data.deleteCharAt(data.length() - 1);
+
+				setUpChart(data, chart_min, chart_max, avg, avg_percent);
+				showChart(data);
+			}
+		});
+
+		m_fuelAmountBtn.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				StringBuilder data = new StringBuilder();
+				data.append(CHART_URL_BASE);
+				double total = 0D;
+				double max = 0D;
+				for (Double amount : m_amounts) {
+					data.append(amount).append(",");
+					total += amount;
+					if (amount > max) {
+						max = amount;
+					}
+				}
+				double avg = total / m_amounts.size();
+				double chart_max = Math.ceil(max);
+				double avgPercent = (avg / chart_max);
+				data.deleteCharAt(data.length() - 1);
+
+				setUpChart(data, 0, chart_max, avg, avgPercent);
+				showChart(data);
+			}
+		});
+	}
+
+	private void showChart(StringBuilder url) {
+		Intent i = new Intent(Intent.ACTION_VIEW);
+		i.setData(Uri.parse(url.toString()));
+		startActivity(i);
+	}
+
+	private void setUpChart(StringBuilder builder, double chart_min, double chart_max, double avg, double avg_percent) {
+		DecimalFormat format = new DecimalFormat("0.00");
+		builder.append("&chco=000000&");
+		builder.append("&chds=").append(chart_min).append(",").append(chart_max);
+		builder.append("&chxt=y");
+		builder.append("&chxl=0:|").append(chart_min).append("|").append(format.format(avg)).append("|").append(chart_max);
+		builder.append("&chxp=0,0,").append(format.format(avg_percent * 100)).append(",100");
+
+		builder.append("&chm=");
+		builder.append("r,FF8880,0,").append(format.format(avg_percent)).append(",1|");
+		builder.append("r,70FF9D,0,0,").append(format.format(avg_percent));
 	}
 
 	private void getTextView(int id) {
