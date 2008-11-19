@@ -47,6 +47,10 @@ public class StatisticsView extends Activity {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.statistics);
+	}
+	
+	public void onResume() {
+		super.onResume();
 		m_pref = PreferencesProvider.getInstance(this);
 		m_engine = m_pref.getCalculator();
 
@@ -170,7 +174,7 @@ public class StatisticsView extends Activity {
 				double avg = engine.calculateEconomy(m_miles.get(0) - m_miles.get(m_miles.size() - 1), fuel);
 				double avg_percent = (avg - chart_min) / (chart_max - chart_min); 
 				
-				setUpChart(data, chart_min, chart_max, avg, avg_percent);
+				setUpChart(data, chart_min, chart_max, avg, avg_percent, engine.getBestEconomy() < engine.getWorstEconomy());
 				showChart(data);
 			}
 		});
@@ -201,7 +205,7 @@ public class StatisticsView extends Activity {
 				double avg = total / (m_miles.size() - 1);
 				double avg_percent = (avg - chart_min) / (chart_max - chart_min);
 				
-				setUpChart(builder, chart_min, chart_max, avg, avg_percent);
+				setUpChart(builder, chart_min, chart_max, avg, avg_percent, false);
 				showChart(builder);
 			}
 		});
@@ -214,6 +218,10 @@ public class StatisticsView extends Activity {
 	}
 
 	private void setUpChart(StringBuilder builder, double chart_min, double chart_max, double avg, double avg_percent) {
+		setUpChart(builder, chart_min, chart_max, avg, avg_percent, true);
+	}
+	
+	private void setUpChart(StringBuilder builder, double chart_min, double chart_max, double avg, double avg_percent, boolean good_on_bottom) {
 		DecimalFormat format = new DecimalFormat("0.00");
 		builder.append("&chco=000000&");
 		builder.append("&chds=").append(chart_min).append(",").append(chart_max);
@@ -222,8 +230,13 @@ public class StatisticsView extends Activity {
 		builder.append("&chxp=0,0,").append(format.format(avg_percent * 100)).append(",100");
 
 		builder.append("&chm=");
-		builder.append("r,FF8880,0,").append(format.format(avg_percent)).append(",1|");
-		builder.append("r,70FF9D,0,0,").append(format.format(avg_percent));
+		if (good_on_bottom) {
+			builder.append("r,FF8880,0,").append(format.format(avg_percent)).append(",1|");
+			builder.append("r,70FF9D,0,0,").append(format.format(avg_percent));
+		} else {
+			builder.append("r,70FF9D,0,").append(format.format(avg_percent)).append(",1|");
+			builder.append("r,FF8880,0,0,").append(format.format(avg_percent));
+		}
 	}
 
 	private void getTextView(int id) {
