@@ -1,8 +1,10 @@
 package com.evancharlton.mileage;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -97,85 +99,133 @@ public class StatisticsView extends Activity {
 
 		m_fuelPriceBtn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				StringBuilder data = new StringBuilder();
-				data.append(CHART_URL_BASE);
+				StringBuilder builder = new StringBuilder();
+				builder.append(CHART_URL_BASE);
 				double total = 0D;
 				double max = 0D;
 				double min = Double.MAX_VALUE;
+				int min_index = 0;
+				int max_index = 0;
 				for (Double price : m_costs) {
-					data.append(price).append(",");
+					builder.append(price).append(",");
 					total += price;
 					if (price > max) {
 						max = price;
+						max_index = m_costs.indexOf(price);
 					}
 					if (price < min) {
 						min = price;
+						min_index = m_costs.indexOf(price);
 					}
 				}
 				double avg = total / m_costs.size();
 				double chart_max = Math.ceil(max);
 				double chart_min = Math.floor(min);
 				double avg_percent = ((avg - chart_min) / (chart_max - chart_min));
-				data.deleteCharAt(data.length() - 1);
+				builder.deleteCharAt(builder.length() - 1);
 
-				setUpChart(data, chart_min, chart_max, avg, avg_percent);
-				showChart(data);
+				setUpChart(builder, chart_min, chart_max, avg_percent);
+				
+				long end_time = m_dates.get(0);
+				long start_time = m_dates.get(m_dates.size() - 1);
+				long min_time = m_dates.get(min_index);
+				long max_time = m_dates.get(max_index);
+				double min_pos = (((double) min_index) / ((double) m_dates.size())) * 100D;
+				double max_pos = (((double) max_index) / ((double) m_dates.size())) * 100D;
+				
+				addLabels(builder, start_time, end_time, min_time, min_pos, max_time, max_pos, avg, avg_percent, chart_min, chart_max);
+				
+				showChart(builder);
 			}
 		});
 
 		m_fuelAmountBtn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				StringBuilder data = new StringBuilder();
-				data.append(CHART_URL_BASE);
+				StringBuilder builder = new StringBuilder();
+				builder.append(CHART_URL_BASE);
 				double total = 0D;
 				double max = 0D;
+				double min = Double.MAX_VALUE;
+				int max_index = 0;
+				int min_index = 0;
 				for (Double amount : m_amounts) {
-					data.append(amount).append(",");
+					builder.append(amount).append(",");
 					total += amount;
+					
 					if (amount > max) {
 						max = amount;
+						max_index = m_amounts.indexOf(amount);
+					}
+					if(amount < min) {
+						min = amount;
+						min_index = m_amounts.indexOf(amount);
 					}
 				}
 				double avg = total / m_amounts.size();
 				double chart_max = Math.ceil(max);
-				double avgPercent = (avg / chart_max);
-				data.deleteCharAt(data.length() - 1);
+				double chart_min = 0D; // TODO: support this later?
+				double avg_percent = (avg / chart_max);
+				builder.deleteCharAt(builder.length() - 1);
 
-				setUpChart(data, 0, chart_max, avg, avgPercent);
-				showChart(data);
+				setUpChart(builder, 0, chart_max, avg_percent);
+				
+				long end_time = m_dates.get(0);
+				long start_time = m_dates.get(m_dates.size() - 1);
+				long min_time = m_dates.get(min_index);
+				long max_time = m_dates.get(max_index);
+				double min_pos = (((double) min_index) / ((double) m_dates.size())) * 100D;
+				double max_pos = (((double) max_index) / ((double) m_dates.size())) * 100D;
+				
+				addLabels(builder, start_time, end_time, min_time, min_pos, max_time, max_pos, avg, avg_percent, chart_min, chart_max);
+				
+				showChart(builder);
 			}
 		});
 		
 		m_economyBtn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				StringBuilder data = new StringBuilder();
-				data.append(CHART_URL_BASE);
+				StringBuilder builder = new StringBuilder();
+				builder.append(CHART_URL_BASE);
 				PreferencesProvider prefs = PreferencesProvider.getInstance(StatisticsView.this);
 				CalculationEngine engine = prefs.getCalculator();
 				double min = engine.getBestEconomy();
 				double max = engine.getWorstEconomy();
 				double fuel = 0D;
+				int min_index = 0;
+				int max_index = 0;
 				for(int i = 0; i < m_miles.size() - 1; i++) {
 					double distance = m_miles.get(i) - m_miles.get(i+1);
 					double economy = engine.calculateEconomy(distance, m_amounts.get(i));
 					if(economy > max) {
 						max = economy;
+						max_index = i;
 					}
 					if(economy < min) {
 						min = economy;
+						min_index = i;
 					}
 					fuel += m_amounts.get(i);
-					data.append(economy).append(",");
+					builder.append(economy).append(",");
 				}
-				data.deleteCharAt(data.length() - 1);
+				builder.deleteCharAt(builder.length() - 1);
 				
 				double chart_min = Math.floor(min);
 				double chart_max = Math.ceil(max);
 				double avg = engine.calculateEconomy(m_miles.get(0) - m_miles.get(m_miles.size() - 1), fuel);
 				double avg_percent = (avg - chart_min) / (chart_max - chart_min); 
 				
-				setUpChart(data, chart_min, chart_max, avg, avg_percent, engine.getBestEconomy() < engine.getWorstEconomy());
-				showChart(data);
+				setUpChart(builder, chart_min, chart_max, avg_percent, engine.getBestEconomy() < engine.getWorstEconomy());
+				
+				long end_time = m_dates.get(0);
+				long start_time = m_dates.get(m_dates.size() - 1);
+				long min_time = m_dates.get(min_index);
+				long max_time = m_dates.get(max_index);
+				double min_pos = (((double) min_index) / ((double) m_dates.size())) * 100D;
+				double max_pos = (((double) max_index) / ((double) m_dates.size())) * 100D;
+				
+				addLabels(builder, start_time, end_time, min_time, min_pos, max_time, max_pos, avg, avg_percent, chart_min, chart_max);
+				
+				showChart(builder);
 			}
 		});
 		
@@ -186,6 +236,8 @@ public class StatisticsView extends Activity {
 				double min = Double.MAX_VALUE;
 				double max = 0D;
 				double total = 0D;
+				int min_index = 0;
+				int max_index = 0;
 				for(int i = 0; i < m_miles.size() - 1; i++) {
 					double distance = m_miles.get(i) - m_miles.get(i+1);
 					builder.append(distance).append(",");
@@ -193,9 +245,11 @@ public class StatisticsView extends Activity {
 					
 					if(distance > max) {
 						max = distance;
+						max_index = i;
 					}
 					if(distance < min) {
 						min = distance;
+						min_index = i;
 					}
 				}
 				builder.deleteCharAt(builder.length() - 1);
@@ -205,10 +259,51 @@ public class StatisticsView extends Activity {
 				double avg = total / (m_miles.size() - 1);
 				double avg_percent = (avg - chart_min) / (chart_max - chart_min);
 				
-				setUpChart(builder, chart_min, chart_max, avg, avg_percent, false);
+				setUpChart(builder, chart_min, chart_max, avg_percent, false);
+				
+				long end_time = m_dates.get(0);
+				long start_time = m_dates.get(m_dates.size() - 1);
+				long min_time = m_dates.get(min_index);
+				long max_time = m_dates.get(max_index);
+				double min_pos = (((double) min_index) / ((double) m_dates.size())) * 100D;
+				double max_pos = (((double) max_index) / ((double) m_dates.size())) * 100D;
+				
+				addLabels(builder, start_time, end_time, min_time, min_pos, max_time, max_pos, avg, avg_percent, chart_min, chart_max);
+				
 				showChart(builder);
 			}
 		});
+	}
+	
+	private void addLabels(StringBuilder builder, long start_time, long end_time, long min_time, double min_pos, long max_time, double max_pos, double avg, double avg_percent, double chart_min, double chart_max) {
+		DecimalFormat format = new DecimalFormat("0.00");
+		SimpleDateFormat monthFmt = new SimpleDateFormat("MMM");
+		SimpleDateFormat yearFmt = new SimpleDateFormat("yyyy");
+		
+		Date start_date = new Date(start_time);
+		Date end_date = new Date(end_time);
+		Date min_date = new Date(min_time);
+		Date max_date = new Date(max_time);
+		
+		builder.append("&chxt=x,x,y");
+		builder.append("&chxl=");
+		
+		builder.append("0:|").append(monthFmt.format(start_date)).append("|");
+		builder.append(monthFmt.format(min_date)).append("|");
+		builder.append(monthFmt.format(max_date)).append("|");
+		builder.append(monthFmt.format(end_date));
+		
+		builder.append("|1:|").append(yearFmt.format(start_date));
+		builder.append("|").append(yearFmt.format(min_date));
+		builder.append("|").append(yearFmt.format(max_date));
+		builder.append("|").append(yearFmt.format(end_date));
+		
+		builder.append("|2:|").append(chart_min).append("|").append(format.format(avg)).append("|").append(chart_max);
+		
+		builder.append("&chxp=");
+		builder.append("0,0,").append(min_pos).append(",").append(max_pos).append(",100");
+		builder.append("|1,0,").append(min_pos).append(",").append(max_pos).append(",100");
+		builder.append("|2,0,").append(format.format(avg_percent * 100)).append(",100");
 	}
 
 	private void showChart(StringBuilder url) {
@@ -217,17 +312,14 @@ public class StatisticsView extends Activity {
 		startActivity(i);
 	}
 
-	private void setUpChart(StringBuilder builder, double chart_min, double chart_max, double avg, double avg_percent) {
-		setUpChart(builder, chart_min, chart_max, avg, avg_percent, true);
+	private void setUpChart(StringBuilder builder, double chart_min, double chart_max, double avg_percent) {
+		setUpChart(builder, chart_min, chart_max, avg_percent, true);
 	}
 	
-	private void setUpChart(StringBuilder builder, double chart_min, double chart_max, double avg, double avg_percent, boolean good_on_bottom) {
+	private void setUpChart(StringBuilder builder, double chart_min, double chart_max, double avg_percent, boolean good_on_bottom) {
 		DecimalFormat format = new DecimalFormat("0.00");
-		builder.append("&chco=000000&");
+		builder.append("&chco=000000");
 		builder.append("&chds=").append(chart_min).append(",").append(chart_max);
-		builder.append("&chxt=y");
-		builder.append("&chxl=0:|").append(chart_min).append("|").append(format.format(avg)).append("|").append(chart_max);
-		builder.append("&chxp=0,0,").append(format.format(avg_percent * 100)).append(",100");
 
 		builder.append("&chm=");
 		if (good_on_bottom) {
@@ -237,7 +329,7 @@ public class StatisticsView extends Activity {
 			builder.append("r,70FF9D,0,").append(format.format(avg_percent)).append(",1|");
 			builder.append("r,FF8880,0,0,").append(format.format(avg_percent));
 		}
-	}
+	};
 
 	private void getTextView(int id) {
 		m_stats.put(id, (TextView) findViewById(id));
