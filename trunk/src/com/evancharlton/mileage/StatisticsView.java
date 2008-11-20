@@ -74,7 +74,7 @@ public class StatisticsView extends Activity {
 		}
 		switch (item.getItemId()) {
 			case HelpDialog.MENU_HELP:
-				HelpDialog.create(this, R.string.help_title_statistics, R.string.help_statistics);
+				HelpDialog.create(this, R.string.help_title_statistics, new int[]{R.string.help_statistics, R.string.help_charts});
 				break;
 		}
 		return super.onOptionsItemSelected(item);
@@ -125,6 +125,7 @@ public class StatisticsView extends Activity {
 				builder.deleteCharAt(builder.length() - 1);
 
 				setUpChart(builder, chart_min, chart_max, avg_percent);
+				chartTitle(builder, "Fuel Price vs Time");
 				
 				long end_time = m_dates.get(0);
 				long start_time = m_dates.get(m_dates.size() - 1);
@@ -168,6 +169,7 @@ public class StatisticsView extends Activity {
 				builder.deleteCharAt(builder.length() - 1);
 
 				setUpChart(builder, 0, chart_max, avg_percent);
+				chartTitle(builder, "Amount of Fuel per Fill-Up vs Time");
 				
 				long end_time = m_dates.get(0);
 				long start_time = m_dates.get(m_dates.size() - 1);
@@ -215,6 +217,7 @@ public class StatisticsView extends Activity {
 				double avg_percent = (avg - chart_min) / (chart_max - chart_min); 
 				
 				setUpChart(builder, chart_min, chart_max, avg_percent, engine.getBestEconomy() < engine.getWorstEconomy());
+				chartTitle(builder, "Fuel Economy vs Time");
 				
 				long end_time = m_dates.get(0);
 				long start_time = m_dates.get(m_dates.size() - 1);
@@ -260,6 +263,7 @@ public class StatisticsView extends Activity {
 				double avg_percent = (avg - chart_min) / (chart_max - chart_min);
 				
 				setUpChart(builder, chart_min, chart_max, avg_percent, false);
+				chartTitle(builder, "Distance Between Fill-ups vs Time");
 				
 				long end_time = m_dates.get(0);
 				long start_time = m_dates.get(m_dates.size() - 1);
@@ -273,6 +277,10 @@ public class StatisticsView extends Activity {
 				showChart(builder);
 			}
 		});
+	}
+	
+	private void chartTitle(StringBuilder builder, String title) {
+		builder.append("&chtt=").append(title);
 	}
 	
 	private void addLabels(StringBuilder builder, long start_time, long end_time, long min_time, double min_pos, long max_time, double max_pos, double avg, double avg_percent, double chart_min, double chart_max) {

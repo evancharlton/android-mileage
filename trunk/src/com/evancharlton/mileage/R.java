@@ -172,6 +172,7 @@ public final class R {
         public static final int header_expenses=0x7f05002a;
         public static final int header_price=0x7f050027;
         public static final int help=0x7f050071;
+        public static final int help_charts=0x7f050089;
         public static final int help_export_csv=0x7f050077;
         public static final int help_export_db=0x7f050076;
         public static final int help_export_sql=0x7f050078;

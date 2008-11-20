@@ -174,4 +174,7 @@
 	<string name="help_statistics">This screen shows a wide range of calculated statistics on a per-vehicle basis. If you have multiple vehicles,
 	a drop-down will show, and you can switch between vehicles. Note that statistics can not be calculated on vehicles that don't have enough
 	data stored, so you'll get a warning about that.</string>
+	
+	<string name="help_charts">The charting buttons display graphs of various statistics, usually over time. These open in a browser and the resulting
+	image can then be saved, e-mailed, or whatever else you want to do.</string>
 </resources>
