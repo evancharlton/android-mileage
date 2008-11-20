@@ -1,5 +1,6 @@
 package com.evancharlton.mileage;
 
+import java.net.URLEncoder;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -283,7 +284,7 @@ public class StatisticsView extends Activity {
 	}
 
 	private void chartTitle(StringBuilder builder, String title) {
-		builder.append("&chtt=").append(title);
+		builder.append("&chtt=").append(URLEncoder.encode(title));
 	}
 
 	private void addLabels(StringBuilder builder, long start_time, long end_time, long min_time, double min_pos, long max_time, double max_pos, double avg, double avg_percent, double chart_min,

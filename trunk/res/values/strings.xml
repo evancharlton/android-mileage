@@ -176,5 +176,5 @@
 	data stored, so you'll get a warning about that.</string>
 	
 	<string name="help_charts">The charting buttons display graphs of various statistics, usually over time. These open in a browser and the resulting
-	image can then be saved, e-mailed, or whatever else you want to do.</string>
+	image can then be saved, e-mailed, or whatever else you want to do. The divider between the two sections represents the average value.</string>
 </resources>
