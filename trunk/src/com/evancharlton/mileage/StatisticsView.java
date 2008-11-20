@@ -50,7 +50,7 @@ public class StatisticsView extends Activity {
 
 		setContentView(R.layout.statistics);
 	}
-	
+
 	public void onResume() {
 		super.onResume();
 		m_pref = PreferencesProvider.getInstance(this);
@@ -74,7 +74,10 @@ public class StatisticsView extends Activity {
 		}
 		switch (item.getItemId()) {
 			case HelpDialog.MENU_HELP:
-				HelpDialog.create(this, R.string.help_title_statistics, new int[]{R.string.help_statistics, R.string.help_charts});
+				HelpDialog.create(this, R.string.help_title_statistics, new int[] {
+						R.string.help_statistics,
+						R.string.help_charts
+				});
 				break;
 		}
 		return super.onOptionsItemSelected(item);
@@ -126,16 +129,16 @@ public class StatisticsView extends Activity {
 
 				setUpChart(builder, chart_min, chart_max, avg_percent);
 				chartTitle(builder, "Fuel Price vs Time");
-				
+
 				long end_time = m_dates.get(0);
 				long start_time = m_dates.get(m_dates.size() - 1);
 				long min_time = m_dates.get(min_index);
 				long max_time = m_dates.get(max_index);
 				double min_pos = (((double) min_index) / ((double) m_dates.size())) * 100D;
 				double max_pos = (((double) max_index) / ((double) m_dates.size())) * 100D;
-				
+
 				addLabels(builder, start_time, end_time, min_time, min_pos, max_time, max_pos, avg, avg_percent, chart_min, chart_max);
-				
+
 				showChart(builder);
 			}
 		});
@@ -152,12 +155,12 @@ public class StatisticsView extends Activity {
 				for (Double amount : m_amounts) {
 					builder.append(amount).append(",");
 					total += amount;
-					
+
 					if (amount > max) {
 						max = amount;
 						max_index = m_amounts.indexOf(amount);
 					}
-					if(amount < min) {
+					if (amount < min) {
 						min = amount;
 						min_index = m_amounts.indexOf(amount);
 					}
@@ -170,20 +173,20 @@ public class StatisticsView extends Activity {
 
 				setUpChart(builder, 0, chart_max, avg_percent);
 				chartTitle(builder, "Amount of Fuel per Fill-Up vs Time");
-				
+
 				long end_time = m_dates.get(0);
 				long start_time = m_dates.get(m_dates.size() - 1);
 				long min_time = m_dates.get(min_index);
 				long max_time = m_dates.get(max_index);
 				double min_pos = (((double) min_index) / ((double) m_dates.size())) * 100D;
 				double max_pos = (((double) max_index) / ((double) m_dates.size())) * 100D;
-				
+
 				addLabels(builder, start_time, end_time, min_time, min_pos, max_time, max_pos, avg, avg_percent, chart_min, chart_max);
-				
+
 				showChart(builder);
 			}
 		});
-		
+
 		m_economyBtn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				StringBuilder builder = new StringBuilder();
@@ -195,14 +198,14 @@ public class StatisticsView extends Activity {
 				double fuel = 0D;
 				int min_index = 0;
 				int max_index = 0;
-				for(int i = 0; i < m_miles.size() - 1; i++) {
-					double distance = m_miles.get(i) - m_miles.get(i+1);
+				for (int i = 0; i < m_miles.size() - 1; i++) {
+					double distance = m_miles.get(i) - m_miles.get(i + 1);
 					double economy = engine.calculateEconomy(distance, m_amounts.get(i));
-					if(economy > max) {
+					if (economy > max) {
 						max = economy;
 						max_index = i;
 					}
-					if(economy < min) {
+					if (economy < min) {
 						min = economy;
 						min_index = i;
 					}
@@ -210,28 +213,28 @@ public class StatisticsView extends Activity {
 					builder.append(economy).append(",");
 				}
 				builder.deleteCharAt(builder.length() - 1);
-				
+
 				double chart_min = Math.floor(min);
 				double chart_max = Math.ceil(max);
 				double avg = engine.calculateEconomy(m_miles.get(0) - m_miles.get(m_miles.size() - 1), fuel);
-				double avg_percent = (avg - chart_min) / (chart_max - chart_min); 
-				
+				double avg_percent = (avg - chart_min) / (chart_max - chart_min);
+
 				setUpChart(builder, chart_min, chart_max, avg_percent, engine.getBestEconomy() < engine.getWorstEconomy());
 				chartTitle(builder, "Fuel Economy vs Time");
-				
+
 				long end_time = m_dates.get(0);
 				long start_time = m_dates.get(m_dates.size() - 1);
 				long min_time = m_dates.get(min_index);
 				long max_time = m_dates.get(max_index);
 				double min_pos = (((double) min_index) / ((double) m_dates.size())) * 100D;
 				double max_pos = (((double) max_index) / ((double) m_dates.size())) * 100D;
-				
+
 				addLabels(builder, start_time, end_time, min_time, min_pos, max_time, max_pos, avg, avg_percent, chart_min, chart_max);
-				
+
 				showChart(builder);
 			}
 		});
-		
+
 		m_distanceBtn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				StringBuilder builder = new StringBuilder();
@@ -241,73 +244,74 @@ public class StatisticsView extends Activity {
 				double total = 0D;
 				int min_index = 0;
 				int max_index = 0;
-				for(int i = 0; i < m_miles.size() - 1; i++) {
-					double distance = m_miles.get(i) - m_miles.get(i+1);
+				for (int i = 0; i < m_miles.size() - 1; i++) {
+					double distance = m_miles.get(i) - m_miles.get(i + 1);
 					builder.append(distance).append(",");
 					total += distance;
-					
-					if(distance > max) {
+
+					if (distance > max) {
 						max = distance;
 						max_index = i;
 					}
-					if(distance < min) {
+					if (distance < min) {
 						min = distance;
 						min_index = i;
 					}
 				}
 				builder.deleteCharAt(builder.length() - 1);
-				
+
 				double chart_min = Math.floor(min);
 				double chart_max = Math.ceil(max);
 				double avg = total / (m_miles.size() - 1);
 				double avg_percent = (avg - chart_min) / (chart_max - chart_min);
-				
+
 				setUpChart(builder, chart_min, chart_max, avg_percent, false);
 				chartTitle(builder, "Distance Between Fill-ups vs Time");
-				
+
 				long end_time = m_dates.get(0);
 				long start_time = m_dates.get(m_dates.size() - 1);
 				long min_time = m_dates.get(min_index);
 				long max_time = m_dates.get(max_index);
 				double min_pos = (((double) min_index) / ((double) m_dates.size())) * 100D;
 				double max_pos = (((double) max_index) / ((double) m_dates.size())) * 100D;
-				
+
 				addLabels(builder, start_time, end_time, min_time, min_pos, max_time, max_pos, avg, avg_percent, chart_min, chart_max);
-				
+
 				showChart(builder);
 			}
 		});
 	}
-	
+
 	private void chartTitle(StringBuilder builder, String title) {
 		builder.append("&chtt=").append(title);
 	}
-	
-	private void addLabels(StringBuilder builder, long start_time, long end_time, long min_time, double min_pos, long max_time, double max_pos, double avg, double avg_percent, double chart_min, double chart_max) {
+
+	private void addLabels(StringBuilder builder, long start_time, long end_time, long min_time, double min_pos, long max_time, double max_pos, double avg, double avg_percent, double chart_min,
+			double chart_max) {
 		DecimalFormat format = new DecimalFormat("0.00");
 		SimpleDateFormat monthFmt = new SimpleDateFormat("MMM");
 		SimpleDateFormat yearFmt = new SimpleDateFormat("yyyy");
-		
+
 		Date start_date = new Date(start_time);
 		Date end_date = new Date(end_time);
 		Date min_date = new Date(min_time);
 		Date max_date = new Date(max_time);
-		
+
 		builder.append("&chxt=x,x,y");
 		builder.append("&chxl=");
-		
+
 		builder.append("0:|").append(monthFmt.format(start_date)).append("|");
 		builder.append(monthFmt.format(min_date)).append("|");
 		builder.append(monthFmt.format(max_date)).append("|");
 		builder.append(monthFmt.format(end_date));
-		
+
 		builder.append("|1:|").append(yearFmt.format(start_date));
 		builder.append("|").append(yearFmt.format(min_date));
 		builder.append("|").append(yearFmt.format(max_date));
 		builder.append("|").append(yearFmt.format(end_date));
-		
+
 		builder.append("|2:|").append(chart_min).append("|").append(format.format(avg)).append("|").append(chart_max);
-		
+
 		builder.append("&chxp=");
 		builder.append("0,0,").append(min_pos).append(",").append(max_pos).append(",100");
 		builder.append("|1,0,").append(min_pos).append(",").append(max_pos).append(",100");
@@ -323,7 +327,7 @@ public class StatisticsView extends Activity {
 	private void setUpChart(StringBuilder builder, double chart_min, double chart_max, double avg_percent) {
 		setUpChart(builder, chart_min, chart_max, avg_percent, true);
 	}
-	
+
 	private void setUpChart(StringBuilder builder, double chart_min, double chart_max, double avg_percent, boolean good_on_bottom) {
 		DecimalFormat format = new DecimalFormat("0.00");
 		builder.append("&chco=000000");
