@@ -38,7 +38,7 @@
 	</condition>
 
 	<!-- Output directories -->
-	<property name="outdir-classes" value="${outdir}/classes" />
+	<property name="outdir-classes" value="${outdir}/" />
 	<condition property="outdir-classes-ospath"
 			value="${basedir}\${outdir-classes}"
 			else="${basedir}/${outdir-classes}" >

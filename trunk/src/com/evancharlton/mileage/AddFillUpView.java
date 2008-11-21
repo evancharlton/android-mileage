@@ -14,9 +14,11 @@ import android.database.Cursor;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -92,7 +94,6 @@ public class AddFillUpView extends Activity {
 		if (m_vehicleAdapter.getCount() == 1) {
 			m_vehicleSpinner.setVisibility(View.GONE);
 		}
-
 	}
 
 	protected void loadPrefs() {
@@ -122,12 +123,44 @@ public class AddFillUpView extends Activity {
 			}
 		});
 
+		m_amountEdit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+			public void onFocusChange(View v, boolean hasFocus) {
+				showOSK(hasFocus);
+			}
+		});
+
+		m_priceEdit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+			public void onFocusChange(View v, boolean hasFocus) {
+				showOSK(hasFocus);
+			}
+		});
+
+		m_mileageEdit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+			public void onFocusChange(View v, boolean hasFocus) {
+				showOSK(hasFocus);
+			}
+		});
+
 		m_priceEdit.requestFocus();
 
 		// m_priceEdit.setKeyListener(new KeyFocuser(m_amountEdit));
 		// m_amountEdit.setKeyListener(new KeyFocuser(m_mileageEdit));
 		// m_mileageEdit.setKeyListener(new KeyFocuser(m_commentEdit));
 		// m_commentEdit.setKeyListener(new KeyFocuser(m_saveButton));
+	}
+
+	protected void showOSK(boolean hasFocus) {
+		Activity parent = getParent();
+		if (parent instanceof Mileage) {
+			Mileage mileage = (Mileage) parent;
+			mileage.setOskVisibility(isPortrait() && hasFocus);
+		}
+	}
+
+	protected boolean isPortrait() {
+		WindowManager wm = getWindowManager();
+		Display d = wm.getDefaultDisplay();
+		return d.getWidth() < d.getHeight();
 	}
 
 	private void resetForm(View v) {

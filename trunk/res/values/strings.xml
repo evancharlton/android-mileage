@@ -9,6 +9,7 @@
 	<string name="graphs">Graphs</string>
 	<string name="save_changes">Save Changes</string>
 	<string name="delete">Delete</string>
+	<string name="backspace">Del</string>
 	<string name="edit">Edit</string>
 	<string name="edit_fillup">Edit Fill-up</string>
 	<string name="cancel_changes">Cancel Changes</string>

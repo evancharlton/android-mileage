@@ -1,13 +1,21 @@
 package com.evancharlton.mileage;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.Activity;
 import android.app.TabActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.Selection;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 
@@ -15,6 +23,8 @@ public class Mileage extends TabActivity {
 	public static final String EXTRA_IGNORE_STATE = "ignore-state";
 	public static final String PACKAGE = "com.evancharlton.mileage";
 	private TabHost m_tabHost;
+	private LinearLayout m_osk;
+	private List<Button> m_oskButtons = new ArrayList<Button>();
 
 	private static final int MENU_SETTINGS = Menu.FIRST;
 	private static final int MENU_IMPORT_EXPORT = Menu.FIRST + 1;
@@ -28,6 +38,8 @@ public class Mileage extends TabActivity {
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.tabs);
+
+		setUpOSK();
 
 		m_tabHost = getTabHost();
 
@@ -47,6 +59,44 @@ public class Mileage extends TabActivity {
 					}
 				}
 			}
+		}
+	}
+
+	private void setUpOSK() {
+		m_osk = (LinearLayout) findViewById(R.id.number_osk);
+
+		m_oskButtons.add((Button) findViewById(R.id.zero_btn));
+		m_oskButtons.add((Button) findViewById(R.id.one_btn));
+		m_oskButtons.add((Button) findViewById(R.id.two_btn));
+		m_oskButtons.add((Button) findViewById(R.id.three_btn));
+		m_oskButtons.add((Button) findViewById(R.id.four_btn));
+		m_oskButtons.add((Button) findViewById(R.id.five_btn));
+		m_oskButtons.add((Button) findViewById(R.id.six_btn));
+		m_oskButtons.add((Button) findViewById(R.id.seven_btn));
+		m_oskButtons.add((Button) findViewById(R.id.eight_btn));
+		m_oskButtons.add((Button) findViewById(R.id.nine_btn));
+		m_oskButtons.add((Button) findViewById(R.id.plus_btn));
+		m_oskButtons.add((Button) findViewById(R.id.dot_btn));
+		m_oskButtons.add((Button) findViewById(R.id.backspace_btn));
+
+		for (Button btn : m_oskButtons) {
+			btn.setOnClickListener(new View.OnClickListener() {
+				public void onClick(View v) {
+					View focus = getCurrentFocus();
+					if (focus instanceof EditText) {
+						EditText focusedText = (EditText) focus;
+						CharSequence text = ((Button) v).getText();
+						if (text.length() == 1) {
+							focusedText.append(text);
+						} else {
+							// backspace
+							Editable seq = focusedText.getText();
+							int index = Selection.getSelectionStart(seq);
+							seq.delete(index - 1, index);
+						}
+					}
+				}
+			});
 		}
 	}
 
@@ -83,6 +133,16 @@ public class Mileage extends TabActivity {
 		spec.setIndicator(getString(R.string.statistics), getResources().getDrawable(R.drawable.statistics_i));
 		spec.setContent(i);
 		m_tabHost.addTab(spec);
+	}
+
+	public void setOskVisibility(boolean visible) {
+		if (m_osk != null) {
+			if (visible) {
+				m_osk.setVisibility(View.VISIBLE);
+			} else {
+				m_osk.setVisibility(View.GONE);
+			}
+		}
 	}
 
 	public static void createMenu(Menu menu) {
