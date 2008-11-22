@@ -92,7 +92,9 @@ public class Mileage extends TabActivity {
 							// backspace
 							Editable seq = focusedText.getText();
 							int index = Selection.getSelectionStart(seq);
-							seq.delete(index - 1, index);
+							if (index >= 1) {
+								seq.delete(index - 1, index);
+							}
 						}
 					}
 				}
