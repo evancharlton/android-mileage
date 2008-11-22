@@ -1,8 +1,10 @@
 package com.evancharlton.mileage;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -14,6 +16,8 @@ import android.database.Cursor;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.Selection;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,6 +26,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 
@@ -44,6 +49,8 @@ public class AddFillUpView extends Activity {
 	protected DatePickerDialog m_dateDlg = null;
 	protected EditText m_commentEdit;
 	protected SimpleCursorAdapter m_vehicleAdapter;
+	private LinearLayout m_osk;
+	private List<Button> m_oskButtons = new ArrayList<Button>();
 
 	/** Called when the activity is first created. */
 	@Override
@@ -57,6 +64,7 @@ public class AddFillUpView extends Activity {
 
 		setContentView(R.layout.fillup);
 
+		setUpOSK();
 		loadData();
 		initHandlers();
 		updateDate();
@@ -125,19 +133,19 @@ public class AddFillUpView extends Activity {
 
 		m_amountEdit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 			public void onFocusChange(View v, boolean hasFocus) {
-				showOSK(hasFocus);
+				setOskVisibility(hasFocus);
 			}
 		});
 
 		m_priceEdit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 			public void onFocusChange(View v, boolean hasFocus) {
-				showOSK(hasFocus);
+				setOskVisibility(hasFocus);
 			}
 		});
 
 		m_mileageEdit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 			public void onFocusChange(View v, boolean hasFocus) {
-				showOSK(hasFocus);
+				setOskVisibility(hasFocus);
 			}
 		});
 
@@ -149,11 +157,13 @@ public class AddFillUpView extends Activity {
 		// m_commentEdit.setKeyListener(new KeyFocuser(m_saveButton));
 	}
 
-	protected void showOSK(boolean hasFocus) {
-		Activity parent = getParent();
-		if (parent instanceof Mileage) {
-			Mileage mileage = (Mileage) parent;
-			mileage.setOskVisibility(isPortrait() && hasFocus);
+	protected void setOskVisibility(boolean visible) {
+		if (m_osk != null) {
+			if (visible && isPortrait()) {
+				m_osk.setVisibility(View.VISIBLE);
+			} else {
+				m_osk.setVisibility(View.GONE);
+			}
 		}
 	}
 
@@ -179,6 +189,46 @@ public class AddFillUpView extends Activity {
 		m_customDateButton.setText(PreferencesProvider.getInstance(AddFillUpView.this).format(d));
 		if (m_dateDlg != null) {
 			m_dateDlg.updateDate(m_year, m_month, m_day);
+		}
+	}
+
+	protected void setUpOSK() {
+		m_osk = (LinearLayout) findViewById(R.id.number_osk);
+
+		m_oskButtons.add((Button) findViewById(R.id.zero_btn));
+		m_oskButtons.add((Button) findViewById(R.id.one_btn));
+		m_oskButtons.add((Button) findViewById(R.id.two_btn));
+		m_oskButtons.add((Button) findViewById(R.id.three_btn));
+		m_oskButtons.add((Button) findViewById(R.id.four_btn));
+		m_oskButtons.add((Button) findViewById(R.id.five_btn));
+		m_oskButtons.add((Button) findViewById(R.id.six_btn));
+		m_oskButtons.add((Button) findViewById(R.id.seven_btn));
+		m_oskButtons.add((Button) findViewById(R.id.eight_btn));
+		m_oskButtons.add((Button) findViewById(R.id.nine_btn));
+		m_oskButtons.add((Button) findViewById(R.id.plus_btn));
+		m_oskButtons.add((Button) findViewById(R.id.dot_btn));
+		m_oskButtons.add((Button) findViewById(R.id.backspace_btn));
+
+		for (Button btn : m_oskButtons) {
+			btn.setOnClickListener(new View.OnClickListener() {
+				public void onClick(View v) {
+					View focus = getCurrentFocus();
+					if (focus instanceof EditText) {
+						EditText focusedText = (EditText) focus;
+						CharSequence text = ((Button) v).getText();
+						if (text.length() == 1) {
+							focusedText.append(text);
+						} else {
+							// backspace
+							Editable seq = focusedText.getText();
+							int index = Selection.getSelectionStart(seq);
+							if (index >= 1) {
+								seq.delete(index - 1, index);
+							}
+						}
+					}
+				}
+			});
 		}
 	}
 
