@@ -30,11 +30,18 @@ import android.widget.LinearLayout;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 
-public class AddFillUpView extends Activity {
+public class AddFillUpView extends Activity implements Persistent {
 	public static final String PACKAGE = "com.evancharlton.mileage";
 	public static final int DATE_DIALOG_ID = 0;
 	public static final int MENU_VEHICLES = Menu.FIRST;
 	public static final int MENU_SETTINGS = Menu.FIRST + 1;
+
+	protected static final String SAVED_PRICE = "saved_price";
+	protected static final String SAVED_AMOUNT = "saved_amount";
+	protected static final String SAVED_ODOMETER = "saved_odometer";
+	protected static final String SAVED_DATE = "saved_date";
+	protected static final String SAVED_COMMENT = "saved_comment";
+	protected static final String SAVED_VEHICLE = "saved_vehicle";
 
 	protected int m_year;
 	protected int m_month;
@@ -69,6 +76,29 @@ public class AddFillUpView extends Activity {
 		initHandlers();
 		updateDate();
 		loadPrefs();
+	}
+
+	public void saveState(Bundle outState) {
+		outState.putString(SAVED_PRICE, m_priceEdit.getText().toString());
+		outState.putString(SAVED_AMOUNT, m_amountEdit.getText().toString());
+		outState.putString(SAVED_COMMENT, m_commentEdit.getText().toString());
+		outState.putString(SAVED_ODOMETER, m_mileageEdit.getText().toString());
+		outState.putInt(SAVED_VEHICLE, m_vehicleSpinner.getSelectedItemPosition());
+		Date d = new Date(m_year, m_month, m_day);
+		outState.putLong(SAVED_DATE, d.getTime());
+	}
+
+	public void restoreState(Bundle inState) {
+		m_priceEdit.setText(inState.getString(SAVED_PRICE));
+		m_amountEdit.setText(inState.getString(SAVED_AMOUNT));
+		m_commentEdit.setText(inState.getString(SAVED_COMMENT));
+		m_mileageEdit.setText(inState.getString(SAVED_ODOMETER));
+		m_vehicleSpinner.setSelection(inState.getInt(SAVED_VEHICLE));
+		Calendar c = Calendar.getInstance();
+		c.setTimeInMillis(inState.getLong(SAVED_DATE));
+		m_day = c.get(Calendar.DAY_OF_MONTH);
+		m_year = c.get(Calendar.YEAR);
+		m_month = c.get(Calendar.MONTH);
 	}
 
 	@Override

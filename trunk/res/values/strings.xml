@@ -153,10 +153,9 @@
 	multiple vehicles share a database. You can optionally set this vehicle to be the default vehicle.</string>
 	
 	<string name="help_title_fillup_new">Recording Fill-Up Help</string>
-	<string name="help_fillup_new">This allows you to add a new fill-up into the database. Note that you can select any date you wish, so you can
-	enter past fill-ups. Alternatively, you can import old fill-ups from a spreadsheet or database; go to History, then to Import/Export for more
-	details. You can fill in an optional comment. You can add incremental fill-ups (since the previous one) by prefixing your odometer with a '+'.
-	For example, if you have gone 300 miles since your last fillup, enter '+300'</string>
+	<string name="help_fillup_new">You can add incremental fill-ups (since the previous one) by prefixing your odometer with a '+'.
+	For example, if you have gone 300 miles since your last fillup, enter '+300'. In portait mode, an on-screen keyboard will appear for making
+	quick edits. Note that this keyboard is numeric only.</string>
 	
 	<string name="help_title_history">History Help</string>
 	<string name="help_history">The history browser lets you view a list of past fill-ups, of all vehicles. Once a fill-up is selected, you can edit or

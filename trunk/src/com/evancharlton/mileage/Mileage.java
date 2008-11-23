@@ -36,7 +36,13 @@ public class Mileage extends TabActivity {
 		addStatisticsTab();
 
 		if (savedInstanceState != null) {
-			m_tabHost.setCurrentTab(savedInstanceState.getInt(CURRENT_TAB, 0));
+			int c = savedInstanceState.getInt(CURRENT_TAB, 0);
+			if (c == 0) {
+				Activity a = getCurrentActivity();
+				Persistent p = (Persistent) a;
+				p.restoreState(savedInstanceState);
+			}
+			m_tabHost.setCurrentTab(c);
 			int id = savedInstanceState.getInt(CURRENT_VIEW, -1);
 			if (id != -1) {
 				View current = m_tabHost.getCurrentView();
@@ -111,7 +117,13 @@ public class Mileage extends TabActivity {
 	}
 
 	protected void onSaveInstanceState(Bundle outState) {
-		outState.putInt(CURRENT_TAB, m_tabHost.getCurrentTab());
+		int current = m_tabHost.getCurrentTab();
+		outState.putInt(CURRENT_TAB, current);
+		if (current == 0) {
+			Activity a = getCurrentActivity();
+			Persistent p = (Persistent) a;
+			p.saveState(outState);
+		}
 		View focused = getCurrentFocus();
 		outState.putInt(CURRENT_VIEW, focused.getId());
 	}
