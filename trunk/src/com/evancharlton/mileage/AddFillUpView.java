@@ -133,13 +133,13 @@ public class AddFillUpView extends Activity {
 
 		m_amountEdit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 			public void onFocusChange(View v, boolean hasFocus) {
-				setOskVisibility(hasFocus);
+				setOskVisibility(hasFocus, false);
 			}
 		});
 
 		m_priceEdit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 			public void onFocusChange(View v, boolean hasFocus) {
-				setOskVisibility(hasFocus);
+				setOskVisibility(hasFocus, false);
 			}
 		});
 
@@ -157,7 +157,13 @@ public class AddFillUpView extends Activity {
 		// m_commentEdit.setKeyListener(new KeyFocuser(m_saveButton));
 	}
 
-	protected void setOskVisibility(boolean visible) {
+	protected void setOskVisibility(boolean visible, boolean plus_sign) {
+		Button plus = (Button) findViewById(R.id.plus_btn);
+		if (plus_sign) {
+			plus.setVisibility(View.VISIBLE);
+		} else {
+			plus.setVisibility(View.GONE);
+		}
 		if (m_osk != null) {
 			if (visible && isPortrait()) {
 				m_osk.setVisibility(View.VISIBLE);
@@ -165,6 +171,10 @@ public class AddFillUpView extends Activity {
 				m_osk.setVisibility(View.GONE);
 			}
 		}
+	}
+
+	protected void setOskVisibility(boolean visible) {
+		setOskVisibility(visible, true);
 	}
 
 	protected boolean isPortrait() {
