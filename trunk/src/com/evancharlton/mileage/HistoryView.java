@@ -128,12 +128,16 @@ public class HistoryView extends ListActivity implements View.OnCreateContextMen
 			vehicleCursor.moveToNext();
 		}
 
-		Cursor historyCursor = managedQuery(FillUps.CONTENT_URI, PROJECTIONS, null, null, FillUps.DEFAULT_SORT_ORDER);
+		Cursor historyCursor = managedQuery(FillUps.CONTENT_URI, PROJECTIONS, FillUps.AMOUNT + " != ''", null, FillUps.DEFAULT_SORT_ORDER);
 		if (historyCursor.getCount() > 0) {
 			historyCursor.moveToFirst();
 			while (historyCursor.isAfterLast() == false) {
 				int vehicleId = historyCursor.getInt(COL_VEHICLEID);
 				HashMap<Double, Double> data = m_history.get(vehicleId);
+				if (data == null) {
+					// invalid vehicle ID
+					continue;
+				}
 				double mileage = historyCursor.getDouble(COL_MILEAGE);
 				double amount = historyCursor.getDouble(COL_AMOUNT);
 				data.put(mileage, amount);

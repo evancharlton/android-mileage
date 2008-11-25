@@ -30,6 +30,8 @@ import android.widget.TextView;
 import com.evancharlton.mileage.calculators.CalculationEngine;
 
 public class StatisticsView extends Activity {
+	private static final int MAX_DATA_POINTS = 100;
+
 	private HashMap<Integer, TextView> m_stats = new HashMap<Integer, TextView>();
 	private Spinner m_vehicles;
 	private ArrayList<Double> m_amounts;
@@ -42,6 +44,7 @@ public class StatisticsView extends Activity {
 	private Button m_fuelPriceBtn;
 	private Button m_economyBtn;
 	private Button m_distanceBtn;
+	private DecimalFormat m_format = new DecimalFormat("0.00");
 
 	// TODO: set chs to be the same as the display size
 	private static final String CHART_URL_BASE = "http://chart.apis.google.com/chart?cht=lc&chs=480x320&chd=t:";
@@ -110,19 +113,24 @@ public class StatisticsView extends Activity {
 				double min = Double.MAX_VALUE;
 				int min_index = 0;
 				int max_index = 0;
-				for (Double price : m_costs) {
-					builder.append(price).append(",");
+				int skip = 1;
+				if (m_costs.size() > MAX_DATA_POINTS) {
+					skip = (int) Math.floor((double) m_costs.size() / (double) MAX_DATA_POINTS);
+				}
+				for (int i = 0; i < m_costs.size(); i += skip) {
+					double price = m_costs.get(i);
+					builder.append(m_format.format(price)).append(",");
 					total += price;
 					if (price > max) {
 						max = price;
-						max_index = m_costs.indexOf(price);
+						max_index = i;
 					}
 					if (price < min) {
 						min = price;
-						min_index = m_costs.indexOf(price);
+						min_index = i;
 					}
 				}
-				double avg = total / m_costs.size();
+				double avg = total / (MAX_DATA_POINTS > m_costs.size() ? m_costs.size() : MAX_DATA_POINTS);
 				double chart_max = Math.ceil(max);
 				double chart_min = Math.floor(min);
 				double avg_percent = ((avg - chart_min) / (chart_max - chart_min));
@@ -153,20 +161,25 @@ public class StatisticsView extends Activity {
 				double min = Double.MAX_VALUE;
 				int max_index = 0;
 				int min_index = 0;
-				for (Double amount : m_amounts) {
-					builder.append(amount).append(",");
+				int skip = 1;
+				if (m_amounts.size() > MAX_DATA_POINTS) {
+					skip = (int) Math.floor((double) m_amounts.size() / (double) MAX_DATA_POINTS);
+				}
+				for (int i = 0; i < m_amounts.size(); i += skip) {
+					double amount = m_amounts.get(i);
+					builder.append(m_format.format(amount)).append(",");
 					total += amount;
 
 					if (amount > max) {
 						max = amount;
-						max_index = m_amounts.indexOf(amount);
+						max_index = i;
 					}
 					if (amount < min) {
 						min = amount;
-						min_index = m_amounts.indexOf(amount);
+						min_index = i;
 					}
 				}
-				double avg = total / m_amounts.size();
+				double avg = total / (MAX_DATA_POINTS > m_amounts.size() ? m_amounts.size() : MAX_DATA_POINTS);
 				double chart_max = Math.ceil(max);
 				double chart_min = 0D; // TODO: support this later?
 				double avg_percent = (avg / chart_max);
@@ -199,8 +212,15 @@ public class StatisticsView extends Activity {
 				double fuel = 0D;
 				int min_index = 0;
 				int max_index = 0;
-				for (int i = 0; i < m_miles.size() - 1; i++) {
-					double distance = m_miles.get(i) - m_miles.get(i + 1);
+				int skip = 1;
+				if (m_amounts.size() > MAX_DATA_POINTS) {
+					skip = (int) Math.floor((double) m_amounts.size() / (double) MAX_DATA_POINTS);
+				}
+				double total_distance = 0D;
+				for (int i = 0; i < m_miles.size() - skip; i += skip) {
+					double distance = m_miles.get(i) - m_miles.get(i + skip);
+					total_distance += distance;
+					fuel += m_amounts.get(i);
 					double economy = engine.calculateEconomy(distance, m_amounts.get(i));
 					if (economy > max) {
 						max = economy;
@@ -210,14 +230,14 @@ public class StatisticsView extends Activity {
 						min = economy;
 						min_index = i;
 					}
-					fuel += m_amounts.get(i);
-					builder.append(economy).append(",");
+					builder.append(m_format.format(economy)).append(",");
 				}
+
 				builder.deleteCharAt(builder.length() - 1);
 
 				double chart_min = Math.floor(min);
 				double chart_max = Math.ceil(max);
-				double avg = engine.calculateEconomy(m_miles.get(0) - m_miles.get(m_miles.size() - 1), fuel);
+				double avg = engine.calculateEconomy(total_distance, fuel);
 				double avg_percent = (avg - chart_min) / (chart_max - chart_min);
 
 				setUpChart(builder, chart_min, chart_max, avg_percent, engine.getBestEconomy() < engine.getWorstEconomy());
@@ -245,8 +265,12 @@ public class StatisticsView extends Activity {
 				double total = 0D;
 				int min_index = 0;
 				int max_index = 0;
-				for (int i = 0; i < m_miles.size() - 1; i++) {
-					double distance = m_miles.get(i) - m_miles.get(i + 1);
+				int skip = 1;
+				if (m_amounts.size() > MAX_DATA_POINTS) {
+					skip = (int) Math.floor((double) m_amounts.size() / (double) MAX_DATA_POINTS);
+				}
+				for (int i = 0; i < m_miles.size() - skip; i += skip) {
+					double distance = m_miles.get(i) - m_miles.get(i + skip);
 					builder.append(distance).append(",");
 					total += distance;
 
@@ -263,7 +287,7 @@ public class StatisticsView extends Activity {
 
 				double chart_min = Math.floor(min);
 				double chart_max = Math.ceil(max);
-				double avg = total / (m_miles.size() - 1);
+				double avg = total / (MAX_DATA_POINTS > m_miles.size() ? m_miles.size() : MAX_DATA_POINTS);
 				double avg_percent = (avg - chart_min) / (chart_max - chart_min);
 
 				setUpChart(builder, chart_min, chart_max, avg_percent, false);
@@ -330,17 +354,16 @@ public class StatisticsView extends Activity {
 	}
 
 	private void setUpChart(StringBuilder builder, double chart_min, double chart_max, double avg_percent, boolean good_on_bottom) {
-		DecimalFormat format = new DecimalFormat("0.00");
 		builder.append("&chco=000000");
 		builder.append("&chds=").append(chart_min).append(",").append(chart_max);
 
 		builder.append("&chm=");
 		if (good_on_bottom) {
-			builder.append("r,FF8880,0,").append(format.format(avg_percent)).append(",1|");
-			builder.append("r,70FF9D,0,0,").append(format.format(avg_percent));
+			builder.append("r,FF8880,0,").append(m_format.format(avg_percent)).append(",1|");
+			builder.append("r,70FF9D,0,0,").append(m_format.format(avg_percent));
 		} else {
-			builder.append("r,70FF9D,0,").append(format.format(avg_percent)).append(",1|");
-			builder.append("r,FF8880,0,0,").append(format.format(avg_percent));
+			builder.append("r,70FF9D,0,").append(m_format.format(avg_percent)).append(",1|");
+			builder.append("r,FF8880,0,0,").append(m_format.format(avg_percent));
 		}
 	};
 
