@@ -1,4 +1,4 @@
-package com.evancharlton.mileage;
+package com.evancharlton.mileage.io.output;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -12,10 +12,15 @@ import android.os.Handler;
 import android.os.Message;
 import au.com.bytecode.opencsv.CSVWriter;
 
-public class CSVExporter implements Runnable {
+import com.evancharlton.mileage.FillUps;
+import com.evancharlton.mileage.FillUpsProvider;
+import com.evancharlton.mileage.Mileage;
+import com.evancharlton.mileage.R;
+
+public class CSVView implements Runnable {
 	private Handler m_handler;
 
-	public CSVExporter(Handler handler) {
+	public CSVView(Handler handler) {
 		m_handler = handler;
 	}
 

@@ -1,4 +1,4 @@
-package com.evancharlton.mileage;
+package com.evancharlton.mileage.io.input;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -13,10 +13,15 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 
-public class SQLImporter implements Runnable {
+import com.evancharlton.mileage.FillUps;
+import com.evancharlton.mileage.FillUpsProvider;
+import com.evancharlton.mileage.Mileage;
+import com.evancharlton.mileage.R;
+
+public class SQLView implements Runnable {
 	private Handler m_handler;
 
-	public SQLImporter(Handler handler) {
+	public SQLView(Handler handler) {
 		m_handler = handler;
 	}
 

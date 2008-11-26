@@ -1,4 +1,4 @@
-package com.evancharlton.mileage;
+package com.evancharlton.mileage.io.input;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -9,10 +9,14 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 
-public class DBImporter implements Runnable {
+import com.evancharlton.mileage.FillUpsProvider;
+import com.evancharlton.mileage.Mileage;
+import com.evancharlton.mileage.R;
+
+public class DBView implements Runnable {
 	private Handler m_handler;
 
-	public DBImporter(Handler handler) {
+	public DBView(Handler handler) {
 		m_handler = handler;
 	}
 

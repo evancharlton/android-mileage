@@ -15,6 +15,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 
+import com.evancharlton.mileage.io.output.DBView;
+
 public class ImportExportView extends Activity {
 	private ProgressDialog m_progress;
 	private static final int EXPORT_DB = 1;
@@ -113,7 +115,7 @@ public class ImportExportView extends Activity {
 			Intent i = new Intent();
 			switch (m_btn) {
 				case EXPORT_DB:
-					i.setClass(ImportExportView.this, DBExporter.class);
+					i.setClass(ImportExportView.this, DBView.class);
 					set = true;
 					break;
 				case EXPORT_SQL:

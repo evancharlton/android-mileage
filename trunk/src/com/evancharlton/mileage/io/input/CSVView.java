@@ -1,4 +1,4 @@
-package com.evancharlton.mileage;
+package com.evancharlton.mileage.io.input;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -11,10 +11,14 @@ import android.os.Handler;
 import android.os.Message;
 import au.com.bytecode.opencsv.CSVReader;
 
-public class CSVImporter implements Runnable {
+import com.evancharlton.mileage.FillUpsProvider;
+import com.evancharlton.mileage.Mileage;
+import com.evancharlton.mileage.R;
+
+public class CSVView implements Runnable {
 	private Handler m_handler;
 
-	public CSVImporter(Handler handler) {
+	public CSVView(Handler handler) {
 		m_handler = handler;
 	}
 
