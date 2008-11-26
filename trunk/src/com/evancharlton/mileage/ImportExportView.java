@@ -1,32 +1,25 @@
 package com.evancharlton.mileage;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 
-import com.evancharlton.mileage.io.output.DBView;
-
 public class ImportExportView extends Activity {
-	private ProgressDialog m_progress;
-	private static final int EXPORT_DB = 1;
-	private static final int EXPORT_SQL = 2;
-	private static final int EXPORT_CSV = 3;
-	private static final int IMPORT_DB = 4;
-	private static final int IMPORT_SQL = 5;
-	private static final int IMPORT_CSV = 6;
 	private static final int MENU_ERASE = Menu.FIRST;
 	private static final int ERASE_DIALOG_ID = 0;
+
+	private Map<ImageButton, Class<?>> m_actions = new HashMap<ImageButton, Class<?>>();
 
 	private AlertDialog m_eraseDialog;
 
@@ -39,19 +32,25 @@ public class ImportExportView extends Activity {
 	}
 
 	private void initUI() {
-		ImageButton importDB = (ImageButton) findViewById(R.id.import_db_btn);
-		ImageButton importSQL = (ImageButton) findViewById(R.id.import_sql_btn);
-		ImageButton importCSV = (ImageButton) findViewById(R.id.import_csv_btn);
-		ImageButton exportDB = (ImageButton) findViewById(R.id.export_db_btn);
-		ImageButton exportSQL = (ImageButton) findViewById(R.id.export_sql_btn);
-		ImageButton exportCSV = (ImageButton) findViewById(R.id.export_csv_btn);
+		m_actions.put((ImageButton) findViewById(R.id.import_db_btn), com.evancharlton.mileage.io.input.DBView.class);
+		m_actions.put((ImageButton) findViewById(R.id.import_sql_btn), com.evancharlton.mileage.io.input.SQLView.class);
+		m_actions.put((ImageButton) findViewById(R.id.import_csv_btn), com.evancharlton.mileage.io.input.CSVView.class);
+		m_actions.put((ImageButton) findViewById(R.id.export_db_btn), com.evancharlton.mileage.io.output.DBView.class);
+		m_actions.put((ImageButton) findViewById(R.id.export_sql_btn), com.evancharlton.mileage.io.output.SQLView.class);
+		m_actions.put((ImageButton) findViewById(R.id.export_csv_btn), com.evancharlton.mileage.io.output.CSVView.class);
 
-		importDB.setOnClickListener(new ButtonHandler(IMPORT_DB));
-		importSQL.setOnClickListener(new ButtonHandler(IMPORT_SQL));
-		importCSV.setOnClickListener(new ButtonHandler(IMPORT_CSV));
-		exportDB.setOnClickListener(new ButtonHandler(EXPORT_DB));
-		exportSQL.setOnClickListener(new ButtonHandler(EXPORT_SQL));
-		exportCSV.setOnClickListener(new ButtonHandler(EXPORT_CSV));
+		for (ImageButton btn : m_actions.keySet()) {
+			btn.setOnClickListener(new View.OnClickListener() {
+				public void onClick(View v) {
+					Intent intent = new Intent();
+					Class<?> cls = m_actions.get(v);
+					if (cls != null) {
+						intent.setClass(ImportExportView.this, cls);
+						startActivity(intent);
+					}
+				}
+			});
+		}
 
 		m_eraseDialog = new AlertDialog.Builder(this).create();
 		m_eraseDialog.setMessage(getString(R.string.confirm_erase));
@@ -102,57 +101,6 @@ public class ImportExportView extends Activity {
 		}
 		return null;
 	}
-
-	private class ButtonHandler implements View.OnClickListener {
-		private int m_btn = 0;
-
-		public ButtonHandler(int btn) {
-			m_btn = btn;
-		}
-
-		public void onClick(View v) {
-			boolean set = false;
-			Intent i = new Intent();
-			switch (m_btn) {
-				case EXPORT_DB:
-					i.setClass(ImportExportView.this, DBView.class);
-					set = true;
-					break;
-				case EXPORT_SQL:
-					break;
-				case EXPORT_CSV:
-					break;
-				case IMPORT_CSV:
-					break;
-				case IMPORT_SQL:
-					break;
-				case IMPORT_DB:
-					break;
-			}
-			if (set) {
-				startActivity(i);
-			}
-		}
-	}
-
-	private Handler m_handler = new Handler() {
-		public void handleMessage(Message msg) {
-			m_progress.dismiss();
-			AlertDialog dlg = new AlertDialog.Builder(ImportExportView.this).create();
-			dlg.setButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int which) {
-				}
-			});
-			if (msg.what == 0) {
-				dlg.setMessage(msg.obj.toString());
-				dlg.setTitle(msg.arg2);
-			} else if (msg.what == 1) {
-				dlg.setTitle(msg.arg2);
-				dlg.setMessage(getString(msg.arg1) + "\n" + msg.obj.toString());
-			}
-			dlg.show();
-		}
-	};
 
 	private DialogInterface.OnClickListener m_eraseListener = new DialogInterface.OnClickListener() {
 		public void onClick(DialogInterface dialog, int which) {
