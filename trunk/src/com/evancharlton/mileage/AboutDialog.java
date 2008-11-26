@@ -2,6 +2,8 @@ package com.evancharlton.mileage;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.view.View;
 import android.widget.Button;
 
@@ -16,7 +18,12 @@ public class AboutDialog extends Dialog {
 				dismiss();
 			}
 		});
-		String title = getContext().getString(R.string.app_name) + " : " + getContext().getString(R.string.app_version);
+		String title;
+		try {
+			title = getContext().getString(R.string.app_name) + " : " + getContext().getPackageManager().getPackageInfo(getContext().getPackageName(), PackageManager.GET_ACTIVITIES).versionName;
+		} catch (NameNotFoundException e) {
+			title = "Unknown version";
+		}
 		setTitle(title);
 	}
 

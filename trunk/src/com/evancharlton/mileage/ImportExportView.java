@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
@@ -108,42 +109,26 @@ public class ImportExportView extends Activity {
 		}
 
 		public void onClick(View v) {
-			Thread t = null;
-			int title = R.string.exporting_title;
-			int message = R.string.exporting;
+			boolean set = false;
+			Intent i = new Intent();
 			switch (m_btn) {
 				case EXPORT_DB:
-					t = new Thread(new DBExporter(m_handler));
+					i.setClass(ImportExportView.this, DBExporter.class);
+					set = true;
 					break;
 				case EXPORT_SQL:
-					t = new Thread(new SQLExporter(m_handler));
 					break;
 				case EXPORT_CSV:
-					t = new Thread(new CSVExporter(m_handler));
 					break;
 				case IMPORT_CSV:
-					t = new Thread(new CSVImporter(m_handler));
-					title = R.string.importing_title;
-					message = R.string.importing;
 					break;
 				case IMPORT_SQL:
-					t = new Thread(new SQLImporter(m_handler));
-					title = R.string.importing_title;
-					message = R.string.importing;
 					break;
 				case IMPORT_DB:
-					t = new Thread(new DBImporter(m_handler));
-					title = R.string.importing_title;
-					message = R.string.importing;
 					break;
 			}
-			if (t != null) {
-				m_progress = new ProgressDialog(ImportExportView.this);
-				m_progress.setMessage(getString(message));
-				m_progress.setIndeterminate(true);
-				m_progress.setTitle(title);
-				m_progress.show();
-				t.start();
+			if (set) {
+				startActivity(i);
 			}
 		}
 	}
