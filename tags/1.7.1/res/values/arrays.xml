@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string-array name="units_volume">
+		<item>Gallons</item>
+		<item>Litres</item>
+		<item>Imperial Gallons</item>
+	</string-array>
+	<string-array name="units_distance">
+		<item>Miles</item>
+		<item>Kilometer</item>
+	</string-array>
+	<string-array name="units_economy">
+		<item>Mi per Gallon</item>
+		<item>Km per Gallon</item>
+		<item>Mi per Imp. Gallon</item>
+		<item>Km per Imp. Gallon</item>
+		<item>Mi per Litre</item>
+		<item>Km per Litre</item>
+		<item>Gallons per 100 km</item>
+		<item>Litres per 100 km</item>
+		<item>Imp. Gal. per 100 km</item>
+	</string-array>
+    <!-- I know that this is terrible, but I don't have i18n, so I have to do this crap -->
+    <string-array name="unit_price_hints">
+    	<item>Price per gallon</item>
+    	<item>Price per litre</item>
+    	<item>Price per gallon</item>
+    </string-array>
+    <string-array name="unit_amount_hints">
+    	<item>Gallons of fuel</item>
+    	<item>Litres of fuel</item>
+    	<item>Gallons of fuel</item>
+    </string-array>
+    <string-array name="orientations">
+    	<item>Device</item>
+    	<item>Keyboard</item>
+    </string-array>
+    
+    <string-array name="currencies">
+    	<item>$</item>
+    	<item>€</item>
+    	<item>£</item>
+    </string-array>
+    <string-array name="date_formats">
+    	<item>MM/DD/YY</item>
+    	<item>MM/DD/YYYY</item>
+    	<item>DD/MM/YY</item>
+    	<item>DD/MM/YYYY</item>
+    	<item>DD.MM.YY</item>
+    	<item>DD.MM.YYYY</item>
+    	<item>January 1, 1970</item>
+    </string-array>
+    <string-array name="date_patterns">
+    	<item>MM/dd/yy</item>
+    	<item>MM/dd/yyyy</item>
+    	<item>dd/MM/yy</item>
+    	<item>dd/MM/yyyy</item>
+    	<item>dd.MM.yy</item>
+    	<item>dd.MM.yyyy</item>
+    	<item>MMMM d, yyyy</item>
+    </string-array>
+    <string-array name="number_formats">
+    	<item>1234.00</item>
+    	<item>1,234.00</item>
+    	<item>1234,00</item>
+    	<item>1.234,00</item>
+    </string-array>
+    <string-array name="number_patterns">
+    	<item>###0.00</item>
+    	<item>#,##0.00</item>
+    	<item>###0,00</item>
+    	<item>#.##0,00</item>
+    </string-array>
+</resources>
