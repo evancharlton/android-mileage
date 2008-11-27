@@ -12,12 +12,15 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.evancharlton.mileage.HelpDialog;
 import com.evancharlton.mileage.R;
 
 public abstract class ImportView extends Activity {
@@ -41,6 +44,25 @@ public abstract class ImportView extends Activity {
 		super.onResume();
 		initUI();
 	}
+
+	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
+		HelpDialog.injectHelp(menu, 'h');
+		return true;
+	}
+
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case HelpDialog.MENU_HELP:
+				HelpDialog.create(this, R.string.help_title_history, R.string.help_history);
+				return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
+	protected abstract String getHelpTitle();
+
+	protected abstract String getHelp();
 
 	protected void initUI() {
 		m_title = (TextView) findViewById(R.id.title);

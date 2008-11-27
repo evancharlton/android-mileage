@@ -130,19 +130,24 @@
 	<string name="error_title">Title can not be blank!</string>
 	
 	<string name="help">Help</string>
-	<string name="help_title_import_export">Import/Export Help</string>
+	<string name="help_import_db_title">Import SQLite</string>
 	<string name="help_import_db">When importing SQLite databases it is extremely important to know that it will overwrite your current database.
 	All local changes will be lost forever. The file that will be imported needs to be on your SD card as "mileage.db"</string>
+	<string name="help_import_csv_title">Import CSV</string>
 	<string name="help_import_csv">Importing comma-separated value (CSV) files is useful for providing spreadsheet integration. Note that the format
 	is pretty specific; if you are not sure of the format, it's highly recommended that you export a CSV, open it in Excel, insert your values, and
 	then import the resulting spreadsheet. Note that the input file needs to be on your SD card as "mileage.csv". Dates need to be in milliseconds 
 	since 1/1/1970.</string>
+	<string name="help_import_sql_title">Import SQL</string>
 	<string name="help_import_sql">Importing SQL is highly dependent on the database schema. If you do not know what you're doing with this, it is
 	recommended you use another option. The file that is imported needs to be on your SD card as "mileage.sql"</string>
+	<string name="help_export_db_title">Export DB</string>
 	<string name="help_export_db">Exporting the SQLite database will create a direct copy of your current SQLite database and place the resulting
 	copy on your SD card in the file "mileage.db"</string>
+	<string name="help_export_csv_title">Export CSV</string>
 	<string name="help_export_csv">Exporting a comma-separated value (CSV) file will export your current database into a "mileage.csv" file on
 	your SD card. This file can then be used in Excel or any other spreadsheet editor.</string>
+	<string name="help_export_sql_title">Export SQL</string>
 	<string name="help_export_sql">Exporting your database as SQL will create a "mileage.sql" file on your SD card. These SQL commands can then
 	be imported into any other database engine of choice, provided that the schemas match. Note that the table-creation SQL is omitted; it is up
 	to the end user to create the necessary tables.</string>

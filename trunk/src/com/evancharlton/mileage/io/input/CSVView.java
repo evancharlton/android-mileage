@@ -263,4 +263,14 @@ public class CSVView extends ImportView {
 			dialog.dismiss();
 		}
 	};
+
+	@Override
+	protected String getHelp() {
+		return getString(R.string.help_import_csv);
+	}
+
+	@Override
+	protected String getHelpTitle() {
+		return getString(R.string.help_import_csv_title);
+	}
 }

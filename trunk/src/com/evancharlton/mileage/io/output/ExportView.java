@@ -39,6 +39,10 @@ public abstract class ExportView extends Activity {
 		initUI();
 	}
 
+	protected abstract String getHelpTitle();
+
+	protected abstract String getHelp();
+
 	protected void initUI() {
 		m_title = (TextView) findViewById(R.id.title);
 		m_startBtn = (Button) findViewById(R.id.start);

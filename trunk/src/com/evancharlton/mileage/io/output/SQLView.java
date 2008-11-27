@@ -128,4 +128,14 @@ public class SQLView extends ExportView {
 			}
 		};
 	}
+
+	@Override
+	protected String getHelp() {
+		return getString(R.string.help_import_sql);
+	}
+
+	@Override
+	protected String getHelpTitle() {
+		return getString(R.string.help_import_sql_title);
+	}
 }

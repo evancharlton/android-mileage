@@ -76,4 +76,14 @@ public class CSVView extends ExportView {
 			}
 		};
 	}
+
+	@Override
+	protected String getHelp() {
+		return getString(R.string.help_import_csv);
+	}
+
+	@Override
+	protected String getHelpTitle() {
+		return getString(R.string.help_import_csv_title);
+	}
 }

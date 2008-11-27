@@ -66,4 +66,14 @@ public class DBView extends ImportView {
 			}
 		};
 	}
+
+	@Override
+	protected String getHelp() {
+		return getString(R.string.help_import_db);
+	}
+
+	@Override
+	protected String getHelpTitle() {
+		return getString(R.string.help_import_db_title);
+	}
 }

@@ -193,13 +193,6 @@ public class HistoryView extends ListActivity implements View.OnCreateContextMen
 		startActivity(intent);
 	}
 
-	public boolean onCreateOptionsMenu(Menu menu) {
-		super.onCreateOptionsMenu(menu);
-		Mileage.createMenu(menu);
-		HelpDialog.injectHelp(menu, 'h');
-		return true;
-	}
-
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo info) {
 		menu.setHeaderTitle(R.string.operations);
 		menu.add(Menu.NONE, MENU_DELETE, Menu.NONE, R.string.delete);
@@ -224,6 +217,13 @@ public class HistoryView extends ListActivity implements View.OnCreateContextMen
 			// fail gracefully?
 		}
 		return super.onContextItemSelected(item);
+	}
+
+	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
+		Mileage.createMenu(menu);
+		HelpDialog.injectHelp(menu, 'h');
+		return true;
 	}
 
 	public boolean onOptionsItemSelected(MenuItem item) {
