@@ -14,9 +14,12 @@
 	<string name="cancel_changes">Cancel Changes</string>
 	<string name="confirm_delete">Are you sure you want to delete this?</string>
 	<string name="confirm_erase">Are you sure you want to completely erase the database? This can not be undone!</string>
+	<string name="confirm_data">Confirm data</string>
+	<string name="confirm_import">Is the following data correct?</string>
 	<string name="yes">Yes</string>
 	<string name="no">No</string>
 	<string name="ok">OK</string>
+	<string name="date">Date</string>
 	<string name="statistics">Statistics</string>
 	<string name="close">Close</string>
 	<string name="about">About</string>
@@ -33,6 +36,10 @@
 	<string name="filename">Filename</string>
 	<string name="success">Success</string>
 	<string name="save_as">Save file as:</string>
+	<string name="select_file">Select file to import:</string>
+	<string name="data_parsed">Data parsed, please confirm the input</string>
+	<string name="parsing_title">Parsing</string>
+	<string name="parsing">Parsing data...</string>
 	
 	<string name="vehicles">Vehicles</string>
 	<string name="vehicle_make">Make</string>

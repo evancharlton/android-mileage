@@ -136,6 +136,7 @@ public class HistoryView extends ListActivity implements View.OnCreateContextMen
 				HashMap<Double, Double> data = m_history.get(vehicleId);
 				if (data == null) {
 					// invalid vehicle ID
+					historyCursor.moveToNext();
 					continue;
 				}
 				double mileage = historyCursor.getDouble(COL_MILEAGE);
@@ -291,9 +292,12 @@ public class HistoryView extends ListActivity implements View.OnCreateContextMen
 					double mileage = cursor.getDouble(columnIndex);
 					if (!cursor.isLast()) {
 						int vehicleId = cursor.getInt(COL_VEHICLEID);
-						Double mpg = m_history.get(vehicleId).get(mileage);
+						HashMap<Double, Double> vehicleData = m_history.get(vehicleId);
+						if (vehicleData == null) {
+							return true;
+						}
+						Double mpg = vehicleData.get(mileage);
 						if (mpg == null) {
-							// can't do anything
 							return true;
 						}
 						double avgMpg = m_avgEconomies.get(vehicleId);

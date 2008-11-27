@@ -23,9 +23,8 @@
 			>
 				<TextView
 					android:textAppearance="?android:attr/textAppearanceLarge"
-					android:layout_width="fill_parent"
+					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:layout_weight="1"
 					android:text="@string/export_header"
 				/>
 				<TextView
@@ -33,7 +32,7 @@
 					android:textAppearance="?android:attr/textAppearanceLarge"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:gravity="right"
+					android:paddingLeft="5dip"
 				/>
 			</LinearLayout>
 			<TextView

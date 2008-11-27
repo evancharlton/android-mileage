@@ -23,8 +23,8 @@
 		<activity android:name=".io.output.DBView"/>
 		<activity android:name=".io.output.CSVView"/>
 		<activity android:name=".io.output.SQLView"/>
-		<!--<activity android:name=".io.input.DBView"/>
+		<activity android:name=".io.input.DBView"/>
 		<activity android:name=".io.input.CSVView"/>
-		<activity android:name=".io.input.SQLView"/> -->
+		<activity android:name=".io.input.SQLView"/>
 	</application>
 </manifest> 
