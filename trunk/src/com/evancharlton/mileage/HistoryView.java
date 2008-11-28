@@ -4,10 +4,11 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ListActivity;
 import android.content.ContentUris;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -22,12 +23,13 @@ import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
 import com.evancharlton.mileage.calculators.CalculationEngine;
 
-public class HistoryView extends ListActivity implements View.OnCreateContextMenuListener {
+public class HistoryView extends Activity implements View.OnCreateContextMenuListener {
 	public static final int MENU_IMPORT_EXPORT = Menu.FIRST;
 	public static final int MENU_EXPORT = Menu.FIRST;
 	public static final int MENU_EXPORT_DB = Menu.FIRST + 1;
@@ -53,12 +55,14 @@ public class HistoryView extends ListActivity implements View.OnCreateContextMen
 	public static final int COL_MILEAGE = 6;
 
 	private Map<Integer, String> m_vehicleTitles = new HashMap<Integer, String>();
-	private Map<Integer, Double> m_avgEconomies = new HashMap<Integer, Double>();
-	private HashMap<Integer, HashMap<Double, Double>> m_history;
+	private double m_avgMpg;
+	private HashMap<Double, Double> m_history;
 	private AlertDialog m_deleteDialog;
 	private long m_deleteId;
 	private PreferencesProvider m_prefs;
 	private CalculationEngine m_calcEngine;
+	private ListView m_listView;
+	private Spinner m_vehicles;
 
 	private static final String[] PROJECTIONS = new String[] {
 			FillUps._ID,
@@ -73,16 +77,64 @@ public class HistoryView extends ListActivity implements View.OnCreateContextMen
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.history);
 
 		m_deleteDialog = new AlertDialog.Builder(this).create();
 		m_deleteDialog.setMessage(getString(R.string.confirm_delete));
 		m_deleteDialog.setCancelable(false);
 		m_deleteDialog.setButton(getString(R.string.yes), m_deleteListener);
 		m_deleteDialog.setButton2(getString(R.string.no), m_deleteListener);
+
+		m_listView = (ListView) findViewById(android.R.id.list);
+		m_listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+				HistoryView.this.onItemClick(arg2, arg3);
+			}
+		});
+		m_history = new HashMap<Double, Double>();
+
+		m_vehicles = (Spinner) findViewById(R.id.vehicles);
+
+		String[] projection = new String[] {
+				Vehicles._ID,
+				Vehicles.TITLE
+		};
+
+		Cursor vehicleCursor = managedQuery(Vehicles.CONTENT_URI, projection, null, null, Vehicles.DEFAULT_SORT_ORDER);
+		SimpleCursorAdapter vehicleAdapter = new SimpleCursorAdapter(this, android.R.layout.simple_spinner_item, vehicleCursor, new String[] {
+			Vehicles.TITLE
+		}, new int[] {
+			android.R.id.text1
+		});
+		vehicleAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		m_vehicles.setAdapter(vehicleAdapter);
+		m_vehicles.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+			public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+				onResume();
+			}
+
+			public void onNothingSelected(AdapterView<?> arg0) {
+			}
+		});
+
+		if (vehicleAdapter.getCount() == 1) {
+			m_vehicles.setVisibility(View.GONE);
+		}
+	}
+
+	protected void onItemClick(int arg2, long arg3) {
+		Uri uri = ContentUris.withAppendedId(getIntent().getData(), arg3);
+		Intent intent = new Intent();
+		intent.setData(uri);
+		intent.setClass(HistoryView.this, FillUpView.class);
+		startActivity(intent);
 	}
 
 	public void onResume() {
 		super.onResume();
+
+		m_prefs = PreferencesProvider.getInstance(this);
+		m_calcEngine = m_prefs.getCalculator();
 
 		setDefaultKeyMode(DEFAULT_KEYS_SHORTCUT);
 
@@ -91,7 +143,6 @@ public class HistoryView extends ListActivity implements View.OnCreateContextMen
 			intent.setData(FillUps.CONTENT_URI);
 		}
 
-		getListView().setOnCreateContextMenuListener(this);
 		String[] from = new String[] {
 				FillUps.AMOUNT,
 				FillUps.COST,
@@ -109,88 +160,41 @@ public class HistoryView extends ListActivity implements View.OnCreateContextMen
 				R.id.history_mileage
 		};
 
-		String[] projection = new String[] {
-				Vehicles._ID,
-				Vehicles.TITLE
+		String selection = FillUps.VEHICLE_ID + " = ?";
+		String[] selectionArgs = new String[] {
+			String.valueOf(m_vehicles.getSelectedItemId())
 		};
-		m_prefs = PreferencesProvider.getInstance(this);
-		m_calcEngine = m_prefs.getCalculator();
 
-		m_history = new HashMap<Integer, HashMap<Double, Double>>();
-
-		Cursor vehicleCursor = managedQuery(Vehicles.CONTENT_URI, projection, null, null, Vehicles.DEFAULT_SORT_ORDER);
-		vehicleCursor.moveToFirst();
-		while (vehicleCursor.isAfterLast() == false) {
-			String title = vehicleCursor.getString(1);
-			int index = vehicleCursor.getInt(0);
-			m_vehicleTitles.put(index, title);
-			m_history.put(index, new HashMap<Double, Double>());
-			vehicleCursor.moveToNext();
-		}
-
-		Cursor historyCursor = managedQuery(FillUps.CONTENT_URI, PROJECTIONS, FillUps.AMOUNT + " != ''", null, FillUps.DEFAULT_SORT_ORDER);
+		Cursor historyCursor = managedQuery(FillUps.CONTENT_URI, PROJECTIONS, selection, selectionArgs, FillUps.DEFAULT_SORT_ORDER);
 		if (historyCursor.getCount() > 0) {
 			historyCursor.moveToFirst();
+			Map<Double, Double> milesToAmt = new HashMap<Double, Double>();
 			while (historyCursor.isAfterLast() == false) {
-				int vehicleId = historyCursor.getInt(COL_VEHICLEID);
-				HashMap<Double, Double> data = m_history.get(vehicleId);
-				if (data == null) {
-					// invalid vehicle ID
-					historyCursor.moveToNext();
-					continue;
-				}
-				double mileage = historyCursor.getDouble(COL_MILEAGE);
-				double amount = historyCursor.getDouble(COL_AMOUNT);
-				data.put(mileage, amount);
+				milesToAmt.put(historyCursor.getDouble(COL_MILEAGE), historyCursor.getDouble(COL_AMOUNT));
 				historyCursor.moveToNext();
 			}
-			historyCursor.moveToFirst();
 
-			// calculate their respective economies
-			for (Integer vehicleId : m_history.keySet()) {
-				HashMap<Double, Double> data = m_history.get(vehicleId);
-				Double[] keys = data.keySet().toArray(new Double[data.keySet().size()]);
-				Arrays.sort(keys);
-				if (keys.length == 0) {
-					data.put(0D, null);
-					continue;
-				}
-				if (keys.length == 1) {
-					// can't calculate the avg economy
-					data.put(keys[0], null);
-					continue;
-				}
-				double total_miles = Math.abs(keys[0] - keys[keys.length - 1]);
-				double total_fuel = 0.0D;
-				for (int i = keys.length - 1; i > 0; i--) {
-					double key = keys[i];
-					double miles = keys[i] - keys[i - 1];
-					double amount = data.get(key);
-					data.put(key, m_calcEngine.calculateEconomy(miles, amount));
-					total_fuel += amount;
-				}
-				double mileage = m_calcEngine.calculateEconomy(total_miles, total_fuel);
-				m_avgEconomies.put(vehicleId, mileage);
+			Set<Double> keyset = milesToAmt.keySet();
+			Double[] keys = keyset.toArray(new Double[keyset.size()]);
+			Arrays.sort(keys);
+			double total_fuel = 0;
+			for (int i = keys.length - 1; i > 0; i--) {
+				double amount = milesToAmt.get(keys[i]);
+				double prev_mileage = keys[i - 1];
+				double mileage = keys[i];
+				double diff = mileage - prev_mileage;
+				double mpg = m_calcEngine.calculateEconomy(diff, amount);
+				m_history.put(mileage, mpg);
+				total_fuel += amount;
 			}
+
+			double total_distance = keys[keys.length - 1] - keys[0];
+			m_avgMpg = m_calcEngine.calculateEconomy(total_distance, total_fuel);
 		}
 
-		ListView list = getListView();
-		list.setFocusable(true);
-		list.setOnCreateContextMenuListener(this);
-
-		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.history, historyCursor, from, to);
+		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.history_row, historyCursor, from, to);
 		adapter.setViewBinder(m_viewBinder);
-		setListAdapter(adapter);
-	}
-
-	@Override
-	protected void onListItemClick(ListView lv, View v, int position, long id) {
-		super.onListItemClick(lv, v, position, id);
-		Uri uri = ContentUris.withAppendedId(getIntent().getData(), id);
-		Intent intent = new Intent();
-		intent.setData(uri);
-		intent.setClass(HistoryView.this, FillUpView.class);
-		startActivity(intent);
+		m_listView.setAdapter(adapter);
 	}
 
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo info) {
@@ -205,12 +209,12 @@ public class HistoryView extends ListActivity implements View.OnCreateContextMen
 			info = (AdapterContextMenuInfo) item.getMenuInfo();
 			switch (item.getItemId()) {
 				case MENU_DELETE:
-					m_deleteId = getListAdapter().getItemId(info.position);
+					m_deleteId = m_listView.getAdapter().getItemId(info.position);
 					showDialog(DELETE_DIALOG_ID);
 					return true;
 				case MENU_EDIT:
-					long id = getListAdapter().getItemId(info.position);
-					onListItemClick(getListView(), info.targetView, info.position, id);
+					long id = m_listView.getAdapter().getItemId(info.position);
+					onItemClick(info.position, id);
 					return true;
 			}
 		} catch (ClassCastException e) {
@@ -291,21 +295,15 @@ public class HistoryView extends ListActivity implements View.OnCreateContextMen
 				case COL_MILEAGE:
 					double mileage = cursor.getDouble(columnIndex);
 					if (!cursor.isLast()) {
-						int vehicleId = cursor.getInt(COL_VEHICLEID);
-						HashMap<Double, Double> vehicleData = m_history.get(vehicleId);
-						if (vehicleData == null) {
-							return true;
-						}
-						Double mpg = vehicleData.get(mileage);
+						Double mpg = m_history.get(mileage);
 						if (mpg == null) {
 							return true;
 						}
-						double avgMpg = m_avgEconomies.get(vehicleId);
 						TextView tv = (TextView) view;
 						int color = 0xFF666666;
-						if (m_calcEngine.better(mpg, avgMpg)) {
+						if (m_calcEngine.better(mpg, m_avgMpg)) {
 							color = 0xFF0AB807;
-						} else if (mpg == avgMpg) {
+						} else if (mpg == m_avgMpg) {
 							color = 0xFF2469FF;
 						} else {
 							color = 0xFFD90000;

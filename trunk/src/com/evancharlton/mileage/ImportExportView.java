@@ -62,14 +62,7 @@ public class ImportExportView extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 			case HelpDialog.MENU_HELP:
-				HelpDialog.create(this, R.string.help_title_import_export, new int[] {
-						R.string.help_import_db,
-						R.string.help_export_db,
-						R.string.help_import_csv,
-						R.string.help_export_csv,
-						R.string.help_import_sql,
-						R.string.help_export_sql
-				});
+				HelpDialog.create(this, R.string.help_title_import_export, R.string.help_import_export);
 				break;
 			case MENU_ERASE:
 				showDialog(ERASE_DIALOG_ID);

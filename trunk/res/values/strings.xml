@@ -130,6 +130,8 @@
 	<string name="error_title">Title can not be blank!</string>
 	
 	<string name="help">Help</string>
+	<string name="help_import_export">Select an item to import or export that file format</string>
+	<string name="help_title_import_export">Import/Export Help</string>
 	<string name="help_import_db_title">Import SQLite</string>
 	<string name="help_import_db">When importing SQLite databases it is extremely important to know that it will overwrite your current database.
 	All local changes will be lost forever. The file that will be imported needs to be on your SD card as "mileage.db"</string>

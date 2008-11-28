@@ -11,7 +11,7 @@ public class FillUps implements BaseColumns {
 	public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/fillups");
 	public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.evancharlton.fillup";
 	public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.evancharlton.fillup";
-	public static final String DEFAULT_SORT_ORDER = "date DESC, mileage DESC";
+	public static final String DEFAULT_SORT_ORDER = "mileage DESC";
 	public static final String COST = "cost";
 	public static final String AMOUNT = "amount";
 	public static final String MILEAGE = "mileage";
