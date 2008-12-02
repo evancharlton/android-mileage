@@ -50,19 +50,13 @@
 				android:id="@+id/parsed_date"
 			/>
 		</LinearLayout>
-		<ScrollView
+		<ListView
+			android:id="@+id/vehicle_mapping"
 			android:layout_width="fill_parent"
 			android:layout_height="fill_parent"
-			android:layout_weight="1"
-		>
-			<ListView
-				android:id="@+id/vehicle_mapping"
-				android:layout_width="fill_parent"
-				android:layout_height="fill_parent"
-				android:choiceMode="none"
-				android:clickable="false"
-			/>
-		</ScrollView>
+			android:choiceMode="none"
+			android:clickable="false"
+		/>
 	</LinearLayout>
 	<Button
 		android:id="@+id/start"
