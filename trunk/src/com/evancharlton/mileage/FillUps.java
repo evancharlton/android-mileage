@@ -1,5 +1,8 @@
 package com.evancharlton.mileage;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import android.net.Uri;
 import android.provider.BaseColumns;
 
@@ -20,4 +23,16 @@ public class FillUps implements BaseColumns {
 	public static final String LATITUDE = "latitude";
 	public static final String LONGITUDE = "longitude";
 	public static final String COMMENT = "comment";
+	public static final Map<String, String> PLAINTEXT = new HashMap<String, String>();
+
+	static {
+		PLAINTEXT.put(DATE, "Date");
+		PLAINTEXT.put(COST, "Price per gallon");
+		PLAINTEXT.put(AMOUNT, "Gallons of fuel");
+		PLAINTEXT.put(MILEAGE, "Odometer");
+		PLAINTEXT.put(VEHICLE_ID, "Vehicle");
+		PLAINTEXT.put(LATITUDE, "Latitude");
+		PLAINTEXT.put(LONGITUDE, "Longitude");
+		PLAINTEXT.put(COMMENT, "Fill-Up Comment");
+	}
 }

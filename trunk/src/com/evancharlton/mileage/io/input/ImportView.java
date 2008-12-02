@@ -31,8 +31,8 @@ public abstract class ImportView extends Activity {
 	protected TextView m_title;
 	protected String m_ext = "";
 	protected ProgressDialog m_progress = null;
-	private Spinner m_fileSelector;
-	private Button m_startBtn;
+	protected Spinner m_fileSelector;
+	protected Button m_startBtn;
 
 	public void onCreate(Bundle savedInstanceState, String ext) {
 		super.onCreate(savedInstanceState);
@@ -91,7 +91,7 @@ public abstract class ImportView extends Activity {
 		m_fileSelector.setAdapter(adapter);
 	}
 
-	protected String getInput() {
+	public String getInput() {
 		return Environment.getExternalStorageDirectory() + "/" + (String) m_fileSelector.getSelectedItem();
 	}
 

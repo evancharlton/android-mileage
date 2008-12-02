@@ -19,6 +19,7 @@
 	<string name="yes">Yes</string>
 	<string name="no">No</string>
 	<string name="ok">OK</string>
+	<string name="cancel">Cancel</string>
 	<string name="date">Date</string>
 	<string name="statistics">Statistics</string>
 	<string name="close">Close</string>
@@ -40,6 +41,8 @@
 	<string name="data_parsed">Data parsed, please confirm the input</string>
 	<string name="parsing_title">Parsing</string>
 	<string name="parsing">Parsing data...</string>
+	<string name="parsed_date">Parsed date:</string>
+	<string name="import_options">Import Options</string>
 	
 	<string name="vehicles">Vehicles</string>
 	<string name="vehicle_make">Make</string>
@@ -57,6 +60,11 @@
 	<string name="header_expenses">Fuel Expenses</string>
 	<string name="header_charts">Charts</string>
 	<string name="stats_default">--</string>
+	<string name="last">Last:</string>
+	<string name="average">Average:</string>
+	<string name="minimum">Minimum:</string>
+	<string name="maximum">Maximum:</string>
+	<string name="total">Total:</string>
 	<string name="stats_distance_running">Last:</string>
 	<string name="stats_distance_average">Average:</string>
 	<string name="stats_distance_maximum">Maximum:</string>
