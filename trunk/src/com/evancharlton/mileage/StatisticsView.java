@@ -311,8 +311,7 @@ public class StatisticsView extends Activity {
 		builder.append("&chtt=").append(URLEncoder.encode(title));
 	}
 
-	private void addLabels(StringBuilder builder, long start_time, long end_time, long min_time, double min_pos, long max_time, double max_pos, double avg, double avg_percent, double chart_min,
-			double chart_max) {
+	private void addLabels(StringBuilder builder, long start_time, long end_time, long min_time, double min_pos, long max_time, double max_pos, double avg, double avg_percent, double chart_min, double chart_max) {
 		DecimalFormat format = new DecimalFormat("0.00");
 		SimpleDateFormat monthFmt = new SimpleDateFormat("MMM");
 		SimpleDateFormat yearFmt = new SimpleDateFormat("yyyy");
@@ -400,7 +399,7 @@ public class StatisticsView extends Activity {
 		};
 		Cursor c = managedQuery(FillUps.CONTENT_URI, projection, FillUps.VEHICLE_ID + " = ?", new String[] {
 			String.valueOf(id)
-		}, FillUps.DATE + " DESC, " + FillUps.MILEAGE + " DESC");
+		}, FillUps.MILEAGE + " DESC");
 
 		HashMap<Integer, String> calculatedData = new HashMap<Integer, String>();
 
