@@ -399,7 +399,7 @@ public class StatisticsView extends Activity {
 		};
 		Cursor c = managedQuery(FillUps.CONTENT_URI, projection, FillUps.VEHICLE_ID + " = ?", new String[] {
 			String.valueOf(id)
-		}, FillUps.MILEAGE + " DESC");
+		}, FillUps.DEFAULT_SORT_ORDER);
 
 		HashMap<Integer, String> calculatedData = new HashMap<Integer, String>();
 
