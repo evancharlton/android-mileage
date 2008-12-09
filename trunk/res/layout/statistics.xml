@@ -43,7 +43,7 @@
 						android:layout_weight="1"
 						android:layout_width="wrap_content"
 					    android:layout_height="wrap_content"
-						android:text="@string/stats_distance_running"
+						android:text="@string/last"
 					/>
 					<TextView
 						android:id="@+id/stats_distance_running"
@@ -63,7 +63,7 @@
 						android:layout_weight="1"
 						android:layout_width="wrap_content"
 					    android:layout_height="wrap_content"
-						android:text="@string/stats_distance_average"
+						android:text="@string/average"
 					/>
 					<TextView
 						android:id="@+id/stats_distance_average"
@@ -83,7 +83,7 @@
 						android:layout_weight="1"
 						android:layout_width="wrap_content"
 					    android:layout_height="wrap_content"
-						android:text="@string/stats_distance_maximum"
+						android:text="@string/maximum"
 					/>
 					<TextView
 						android:id="@+id/stats_distance_maximum"
@@ -103,7 +103,7 @@
 						android:layout_weight="1"
 						android:layout_width="wrap_content"
 					    android:layout_height="wrap_content"
-						android:text="@string/stats_distance_minimum"
+						android:text="@string/minimum"
 					/>
 					<TextView
 						android:id="@+id/stats_distance_minimum"
@@ -131,7 +131,7 @@
 					android:layout_weight="1"
 					android:layout_width="wrap_content"
 				    android:layout_height="wrap_content"
-					android:text="@string/stats_economy_running"
+					android:text="@string/last"
 				/>
 				<TextView
 					android:id="@+id/stats_economy_running"
@@ -151,7 +151,7 @@
 					android:layout_weight="1"
 					android:layout_width="wrap_content"
 				    android:layout_height="wrap_content"
-					android:text="@string/stats_economy_average"
+					android:text="@string/average"
 				/>
 				<TextView
 					android:id="@+id/stats_economy_average"
@@ -171,7 +171,7 @@
 					android:layout_weight="1"
 					android:layout_width="wrap_content"
 				    android:layout_height="wrap_content"
-					android:text="@string/stats_economy_maximum"
+					android:text="@string/maximum"
 				/>
 				<TextView
 					android:id="@+id/stats_economy_maximum"
@@ -191,7 +191,7 @@
 					android:layout_weight="1"
 					android:layout_width="wrap_content"
 				    android:layout_height="wrap_content"
-					android:text="@string/stats_economy_minimum"
+					android:text="@string/minimum"
 				/>
 				<TextView
 					android:id="@+id/stats_economy_minimum"
@@ -218,7 +218,7 @@
 					android:layout_weight="1"
 					android:layout_width="wrap_content"
 				    android:layout_height="wrap_content"
-					android:text="@string/stats_price_latest"
+					android:text="@string/last"
 				/>
 				<TextView
 					android:id="@+id/stats_price_latest"
@@ -238,7 +238,7 @@
 					android:layout_weight="1"
 					android:layout_width="wrap_content"
 				    android:layout_height="wrap_content"
-					android:text="@string/stats_price_average"
+					android:text="@string/average"
 				/>
 				<TextView
 					android:id="@+id/stats_price_average"
@@ -258,7 +258,7 @@
 					android:layout_weight="1"
 					android:layout_width="wrap_content"
 				    android:layout_height="wrap_content"
-					android:text="@string/stats_price_maximum"
+					android:text="@string/highest"
 				/>
 				<TextView
 					android:id="@+id/stats_price_maximum"
@@ -278,7 +278,7 @@
 					android:layout_weight="1"
 					android:layout_width="wrap_content"
 				    android:layout_height="wrap_content"
-					android:text="@string/stats_price_minimum"
+					android:text="@string/lowest"
 				/>
 				<TextView
 					android:id="@+id/stats_price_minimum"
@@ -305,7 +305,7 @@
 					android:layout_weight="1"
 					android:layout_width="wrap_content"
 				    android:layout_height="wrap_content"
-					android:text="@string/stats_cost_last"
+					android:text="@string/last"
 				/>
 				<TextView
 					android:id="@+id/stats_cost_last"
@@ -325,7 +325,7 @@
 					android:layout_weight="1"
 					android:layout_width="wrap_content"
 				    android:layout_height="wrap_content"
-					android:text="@string/stats_amount_average_cost"
+					android:text="@string/average"
 				/>
 				<TextView
 					android:id="@+id/stats_amount_average_cost"
@@ -345,7 +345,7 @@
 					android:layout_weight="1"
 					android:layout_width="wrap_content"
 				    android:layout_height="wrap_content"
-					android:text="@string/stats_amount_maximum_cost"
+					android:text="@string/maximum"
 				/>
 				<TextView
 					android:id="@+id/stats_amount_maximum_cost"
@@ -365,7 +365,7 @@
 					android:layout_weight="1"
 					android:layout_width="wrap_content"
 				    android:layout_height="wrap_content"
-					android:text="@string/stats_amount_minimum_cost"
+					android:text="@string/minimum"
 				/>
 				<TextView
 					android:id="@+id/stats_amount_minimum_cost"
@@ -392,7 +392,7 @@
 					android:layout_weight="1"
 					android:layout_width="wrap_content"
 				    android:layout_height="wrap_content"
-					android:text="@string/stats_amount_total"
+					android:text="@string/total"
 				/>
 				<TextView
 					android:id="@+id/stats_amount_total"
@@ -412,7 +412,7 @@
 					android:layout_weight="1"
 					android:layout_width="wrap_content"
 				    android:layout_height="wrap_content"
-					android:text="@string/stats_amount_last"
+					android:text="@string/last"
 				/>
 				<TextView
 					android:id="@+id/stats_amount_last"
@@ -432,7 +432,7 @@
 					android:layout_weight="1"
 					android:layout_width="wrap_content"
 				    android:layout_height="wrap_content"
-					android:text="@string/stats_amount_average"
+					android:text="@string/average"
 				/>
 				<TextView
 					android:id="@+id/stats_amount_average"
@@ -452,7 +452,7 @@
 					android:layout_weight="1"
 					android:layout_width="wrap_content"
 				    android:layout_height="wrap_content"
-					android:text="@string/stats_amount_minimum"
+					android:text="@string/minimum"
 				/>
 				<TextView
 					android:id="@+id/stats_amount_minimum"
@@ -472,7 +472,7 @@
 					android:layout_weight="1"
 					android:layout_width="wrap_content"
 				    android:layout_height="wrap_content"
-					android:text="@string/stats_amount_maximum"
+					android:text="@string/maximum"
 				/>
 				<TextView
 					android:id="@+id/stats_amount_maximum"
@@ -499,7 +499,7 @@
 					android:layout_weight="1"
 					android:layout_width="wrap_content"
 				    android:layout_height="wrap_content"
-					android:text="@string/stats_expense_running"
+					android:text="@string/last"
 				/>
 				<TextView
 					android:id="@+id/stats_expense_running"
