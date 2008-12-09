@@ -86,6 +86,7 @@ public class HistoryView extends Activity implements View.OnCreateContextMenuLis
 		m_deleteDialog.setButton2(getString(R.string.no), m_deleteListener);
 
 		m_listView = (ListView) findViewById(android.R.id.list);
+		m_listView.setOnCreateContextMenuListener(this);
 		m_listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 				HistoryView.this.onItemClick(arg2, arg3);
@@ -254,6 +255,7 @@ public class HistoryView extends Activity implements View.OnCreateContextMenuLis
 	private void delete() {
 		Uri uri = ContentUris.withAppendedId(FillUps.CONTENT_URI, m_deleteId);
 		getContentResolver().delete(uri, null, null);
+		onResume();
 	}
 
 	private SimpleCursorAdapter.ViewBinder m_viewBinder = new SimpleCursorAdapter.ViewBinder() {
