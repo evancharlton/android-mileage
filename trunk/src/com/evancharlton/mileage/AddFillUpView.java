@@ -18,11 +18,13 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.Selection;
+import android.view.ContextMenu;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -42,6 +44,16 @@ public class AddFillUpView extends Activity implements Persistent {
 	protected static final String SAVED_DATE = "saved_date";
 	protected static final String SAVED_COMMENT = "saved_comment";
 	protected static final String SAVED_VEHICLE = "saved_vehicle";
+
+	protected static final int CONTEXT_CONVERT_TO_UNIT_COST = 1;
+	protected static final int CONTEXT_LITRES_TO_GALLONS = 10;
+	protected static final int CONTEXT_LITRES_TO_IMP_GALLONS = 11;
+	protected static final int CONTEXT_GALLONS_TO_LITRES = 12;
+	protected static final int CONTEXT_GALLONS_TO_IMP_GALLONS = 13;
+	protected static final int CONTEXT_IMP_GALLONS_TO_LITRES = 14;
+	protected static final int CONTEXT_IMP_GALLONS_TO_GALLONS = 15;
+	protected static final int CONTEXT_MILES_TO_KILOMETERS = 20;
+	protected static final int CONTEXT_KILOMETERS_TO_MILES = 21;
 
 	protected int m_year;
 	protected int m_month;
@@ -117,6 +129,10 @@ public class AddFillUpView extends Activity implements Persistent {
 		m_commentEdit = (EditText) findViewById(R.id.comment_edit);
 		m_vehicleSpinner = (Spinner) findViewById(R.id.vehicle_spinner);
 
+		registerForContextMenu(m_amountEdit);
+		registerForContextMenu(m_priceEdit);
+		registerForContextMenu(m_mileageEdit);
+
 		Cursor c = managedQuery(Vehicles.CONTENT_URI, new String[] {
 				Vehicles._ID,
 				Vehicles.TITLE
@@ -131,6 +147,90 @@ public class AddFillUpView extends Activity implements Persistent {
 
 		if (m_vehicleAdapter.getCount() == 1) {
 			m_vehicleSpinner.setVisibility(View.GONE);
+		}
+	}
+
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenuInfo menuInfo) {
+		if (view.equals(m_priceEdit)) {
+			menu.clear();
+			menu.add(Menu.NONE, CONTEXT_CONVERT_TO_UNIT_COST, Menu.NONE, getString(R.string.context_convert_to_unit_cost));
+		} else if (view.equals(m_amountEdit)) {
+			menu.clear();
+			menu.add(Menu.NONE, CONTEXT_LITRES_TO_GALLONS, Menu.NONE, getString(R.string.context_litres_to_gallons));
+			menu.add(Menu.NONE, CONTEXT_LITRES_TO_IMP_GALLONS, Menu.NONE, getString(R.string.context_litres_to_imp_gallons));
+			menu.add(Menu.NONE, CONTEXT_GALLONS_TO_LITRES, Menu.NONE, getString(R.string.context_gallons_to_litres));
+			menu.add(Menu.NONE, CONTEXT_GALLONS_TO_IMP_GALLONS, Menu.NONE, getString(R.string.context_gallons_to_imp_gallons));
+			menu.add(Menu.NONE, CONTEXT_IMP_GALLONS_TO_LITRES, Menu.NONE, getString(R.string.context_imp_gallons_to_litres));
+			menu.add(Menu.NONE, CONTEXT_IMP_GALLONS_TO_GALLONS, Menu.NONE, getString(R.string.context_imp_gallons_to_gallons));
+		} else if (view.equals(m_mileageEdit)) {
+			menu.clear();
+			menu.add(Menu.NONE, CONTEXT_KILOMETERS_TO_MILES, Menu.NONE, getString(R.string.context_km_to_miles));
+			menu.add(Menu.NONE, CONTEXT_MILES_TO_KILOMETERS, Menu.NONE, getString(R.string.context_miles_to_km));
+		}
+	}
+
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case CONTEXT_LITRES_TO_GALLONS:
+				convertAmount(PreferencesProvider.LITRES, PreferencesProvider.GALLONS);
+				return true;
+			case CONTEXT_LITRES_TO_IMP_GALLONS:
+				convertAmount(PreferencesProvider.LITRES, PreferencesProvider.IMP_GALLONS);
+				return true;
+			case CONTEXT_GALLONS_TO_LITRES:
+				convertAmount(PreferencesProvider.GALLONS, PreferencesProvider.LITRES);
+				return true;
+			case CONTEXT_GALLONS_TO_IMP_GALLONS:
+				convertAmount(PreferencesProvider.GALLONS, PreferencesProvider.IMP_GALLONS);
+				return true;
+			case CONTEXT_IMP_GALLONS_TO_LITRES:
+				convertAmount(PreferencesProvider.IMP_GALLONS, PreferencesProvider.LITRES);
+				return true;
+			case CONTEXT_IMP_GALLONS_TO_GALLONS:
+				convertAmount(PreferencesProvider.IMP_GALLONS, PreferencesProvider.GALLONS);
+				return true;
+			case CONTEXT_CONVERT_TO_UNIT_COST:
+				String amount = m_amountEdit.getText().toString().trim();
+				if (amount.length() > 0) {
+					try {
+						Double fuel_amount = Double.parseDouble(amount);
+						Double cost = Double.parseDouble(m_priceEdit.getText().toString().trim());
+						cost = cost / fuel_amount;
+						m_priceEdit.setText(String.valueOf(cost));
+					} catch (NumberFormatException nfe) {
+						// squish!
+					}
+				}
+				return true;
+			case CONTEXT_MILES_TO_KILOMETERS:
+				convertDistance(PreferencesProvider.MILES, PreferencesProvider.KILOMETERS);
+				return true;
+			case CONTEXT_KILOMETERS_TO_MILES:
+				convertDistance(PreferencesProvider.KILOMETERS, PreferencesProvider.MILES);
+				return true;
+		}
+		return super.onContextItemSelected(item);
+	}
+
+	private void convertAmount(int from, int to) {
+		try {
+			Double d = Double.parseDouble(m_amountEdit.getText().toString().trim());
+			d = PreferencesProvider.getInstance(this).getCalculator().convertVolume(from, to, d);
+			m_amountEdit.setText(String.valueOf(d));
+		} catch (NumberFormatException nfe) {
+			// squish!
+		}
+	}
+
+	private void convertDistance(int from, int to) {
+		try {
+			Double d = Double.parseDouble(m_mileageEdit.getText().toString().trim());
+			d = PreferencesProvider.getInstance(this).getCalculator().convertDistance(from, to, d);
+			m_mileageEdit.setText(String.valueOf(d));
+		} catch (NumberFormatException nfe) {
+			// squish!
 		}
 	}
 

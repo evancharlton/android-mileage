@@ -116,9 +116,48 @@ public class CalculationEngine {
 	}
 
 	public double calculateEconomy(double distance, double fuel) {
+		double kilometers = convertDistance(m_inputDistance, m_outputDistance, distance);
+		double litres = convertVolume(m_inputVolume, m_outputVolume, fuel);
+
+		double ratio = distance / fuel;
+		if (m_inverse) {
+			ratio = 1 / ratio;
+		}
+		return ratio;
+	}
+
+	public double convertVolume(int from, int to, double amount) {
+		double litres = amount;
+		switch (from) {
+			case PreferencesProvider.GALLONS:
+				litres = gallonsToLitres(amount);
+				break;
+			case PreferencesProvider.LITRES:
+				// do nothing
+				break;
+			case PreferencesProvider.IMP_GALLONS:
+				litres = impGallonsToLitres(amount);
+				break;
+		}
+
+		switch (to) {
+			case PreferencesProvider.GALLONS:
+				litres = litresToGallons(litres);
+				break;
+			case PreferencesProvider.LITRES:
+				// don't need to do anything
+				break;
+			case PreferencesProvider.IMP_GALLONS:
+				litres = litresToImpGallons(litres);
+				break;
+		}
+		return litres;
+	}
+
+	public double convertDistance(int from, int to, double distance) {
 		double kilometers = distance;
-		double litres = fuel;
-		switch (m_inputDistance) {
+
+		switch (from) {
 			case PreferencesProvider.MILES:
 				kilometers = milesToKM(distance);
 				break;
@@ -126,19 +165,8 @@ public class CalculationEngine {
 				// do nothing
 				break;
 		}
-		switch (m_inputVolume) {
-			case PreferencesProvider.GALLONS:
-				litres = gallonsToLitres(fuel);
-				break;
-			case PreferencesProvider.LITRES:
-				// do nothing
-				break;
-			case PreferencesProvider.IMP_GALLONS:
-				litres = impGallonsToLitres(fuel);
-				break;
-		}
 
-		switch (m_outputDistance) {
+		switch (to) {
 			case PreferencesProvider.MILES:
 				distance = kmToMiles(kilometers);
 				break;
@@ -149,22 +177,7 @@ public class CalculationEngine {
 				distance = kilometers / 100;
 				break;
 		}
-		switch (m_outputVolume) {
-			case PreferencesProvider.GALLONS:
-				fuel = litresToGallons(litres);
-				break;
-			case PreferencesProvider.LITRES:
-				fuel = litres;
-				break;
-			case PreferencesProvider.IMP_GALLONS:
-				fuel = litresToImpGallons(litres);
-				break;
-		}
-		double ratio = distance / fuel;
-		if (m_inverse) {
-			ratio = 1 / ratio;
-		}
-		return ratio;
+		return distance;
 	}
 
 	public String getEconomyUnits() {
