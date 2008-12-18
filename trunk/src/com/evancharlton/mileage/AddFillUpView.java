@@ -219,6 +219,8 @@ public class AddFillUpView extends Activity implements Persistent {
 		m_mileageEdit.setText("");
 		m_commentEdit.setText("");
 
+		m_priceEdit.requestFocus();
+
 		getIntent().setData(FillUps.CONTENT_URI);
 	}
 
