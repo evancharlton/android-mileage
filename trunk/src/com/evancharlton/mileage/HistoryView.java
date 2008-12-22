@@ -93,6 +93,18 @@ public class HistoryView extends Activity implements View.OnCreateContextMenuLis
 			}
 		});
 		m_history = new HashMap<Double, Double>();
+	}
+
+	protected void onItemClick(int arg2, long arg3) {
+		Uri uri = ContentUris.withAppendedId(getIntent().getData(), arg3);
+		Intent intent = new Intent();
+		intent.setData(uri);
+		intent.setClass(HistoryView.this, FillUpView.class);
+		startActivity(intent);
+	}
+
+	public void onResume() {
+		super.onResume();
 
 		m_vehicles = (Spinner) findViewById(R.id.vehicles);
 
@@ -121,18 +133,6 @@ public class HistoryView extends Activity implements View.OnCreateContextMenuLis
 		if (vehicleAdapter.getCount() == 1) {
 			m_vehicles.setVisibility(View.GONE);
 		}
-	}
-
-	protected void onItemClick(int arg2, long arg3) {
-		Uri uri = ContentUris.withAppendedId(getIntent().getData(), arg3);
-		Intent intent = new Intent();
-		intent.setData(uri);
-		intent.setClass(HistoryView.this, FillUpView.class);
-		startActivity(intent);
-	}
-
-	public void onResume() {
-		super.onResume();
 
 		m_prefs = PreferencesProvider.getInstance(this);
 		m_calcEngine = m_prefs.getCalculator();
