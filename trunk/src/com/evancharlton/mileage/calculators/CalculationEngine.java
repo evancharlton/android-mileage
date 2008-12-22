@@ -116,8 +116,8 @@ public class CalculationEngine {
 	}
 
 	public double calculateEconomy(double distance, double fuel) {
-		double kilometers = convertDistance(m_inputDistance, m_outputDistance, distance);
-		double litres = convertVolume(m_inputVolume, m_outputVolume, fuel);
+		distance = convertDistance(m_inputDistance, m_outputDistance, distance);
+		fuel = convertVolume(m_inputVolume, m_outputVolume, fuel);
 
 		double ratio = distance / fuel;
 		if (m_inverse) {
