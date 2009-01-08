@@ -96,11 +96,11 @@ public class CSVView extends ExportView {
 
 	@Override
 	protected String getHelp() {
-		return getString(R.string.help_import_csv);
+		return getString(R.string.help_export_csv);
 	}
 
 	@Override
 	protected String getHelpTitle() {
-		return getString(R.string.help_import_csv_title);
+		return getString(R.string.help_export_csv_title);
 	}
 }

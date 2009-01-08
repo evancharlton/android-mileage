@@ -54,10 +54,14 @@ public abstract class ImportView extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 			case HelpDialog.MENU_HELP:
-				HelpDialog.create(this, R.string.help_title_history, R.string.help_history);
+				createHelp();
 				return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	protected void createHelp() {
+		HelpDialog.create(this, getHelpTitle(), getHelp());
 	}
 
 	protected abstract String getHelpTitle();

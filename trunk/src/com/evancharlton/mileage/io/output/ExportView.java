@@ -11,11 +11,14 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.evancharlton.mileage.HelpDialog;
 import com.evancharlton.mileage.R;
 
 public abstract class ExportView extends Activity {
@@ -37,6 +40,25 @@ public abstract class ExportView extends Activity {
 	public void onResume() {
 		super.onResume();
 		initUI();
+	}
+
+	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
+		HelpDialog.injectHelp(menu, 'h');
+		return true;
+	}
+
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case HelpDialog.MENU_HELP:
+				createHelp();
+				return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
+	protected void createHelp() {
+		HelpDialog.create(this, getHelpTitle(), getHelp());
 	}
 
 	protected abstract String getHelpTitle();

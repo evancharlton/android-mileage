@@ -79,11 +79,11 @@ public class DBView extends ExportView {
 
 	@Override
 	protected String getHelp() {
-		return getString(R.string.help_import_db);
+		return getString(R.string.help_export_db);
 	}
 
 	@Override
 	protected String getHelpTitle() {
-		return getString(R.string.help_import_db_title);
+		return getString(R.string.help_export_db_title);
 	}
 }

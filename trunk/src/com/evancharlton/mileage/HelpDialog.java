@@ -76,6 +76,14 @@ public class HelpDialog extends Dialog {
 		return dlg;
 	}
 
+	public static HelpDialog create(Context context, String title, String contents) {
+		HelpDialog dlg = new HelpDialog(context);
+		dlg.setTitle(title);
+		dlg.setContents(contents);
+		dlg.show();
+		return dlg;
+	}
+
 	public static boolean injectHelp(Menu menu, char letter) {
 		int count = menu.size();
 		count++;
