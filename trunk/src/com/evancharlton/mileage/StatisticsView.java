@@ -580,8 +580,10 @@ public class StatisticsView extends Activity {
 		}
 
 		// set the text on the "per 10k" stat
-		((TextView) findViewById(R.id.label_amount_per_10k)).setText(getResources().getString(R.string.stats_amount_per_10k, m_engine.getDistanceUnitsAbbr()));
-		double fuel_per_10k = (m_engine.convertVolume(total_fuel) / m_engine.convertDistance(range(m_miles))) * 10000;
+		double divisor = Math.ceil(m_engine.convertDistance(PreferencesProvider.MILES, m_pref.getInt(SettingsView.DISTANCE, 0), 10000));
+		String amnt = String.valueOf((int) divisor);
+		((TextView) findViewById(R.id.label_amount_per_10k)).setText(getResources().getString(R.string.stats_amount_per_10k, m_engine.getDistanceUnitsAbbr(), amnt));
+		double fuel_per_10k = (m_engine.convertVolume(total_fuel) / m_engine.convertDistance(range(m_miles))) * divisor;
 
 		data.put(R.id.stats_price_latest, string(m_pref.getCurrency(), m_costs.get(0), "/" + m_engine.getVolumeUnitsAbbr().trim()));
 		data.put(R.id.stats_price_average, string(m_pref.getCurrency(), total_cost / m_costs.size(), "/" + m_engine.getVolumeUnitsAbbr().trim()));

@@ -52,15 +52,15 @@
 	<string name="vehicle_add">Add Vehicle</string>
 	<string name="vehicle_save">Save Vehicle</string>
 	
-	<string name="context_litres_to_gallons">Litres -> Gallons</string>
-	<string name="context_litres_to_imp_gallons">Litres -> Imperial Gallons</string>
-	<string name="context_gallons_to_litres">Gallons -> Litres</string>
-	<string name="context_gallons_to_imp_gallons">Gallons -> Imperial Gallons</string>
-	<string name="context_imp_gallons_to_litres">Imperial Gallons -> Litres</string>
-	<string name="context_imp_gallons_to_gallons">Imperial Gallons -> Gallons</string>
+	<string name="context_litres_to_gallons">Litres to Gallons</string>
+	<string name="context_litres_to_imp_gallons">Litres to Imperial Gallons</string>
+	<string name="context_gallons_to_litres">Gallons to Litres</string>
+	<string name="context_gallons_to_imp_gallons">Gallons to Imperial Gallons</string>
+	<string name="context_imp_gallons_to_litres">Imperial Gallons to Litres</string>
+	<string name="context_imp_gallons_to_gallons">Imperial Gallons to Gallons</string>
 	<string name="context_convert_to_unit_cost">Convert to unit cost</string>
-	<string name="context_miles_to_km">Miles -> Kilometers</string>
-	<string name="context_km_to_miles">Kilometers -> Miles</string>
+	<string name="context_miles_to_km">Miles to Kilometers</string>
+	<string name="context_km_to_miles">Kilometers to Miles</string>
 	
 	<string name="header_distance">Distance Between Fill-Ups</string>
 	<string name="header_economy">Fuel Economy</string>
@@ -79,7 +79,7 @@
 	<string name="highest">Highest:</string>
 	<string name="stats_expense_thirty_days">30-day cost:</string>
 	<string name="stats_expense_yearly">Last year:</string>
-	<string name="stats_amount_per_10k">Fuel per 10K %1$s:</string>
+	<string name="stats_amount_per_10k">Fuel / %2$s %1$s:</string>
 	<string name="statistics_no_data">Not enough data!</string>
 	<string name="statistics_no_data_msg">There is not enough data stored for this vehicle; not calculating statistics.</string>
 	<string name="charts_fuel_price">Fuel Price</string>
