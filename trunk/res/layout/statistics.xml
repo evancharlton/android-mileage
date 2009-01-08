@@ -482,6 +482,26 @@
 					android:text="@string/stats_default"
 				/>
 			</LinearLayout>
+			<LinearLayout
+				android:orientation="horizontal"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+			>
+				<TextView
+					style="@style/LabelText"
+					android:layout_weight="1"
+					android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+					android:id="@+id/label_amount_per_10k"
+				/>
+				<TextView
+					android:id="@+id/stats_amount_per_10k"
+					style="@style/StatisticText"
+					android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+					android:text="@string/stats_default"
+				/>
+			</LinearLayout>
 			<!-- fuel expense statistics -->
 			<TextView
 				android:layout_width="fill_parent"

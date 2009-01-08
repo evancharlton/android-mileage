@@ -45,15 +45,6 @@ public class CalculationEngine {
 		return litres *= 0.219969157; // number of imperial gallons per litre
 	}
 
-	public String help() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("This system expects:\n");
-		sb.append("  fuel: ").append(getVolumeUnits()).append("\n");
-		sb.append("  odometer: ").append(getDistanceUnits()).append("\n");
-		sb.append("  economy: ").append(getEconomyUnits());
-		return sb.toString();
-	}
-
 	public void setInputVolume(int volume) {
 		m_inputVolume = volume;
 	}
@@ -126,6 +117,14 @@ public class CalculationEngine {
 		return ratio;
 	}
 
+	public double convertVolume(double amount) {
+		return convertVolume(m_inputVolume, m_outputVolume, amount);
+	}
+
+	public double convertVolume(int to, double amount) {
+		return convertVolume(m_inputVolume, to, amount);
+	}
+
 	public double convertVolume(int from, int to, double amount) {
 		double litres = amount;
 		switch (from) {
@@ -152,6 +151,14 @@ public class CalculationEngine {
 				break;
 		}
 		return litres;
+	}
+
+	public double convertDistance(double distance) {
+		return convertDistance(m_inputDistance, m_outputDistance, distance);
+	}
+
+	public double convertDistance(int to, double distance) {
+		return convertDistance(m_inputDistance, distance);
 	}
 
 	public double convertDistance(int from, int to, double distance) {

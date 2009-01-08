@@ -5,9 +5,11 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import android.app.Activity;
@@ -577,6 +579,10 @@ public class StatisticsView extends Activity {
 			total_expense += cost;
 		}
 
+		// set the text on the "per 10k" stat
+		((TextView) findViewById(R.id.label_amount_per_10k)).setText(getResources().getString(R.string.stats_amount_per_10k, m_engine.getDistanceUnitsAbbr()));
+		double fuel_per_10k = (m_engine.convertVolume(total_fuel) / m_engine.convertDistance(range(m_miles))) * 10000;
+
 		data.put(R.id.stats_price_latest, string(m_pref.getCurrency(), m_costs.get(0), "/" + m_engine.getVolumeUnitsAbbr().trim()));
 		data.put(R.id.stats_price_average, string(m_pref.getCurrency(), total_cost / m_costs.size(), "/" + m_engine.getVolumeUnitsAbbr().trim()));
 		data.put(R.id.stats_price_minimum, string(m_pref.getCurrency(), lowest_ppg, "/" + m_engine.getVolumeUnitsAbbr().trim()));
@@ -593,8 +599,30 @@ public class StatisticsView extends Activity {
 		data.put(R.id.stats_expense_running, string(m_pref.getCurrency(), total_expense));
 		data.put(R.id.stats_expense_yearly, string(m_pref.getCurrency(), yearly_cost));
 		data.put(R.id.stats_cost_last, string(m_pref.getCurrency(), m_costs.get(0) * m_amounts.get(0)));
+		data.put(R.id.stats_amount_per_10k, string(fuel_per_10k, m_engine.getVolumeUnitsAbbr()));
 
 		return data;
+	}
+
+	private double range(Collection<Double> coll) {
+		double ret = 0D;
+		if (coll.size() >= 2) {
+			double max = 0D;
+			double min = Double.MAX_VALUE;
+			double c = 0D;
+			Iterator<Double> i = coll.iterator();
+			while (i.hasNext()) {
+				c = i.next();
+				if (c > max) {
+					max = c;
+				}
+				if (c < min) {
+					min = c;
+				}
+			}
+			ret = max - min;
+		}
+		return ret;
 	}
 
 	private void setText(int id, String text) {

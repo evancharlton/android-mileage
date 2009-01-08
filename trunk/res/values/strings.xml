@@ -79,6 +79,7 @@
 	<string name="highest">Highest:</string>
 	<string name="stats_expense_thirty_days">30-day cost:</string>
 	<string name="stats_expense_yearly">Last year:</string>
+	<string name="stats_amount_per_10k">Fuel per 10K %1$s:</string>
 	<string name="statistics_no_data">Not enough data!</string>
 	<string name="statistics_no_data_msg">There is not enough data stored for this vehicle; not calculating statistics.</string>
 	<string name="charts_fuel_price">Fuel Price</string>
