@@ -4,7 +4,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Set;
 
 import android.database.Cursor;
@@ -33,30 +32,27 @@ public class CSVView extends ExportView {
 
 					HashMap<String, String> fillupsProjection = FillUpsProvider.getFillUpsProjection();
 					Set<String> tmp_keySet = fillupsProjection.keySet();
-					HashSet<String> keySet = new HashSet<String>(tmp_keySet);
+					ArrayList<String> keySet = new ArrayList<String>(tmp_keySet);
 					keySet.remove(FillUps._ID);
 					String[] proj = keySet.toArray(new String[keySet.size()]);
 					SQLiteDatabase db = SQLiteDatabase.openDatabase("/data/data/" + Mileage.PACKAGE + "/databases/" + FillUpsProvider.DATABASE_NAME, null, SQLiteDatabase.OPEN_READONLY);
 					Cursor c = db.query(FillUpsProvider.FILLUPS_TABLE_NAME, proj, null, null, null, null, FillUps._ID + " ASC");
 					c.moveToFirst();
 
-					// transform the keySet into the plain english form
-					ArrayList<String> removed = new ArrayList<String>();
-					ArrayList<String> added = new ArrayList<String>();
+					// transform the column keySet into the plain English form
+					int i = 0;
 					for (String key : keySet) {
 						String english = FillUps.PLAINTEXT.get(key);
 						if (english != null) {
-							added.add(english);
-							removed.add(key);
+							keySet.set(i, english);
 						}
+						i++;
 					}
-					keySet.addAll(added);
-					keySet.removeAll(removed);
 
 					csv.writeNext(keySet.toArray(new String[keySet.size()]));
 					while (c.isAfterLast() == false) {
 						String[] data = new String[keySet.size()];
-						for (int i = 0; i < c.getColumnCount(); i++) {
+						for (i = 0; i < c.getColumnCount(); i++) {
 							data[i] = c.getString(i);
 						}
 						csv.writeNext(data);
