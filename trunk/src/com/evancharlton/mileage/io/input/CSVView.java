@@ -72,7 +72,7 @@ public class CSVView extends ImportView {
 						} else if (columns[i].equalsIgnoreCase(FillUps.VEHICLE_ID)) {
 							vehicle_id_column = i;
 						} else if (columns[i].equalsIgnoreCase(FillUps.AMOUNT)) {
-							amount_column = 0;
+							amount_column = i;
 						}
 					}
 
