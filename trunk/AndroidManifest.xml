@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="com.evancharlton.mileage" android:versionName="1.8.2" android:versionCode="1820">
+	package="com.evancharlton.mileage" android:versionName="1.8.3" android:versionCode="1830">
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 	<application android:label="@string/app_name" android:icon="@drawable/gasbuttonx">
 		<meta-data android:name="org.openintents.updatechecker.UPDATE_URL" android:value="http://evancharlton.com/projects/mileage/version" />

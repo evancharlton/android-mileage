@@ -93,6 +93,8 @@ public class HistoryView extends Activity implements View.OnCreateContextMenuLis
 			}
 		});
 		m_history = new HashMap<Double, Double>();
+
+		buildVehicleSpinner();
 	}
 
 	protected void onItemClick(int arg2, long arg3) {
@@ -103,9 +105,7 @@ public class HistoryView extends Activity implements View.OnCreateContextMenuLis
 		startActivity(intent);
 	}
 
-	public void onResume() {
-		super.onResume();
-
+	private void buildVehicleSpinner() {
 		m_vehicles = (Spinner) findViewById(R.id.vehicles);
 
 		String[] projection = new String[] {
@@ -133,6 +133,10 @@ public class HistoryView extends Activity implements View.OnCreateContextMenuLis
 		if (vehicleAdapter.getCount() == 1) {
 			m_vehicles.setVisibility(View.GONE);
 		}
+	}
+
+	public void onResume() {
+		super.onResume();
 
 		m_prefs = PreferencesProvider.getInstance(this);
 		m_calcEngine = m_prefs.getCalculator();
@@ -161,10 +165,17 @@ public class HistoryView extends Activity implements View.OnCreateContextMenuLis
 				R.id.history_mileage
 		};
 
-		String selection = FillUps.VEHICLE_ID + " = ?";
-		String[] selectionArgs = new String[] {
-			String.valueOf(m_vehicles.getSelectedItemId())
-		};
+		String selection;
+		String[] selectionArgs;
+		if (m_vehicles.getVisibility() != View.GONE) {
+			selection = FillUps.VEHICLE_ID + " = ?";
+			selectionArgs = new String[] {
+				String.valueOf(m_vehicles.getSelectedItemId())
+			};
+		} else {
+			selection = FillUps.VEHICLE_ID + " = (select " + Vehicles._ID + " from " + FillUpsProvider.VEHICLES_TABLE_NAME + " order by " + Vehicles.DEFAULT + " desc limit 1)";
+			selectionArgs = null;
+		}
 
 		Cursor historyCursor = managedQuery(FillUps.CONTENT_URI, PROJECTIONS, selection, selectionArgs, FillUps.DEFAULT_SORT_ORDER);
 		if (historyCursor.getCount() > 0) {
