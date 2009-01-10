@@ -191,7 +191,6 @@ public class CSVViewConfirm extends Dialog {
 								if (s != null) {
 									long v_id = s.getSelectedItemId();
 									params[j] = String.valueOf(v_id);
-									break;
 								}
 							}
 						}
