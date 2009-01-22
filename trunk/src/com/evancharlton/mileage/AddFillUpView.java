@@ -76,11 +76,6 @@ public class AddFillUpView extends Activity implements Persistent {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		Calendar c = Calendar.getInstance();
-		m_year = c.get(Calendar.YEAR);
-		m_month = c.get(Calendar.MONTH);
-		m_day = c.get(Calendar.DAY_OF_MONTH);
-
 		setContentView(R.layout.fillup);
 
 		setUpOSK();
@@ -116,6 +111,12 @@ public class AddFillUpView extends Activity implements Persistent {
 	@Override
 	public void onResume() {
 		super.onResume();
+
+		Calendar c = Calendar.getInstance();
+		m_year = c.get(Calendar.YEAR);
+		m_month = c.get(Calendar.MONTH);
+		m_day = c.get(Calendar.DAY_OF_MONTH);
+
 		updateDate();
 		loadPrefs();
 	}

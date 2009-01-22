@@ -327,23 +327,18 @@
 		</exec>
 	</target>
 	
-	<target name="test" depends="sign">
-		<echo>Running JUnit for ${application-package}.${ant.project.name}Suite...</echo>
-		<junit haltonfailure="yes" printsummary="yes" showoutput="yes">
-			<classpath>
-				<pathelement path="bin/"/>
-				<pathelement location="bin/${out-signed-package}.apk"/>
-				<pathelement path="${java.class.path}"/>
-				<fileset dir="${external-libs}" includes="*.jar"/>
-				<pathelement location="${android-jar}"/>
-			</classpath>
-			<formatter type="plain"/>
-				<batchtest fork="yes" todir="${reports.tests}">
-				<fileset dir="${src.tests}">
-					<include name="**/*Test.java"/>
-				</fileset>
-			</batchtest>
-		</junit>
+	<target name="test" depends="u,i">
+		<echo>Installing ${application-package}.${ant.project.name}...</echo>
+		<exec executable="cd">
+			<arg line="test"/>
+		</exec>
+		<exec executable="ant">
+			<arg line="install"/>
+		</exec>
+		<echo>Running tests ... </echo>
+		<exec executable="${adb}">
+			<arg line="shell am instrument -w ${application-package}/android.test.InstrumentationTestRunner"/>
+		</exec>
 	</target>
 	
 </project>
