@@ -337,7 +337,7 @@
 		</exec>
 		<echo>Running tests ... </echo>
 		<exec executable="${adb}">
-			<arg line="shell am instrument -w ${application-package}/android.test.InstrumentationTestRunner"/>
+			<arg line="shell am instrument -w ${application-package}.tests/android.test.InstrumentationTestRunner"/>
 		</exec>
 	</target>
 	
