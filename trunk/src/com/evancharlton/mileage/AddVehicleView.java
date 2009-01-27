@@ -2,7 +2,6 @@ package com.evancharlton.mileage;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.ContentValues;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -10,6 +9,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+
+import com.evancharlton.mileage.models.Vehicle;
 
 public class AddVehicleView extends Activity {
 	protected EditText m_year;
@@ -40,58 +41,46 @@ public class AddVehicleView extends Activity {
 		// set up the handlers
 		m_save.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				ContentValues values = save();
-				if (values == null) {
+				Vehicle vehicle = setData();
+				if (vehicle == null) {
 					return;
 				}
 
-				getContentResolver().insert(Vehicles.CONTENT_URI, values);
+				vehicle.save();
+
 				finish();
 			}
 		});
 	}
 
-	protected ContentValues save() {
+	protected Vehicle setData() {
 		// do some error checking
-		String year = m_year.getText().toString().trim();
-		String make = m_make.getText().toString().trim();
-		String model = m_model.getText().toString().trim();
-		String title = m_title.getText().toString().trim();
+		String year = m_year.getText().toString();
+		String make = m_make.getText().toString();
+		String model = m_model.getText().toString();
+		String title = m_title.getText().toString();
 
-		int error = 0;
-		if (year.length() == 0) {
-			error = R.string.error_year;
-		}
-		if (make.length() == 0) {
-			error = R.string.error_make;
-		}
-		if (model.length() == 0) {
-			error = R.string.error_model;
-		}
-		if (title.length() == 0) {
-			error = R.string.error_title;
+		Vehicle v = new Vehicle();
+		v.setTitle(title);
+		v.setMake(make);
+		v.setModel(model);
+		v.setYear(year);
+
+		if (m_default.isChecked()) {
+			v.setDefault(true);
 		}
 
-		if (error != 0) {
+		int valid = v.validate();
+
+		if (valid > 0) {
 			AlertDialog dlg = new AlertDialog.Builder(this).create();
 			dlg.setTitle(R.string.error);
-			dlg.setMessage(getString(error));
+			dlg.setMessage(getString(valid));
 			dlg.show();
 			return null;
 		}
 
-		// save the changes
-		ContentValues values = new ContentValues();
-		values.put(Vehicles.YEAR, m_year.getText().toString().trim());
-		values.put(Vehicles.MAKE, m_make.getText().toString().trim());
-		values.put(Vehicles.MODEL, m_model.getText().toString().trim());
-		values.put(Vehicles.TITLE, m_title.getText().toString().trim());
-
-		if (m_default.isChecked()) {
-			values.put(Vehicles.DEFAULT, System.currentTimeMillis());
-		}
-
-		return values;
+		return v;
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {

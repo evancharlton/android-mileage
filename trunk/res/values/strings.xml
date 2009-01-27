@@ -52,6 +52,8 @@
 	<string name="vehicle_add">Add Vehicle</string>
 	<string name="vehicle_save">Save Vehicle</string>
 	
+	<string name="fillup_saved">Fill-up Saved</string>
+	
 	<string name="context_litres_to_gallons">Litres to Gallons</string>
 	<string name="context_litres_to_imp_gallons">Litres to Imperial Gallons</string>
 	<string name="context_gallons_to_litres">Gallons to Litres</string>
@@ -127,6 +129,7 @@
 	<string name="error_make">Make can not be blank!</string>
 	<string name="error_model">Model can not be blank!</string>
 	<string name="error_title">Title can not be blank!</string>
+	<string name="error_vehicle">No vehicle ID set!</string>
 	
 	<string name="help">Help</string>
 	<string name="help_import_export">Select an item to import or export that file format</string>

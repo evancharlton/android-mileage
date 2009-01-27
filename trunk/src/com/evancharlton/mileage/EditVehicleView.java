@@ -2,7 +2,6 @@ package com.evancharlton.mileage;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -10,6 +9,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
+import com.evancharlton.mileage.models.Vehicle;
 
 public class EditVehicleView extends AddVehicleView {
 	private AlertDialog m_deleteDialog;
@@ -30,13 +31,14 @@ public class EditVehicleView extends AddVehicleView {
 
 		m_save.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				ContentValues values = save();
-				if (values == null) {
+				Vehicle vehicle = setData();
+				if (vehicle == null) {
 					return;
 				}
-
-				getContentResolver().update(getIntent().getData(), values, null, null);
+				vehicle.save();
 				finish();
+
+				// TODO: show Toast
 			}
 		});
 
@@ -52,14 +54,14 @@ public class EditVehicleView extends AddVehicleView {
 		}, null, null, Vehicles.DEFAULT_SORT_ORDER);
 	}
 
-	protected ContentValues save() {
-		ContentValues values = super.save();
+	protected Vehicle setData() {
+		Vehicle vehicle = super.setData();
 		if (m_vehicleWasDefault && m_default.isChecked() == false) {
 			// remove it from being default, fall back to whatever was last
 			// default
-			values.put(Vehicles.DEFAULT, 0);
+			vehicle.setDefault(false);
 		}
-		return values;
+		return vehicle;
 	}
 
 	private void loadData() {

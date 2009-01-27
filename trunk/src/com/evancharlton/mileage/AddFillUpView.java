@@ -10,7 +10,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.location.Location;
@@ -31,6 +30,9 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
+
+import com.evancharlton.mileage.models.FillUp;
 
 public class AddFillUpView extends Activity implements Persistent {
 	public static final String PACKAGE = "com.evancharlton.mileage";
@@ -245,13 +247,12 @@ public class AddFillUpView extends Activity implements Persistent {
 		m_saveButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				// save the new fill-up
-				ContentValues values = saveData();
-				if (values == null) {
-					return;
+				FillUp fillup = saveData();
+				if (fillup != null) {
+					fillup.save();
+					resetForm(v);
+					Toast.makeText(AddFillUpView.this, getString(R.string.fillup_saved), Toast.LENGTH_SHORT);
 				}
-
-				getContentResolver().insert(FillUps.CONTENT_URI, values);
-				resetForm(v);
 			}
 		});
 
@@ -375,16 +376,21 @@ public class AddFillUpView extends Activity implements Persistent {
 		}
 	}
 
-	protected ContentValues saveData() {
-		ContentValues values = new ContentValues();
+	protected FillUp saveData() {
+		FillUp fillup = new FillUp(PreferencesProvider.getInstance(this).getCalculator());
+
 		boolean error = false;
 		int errorMsg = 0;
 
 		long vehicleId = m_vehicleSpinner.getSelectedItemId();
 
+		fillup.setComment(m_commentEdit.getText().toString());
+		fillup.setVehicleId(vehicleId);
+		fillup.setDate(m_day, m_month, m_year);
+
 		try {
-			double cost = Double.parseDouble(m_priceEdit.getText().toString());
-			values.put(FillUps.COST, cost);
+			double price = Double.parseDouble(m_priceEdit.getText().toString());
+			fillup.setPrice(price);
 		} catch (NumberFormatException nfe) {
 			error = true;
 			errorMsg = R.string.error_cost;
@@ -392,51 +398,27 @@ public class AddFillUpView extends Activity implements Persistent {
 
 		try {
 			double amount = Double.parseDouble(m_amountEdit.getText().toString());
-			values.put(FillUps.AMOUNT, amount);
+			fillup.setAmount(amount);
 		} catch (NumberFormatException nfe) {
 			error = true;
 			errorMsg = R.string.error_amount;
 		}
 
 		try {
-			String miles = m_mileageEdit.getText().toString().trim();
-			double mileage = 0.0D;
-			if (miles.startsWith("+")) {
-				// we have an incremental mileage
-				String[] projection = new String[] {
-						FillUps._ID,
-						FillUps.MILEAGE
-				};
-				Cursor c = managedQuery(FillUps.CONTENT_URI, projection, FillUps.VEHICLE_ID + " = ?", new String[] {
-					String.valueOf(vehicleId)
-				}, FillUps.DEFAULT_SORT_ORDER);
-				if (c.getCount() > 0) {
-					c.moveToFirst();
-					double previous_miles = c.getDouble(1);
-					mileage = Double.parseDouble(miles.substring(1)) + previous_miles;
-				}
-			} else {
-				mileage = Double.parseDouble(miles);
-			}
-			values.put(FillUps.MILEAGE, mileage);
+			String odometer = m_mileageEdit.getText().toString().trim();
+			fillup.setOdometer(odometer);
 		} catch (NumberFormatException nfe) {
 			error = true;
 			errorMsg = R.string.error_mileage;
 		}
 
 		LocationManager location = (LocationManager) getSystemService(LOCATION_SERVICE);
-		boolean locationStored = false;
 		if (location != null) {
-			Location loc = location.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+			Location loc = location.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 			if (loc != null) {
-				values.put(FillUps.LATITUDE, loc.getLatitude());
-				values.put(FillUps.LONGITUDE, loc.getLongitude());
-				locationStored = true;
+				fillup.setLatitude(loc.getLatitude());
+				fillup.setLongitude(loc.getLongitude());
 			}
-		}
-		if (!locationStored) {
-			values.put(FillUps.LATITUDE, 0D);
-			values.put(FillUps.LONGITUDE, 0D);
 		}
 
 		if (error) {
@@ -447,12 +429,7 @@ public class AddFillUpView extends Activity implements Persistent {
 			return null;
 		}
 
-		values.put(FillUps.COMMENT, m_commentEdit.getText().toString().trim());
-		values.put(FillUps.VEHICLE_ID, vehicleId);
-
-		Calendar c = new GregorianCalendar(m_year, m_month, m_day);
-		values.put(FillUps.DATE, c.getTimeInMillis());
-		return values;
+		return fillup;
 	}
 
 	@Override

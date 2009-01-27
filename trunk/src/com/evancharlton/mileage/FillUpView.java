@@ -4,7 +4,6 @@ import java.util.Calendar;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -12,6 +11,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
+import com.evancharlton.mileage.models.FillUp;
 
 public class FillUpView extends AddFillUpView {
 	private static final int DELETE_DIALOG_ID = 1;
@@ -28,15 +29,13 @@ public class FillUpView extends AddFillUpView {
 		super.initHandlers();
 		m_saveButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
+				// get the ID
+				long id = Long.parseLong(getIntent().getData().getLastPathSegment());
 				// save the new fill-up
-				ContentValues values = saveData();
-				if (values == null) {
-					return;
-				}
-				double mileage = Double.parseDouble(m_mileageEdit.getText().toString().trim());
-				values.put(FillUps.MILEAGE, mileage);
+				FillUp fillup = saveData();
+				fillup.setId(id);
 
-				getContentResolver().update(getIntent().getData(), values, null, null);
+				fillup.save();
 				finish();
 			}
 		});

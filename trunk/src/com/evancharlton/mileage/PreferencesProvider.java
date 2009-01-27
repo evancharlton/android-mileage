@@ -4,7 +4,7 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 
@@ -12,7 +12,7 @@ import com.evancharlton.mileage.calculators.CalculationEngine;
 
 public class PreferencesProvider {
 	private static PreferencesProvider s_instance = null;
-	private Activity m_activity;
+	private Context m_activity;
 	private SharedPreferences m_settings;
 	private CalculationEngine m_calcEngine;
 
@@ -41,14 +41,14 @@ public class PreferencesProvider {
 	public static final int LITRES_PER_CKM = 7;
 	public static final int IMP_GALLONS_PER_CKM = 8;
 
-	private PreferencesProvider(Activity activity) {
-		m_activity = activity;
+	private PreferencesProvider(Context context) {
+		m_activity = context;
 		m_settings = m_activity.getSharedPreferences(PREFS_NAME, 0);
 	}
 
-	public static PreferencesProvider getInstance(Activity activity) {
+	public static PreferencesProvider getInstance(Context context) {
 		if (s_instance == null) {
-			s_instance = new PreferencesProvider(activity);
+			s_instance = new PreferencesProvider(context);
 		}
 		return s_instance;
 	}
