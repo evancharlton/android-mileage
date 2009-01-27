@@ -1,8 +1,7 @@
 package com.evancharlton.mileage.calculators;
 
-import junit.framework.TestCase;
-
 import com.evancharlton.mileage.PreferencesProvider;
+import com.evancharlton.mileage.tests.TestCase;
 
 public class CalculationEngineTest extends TestCase {
 	private CalculationEngine ce;
@@ -121,9 +120,5 @@ public class CalculationEngineTest extends TestCase {
 		ce.setInputDistance(PreferencesProvider.KILOMETERS);
 		ce.setInputVolume(PreferencesProvider.IMP_GALLONS);
 		assertCloseEnough(8.3267384, ce.calculateEconomy(100, 10));
-	}
-
-	private void assertCloseEnough(double expected, double actual) {
-		assertTrue(Math.abs(expected - actual) < 0.01);
 	}
 }
