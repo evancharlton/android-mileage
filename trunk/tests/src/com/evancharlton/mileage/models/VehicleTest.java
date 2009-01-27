@@ -7,9 +7,12 @@ import com.evancharlton.mileage.FillUpsProvider;
 import com.evancharlton.mileage.Mileage;
 
 public class VehicleTest extends TestCase {
-	public void tearDown() {
+	protected void setUp() {
+	}
+
+	protected void tearDown() {
 		SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase("/data/data/" + Mileage.PACKAGE + "/databases/" + FillUpsProvider.DATABASE_NAME, null);
-		db.delete(FillUpsProvider.FILLUPS_TABLE_NAME, "1", null);
+		db.delete(FillUpsProvider.VEHICLES_TABLE_NAME, "1", null);
 		db.close();
 	}
 
@@ -50,12 +53,14 @@ public class VehicleTest extends TestCase {
 		assertFalse(v.isDefault());
 		long id = v.save();
 
+		assertTrue(v.isDefault());
+
 		v.setDefault(false);
 		assertFalse(v.isDefault());
 		id = v.save();
 
 		v = new Vehicle(id);
-		assertFalse(v.isDefault());
+		assertTrue(v.isDefault());
 	}
 
 	public void testTitle() {
