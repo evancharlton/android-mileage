@@ -1,5 +1,9 @@
 package com.evancharlton.mileage;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
@@ -18,7 +22,10 @@ import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
+
+import com.evancharlton.mileage.models.Vehicle;
 
 public class VehiclesView extends ListActivity implements View.OnCreateContextMenuListener {
 	public static final String TAG = "VehiclesList";
@@ -31,9 +38,14 @@ public class VehiclesView extends ListActivity implements View.OnCreateContextMe
 	private long m_deleteId;
 	private AlertDialog m_deleteDialog;
 
-	private static final String[] PROJECTIONS = new String[] {
-			Vehicles._ID,
-			Vehicles.TITLE
+	private static final ArrayList<String> PROJECTION_LIST = new ArrayList<String>();
+
+	static {
+		PROJECTION_LIST.add(Vehicle._ID);
+		PROJECTION_LIST.add(Vehicle.TITLE);
+		PROJECTION_LIST.add(Vehicle.YEAR);
+		PROJECTION_LIST.add(Vehicle.MAKE);
+		PROJECTION_LIST.add(Vehicle.MODEL);
 	};
 
 	@Override
@@ -50,18 +62,19 @@ public class VehiclesView extends ListActivity implements View.OnCreateContextMe
 
 		Intent intent = getIntent();
 		if (intent.getData() == null) {
-			intent.setData(Vehicles.CONTENT_URI);
+			intent.setData(Vehicle.CONTENT_URI);
 		}
 
 		getListView().setOnCreateContextMenuListener(this);
 
-		Cursor c = managedQuery(intent.getData(), PROJECTIONS, null, null, Vehicles.DEFAULT_SORT_ORDER);
+		Cursor c = managedQuery(intent.getData(), PROJECTION_LIST.toArray(new String[PROJECTION_LIST.size()]), null, null, Vehicle.DEFAULT_SORT_ORDER);
 
 		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.vehicles, c, new String[] {
-			Vehicles.TITLE
+			Vehicle.TITLE
 		}, new int[] {
 			android.R.id.text1
 		});
+		adapter.setViewBinder(m_listBinder);
 		setListAdapter(adapter);
 	}
 
@@ -123,9 +136,9 @@ public class VehiclesView extends ListActivity implements View.OnCreateContextMe
 					onListItemClick(getListView(), info.targetView, info.position, id);
 					return true;
 				case MENU_DEFAULT:
-					Uri data = ContentUris.withAppendedId(Vehicles.CONTENT_URI, id);
+					Uri data = ContentUris.withAppendedId(Vehicle.CONTENT_URI, id);
 					ContentValues values = new ContentValues();
-					values.put(Vehicles.DEFAULT, System.currentTimeMillis());
+					values.put(Vehicle.DEFAULT, System.currentTimeMillis());
 					getContentResolver().update(data, values, null, null);
 					return true;
 			}
@@ -144,9 +157,29 @@ public class VehiclesView extends ListActivity implements View.OnCreateContextMe
 	}
 
 	private void delete() {
-		Uri uri = ContentUris.withAppendedId(Vehicles.CONTENT_URI, m_deleteId);
+		Uri uri = ContentUris.withAppendedId(Vehicle.CONTENT_URI, m_deleteId);
 		getContentResolver().delete(uri, null, null);
 	}
+
+	private SimpleCursorAdapter.ViewBinder m_listBinder = new SimpleCursorAdapter.ViewBinder() {
+		public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
+			final int titleIndex = PROJECTION_LIST.indexOf(Vehicle.TITLE);
+			if (columnIndex == titleIndex) { // title index
+				String title = cursor.getString(titleIndex);
+				if (title.length() == 0) {
+					Map<String, String> data = new HashMap<String, String>();
+					data.put(Vehicle.MAKE, cursor.getString(PROJECTION_LIST.indexOf(Vehicle.MAKE)));
+					data.put(Vehicle.YEAR, cursor.getString(PROJECTION_LIST.indexOf(Vehicle.YEAR)));
+					data.put(Vehicle.MODEL, cursor.getString(PROJECTION_LIST.indexOf(Vehicle.MODEL)));
+					Vehicle vehicle = new Vehicle(data);
+					title = vehicle.getTitle();
+				}
+				((TextView) view).setText(title);
+				return true;
+			}
+			return false;
+		}
+	};
 
 	private DialogInterface.OnClickListener m_deleteListener = new DialogInterface.OnClickListener() {
 		public void onClick(DialogInterface dialog, int which) {

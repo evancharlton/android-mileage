@@ -3,7 +3,6 @@ package com.evancharlton.mileage;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.Menu;
@@ -31,14 +30,17 @@ public class EditVehicleView extends AddVehicleView {
 
 		m_save.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
+				long id = Long.parseLong(getIntent().getData().getLastPathSegment());
 				Vehicle vehicle = setData();
 				if (vehicle == null) {
+					showMessage(false);
 					return;
 				}
+				vehicle.setId(id);
 				vehicle.save();
 				finish();
 
-				// TODO: show Toast
+				showMessage(true);
 			}
 		});
 
@@ -48,10 +50,10 @@ public class EditVehicleView extends AddVehicleView {
 		m_deleteDialog.setButton(getString(R.string.yes), m_deleteListener);
 		m_deleteDialog.setButton2(getString(R.string.no), m_deleteListener);
 
-		m_vehicleCursor = managedQuery(Vehicles.CONTENT_URI, new String[] {
-				Vehicles._ID,
-				Vehicles.TITLE
-		}, null, null, Vehicles.DEFAULT_SORT_ORDER);
+		m_vehicleCursor = managedQuery(Vehicle.CONTENT_URI, new String[] {
+				Vehicle._ID,
+				Vehicle.TITLE
+		}, null, null, Vehicle.DEFAULT_SORT_ORDER);
 	}
 
 	protected Vehicle setData() {
@@ -65,30 +67,18 @@ public class EditVehicleView extends AddVehicleView {
 	}
 
 	private void loadData() {
-		Intent data = getIntent();
+		long id = Long.parseLong(getIntent().getData().getLastPathSegment());
+		Vehicle v = new Vehicle(id);
 
-		// load the data
-		String[] projections = new String[] {
-				Vehicles._ID,
-				Vehicles.YEAR,
-				Vehicles.MAKE,
-				Vehicles.MODEL,
-				Vehicles.TITLE
-		};
-
-		Cursor c = managedQuery(data.getData(), projections, null, null, null);
-		c.moveToFirst();
-
-		m_year.setText(c.getString(1));
-		m_make.setText(c.getString(2));
-		m_model.setText(c.getString(3));
-		m_title.setText(c.getString(4));
+		m_year.setText(v.getYear());
+		m_make.setText(v.getMake());
+		m_model.setText(v.getModel());
+		m_title.setText(v.getTitle());
 
 		if (m_vehicleCursor.getCount() == 1) {
 			m_default.setVisibility(View.GONE);
 		} else {
-			m_vehicleCursor.moveToFirst();
-			if (m_vehicleCursor.getLong(0) == c.getLong(0)) {
+			if (v.isDefault()) {
 				m_default.setChecked(true);
 				m_vehicleWasDefault = true;
 			}

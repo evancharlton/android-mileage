@@ -14,10 +14,10 @@ import android.os.Message;
 import android.widget.TextView;
 import au.com.bytecode.opencsv.CSVWriter;
 
-import com.evancharlton.mileage.FillUps;
 import com.evancharlton.mileage.FillUpsProvider;
 import com.evancharlton.mileage.Mileage;
 import com.evancharlton.mileage.R;
+import com.evancharlton.mileage.models.FillUp;
 
 public class CSVView extends ExportView {
 	public void onCreate(Bundle savedInstanceState) {
@@ -33,16 +33,16 @@ public class CSVView extends ExportView {
 					HashMap<String, String> fillupsProjection = FillUpsProvider.getFillUpsProjection();
 					Set<String> tmp_keySet = fillupsProjection.keySet();
 					ArrayList<String> keySet = new ArrayList<String>(tmp_keySet);
-					keySet.remove(FillUps._ID);
+					keySet.remove(FillUp._ID);
 					String[] proj = keySet.toArray(new String[keySet.size()]);
 					SQLiteDatabase db = SQLiteDatabase.openDatabase("/data/data/" + Mileage.PACKAGE + "/databases/" + FillUpsProvider.DATABASE_NAME, null, SQLiteDatabase.OPEN_READONLY);
-					Cursor c = db.query(FillUpsProvider.FILLUPS_TABLE_NAME, proj, null, null, null, null, FillUps._ID + " ASC");
+					Cursor c = db.query(FillUpsProvider.FILLUPS_TABLE_NAME, proj, null, null, null, null, FillUp._ID + " ASC");
 					c.moveToFirst();
 
 					// transform the column keySet into the plain English form
 					int i = 0;
 					for (String key : keySet) {
-						String english = FillUps.PLAINTEXT.get(key);
+						String english = FillUp.PLAINTEXT.get(key);
 						if (english != null) {
 							keySet.set(i, english);
 						}

@@ -6,7 +6,7 @@ import android.provider.BaseColumns;
 import com.evancharlton.mileage.FillUpsProvider;
 import com.evancharlton.mileage.Mileage;
 
-public abstract class Model {
+public abstract class Model implements BaseColumns {
 	protected SQLiteDatabase m_db = null;
 	protected long m_id = -1;
 	private String m_tableName = null;

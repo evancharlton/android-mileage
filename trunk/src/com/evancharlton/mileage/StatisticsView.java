@@ -30,6 +30,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.evancharlton.mileage.calculators.CalculationEngine;
+import com.evancharlton.mileage.models.FillUp;
+import com.evancharlton.mileage.models.Vehicle;
 
 public class StatisticsView extends Activity {
 	private static final int MAX_DATA_POINTS = 100;
@@ -373,13 +375,13 @@ public class StatisticsView extends Activity {
 	}
 
 	private void populateSpinner() {
-		Cursor c = managedQuery(Vehicles.CONTENT_URI, new String[] {
-				Vehicles._ID,
-				Vehicles.TITLE
-		}, null, null, Vehicles.DEFAULT_SORT_ORDER);
+		Cursor c = managedQuery(Vehicle.CONTENT_URI, new String[] {
+				Vehicle._ID,
+				Vehicle.TITLE
+		}, null, null, Vehicle.DEFAULT_SORT_ORDER);
 
 		SimpleCursorAdapter vehicleAdapter = new SimpleCursorAdapter(this, android.R.layout.simple_spinner_item, c, new String[] {
-			Vehicles.TITLE
+			Vehicle.TITLE
 		}, new int[] {
 			android.R.id.text1
 		});
@@ -394,14 +396,14 @@ public class StatisticsView extends Activity {
 
 	private void calculateStatistics(long id) {
 		String[] projection = new String[] {
-				FillUps.AMOUNT,
-				FillUps.COST,
-				FillUps.DATE,
-				FillUps.MILEAGE
+				FillUp.AMOUNT,
+				FillUp.COST,
+				FillUp.DATE,
+				FillUp.MILEAGE
 		};
-		Cursor c = managedQuery(FillUps.CONTENT_URI, projection, FillUps.VEHICLE_ID + " = ?", new String[] {
+		Cursor c = managedQuery(FillUp.CONTENT_URI, projection, FillUp.VEHICLE_ID + " = ?", new String[] {
 			String.valueOf(id)
-		}, FillUps.DEFAULT_SORT_ORDER);
+		}, FillUp.DEFAULT_SORT_ORDER);
 
 		HashMap<Integer, String> calculatedData = new HashMap<Integer, String>();
 

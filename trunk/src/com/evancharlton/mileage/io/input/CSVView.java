@@ -19,8 +19,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import au.com.bytecode.opencsv.CSVReader;
 
-import com.evancharlton.mileage.FillUps;
 import com.evancharlton.mileage.R;
+import com.evancharlton.mileage.models.FillUp;
 
 public class CSVView extends ImportView {
 	private List<Map<String, String>> m_data = new ArrayList<Map<String, String>>();
@@ -60,18 +60,18 @@ public class CSVView extends ImportView {
 						columns[i] = columns[i].trim();
 
 						// translate them back into SQL columns
-						for (String key : FillUps.PLAINTEXT.keySet()) {
-							String val = FillUps.PLAINTEXT.get(key).trim();
+						for (String key : FillUp.PLAINTEXT.keySet()) {
+							String val = FillUp.PLAINTEXT.get(key).trim();
 							if (val.equalsIgnoreCase(columns[i])) {
 								columns[i] = key;
 							}
 						}
 
-						if (columns[i].equalsIgnoreCase(FillUps.DATE)) {
+						if (columns[i].equalsIgnoreCase(FillUp.DATE)) {
 							date_column = i;
-						} else if (columns[i].equalsIgnoreCase(FillUps.VEHICLE_ID)) {
+						} else if (columns[i].equalsIgnoreCase(FillUp.VEHICLE_ID)) {
 							vehicle_id_column = i;
-						} else if (columns[i].equalsIgnoreCase(FillUps.AMOUNT)) {
+						} else if (columns[i].equalsIgnoreCase(FillUp.AMOUNT)) {
 							amount_column = i;
 						}
 					}

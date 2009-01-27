@@ -28,6 +28,8 @@ import android.widget.TextView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
 import com.evancharlton.mileage.calculators.CalculationEngine;
+import com.evancharlton.mileage.models.FillUp;
+import com.evancharlton.mileage.models.Vehicle;
 
 public class HistoryView extends Activity implements View.OnCreateContextMenuListener {
 	public static final int MENU_IMPORT_EXPORT = Menu.FIRST;
@@ -65,13 +67,13 @@ public class HistoryView extends Activity implements View.OnCreateContextMenuLis
 	private Spinner m_vehicles;
 
 	private static final String[] PROJECTIONS = new String[] {
-			FillUps._ID,
-			FillUps.AMOUNT,
-			FillUps.COST,
-			FillUps.DATE,
-			FillUps.COMMENT,
-			FillUps.VEHICLE_ID,
-			FillUps.MILEAGE
+			FillUp._ID,
+			FillUp.AMOUNT,
+			FillUp.COST,
+			FillUp.DATE,
+			FillUp.COMMENT,
+			FillUp.VEHICLE_ID,
+			FillUp.MILEAGE
 	};
 
 	@Override
@@ -109,13 +111,13 @@ public class HistoryView extends Activity implements View.OnCreateContextMenuLis
 		m_vehicles = (Spinner) findViewById(R.id.vehicles);
 
 		String[] projection = new String[] {
-				Vehicles._ID,
-				Vehicles.TITLE
+				Vehicle._ID,
+				Vehicle.TITLE
 		};
 
-		Cursor vehicleCursor = managedQuery(Vehicles.CONTENT_URI, projection, null, null, Vehicles.DEFAULT_SORT_ORDER);
+		Cursor vehicleCursor = managedQuery(Vehicle.CONTENT_URI, projection, null, null, Vehicle.DEFAULT_SORT_ORDER);
 		SimpleCursorAdapter vehicleAdapter = new SimpleCursorAdapter(this, android.R.layout.simple_spinner_item, vehicleCursor, new String[] {
-			Vehicles.TITLE
+			Vehicle.TITLE
 		}, new int[] {
 			android.R.id.text1
 		});
@@ -145,16 +147,16 @@ public class HistoryView extends Activity implements View.OnCreateContextMenuLis
 
 		Intent intent = getIntent();
 		if (intent.getData() == null) {
-			intent.setData(FillUps.CONTENT_URI);
+			intent.setData(FillUp.CONTENT_URI);
 		}
 
 		String[] from = new String[] {
-				FillUps.AMOUNT,
-				FillUps.COST,
-				FillUps.DATE,
-				FillUps.COMMENT,
-				FillUps.VEHICLE_ID,
-				FillUps.MILEAGE
+				FillUp.AMOUNT,
+				FillUp.COST,
+				FillUp.DATE,
+				FillUp.COMMENT,
+				FillUp.VEHICLE_ID,
+				FillUp.MILEAGE
 		};
 		int[] to = new int[] {
 				R.id.history_amount,
@@ -168,16 +170,16 @@ public class HistoryView extends Activity implements View.OnCreateContextMenuLis
 		String selection;
 		String[] selectionArgs;
 		if (m_vehicles.getVisibility() != View.GONE) {
-			selection = FillUps.VEHICLE_ID + " = ?";
+			selection = FillUp.VEHICLE_ID + " = ?";
 			selectionArgs = new String[] {
 				String.valueOf(m_vehicles.getSelectedItemId())
 			};
 		} else {
-			selection = FillUps.VEHICLE_ID + " = (select " + Vehicles._ID + " from " + FillUpsProvider.VEHICLES_TABLE_NAME + " order by " + Vehicles.DEFAULT + " desc limit 1)";
+			selection = FillUp.VEHICLE_ID + " = (select " + Vehicle._ID + " from " + FillUpsProvider.VEHICLES_TABLE_NAME + " order by " + Vehicle.DEFAULT + " desc limit 1)";
 			selectionArgs = null;
 		}
 
-		Cursor historyCursor = managedQuery(FillUps.CONTENT_URI, PROJECTIONS, selection, selectionArgs, FillUps.DEFAULT_SORT_ORDER);
+		Cursor historyCursor = managedQuery(FillUp.CONTENT_URI, PROJECTIONS, selection, selectionArgs, FillUp.DEFAULT_SORT_ORDER);
 		if (historyCursor.getCount() > 0) {
 			historyCursor.moveToFirst();
 			Map<Double, Double> milesToAmt = new HashMap<Double, Double>();
@@ -264,7 +266,7 @@ public class HistoryView extends Activity implements View.OnCreateContextMenuLis
 	}
 
 	private void delete() {
-		Uri uri = ContentUris.withAppendedId(FillUps.CONTENT_URI, m_deleteId);
+		Uri uri = ContentUris.withAppendedId(FillUp.CONTENT_URI, m_deleteId);
 		getContentResolver().delete(uri, null, null);
 		onResume();
 	}

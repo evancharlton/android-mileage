@@ -16,6 +16,9 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
 
+import com.evancharlton.mileage.models.FillUp;
+import com.evancharlton.mileage.models.Vehicle;
+
 public class FillUpsProvider extends ContentProvider {
 
 	// private static final String TAG = "FillUpsProvider";
@@ -37,29 +40,29 @@ public class FillUpsProvider extends ContentProvider {
 
 	static {
 		s_uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-		s_uriMatcher.addURI(FillUps.AUTHORITY, "fillups", FILLUPS);
-		s_uriMatcher.addURI(FillUps.AUTHORITY, "fillups/#", FILLUP_ID);
-		s_uriMatcher.addURI(Vehicles.AUTHORITY, "vehicles", VEHICLES);
-		s_uriMatcher.addURI(Vehicles.AUTHORITY, "vehicles/#", VEHICLE_ID);
+		s_uriMatcher.addURI(FillUp.AUTHORITY, "fillups", FILLUPS);
+		s_uriMatcher.addURI(FillUp.AUTHORITY, "fillups/#", FILLUP_ID);
+		s_uriMatcher.addURI(Vehicle.AUTHORITY, "vehicles", VEHICLES);
+		s_uriMatcher.addURI(Vehicle.AUTHORITY, "vehicles/#", VEHICLE_ID);
 
 		s_fillUpsProjectionMap = new HashMap<String, String>();
-		s_fillUpsProjectionMap.put(FillUps._ID, FillUps._ID);
-		s_fillUpsProjectionMap.put(FillUps.COST, FillUps.COST);
-		s_fillUpsProjectionMap.put(FillUps.AMOUNT, FillUps.AMOUNT);
-		s_fillUpsProjectionMap.put(FillUps.MILEAGE, FillUps.MILEAGE);
-		s_fillUpsProjectionMap.put(FillUps.VEHICLE_ID, FillUps.VEHICLE_ID);
-		s_fillUpsProjectionMap.put(FillUps.DATE, FillUps.DATE);
-		s_fillUpsProjectionMap.put(FillUps.LATITUDE, FillUps.LATITUDE);
-		s_fillUpsProjectionMap.put(FillUps.LONGITUDE, FillUps.LONGITUDE);
-		s_fillUpsProjectionMap.put(FillUps.COMMENT, FillUps.COMMENT);
+		s_fillUpsProjectionMap.put(FillUp._ID, FillUp._ID);
+		s_fillUpsProjectionMap.put(FillUp.COST, FillUp.COST);
+		s_fillUpsProjectionMap.put(FillUp.AMOUNT, FillUp.AMOUNT);
+		s_fillUpsProjectionMap.put(FillUp.MILEAGE, FillUp.MILEAGE);
+		s_fillUpsProjectionMap.put(FillUp.VEHICLE_ID, FillUp.VEHICLE_ID);
+		s_fillUpsProjectionMap.put(FillUp.DATE, FillUp.DATE);
+		s_fillUpsProjectionMap.put(FillUp.LATITUDE, FillUp.LATITUDE);
+		s_fillUpsProjectionMap.put(FillUp.LONGITUDE, FillUp.LONGITUDE);
+		s_fillUpsProjectionMap.put(FillUp.COMMENT, FillUp.COMMENT);
 
 		s_vehiclesProjectionMap = new HashMap<String, String>();
-		s_vehiclesProjectionMap.put(Vehicles._ID, Vehicles._ID);
-		s_vehiclesProjectionMap.put(Vehicles.MAKE, Vehicles.MAKE);
-		s_vehiclesProjectionMap.put(Vehicles.MODEL, Vehicles.MODEL);
-		s_vehiclesProjectionMap.put(Vehicles.TITLE, Vehicles.TITLE);
-		s_vehiclesProjectionMap.put(Vehicles.YEAR, Vehicles.YEAR);
-		s_vehiclesProjectionMap.put(Vehicles.DEFAULT, Vehicles.DEFAULT);
+		s_vehiclesProjectionMap.put(Vehicle._ID, Vehicle._ID);
+		s_vehiclesProjectionMap.put(Vehicle.MAKE, Vehicle.MAKE);
+		s_vehiclesProjectionMap.put(Vehicle.MODEL, Vehicle.MODEL);
+		s_vehiclesProjectionMap.put(Vehicle.TITLE, Vehicle.TITLE);
+		s_vehiclesProjectionMap.put(Vehicle.YEAR, Vehicle.YEAR);
+		s_vehiclesProjectionMap.put(Vehicle.DEFAULT, Vehicle.DEFAULT);
 	}
 
 	private static class DatabaseHelper extends SQLiteOpenHelper {
@@ -71,26 +74,26 @@ public class FillUpsProvider extends ContentProvider {
 		public void onCreate(SQLiteDatabase db) {
 			StringBuilder sql = new StringBuilder();
 			sql.append("CREATE TABLE ").append(FILLUPS_TABLE_NAME).append(" (");
-			sql.append(FillUps._ID).append(" INTEGER PRIMARY KEY AUTOINCREMENT,");
-			sql.append(FillUps.COST).append(" DOUBLE,");
-			sql.append(FillUps.AMOUNT).append(" DOUBLE,");
-			sql.append(FillUps.MILEAGE).append(" DOUBLE,");
-			sql.append(FillUps.VEHICLE_ID).append(" INTEGER,");
-			sql.append(FillUps.DATE).append(" INTEGER,");
-			sql.append(FillUps.LATITUDE).append(" DOUBLE,");
-			sql.append(FillUps.LONGITUDE).append(" DOUBLE,");
-			sql.append(FillUps.COMMENT).append(" TEXT");
+			sql.append(FillUp._ID).append(" INTEGER PRIMARY KEY AUTOINCREMENT,");
+			sql.append(FillUp.COST).append(" DOUBLE,");
+			sql.append(FillUp.AMOUNT).append(" DOUBLE,");
+			sql.append(FillUp.MILEAGE).append(" DOUBLE,");
+			sql.append(FillUp.VEHICLE_ID).append(" INTEGER,");
+			sql.append(FillUp.DATE).append(" INTEGER,");
+			sql.append(FillUp.LATITUDE).append(" DOUBLE,");
+			sql.append(FillUp.LONGITUDE).append(" DOUBLE,");
+			sql.append(FillUp.COMMENT).append(" TEXT");
 			sql.append(");");
 			db.execSQL(sql.toString());
 
 			sql = new StringBuilder();
 			sql.append("CREATE TABLE ").append(VEHICLES_TABLE_NAME).append(" (");
-			sql.append(Vehicles._ID).append(" INTEGER PRIMARY KEY AUTOINCREMENT,");
-			sql.append(Vehicles.MAKE).append(" TEXT,");
-			sql.append(Vehicles.MODEL).append(" TEXT,");
-			sql.append(Vehicles.TITLE).append(" TEXT,");
-			sql.append(Vehicles.YEAR).append(" TEXT,");
-			sql.append(Vehicles.DEFAULT).append(" INTEGER");
+			sql.append(Vehicle._ID).append(" INTEGER PRIMARY KEY AUTOINCREMENT,");
+			sql.append(Vehicle.MAKE).append(" TEXT,");
+			sql.append(Vehicle.MODEL).append(" TEXT,");
+			sql.append(Vehicle.TITLE).append(" TEXT,");
+			sql.append(Vehicle.YEAR).append(" TEXT,");
+			sql.append(Vehicle.DEFAULT).append(" INTEGER");
 			sql.append(");");
 			db.execSQL(sql.toString());
 
@@ -102,11 +105,11 @@ public class FillUpsProvider extends ContentProvider {
 			// TODO: Abstract this out once we get more DB versions
 			if (newVersion == DATABASE_VERSION) {
 				StringBuilder sb = new StringBuilder();
-				sb.append("ALTER TABLE ").append(FILLUPS_TABLE_NAME).append(" ADD COLUMN ").append(FillUps.COMMENT).append(" TEXT;");
+				sb.append("ALTER TABLE ").append(FILLUPS_TABLE_NAME).append(" ADD COLUMN ").append(FillUp.COMMENT).append(" TEXT;");
 				db.execSQL(sb.toString());
 
 				sb = new StringBuilder();
-				sb.append("ALTER TABLE ").append(VEHICLES_TABLE_NAME).append(" ADD COLUMN ").append(Vehicles.DEFAULT).append(" INTEGER;");
+				sb.append("ALTER TABLE ").append(VEHICLES_TABLE_NAME).append(" ADD COLUMN ").append(Vehicle.DEFAULT).append(" INTEGER;");
 				db.execSQL(sb.toString());
 			} else {
 				StringBuilder sb = new StringBuilder();
@@ -124,9 +127,9 @@ public class FillUpsProvider extends ContentProvider {
 	public static void initTables(SQLiteDatabase db) {
 		StringBuilder sql = new StringBuilder();
 		sql.append("INSERT INTO ").append(VEHICLES_TABLE_NAME).append(" (");
-		sql.append(Vehicles.MAKE).append(", ").append(Vehicles.MODEL).append(", ");
-		sql.append(Vehicles.YEAR).append(", ").append(Vehicles.TITLE).append(", ");
-		sql.append(Vehicles.DEFAULT);
+		sql.append(Vehicle.MAKE).append(", ").append(Vehicle.MODEL).append(", ");
+		sql.append(Vehicle.YEAR).append(", ").append(Vehicle.TITLE).append(", ");
+		sql.append(Vehicle.DEFAULT);
 		sql.append(") VALUES ('Make', 'Model', '");
 		sql.append(Calendar.getInstance().get(Calendar.YEAR));
 		sql.append("', 'Default Vehicle', '").append(System.currentTimeMillis()).append("');");
@@ -152,7 +155,7 @@ public class FillUpsProvider extends ContentProvider {
 
 			case FILLUP_ID:
 				String fillUpId = uri.getPathSegments().get(1);
-				count = db.delete(FILLUPS_TABLE_NAME, FillUps._ID + " = " + fillUpId + (!TextUtils.isEmpty(selection) ? " AND (" + selection + ")" : ""), selectionArgs);
+				count = db.delete(FILLUPS_TABLE_NAME, FillUp._ID + " = " + fillUpId + (!TextUtils.isEmpty(selection) ? " AND (" + selection + ")" : ""), selectionArgs);
 				break;
 
 			case VEHICLES:
@@ -161,7 +164,7 @@ public class FillUpsProvider extends ContentProvider {
 
 			case VEHICLE_ID:
 				String vehicleId = uri.getPathSegments().get(1);
-				count = db.delete(VEHICLES_TABLE_NAME, Vehicles._ID + " = " + vehicleId + (!TextUtils.isEmpty(selection) ? " AND (" + selection + ")" : ""), selectionArgs);
+				count = db.delete(VEHICLES_TABLE_NAME, Vehicle._ID + " = " + vehicleId + (!TextUtils.isEmpty(selection) ? " AND (" + selection + ")" : ""), selectionArgs);
 				break;
 
 			default:
@@ -176,13 +179,13 @@ public class FillUpsProvider extends ContentProvider {
 	public String getType(Uri uri) {
 		switch (s_uriMatcher.match(uri)) {
 			case FILLUPS:
-				return FillUps.CONTENT_TYPE;
+				return FillUp.CONTENT_TYPE;
 			case FILLUP_ID:
-				return FillUps.CONTENT_ITEM_TYPE;
+				return FillUp.CONTENT_ITEM_TYPE;
 			case VEHICLES:
-				return Vehicles.CONTENT_TYPE;
+				return Vehicle.CONTENT_TYPE;
 			case VEHICLE_ID:
-				return Vehicles.CONTENT_ITEM_TYPE;
+				return Vehicle.CONTENT_ITEM_TYPE;
 			default:
 				throw new IllegalArgumentException("Unknown URI: " + uri);
 		}
@@ -213,42 +216,42 @@ public class FillUpsProvider extends ContentProvider {
 		Long now = Long.valueOf(System.currentTimeMillis());
 
 		// make sure that the values are all set
-		if (values.containsKey(FillUps.COST) == false) {
-			values.put(FillUps.COST, 0.00D);
+		if (values.containsKey(FillUp.COST) == false) {
+			values.put(FillUp.COST, 0.00D);
 		}
 
-		if (values.containsKey(FillUps.MILEAGE) == false) {
-			values.put(FillUps.MILEAGE, 0.00D);
+		if (values.containsKey(FillUp.MILEAGE) == false) {
+			values.put(FillUp.MILEAGE, 0.00D);
 		}
 
-		if (values.containsKey(FillUps.AMOUNT) == false) {
-			values.put(FillUps.AMOUNT, 0.00D);
+		if (values.containsKey(FillUp.AMOUNT) == false) {
+			values.put(FillUp.AMOUNT, 0.00D);
 		}
 
-		if (values.containsKey(FillUps.DATE) == false) {
-			values.put(FillUps.DATE, now);
+		if (values.containsKey(FillUp.DATE) == false) {
+			values.put(FillUp.DATE, now);
 		}
 
-		if (values.containsKey(FillUps.VEHICLE_ID) == false) {
-			values.put(FillUps.VEHICLE_ID, 1);
+		if (values.containsKey(FillUp.VEHICLE_ID) == false) {
+			values.put(FillUp.VEHICLE_ID, 1);
 		}
 
-		if (values.containsKey(FillUps.LATITUDE) == false) {
-			values.put(FillUps.LATITUDE, "0.00");
+		if (values.containsKey(FillUp.LATITUDE) == false) {
+			values.put(FillUp.LATITUDE, "0.00");
 		}
 
-		if (values.containsKey(FillUps.LONGITUDE) == false) {
-			values.put(FillUps.LONGITUDE, "0.00");
+		if (values.containsKey(FillUp.LONGITUDE) == false) {
+			values.put(FillUp.LONGITUDE, "0.00");
 		}
 
-		if (values.containsKey(FillUps.COMMENT) == false) {
-			values.put(FillUps.COMMENT, "");
+		if (values.containsKey(FillUp.COMMENT) == false) {
+			values.put(FillUp.COMMENT, "");
 		}
 
 		SQLiteDatabase db = m_helper.getWritableDatabase();
 		long rowId = db.insert(FILLUPS_TABLE_NAME, null, values);
 		if (rowId > 0) {
-			Uri fillUpUri = ContentUris.withAppendedId(FillUps.CONTENT_URI, rowId);
+			Uri fillUpUri = ContentUris.withAppendedId(FillUp.CONTENT_URI, rowId);
 			getContext().getContentResolver().notifyChange(fillUpUri, null);
 			return fillUpUri;
 		}
@@ -267,7 +270,7 @@ public class FillUpsProvider extends ContentProvider {
 		SQLiteDatabase db = m_helper.getWritableDatabase();
 		long rowId = db.insert(VEHICLES_TABLE_NAME, null, values);
 		if (rowId > 0) {
-			Uri vehicleUri = ContentUris.withAppendedId(Vehicles.CONTENT_URI, rowId);
+			Uri vehicleUri = ContentUris.withAppendedId(Vehicle.CONTENT_URI, rowId);
 			getContext().getContentResolver().notifyChange(vehicleUri, null);
 			return vehicleUri;
 		}
@@ -286,7 +289,7 @@ public class FillUpsProvider extends ContentProvider {
 			case FILLUP_ID:
 				qb.setTables(FILLUPS_TABLE_NAME);
 				qb.setProjectionMap(s_fillUpsProjectionMap);
-				qb.appendWhere(FillUps._ID + " = " + uri.getPathSegments().get(1));
+				qb.appendWhere(FillUp._ID + " = " + uri.getPathSegments().get(1));
 				break;
 			case VEHICLES:
 				qb.setTables(VEHICLES_TABLE_NAME);
@@ -295,7 +298,7 @@ public class FillUpsProvider extends ContentProvider {
 			case VEHICLE_ID:
 				qb.setTables(VEHICLES_TABLE_NAME);
 				qb.setProjectionMap(s_vehiclesProjectionMap);
-				qb.appendWhere(Vehicles._ID + " = " + uri.getPathSegments().get(1));
+				qb.appendWhere(Vehicle._ID + " = " + uri.getPathSegments().get(1));
 				break;
 			default:
 				throw new IllegalArgumentException("Unknown URI: " + uri);
@@ -304,9 +307,9 @@ public class FillUpsProvider extends ContentProvider {
 		String orderBy = null;
 		if (TextUtils.isEmpty(sortOrder)) {
 			if (qb.getTables() == FILLUPS_TABLE_NAME) {
-				orderBy = FillUps.DEFAULT_SORT_ORDER;
+				orderBy = FillUp.DEFAULT_SORT_ORDER;
 			} else {
-				orderBy = Vehicles.DEFAULT_SORT_ORDER;
+				orderBy = Vehicle.DEFAULT_SORT_ORDER;
 			}
 		} else {
 			orderBy = sortOrder;
@@ -330,7 +333,7 @@ public class FillUpsProvider extends ContentProvider {
 				break;
 			case FILLUP_ID:
 				String fillUpId = uri.getPathSegments().get(1);
-				clause = FillUps._ID + " = " + fillUpId + (!TextUtils.isEmpty(selection) ? " AND (" + selection + ")" : "");
+				clause = FillUp._ID + " = " + fillUpId + (!TextUtils.isEmpty(selection) ? " AND (" + selection + ")" : "");
 				count = db.update(FILLUPS_TABLE_NAME, values, clause, selectionArgs);
 				break;
 			case VEHICLES:
@@ -338,7 +341,7 @@ public class FillUpsProvider extends ContentProvider {
 				break;
 			case VEHICLE_ID:
 				String vehicleId = uri.getPathSegments().get(1);
-				clause = Vehicles._ID + " = " + vehicleId + (!TextUtils.isEmpty(selection) ? " AND (" + selection + ")" : "");
+				clause = Vehicle._ID + " = " + vehicleId + (!TextUtils.isEmpty(selection) ? " AND (" + selection + ")" : "");
 				count = db.update(VEHICLES_TABLE_NAME, values, clause, selectionArgs);
 				break;
 			default:

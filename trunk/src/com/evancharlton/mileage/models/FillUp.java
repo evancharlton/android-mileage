@@ -2,12 +2,14 @@ package com.evancharlton.mileage.models;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Map;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.net.Uri;
 import android.util.Log;
 
-import com.evancharlton.mileage.FillUps;
 import com.evancharlton.mileage.FillUpsProvider;
 import com.evancharlton.mileage.R;
 import com.evancharlton.mileage.calculators.CalculationEngine;
@@ -25,6 +27,33 @@ import com.evancharlton.mileage.calculators.CalculationEngine;
  * 
  */
 public class FillUp extends Model {
+
+	public static final String AUTHORITY = "com.evancharlton.provider.Mileage";
+	public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/fillups");
+	public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.evancharlton.fillup";
+	public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.evancharlton.fillup";
+	public static final String DEFAULT_SORT_ORDER = "mileage DESC";
+	public static final String COST = "cost";
+	public static final String AMOUNT = "amount";
+	public static final String MILEAGE = "mileage";
+	public static final String DATE = "date";
+	public static final String VEHICLE_ID = "vehicle_id";
+	public static final String LATITUDE = "latitude";
+	public static final String LONGITUDE = "longitude";
+	public static final String COMMENT = "comment";
+	public static final Map<String, String> PLAINTEXT = new HashMap<String, String>();
+
+	static {
+		PLAINTEXT.put(DATE, "Date");
+		PLAINTEXT.put(COST, "Price per gallon");
+		PLAINTEXT.put(AMOUNT, "Gallons of fuel");
+		PLAINTEXT.put(MILEAGE, "Odometer");
+		PLAINTEXT.put(VEHICLE_ID, "Vehicle");
+		PLAINTEXT.put(LATITUDE, "Latitude");
+		PLAINTEXT.put(LONGITUDE, "Longitude");
+		PLAINTEXT.put(COMMENT, "Fill-Up Comment");
+	}
+
 	private double m_odometer = 0;
 	private Calendar m_date = GregorianCalendar.getInstance();
 	private double m_price = 0D; // per unit volume price
@@ -50,7 +79,7 @@ public class FillUp extends Model {
 
 	public FillUp(CalculationEngine calculator, long id) {
 		this(calculator);
-		String selection = FillUps._ID + " = ?";
+		String selection = _ID + " = ?";
 		String[] selectionArgs = new String[] {
 			String.valueOf(id)
 		};
@@ -70,24 +99,24 @@ public class FillUp extends Model {
 			for (int i = 0; i < c.getColumnCount(); i++) {
 				String name = c.getColumnName(i);
 				Log.d("COLUMN", name);
-				if (name.equals(FillUps.AMOUNT)) {
+				if (name.equals(AMOUNT)) {
 					setAmount(c.getLong(i));
-				} else if (name.equals(FillUps.COMMENT)) {
+				} else if (name.equals(COMMENT)) {
 					setComment(c.getString(i));
-				} else if (name.equals(FillUps.COST)) {
+				} else if (name.equals(COST)) {
 					setPrice(c.getDouble(i));
-				} else if (name.equals(FillUps.DATE)) {
+				} else if (name.equals(DATE)) {
 					long time = c.getLong(i);
 					Calendar cal = GregorianCalendar.getInstance();
 					cal.setTimeInMillis(time);
 					setDate(cal);
-				} else if (name.equals(FillUps.LATITUDE)) {
+				} else if (name.equals(LATITUDE)) {
 					setLatitude(c.getDouble(i));
-				} else if (name.equals(FillUps.LONGITUDE)) {
+				} else if (name.equals(LONGITUDE)) {
 					setLongitude(c.getDouble(i));
-				} else if (name.equals(FillUps.MILEAGE)) {
+				} else if (name.equals(MILEAGE)) {
 					setOdometer(c.getLong(i));
-				} else if (name.equals(FillUps.VEHICLE_ID)) {
+				} else if (name.equals(VEHICLE_ID)) {
 					m_vehicleId = c.getLong(i);
 				}
 			}
@@ -159,16 +188,16 @@ public class FillUp extends Model {
 		if (m_next == null) {
 			// get the ID for the next fill-up, if any
 			// TODO: this and getPrevious() are basically identical; refactor it
-			String selection = FillUps.MILEAGE + " > ? AND " + FillUps.VEHICLE_ID + " = ?";
+			String selection = MILEAGE + " > ? AND " + VEHICLE_ID + " = ?";
 			String[] selectionArgs = new String[] {
 					String.valueOf(m_odometer),
 					String.valueOf(m_vehicleId)
 			};
-			String orderBy = FillUps.MILEAGE + " ASC, " + FillUps._ID + " ASC";
+			String orderBy = MILEAGE + " ASC, " + _ID + " ASC";
 
 			openDatabase();
 			Cursor c = m_db.query(FillUpsProvider.FILLUPS_TABLE_NAME, new String[] {
-				FillUps._ID
+				_ID
 			}, selection, selectionArgs, null, null, orderBy, "1");
 
 			if (c.getCount() == 1) {
@@ -192,16 +221,16 @@ public class FillUp extends Model {
 		if (m_previous == null) {
 			// get the ID for the previous fill-up, if any
 			// TODO: this and getNext() are basically identical; refactor it
-			String selection = FillUps.MILEAGE + " < ? AND " + FillUps.VEHICLE_ID + " = ?";
+			String selection = MILEAGE + " < ? AND " + VEHICLE_ID + " = ?";
 			String[] selectionArgs = new String[] {
 					String.valueOf(m_odometer),
 					String.valueOf(m_vehicleId)
 			};
-			String orderBy = FillUps.MILEAGE + " DESC, " + FillUps._ID + " DESC";
+			String orderBy = MILEAGE + " DESC, " + _ID + " DESC";
 
 			openDatabase();
 			Cursor c = m_db.query(FillUpsProvider.FILLUPS_TABLE_NAME, new String[] {
-				FillUps._ID
+				_ID
 			}, selection, selectionArgs, null, null, orderBy, "1");
 
 			if (c.getCount() == 1) {
@@ -218,14 +247,14 @@ public class FillUp extends Model {
 	@Override
 	public String[] getProjection() {
 		return new String[] {
-				FillUps.AMOUNT,
-				FillUps.COMMENT,
-				FillUps.COST,
-				FillUps.DATE,
-				FillUps.LATITUDE,
-				FillUps.LONGITUDE,
-				FillUps.MILEAGE,
-				FillUps.VEHICLE_ID
+				AMOUNT,
+				COMMENT,
+				COST,
+				DATE,
+				LATITUDE,
+				LONGITUDE,
+				MILEAGE,
+				VEHICLE_ID
 		};
 	}
 
@@ -233,20 +262,20 @@ public class FillUp extends Model {
 	public long save() {
 		openDatabase();
 		ContentValues values = new ContentValues();
-		values.put(FillUps.AMOUNT, m_amount);
-		values.put(FillUps.COMMENT, m_comment);
-		values.put(FillUps.COST, m_price);
-		values.put(FillUps.DATE, m_date.getTimeInMillis());
-		values.put(FillUps.LATITUDE, m_latitude);
-		values.put(FillUps.LONGITUDE, m_longitude);
-		values.put(FillUps.MILEAGE, m_odometer);
-		values.put(FillUps.VEHICLE_ID, m_vehicleId);
+		values.put(AMOUNT, m_amount);
+		values.put(COMMENT, m_comment);
+		values.put(COST, m_price);
+		values.put(DATE, m_date.getTimeInMillis());
+		values.put(LATITUDE, m_latitude);
+		values.put(LONGITUDE, m_longitude);
+		values.put(MILEAGE, m_odometer);
+		values.put(VEHICLE_ID, m_vehicleId);
 		if (m_id == -1) {
 			// save a new record
 			m_id = m_db.insert(FillUpsProvider.FILLUPS_TABLE_NAME, null, values);
 		} else {
 			// update an existing record
-			m_db.update(FillUpsProvider.FILLUPS_TABLE_NAME, values, FillUps._ID + " = ?", new String[] {
+			m_db.update(FillUpsProvider.FILLUPS_TABLE_NAME, values, _ID + " = ?", new String[] {
 				String.valueOf(m_id)
 			});
 		}

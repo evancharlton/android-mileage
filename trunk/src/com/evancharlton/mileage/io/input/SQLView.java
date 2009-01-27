@@ -13,10 +13,10 @@ import android.os.Bundle;
 import android.os.Message;
 import android.widget.TextView;
 
-import com.evancharlton.mileage.FillUps;
 import com.evancharlton.mileage.FillUpsProvider;
 import com.evancharlton.mileage.Mileage;
 import com.evancharlton.mileage.R;
+import com.evancharlton.mileage.models.FillUp;
 
 public class SQLView extends ImportView {
 	public void onCreate(Bundle savedInstanceState) {
@@ -33,7 +33,7 @@ public class SQLView extends ImportView {
 					BufferedReader in = new BufferedReader(new FileReader(input));
 					HashMap<String, String> fillupsProjection = FillUpsProvider.getFillUpsProjection();
 					Set<String> keySet = fillupsProjection.keySet();
-					keySet.remove(FillUps._ID);
+					keySet.remove(FillUp._ID);
 					SQLiteDatabase db = SQLiteDatabase.openDatabase("/data/data/" + Mileage.PACKAGE + "/databases/" + FillUpsProvider.DATABASE_NAME, null, SQLiteDatabase.OPEN_READWRITE);
 
 					String line;

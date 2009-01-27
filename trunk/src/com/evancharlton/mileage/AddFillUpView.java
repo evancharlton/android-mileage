@@ -33,6 +33,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.evancharlton.mileage.models.FillUp;
+import com.evancharlton.mileage.models.Vehicle;
 
 public class AddFillUpView extends Activity implements Persistent {
 	public static final String PACKAGE = "com.evancharlton.mileage";
@@ -136,12 +137,12 @@ public class AddFillUpView extends Activity implements Persistent {
 		registerForContextMenu(m_priceEdit);
 		registerForContextMenu(m_mileageEdit);
 
-		Cursor c = managedQuery(Vehicles.CONTENT_URI, new String[] {
-				Vehicles._ID,
-				Vehicles.TITLE
-		}, null, null, Vehicles.DEFAULT_SORT_ORDER);
+		Cursor c = managedQuery(Vehicle.CONTENT_URI, new String[] {
+				Vehicle._ID,
+				Vehicle.TITLE
+		}, null, null, Vehicle.DEFAULT_SORT_ORDER);
 		m_vehicleAdapter = new SimpleCursorAdapter(this, android.R.layout.simple_spinner_item, c, new String[] {
-			Vehicles.TITLE
+			Vehicle.TITLE
 		}, new int[] {
 			android.R.id.text1
 		});
@@ -243,6 +244,14 @@ public class AddFillUpView extends Activity implements Persistent {
 		m_amountEdit.setHint(prefs.getString(R.array.unit_amount_hints, SettingsView.VOLUME));
 	}
 
+	protected void showMessage(boolean success) {
+		if (success) {
+			Toast.makeText(AddFillUpView.this, getString(R.string.fillup_saved), Toast.LENGTH_SHORT).show();
+		} else {
+			Toast.makeText(AddFillUpView.this, getString(R.string.fillup_error_saving), Toast.LENGTH_SHORT).show();
+		}
+	}
+
 	protected void initHandlers() {
 		m_saveButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
@@ -251,7 +260,9 @@ public class AddFillUpView extends Activity implements Persistent {
 				if (fillup != null) {
 					fillup.save();
 					resetForm(v);
-					Toast.makeText(AddFillUpView.this, getString(R.string.fillup_saved), Toast.LENGTH_SHORT);
+					showMessage(true);
+				} else {
+					showMessage(false);
 				}
 			}
 		});
@@ -323,7 +334,7 @@ public class AddFillUpView extends Activity implements Persistent {
 
 		m_priceEdit.requestFocus();
 
-		getIntent().setData(FillUps.CONTENT_URI);
+		getIntent().setData(FillUp.CONTENT_URI);
 	}
 
 	protected void updateDate() {

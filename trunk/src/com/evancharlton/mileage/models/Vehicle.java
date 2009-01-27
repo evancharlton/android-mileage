@@ -1,14 +1,15 @@
 package com.evancharlton.mileage.models;
 
+import java.util.Map;
+
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
-import android.provider.BaseColumns;
 
 import com.evancharlton.mileage.FillUpsProvider;
 import com.evancharlton.mileage.R;
 
-public class Vehicle extends Model implements BaseColumns {
+public class Vehicle extends Model {
 	public static final String AUTHORITY = "com.evancharlton.provider.Mileage";
 	public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/vehicles");
 	public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.evancharlton.vehicle";
@@ -69,6 +70,32 @@ public class Vehicle extends Model implements BaseColumns {
 		}
 
 		closeDatabase();
+	}
+
+	public Vehicle(Map<String, String> data) {
+		this();
+
+		String make = data.get(MAKE);
+		String model = data.get(MODEL);
+		String year = data.get(YEAR);
+		String title = data.get(TITLE);
+		String id = data.get(_ID);
+
+		if (id != null) {
+			setId(Long.parseLong(id));
+		}
+		if (make != null) {
+			setMake(make);
+		}
+		if (model != null) {
+			setModel(model);
+		}
+		if (year != null) {
+			setYear(year);
+		}
+		if (title != null) {
+			setTitle(title);
+		}
 	}
 
 	@Override

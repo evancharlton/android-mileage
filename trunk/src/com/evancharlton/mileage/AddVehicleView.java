@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.evancharlton.mileage.models.Vehicle;
 
@@ -26,6 +27,14 @@ public class AddVehicleView extends Activity {
 		setContentView(R.layout.edit_vehicle);
 
 		initUI();
+	}
+
+	protected void showMessage(boolean success) {
+		if (success) {
+			Toast.makeText(this, getString(R.string.vehicle_saved), Toast.LENGTH_SHORT).show();
+		} else {
+			Toast.makeText(this, getString(R.string.vehicle_error_saving), Toast.LENGTH_SHORT).show();
+		}
 	}
 
 	protected void initUI() {

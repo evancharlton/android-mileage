@@ -25,11 +25,11 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.evancharlton.mileage.FillUps;
 import com.evancharlton.mileage.FillUpsProvider;
 import com.evancharlton.mileage.Mileage;
 import com.evancharlton.mileage.R;
-import com.evancharlton.mileage.Vehicles;
+import com.evancharlton.mileage.models.FillUp;
+import com.evancharlton.mileage.models.Vehicle;
 
 public class CSVViewConfirm extends Dialog {
 	private Context m_context;
@@ -71,7 +71,7 @@ public class CSVViewConfirm extends Dialog {
 	private void initUI() {
 		// parse the date
 		Map<String, String> row = m_data.get(0);
-		Date d = new Date(Long.parseLong(row.get(FillUps.DATE)));
+		Date d = new Date(Long.parseLong(row.get(FillUp.DATE)));
 		SimpleDateFormat date_format = new SimpleDateFormat("MMMM d, yyyy");
 
 		TextView parsed_date = (TextView) findViewById(R.id.parsed_date);
@@ -79,11 +79,11 @@ public class CSVViewConfirm extends Dialog {
 
 		// set up the view for doing vehicle mapping
 		String[] projection = new String[] {
-				Vehicles._ID,
-				Vehicles.TITLE
+				Vehicle._ID,
+				Vehicle.TITLE
 		};
 		String[] vehicle_from = new String[] {
-			Vehicles.TITLE
+			Vehicle.TITLE
 		};
 		int[] vehicle_to = new int[] {
 			android.R.id.text1
@@ -151,7 +151,7 @@ public class CSVViewConfirm extends Dialog {
 					String[] row_data = row.keySet().toArray(new String[row.keySet().size()]);
 
 					for (int i = 0; i < row_data.length; i++) {
-						if (vehicle_id_column < 0 && row_data[i].equalsIgnoreCase(FillUps.VEHICLE_ID)) {
+						if (vehicle_id_column < 0 && row_data[i].equalsIgnoreCase(FillUp.VEHICLE_ID)) {
 							vehicle_id_column = i;
 						}
 						sb.append(row_data[i]);

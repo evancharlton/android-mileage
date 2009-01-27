@@ -33,10 +33,16 @@ public class FillUpView extends AddFillUpView {
 				long id = Long.parseLong(getIntent().getData().getLastPathSegment());
 				// save the new fill-up
 				FillUp fillup = saveData();
+				if (fillup == null) {
+					showMessage(false);
+					return;
+				}
+
 				fillup.setId(id);
 
 				fillup.save();
 				finish();
+				showMessage(true);
 			}
 		});
 	}
@@ -58,13 +64,13 @@ public class FillUpView extends AddFillUpView {
 
 		// load the data
 		String[] projections = new String[] {
-				FillUps._ID,
-				FillUps.COST,
-				FillUps.AMOUNT,
-				FillUps.MILEAGE,
-				FillUps.DATE,
-				FillUps.VEHICLE_ID,
-				FillUps.COMMENT
+				FillUp._ID,
+				FillUp.COST,
+				FillUp.AMOUNT,
+				FillUp.MILEAGE,
+				FillUp.DATE,
+				FillUp.VEHICLE_ID,
+				FillUp.COMMENT
 		};
 
 		Cursor c = managedQuery(data.getData(), projections, null, null, null);

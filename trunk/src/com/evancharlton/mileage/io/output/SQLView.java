@@ -13,11 +13,11 @@ import android.os.Environment;
 import android.os.Message;
 import android.widget.TextView;
 
-import com.evancharlton.mileage.FillUps;
 import com.evancharlton.mileage.FillUpsProvider;
 import com.evancharlton.mileage.Mileage;
 import com.evancharlton.mileage.R;
-import com.evancharlton.mileage.Vehicles;
+import com.evancharlton.mileage.models.FillUp;
+import com.evancharlton.mileage.models.Vehicle;
 
 public class SQLView extends ExportView {
 	public void onCreate(Bundle savedInstanceState) {
@@ -33,7 +33,7 @@ public class SQLView extends ExportView {
 				Set<String> keySet = fillupsProjection.keySet();
 				String[] proj = keySet.toArray(new String[keySet.size()]);
 				SQLiteDatabase db = SQLiteDatabase.openDatabase("/data/data/" + Mileage.PACKAGE + "/databases/" + FillUpsProvider.DATABASE_NAME, null, SQLiteDatabase.OPEN_READONLY);
-				Cursor c = db.query(FillUpsProvider.FILLUPS_TABLE_NAME, proj, null, null, null, null, FillUps._ID + " ASC");
+				Cursor c = db.query(FillUpsProvider.FILLUPS_TABLE_NAME, proj, null, null, null, null, FillUp._ID + " ASC");
 
 				StringBuilder sb = new StringBuilder();
 				sb.append("-- Exported database: ").append(FillUpsProvider.DATABASE_NAME).append("\n");
@@ -51,7 +51,7 @@ public class SQLView extends ExportView {
 				sb.append("-- Begin table: ").append(FillUpsProvider.VEHICLES_TABLE_NAME).append("\n");
 				keySet = vehiclesProjection.keySet();
 				proj = keySet.toArray(new String[keySet.size()]);
-				c = db.query(FillUpsProvider.VEHICLES_TABLE_NAME, proj, null, null, null, null, Vehicles._ID + " ASC");
+				c = db.query(FillUpsProvider.VEHICLES_TABLE_NAME, proj, null, null, null, null, Vehicle._ID + " ASC");
 				c.moveToFirst();
 				while (c.isAfterLast() == false) {
 					sb.append("INSERT INTO ").append(FillUpsProvider.VEHICLES_TABLE_NAME);
