@@ -27,6 +27,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
+import com.evancharlton.mileage.binders.VehicleBinder;
 import com.evancharlton.mileage.calculators.CalculationEngine;
 import com.evancharlton.mileage.models.FillUp;
 import com.evancharlton.mileage.models.Vehicle;
@@ -110,18 +111,14 @@ public class HistoryView extends Activity implements View.OnCreateContextMenuLis
 	private void buildVehicleSpinner() {
 		m_vehicles = (Spinner) findViewById(R.id.vehicles);
 
-		String[] projection = new String[] {
-				Vehicle._ID,
-				Vehicle.TITLE
-		};
-
-		Cursor vehicleCursor = managedQuery(Vehicle.CONTENT_URI, projection, null, null, Vehicle.DEFAULT_SORT_ORDER);
+		Cursor vehicleCursor = managedQuery(Vehicle.CONTENT_URI, Vehicle.getProjection(), null, null, Vehicle.DEFAULT_SORT_ORDER);
 		SimpleCursorAdapter vehicleAdapter = new SimpleCursorAdapter(this, android.R.layout.simple_spinner_item, vehicleCursor, new String[] {
 			Vehicle.TITLE
 		}, new int[] {
 			android.R.id.text1
 		});
 		vehicleAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		vehicleAdapter.setViewBinder(new VehicleBinder());
 		m_vehicles.setAdapter(vehicleAdapter);
 		m_vehicles.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {

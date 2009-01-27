@@ -244,8 +244,7 @@ public class FillUp extends Model {
 		return m_previous;
 	}
 
-	@Override
-	public String[] getProjection() {
+	public static String[] getProjection() {
 		return new String[] {
 				AMOUNT,
 				COMMENT,

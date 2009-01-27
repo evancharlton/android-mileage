@@ -13,7 +13,9 @@ public abstract class Model implements BaseColumns {
 
 	public abstract long save();
 
-	public abstract String[] getProjection();
+	public static String[] getProjection() {
+		return new String[] {};
+	}
 
 	/**
 	 * See if the current state of the object is valid for saving. If invalid, a

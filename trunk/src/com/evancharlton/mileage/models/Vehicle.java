@@ -1,5 +1,7 @@
 package com.evancharlton.mileage.models;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import android.content.ContentValues;
@@ -20,6 +22,17 @@ public class Vehicle extends Model {
 	public static final String YEAR = "year";
 	public static final String DEFAULT = "def";
 	public static final String DEFAULT_SORT_ORDER = DEFAULT + " DESC, " + TITLE + " ASC";
+
+	public static final List<String> PROJECTION = new ArrayList<String>();
+
+	static {
+		PROJECTION.add(_ID);
+		PROJECTION.add(TITLE);
+		PROJECTION.add(MAKE);
+		PROJECTION.add(MODEL);
+		PROJECTION.add(YEAR);
+		PROJECTION.add(DEFAULT);
+	}
 
 	private static final int DEFAULT_UNKNOWN = 0;
 	private static final int DEFAULT_TRUE = 1;
@@ -98,16 +111,8 @@ public class Vehicle extends Model {
 		}
 	}
 
-	@Override
-	public String[] getProjection() {
-		return new String[] {
-				_ID,
-				TITLE,
-				MAKE,
-				MODEL,
-				YEAR,
-				DEFAULT
-		};
+	public static String[] getProjection() {
+		return PROJECTION.toArray(new String[PROJECTION.size()]);
 	}
 
 	@Override
@@ -260,5 +265,4 @@ public class Vehicle extends Model {
 	public void setYear(String year) {
 		m_year = year.trim();
 	}
-
 }

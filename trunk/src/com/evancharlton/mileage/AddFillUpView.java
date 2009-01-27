@@ -32,6 +32,7 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.evancharlton.mileage.binders.VehicleBinder;
 import com.evancharlton.mileage.models.FillUp;
 import com.evancharlton.mileage.models.Vehicle;
 
@@ -137,16 +138,14 @@ public class AddFillUpView extends Activity implements Persistent {
 		registerForContextMenu(m_priceEdit);
 		registerForContextMenu(m_mileageEdit);
 
-		Cursor c = managedQuery(Vehicle.CONTENT_URI, new String[] {
-				Vehicle._ID,
-				Vehicle.TITLE
-		}, null, null, Vehicle.DEFAULT_SORT_ORDER);
+		Cursor c = managedQuery(Vehicle.CONTENT_URI, Vehicle.getProjection(), null, null, Vehicle.DEFAULT_SORT_ORDER);
 		m_vehicleAdapter = new SimpleCursorAdapter(this, android.R.layout.simple_spinner_item, c, new String[] {
 			Vehicle.TITLE
 		}, new int[] {
 			android.R.id.text1
 		});
 		m_vehicleAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		m_vehicleAdapter.setViewBinder(new VehicleBinder());
 		m_vehicleSpinner.setAdapter(m_vehicleAdapter);
 
 		if (m_vehicleAdapter.getCount() == 1) {
