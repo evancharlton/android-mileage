@@ -1,8 +1,10 @@
 package com.evancharlton.mileage.models;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import android.content.ContentValues;
@@ -33,25 +35,36 @@ public class FillUp extends Model {
 	public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.evancharlton.fillup";
 	public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.evancharlton.fillup";
 	public static final String DEFAULT_SORT_ORDER = "mileage DESC";
-	public static final String COST = "cost";
+	public static final String PRICE = "cost"; // TODO: "price"
 	public static final String AMOUNT = "amount";
-	public static final String MILEAGE = "mileage";
-	public static final String DATE = "date";
+	public static final String ODOMETER = "mileage"; // TODO: "odometer"
+	public static final String DATE = "date"; // TODO: "timestamp"
 	public static final String VEHICLE_ID = "vehicle_id";
 	public static final String LATITUDE = "latitude";
 	public static final String LONGITUDE = "longitude";
 	public static final String COMMENT = "comment";
 	public static final Map<String, String> PLAINTEXT = new HashMap<String, String>();
+	public static final List<String> PROJECTION = new ArrayList<String>();
 
 	static {
 		PLAINTEXT.put(DATE, "Date");
-		PLAINTEXT.put(COST, "Price per gallon");
+		PLAINTEXT.put(PRICE, "Price per gallon");
 		PLAINTEXT.put(AMOUNT, "Gallons of fuel");
-		PLAINTEXT.put(MILEAGE, "Odometer");
+		PLAINTEXT.put(ODOMETER, "Odometer");
 		PLAINTEXT.put(VEHICLE_ID, "Vehicle");
 		PLAINTEXT.put(LATITUDE, "Latitude");
 		PLAINTEXT.put(LONGITUDE, "Longitude");
 		PLAINTEXT.put(COMMENT, "Fill-Up Comment");
+
+		PROJECTION.add(_ID);
+		PROJECTION.add(PRICE);
+		PROJECTION.add(AMOUNT);
+		PROJECTION.add(ODOMETER);
+		PROJECTION.add(DATE);
+		PROJECTION.add(VEHICLE_ID);
+		PROJECTION.add(LATITUDE);
+		PROJECTION.add(LONGITUDE);
+		PROJECTION.add(COMMENT);
 	}
 
 	private double m_odometer = 0;
@@ -103,7 +116,7 @@ public class FillUp extends Model {
 					setAmount(c.getLong(i));
 				} else if (name.equals(COMMENT)) {
 					setComment(c.getString(i));
-				} else if (name.equals(COST)) {
+				} else if (name.equals(PRICE)) {
 					setPrice(c.getDouble(i));
 				} else if (name.equals(DATE)) {
 					long time = c.getLong(i);
@@ -114,7 +127,7 @@ public class FillUp extends Model {
 					setLatitude(c.getDouble(i));
 				} else if (name.equals(LONGITUDE)) {
 					setLongitude(c.getDouble(i));
-				} else if (name.equals(MILEAGE)) {
+				} else if (name.equals(ODOMETER)) {
 					setOdometer(c.getLong(i));
 				} else if (name.equals(VEHICLE_ID)) {
 					m_vehicleId = c.getLong(i);
@@ -125,6 +138,55 @@ public class FillUp extends Model {
 		closeDatabase();
 	}
 
+	public FillUp(CalculationEngine calculationEngine, Map<String, String> data) {
+		this(calculationEngine);
+
+		String id = data.get(_ID);
+		String vehicleId = data.get(VEHICLE_ID);
+		String timestamp = data.get(DATE);
+		String odometer = data.get(ODOMETER);
+		String amount = data.get(AMOUNT);
+		String price = data.get(PRICE);
+		String latitude = data.get(LATITUDE);
+		String longitude = data.get(LONGITUDE);
+		String comment = data.get(COMMENT);
+
+		if (id != null) {
+			setId(Long.parseLong(id));
+		}
+		if (vehicleId != null) {
+			setVehicleId(Long.parseLong(vehicleId));
+		}
+		if (timestamp != null) {
+			Calendar cal = GregorianCalendar.getInstance();
+			cal.setTimeInMillis(Long.parseLong(timestamp));
+			setDate(cal);
+		}
+		if (odometer != null) {
+			setOdometer(odometer);
+		}
+		if (amount != null) {
+			setAmount(Double.parseDouble(amount));
+		}
+		if (price != null) {
+			setPrice(Double.parseDouble(price));
+		}
+		if (latitude != null) {
+			setLatitude(Double.parseDouble(latitude));
+		}
+		if (longitude != null) {
+			setLongitude(Double.parseDouble(longitude));
+		}
+		if (comment != null) {
+			setComment(comment);
+		}
+	}
+
+	/**
+	 * Get the Vehicle associated with this fill-up.
+	 * 
+	 * @return the Vehicle associated with this fill-up.
+	 */
 	public Vehicle getVehicle() {
 		if (m_vehicle == null) {
 			m_vehicle = new Vehicle(m_vehicleId);
@@ -188,12 +250,12 @@ public class FillUp extends Model {
 		if (m_next == null) {
 			// get the ID for the next fill-up, if any
 			// TODO: this and getPrevious() are basically identical; refactor it
-			String selection = MILEAGE + " > ? AND " + VEHICLE_ID + " = ?";
+			String selection = ODOMETER + " > ? AND " + VEHICLE_ID + " = ?";
 			String[] selectionArgs = new String[] {
 					String.valueOf(m_odometer),
 					String.valueOf(m_vehicleId)
 			};
-			String orderBy = MILEAGE + " ASC, " + _ID + " ASC";
+			String orderBy = ODOMETER + " ASC, " + _ID + " ASC";
 
 			openDatabase();
 			Cursor c = m_db.query(FillUpsProvider.FILLUPS_TABLE_NAME, new String[] {
@@ -211,6 +273,10 @@ public class FillUp extends Model {
 		return m_next;
 	}
 
+	public void setNext(FillUp next) {
+		m_next = next;
+	}
+
 	/**
 	 * Gets the previous (lower mileage) fill-up (if necessary) and returns it.
 	 * If there isn't a previous one, null is returned.
@@ -221,12 +287,12 @@ public class FillUp extends Model {
 		if (m_previous == null) {
 			// get the ID for the previous fill-up, if any
 			// TODO: this and getNext() are basically identical; refactor it
-			String selection = MILEAGE + " < ? AND " + VEHICLE_ID + " = ?";
+			String selection = ODOMETER + " < ? AND " + VEHICLE_ID + " = ?";
 			String[] selectionArgs = new String[] {
 					String.valueOf(m_odometer),
 					String.valueOf(m_vehicleId)
 			};
-			String orderBy = MILEAGE + " DESC, " + _ID + " DESC";
+			String orderBy = ODOMETER + " DESC, " + _ID + " DESC";
 
 			openDatabase();
 			Cursor c = m_db.query(FillUpsProvider.FILLUPS_TABLE_NAME, new String[] {
@@ -244,17 +310,12 @@ public class FillUp extends Model {
 		return m_previous;
 	}
 
+	public void setPrevious(FillUp previous) {
+		m_previous = previous;
+	}
+
 	public static String[] getProjection() {
-		return new String[] {
-				AMOUNT,
-				COMMENT,
-				COST,
-				DATE,
-				LATITUDE,
-				LONGITUDE,
-				MILEAGE,
-				VEHICLE_ID
-		};
+		return PROJECTION.toArray(new String[PROJECTION.size()]);
 	}
 
 	@Override
@@ -263,11 +324,11 @@ public class FillUp extends Model {
 		ContentValues values = new ContentValues();
 		values.put(AMOUNT, m_amount);
 		values.put(COMMENT, m_comment);
-		values.put(COST, m_price);
+		values.put(PRICE, m_price);
 		values.put(DATE, m_date.getTimeInMillis());
 		values.put(LATITUDE, m_latitude);
 		values.put(LONGITUDE, m_longitude);
-		values.put(MILEAGE, m_odometer);
+		values.put(ODOMETER, m_odometer);
 		values.put(VEHICLE_ID, m_vehicleId);
 		if (m_id == -1) {
 			// save a new record
@@ -441,6 +502,14 @@ public class FillUp extends Model {
 	 */
 	public void setVehicleId(long vehicleId) {
 		m_vehicleId = vehicleId;
+	}
+
+	/**
+	 * Set the Vehicle
+	 */
+	public void setVehicle(Vehicle v) {
+		m_vehicle = v;
+		setVehicleId(v.getId());
 	}
 
 	/**

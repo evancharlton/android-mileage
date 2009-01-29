@@ -1,10 +1,10 @@
 package com.evancharlton.mileage;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -49,33 +49,23 @@ public class HistoryView extends Activity implements View.OnCreateContextMenuLis
 
 	public static final String TAG = "HistoryList";
 
-	public static final int COL_ID = 0;
-	public static final int COL_AMOUNT = 1;
-	public static final int COL_COST = 2;
-	public static final int COL_DATE = 3;
-	public static final int COL_COMMENT = 4;
-	public static final int COL_VEHICLEID = 5;
-	public static final int COL_MILEAGE = 6;
+	public static final int COL_ID = FillUp.PROJECTION.indexOf(FillUp._ID);
+	public static final int COL_AMOUNT = FillUp.PROJECTION.indexOf(FillUp.AMOUNT);
+	public static final int COL_PRICE = FillUp.PROJECTION.indexOf(FillUp.PRICE);
+	public static final int COL_TIMESTAMP = FillUp.PROJECTION.indexOf(FillUp.DATE);
+	public static final int COL_COMMENT = FillUp.PROJECTION.indexOf(FillUp.COMMENT);
+	public static final int COL_VEHICLEID = FillUp.PROJECTION.indexOf(FillUp.VEHICLE_ID);
+	public static final int COL_ODOMETER = FillUp.PROJECTION.indexOf(FillUp.ODOMETER);
 
-	private Map<Integer, String> m_vehicleTitles = new HashMap<Integer, String>();
+	private Map<Long, String> m_vehicleTitles = new HashMap<Long, String>();
 	private double m_avgMpg;
-	private HashMap<Double, Double> m_history;
 	private AlertDialog m_deleteDialog;
 	private long m_deleteId;
 	private PreferencesProvider m_prefs;
 	private CalculationEngine m_calcEngine;
 	private ListView m_listView;
 	private Spinner m_vehicles;
-
-	private static final String[] PROJECTIONS = new String[] {
-			FillUp._ID,
-			FillUp.AMOUNT,
-			FillUp.COST,
-			FillUp.DATE,
-			FillUp.COMMENT,
-			FillUp.VEHICLE_ID,
-			FillUp.MILEAGE
-	};
+	private Map<Long, FillUp> m_fillupMap;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -95,7 +85,6 @@ public class HistoryView extends Activity implements View.OnCreateContextMenuLis
 				HistoryView.this.onItemClick(arg2, arg3);
 			}
 		});
-		m_history = new HashMap<Double, Double>();
 
 		buildVehicleSpinner();
 	}
@@ -129,6 +118,15 @@ public class HistoryView extends Activity implements View.OnCreateContextMenuLis
 			}
 		});
 
+		// populate the vehicle title mapping
+		vehicleCursor.moveToFirst();
+		final int col_id = Vehicle.PROJECTION.indexOf(Vehicle._ID);
+		final int col_title = Vehicle.PROJECTION.indexOf(Vehicle.TITLE);
+		while (vehicleCursor.isAfterLast() == false) {
+			m_vehicleTitles.put(vehicleCursor.getLong(col_id), vehicleCursor.getString(col_title));
+			vehicleCursor.moveToNext();
+		}
+
 		if (vehicleAdapter.getCount() == 1) {
 			m_vehicles.setVisibility(View.GONE);
 		}
@@ -149,18 +147,16 @@ public class HistoryView extends Activity implements View.OnCreateContextMenuLis
 
 		String[] from = new String[] {
 				FillUp.AMOUNT,
-				FillUp.COST,
+				FillUp.PRICE,
 				FillUp.DATE,
 				FillUp.COMMENT,
-				FillUp.VEHICLE_ID,
-				FillUp.MILEAGE
+				FillUp.ODOMETER
 		};
 		int[] to = new int[] {
 				R.id.history_amount,
 				R.id.history_price,
 				R.id.history_date,
 				R.id.history_comment,
-				R.id.history_vehicle,
 				R.id.history_mileage
 		};
 
@@ -176,30 +172,47 @@ public class HistoryView extends Activity implements View.OnCreateContextMenuLis
 			selectionArgs = null;
 		}
 
-		Cursor historyCursor = managedQuery(FillUp.CONTENT_URI, PROJECTIONS, selection, selectionArgs, FillUp.DEFAULT_SORT_ORDER);
+		Cursor historyCursor = managedQuery(FillUp.CONTENT_URI, FillUp.getProjection(), selection, selectionArgs, FillUp.DEFAULT_SORT_ORDER);
 		if (historyCursor.getCount() > 0) {
 			historyCursor.moveToFirst();
-			Map<Double, Double> milesToAmt = new HashMap<Double, Double>();
+			double total_distance = 0D;
+			double total_fuel = 0D;
+			List<FillUp> fillups = new ArrayList<FillUp>();
+			m_fillupMap = new HashMap<Long, FillUp>();
 			while (historyCursor.isAfterLast() == false) {
-				milesToAmt.put(historyCursor.getDouble(COL_MILEAGE), historyCursor.getDouble(COL_AMOUNT));
+				Map<String, String> data = new HashMap<String, String>();
+				data.put(FillUp.AMOUNT, historyCursor.getString(COL_AMOUNT));
+				data.put(FillUp.PRICE, historyCursor.getString(COL_PRICE));
+				data.put(FillUp.ODOMETER, historyCursor.getString(COL_ODOMETER));
+				long id = historyCursor.getLong(COL_ID);
+				data.put(FillUp._ID, String.valueOf(id));
+
+				FillUp f = new FillUp(m_calcEngine, data);
+
+				Map<String, String> vehicleData = new HashMap<String, String>();
+				long vehicleId = historyCursor.getLong(COL_VEHICLEID);
+				vehicleData.put(Vehicle._ID, String.valueOf(vehicleId));
+				vehicleData.put(Vehicle.TITLE, m_vehicleTitles.get(vehicleId));
+
+				fillups.add(0, f);
+
+				m_fillupMap.put(id, f);
+
+				total_fuel += f.getAmount();
+
 				historyCursor.moveToNext();
 			}
 
-			Set<Double> keyset = milesToAmt.keySet();
-			Double[] keys = keyset.toArray(new Double[keyset.size()]);
-			Arrays.sort(keys);
-			double total_fuel = 0;
-			for (int i = keys.length - 1; i > 0; i--) {
-				double amount = milesToAmt.get(keys[i]);
-				double prev_mileage = keys[i - 1];
-				double mileage = keys[i];
-				double diff = mileage - prev_mileage;
-				double mpg = m_calcEngine.calculateEconomy(diff, amount);
-				m_history.put(mileage, mpg);
-				total_fuel += amount;
+			// linkage, to avoid many look-ups
+			for (int i = 0; i < fillups.size() - 1; i++) {
+				FillUp current = fillups.get(i);
+				FillUp next = fillups.get(i + 1);
+
+				current.setNext(next);
+				next.setPrevious(current);
 			}
 
-			double total_distance = keys[keys.length - 1] - keys[0];
+			total_distance = fillups.get(fillups.size() - 1).getOdometer() - fillups.get(0).getOdometer();
 			m_avgMpg = m_calcEngine.calculateEconomy(total_distance, total_fuel);
 		}
 
@@ -270,60 +283,41 @@ public class HistoryView extends Activity implements View.OnCreateContextMenuLis
 
 	private SimpleCursorAdapter.ViewBinder m_viewBinder = new SimpleCursorAdapter.ViewBinder() {
 		public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
-			String val;
-			switch (columnIndex) {
-				case 1:
-					double gallons = cursor.getDouble(columnIndex);
-					val = m_prefs.format(gallons) + m_calcEngine.getVolumeUnitsAbbr();
-					((TextView) view).setText(val);
-					return true;
-				case 2:
-					double price = cursor.getDouble(columnIndex);
-					val = m_prefs.getCurrency() + m_prefs.format(price) + "/" + m_calcEngine.getVolumeUnitsAbbr().trim();
-					((TextView) view).setText(val);
-					return true;
-				case 3:
-					long time = cursor.getLong(columnIndex);
-					Date date = new Date(time);
-					String text = m_prefs.format(date);
-					((TextView) view).setText(text);
-					return true;
-				case 5:
-					int id = cursor.getInt(columnIndex);
-					val = m_vehicleTitles.get(id);
-					boolean hide = true;
-					if (m_vehicleTitles.size() == 1) {
-						hide = true;
+			String text = null;
+			FillUp fillup;
+			TextView textview = (TextView) view;
+			if (columnIndex == COL_AMOUNT) {
+				double gallons = cursor.getDouble(columnIndex);
+				text = m_prefs.format(gallons) + m_calcEngine.getVolumeUnitsAbbr();
+			} else if (columnIndex == COL_PRICE) {
+				double price = cursor.getDouble(columnIndex);
+				text = m_prefs.getCurrency() + m_prefs.format(price) + "/" + m_calcEngine.getVolumeUnitsAbbr().trim();
+			} else if (columnIndex == COL_TIMESTAMP) {
+				long time = cursor.getLong(columnIndex);
+				Date date = new Date(time);
+				text = m_prefs.format(date);
+			} else if (columnIndex == COL_ODOMETER) {
+				if (!cursor.isLast()) {
+					fillup = m_fillupMap.get(cursor.getLong(FillUp.PROJECTION.indexOf(FillUp._ID)));
+					if (fillup == null) {
+						return true;
+					}
+					double mpg = fillup.calcEconomy();
+					int color = 0xFF666666;
+					if (m_calcEngine.better(mpg, m_avgMpg)) {
+						color = 0xFF0AB807;
+					} else if (mpg == m_avgMpg) {
+						color = 0xFF2469FF;
 					} else {
-						if (val != null) {
-							((TextView) view).setText(val);
-							hide = false;
-						}
+						color = 0xFFD90000;
 					}
-					if (hide) {
-						view.setVisibility(View.GONE);
-					}
-					return true;
-				case COL_MILEAGE:
-					double mileage = cursor.getDouble(columnIndex);
-					if (!cursor.isLast()) {
-						Double mpg = m_history.get(mileage);
-						if (mpg == null) {
-							return true;
-						}
-						TextView tv = (TextView) view;
-						int color = 0xFF666666;
-						if (m_calcEngine.better(mpg, m_avgMpg)) {
-							color = 0xFF0AB807;
-						} else if (mpg == m_avgMpg) {
-							color = 0xFF2469FF;
-						} else {
-							color = 0xFFD90000;
-						}
-						tv.setTextColor(color);
-						tv.setText(m_prefs.format(mpg) + m_calcEngine.getEconomyUnits());
-					}
-					return true;
+					textview.setTextColor(color);
+					text = m_prefs.format(mpg) + m_calcEngine.getEconomyUnits();
+				}
+			}
+			if (text != null) {
+				textview.setText(text);
+				return true;
 			}
 			return false;
 		}

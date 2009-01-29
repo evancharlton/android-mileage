@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.evancharlton.mileage.models.FillUp;
 
@@ -65,9 +66,9 @@ public class FillUpView extends AddFillUpView {
 		// load the data
 		String[] projections = new String[] {
 				FillUp._ID,
-				FillUp.COST,
+				FillUp.PRICE,
 				FillUp.AMOUNT,
-				FillUp.MILEAGE,
+				FillUp.ODOMETER,
 				FillUp.DATE,
 				FillUp.VEHICLE_ID,
 				FillUp.COMMENT
@@ -133,6 +134,7 @@ public class FillUpView extends AddFillUpView {
 			dialog.dismiss();
 			if (which == Dialog.BUTTON1) {
 				delete();
+				Toast.makeText(FillUpView.this, getString(R.string.fillup_deleted), Toast.LENGTH_SHORT);
 				finish();
 			}
 		}

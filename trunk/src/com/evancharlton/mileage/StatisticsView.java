@@ -29,6 +29,7 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.evancharlton.mileage.binders.VehicleBinder;
 import com.evancharlton.mileage.calculators.CalculationEngine;
 import com.evancharlton.mileage.models.FillUp;
 import com.evancharlton.mileage.models.Vehicle;
@@ -375,10 +376,7 @@ public class StatisticsView extends Activity {
 	}
 
 	private void populateSpinner() {
-		Cursor c = managedQuery(Vehicle.CONTENT_URI, new String[] {
-				Vehicle._ID,
-				Vehicle.TITLE
-		}, null, null, Vehicle.DEFAULT_SORT_ORDER);
+		Cursor c = managedQuery(Vehicle.CONTENT_URI, Vehicle.getProjection(), null, null, Vehicle.DEFAULT_SORT_ORDER);
 
 		SimpleCursorAdapter vehicleAdapter = new SimpleCursorAdapter(this, android.R.layout.simple_spinner_item, c, new String[] {
 			Vehicle.TITLE
@@ -386,6 +384,7 @@ public class StatisticsView extends Activity {
 			android.R.id.text1
 		});
 		vehicleAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		vehicleAdapter.setViewBinder(new VehicleBinder());
 		m_vehicles.setAdapter(vehicleAdapter);
 
 		if (vehicleAdapter.getCount() == 1) {
@@ -397,9 +396,9 @@ public class StatisticsView extends Activity {
 	private void calculateStatistics(long id) {
 		String[] projection = new String[] {
 				FillUp.AMOUNT,
-				FillUp.COST,
+				FillUp.PRICE,
 				FillUp.DATE,
-				FillUp.MILEAGE
+				FillUp.ODOMETER
 		};
 		Cursor c = managedQuery(FillUp.CONTENT_URI, projection, FillUp.VEHICLE_ID + " = ?", new String[] {
 			String.valueOf(id)

@@ -47,9 +47,9 @@ public class FillUpsProvider extends ContentProvider {
 
 		s_fillUpsProjectionMap = new HashMap<String, String>();
 		s_fillUpsProjectionMap.put(FillUp._ID, FillUp._ID);
-		s_fillUpsProjectionMap.put(FillUp.COST, FillUp.COST);
+		s_fillUpsProjectionMap.put(FillUp.PRICE, FillUp.PRICE);
 		s_fillUpsProjectionMap.put(FillUp.AMOUNT, FillUp.AMOUNT);
-		s_fillUpsProjectionMap.put(FillUp.MILEAGE, FillUp.MILEAGE);
+		s_fillUpsProjectionMap.put(FillUp.ODOMETER, FillUp.ODOMETER);
 		s_fillUpsProjectionMap.put(FillUp.VEHICLE_ID, FillUp.VEHICLE_ID);
 		s_fillUpsProjectionMap.put(FillUp.DATE, FillUp.DATE);
 		s_fillUpsProjectionMap.put(FillUp.LATITUDE, FillUp.LATITUDE);
@@ -75,9 +75,9 @@ public class FillUpsProvider extends ContentProvider {
 			StringBuilder sql = new StringBuilder();
 			sql.append("CREATE TABLE ").append(FILLUPS_TABLE_NAME).append(" (");
 			sql.append(FillUp._ID).append(" INTEGER PRIMARY KEY AUTOINCREMENT,");
-			sql.append(FillUp.COST).append(" DOUBLE,");
+			sql.append(FillUp.PRICE).append(" DOUBLE,");
 			sql.append(FillUp.AMOUNT).append(" DOUBLE,");
-			sql.append(FillUp.MILEAGE).append(" DOUBLE,");
+			sql.append(FillUp.ODOMETER).append(" DOUBLE,");
 			sql.append(FillUp.VEHICLE_ID).append(" INTEGER,");
 			sql.append(FillUp.DATE).append(" INTEGER,");
 			sql.append(FillUp.LATITUDE).append(" DOUBLE,");
@@ -216,12 +216,12 @@ public class FillUpsProvider extends ContentProvider {
 		Long now = Long.valueOf(System.currentTimeMillis());
 
 		// make sure that the values are all set
-		if (values.containsKey(FillUp.COST) == false) {
-			values.put(FillUp.COST, 0.00D);
+		if (values.containsKey(FillUp.PRICE) == false) {
+			values.put(FillUp.PRICE, 0.00D);
 		}
 
-		if (values.containsKey(FillUp.MILEAGE) == false) {
-			values.put(FillUp.MILEAGE, 0.00D);
+		if (values.containsKey(FillUp.ODOMETER) == false) {
+			values.put(FillUp.ODOMETER, 0.00D);
 		}
 
 		if (values.containsKey(FillUp.AMOUNT) == false) {

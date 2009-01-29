@@ -58,10 +58,13 @@ public class EditVehicleView extends AddVehicleView {
 
 	protected Vehicle setData() {
 		Vehicle vehicle = super.setData();
-		if (m_vehicleWasDefault && m_default.isChecked() == false) {
+		boolean checked = m_default.isChecked();
+		if (m_vehicleWasDefault && checked == false) {
 			// remove it from being default, fall back to whatever was last
 			// default
 			vehicle.setDefault(false);
+		} else if (checked) {
+			vehicle.setDefault(checked);
 		}
 		return vehicle;
 	}

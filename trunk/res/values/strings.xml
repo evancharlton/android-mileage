@@ -51,11 +51,12 @@
 	<string name="vehicle_title">Title (e.g. Mom's car)</string>
 	<string name="vehicle_add">Add Vehicle</string>
 	<string name="vehicle_save">Save Vehicle</string>
+
 	<string name="vehicle_saved">Vehicle saved</string>
 	<string name="vehicle_error_saving">Error while saving vehicle!</string>
-	
 	<string name="fillup_saved">Fill-up saved</string>
 	<string name="fillup_error_saving">Error while saving fill-up!</string>
+	<string name="fillup_deleted">Fill-up deleted</string>
 	
 	<string name="context_litres_to_gallons">Litres to Gallons</string>
 	<string name="context_litres_to_imp_gallons">Litres to Imperial Gallons</string>

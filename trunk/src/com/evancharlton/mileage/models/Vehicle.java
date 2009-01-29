@@ -204,6 +204,8 @@ public class Vehicle extends Model {
 	public void setDefault(boolean def) {
 		if (!def) {
 			m_defaultState = DEFAULT_FALSE_CHANGED;
+		} else {
+			m_defaultState = DEFAULT_TRUE;
 		}
 	}
 
