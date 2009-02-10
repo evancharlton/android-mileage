@@ -17,6 +17,7 @@
 		<activity android:name="AddVehicleView"/>
 		<activity android:name="EditVehicleView"/>
 		<activity android:name="StatisticsView"/>
+		<activity android:name=".views.ChartsView"/>
 		<activity android:name="ImportExportView"/>
 		<activity android:name="SettingsView"/>
 		<activity android:name="AddFillUpView"/>

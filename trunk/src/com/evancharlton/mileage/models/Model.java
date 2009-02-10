@@ -1,5 +1,6 @@
 package com.evancharlton.mileage.models;
 
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 
@@ -52,7 +53,7 @@ public abstract class Model implements BaseColumns {
 			if (num == 1) {
 				m_id = -1;
 			}
-			closeDatabase();
+			closeDatabase(null);
 		}
 	}
 
@@ -70,7 +71,12 @@ public abstract class Model implements BaseColumns {
 	 * Closes the database, if opened. Note that after closing, m_db should be
 	 * null.
 	 */
-	protected void closeDatabase() {
+	protected void closeDatabase(Cursor c) {
+		if (c != null) {
+			if (!c.isClosed()) {
+				c.close();
+			}
+		}
 		if (m_db != null) {
 			m_db.close();
 			m_db = null;

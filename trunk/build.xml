@@ -327,16 +327,13 @@
 		</exec>
 	</target>
 	
-	<target name="test" depends="u,i">
+	<target name="test" depends="reinstall">
 		<echo>Installing ${application-package}.${ant.project.name}...</echo>
-		<exec executable="cd">
-			<arg line="test"/>
+		<exec executable="adb">
+			<arg line="install -r tests/bin/MileageTest.apk"/>
 		</exec>
-		<exec executable="ant">
-			<arg line="install"/>
-		</exec>
-		<echo>Running tests ... </echo>
-		<exec executable="${adb}">
+		<echo>Running tests ...</echo>
+		<exec executable="adb">
 			<arg line="shell am instrument -w ${application-package}.tests/android.test.InstrumentationTestRunner"/>
 		</exec>
 	</target>

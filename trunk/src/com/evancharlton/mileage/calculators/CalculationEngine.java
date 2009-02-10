@@ -61,6 +61,10 @@ public class CalculationEngine {
 		m_outputDistance = distance;
 	}
 
+	public int getOutputDistance() {
+		return m_outputDistance;
+	}
+
 	public void setEconomy(int economy) {
 		m_inverse = false;
 		switch (economy) {

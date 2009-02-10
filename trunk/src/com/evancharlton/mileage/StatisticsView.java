@@ -1,58 +1,32 @@
 package com.evancharlton.mileage;
 
-import java.net.URLEncoder;
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.List;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.database.Cursor;
-import android.database.CursorIndexOutOfBoundsException;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.evancharlton.mileage.binders.VehicleBinder;
 import com.evancharlton.mileage.calculators.CalculationEngine;
 import com.evancharlton.mileage.models.FillUp;
+import com.evancharlton.mileage.models.Statistic;
+import com.evancharlton.mileage.models.StatisticsGroup;
 import com.evancharlton.mileage.models.Vehicle;
 
 public class StatisticsView extends Activity {
-	private static final int MAX_DATA_POINTS = 100;
-
-	private HashMap<Integer, TextView> m_stats = new HashMap<Integer, TextView>();
 	private Spinner m_vehicles;
-	private ArrayList<Double> m_amounts;
-	private ArrayList<Double> m_costs;
-	private ArrayList<Long> m_dates;
-	private ArrayList<Double> m_miles;
 	private PreferencesProvider m_pref;
 	private CalculationEngine m_engine;
-	private Button m_fuelAmountBtn;
-	private Button m_fuelPriceBtn;
-	private Button m_economyBtn;
-	private Button m_distanceBtn;
-	private DecimalFormat m_format = new DecimalFormat("0.00");
-
-	// TODO: set chs to be the same as the display size
-	private static final String CHART_URL_BASE = "http://chart.apis.google.com/chart?cht=lc&chs=480x320&chd=t:";
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -103,276 +77,6 @@ public class StatisticsView extends Activity {
 				// uh, do nothing?
 			}
 		});
-
-		m_fuelPriceBtn = (Button) findViewById(R.id.fuel_price_btn);
-		m_fuelAmountBtn = (Button) findViewById(R.id.fuel_amount_btn);
-		m_distanceBtn = (Button) findViewById(R.id.delta_distance_btn);
-		m_economyBtn = (Button) findViewById(R.id.fuel_economy_btn);
-
-		m_fuelPriceBtn.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				StringBuilder builder = new StringBuilder();
-				builder.append(CHART_URL_BASE);
-				double total = 0D;
-				double max = 0D;
-				double min = Double.MAX_VALUE;
-				int min_index = 0;
-				int max_index = 0;
-				int skip = 1;
-				if (m_costs.size() > MAX_DATA_POINTS) {
-					skip = (int) Math.floor((double) m_costs.size() / (double) MAX_DATA_POINTS);
-				}
-				for (int i = 0; i < m_costs.size(); i += skip) {
-					double price = m_costs.get(i);
-					builder.append(m_format.format(price)).append(",");
-					total += price;
-					if (price > max) {
-						max = price;
-						max_index = i;
-					}
-					if (price < min) {
-						min = price;
-						min_index = i;
-					}
-				}
-				double avg = total / (MAX_DATA_POINTS > m_costs.size() ? m_costs.size() : MAX_DATA_POINTS);
-				double chart_max = Math.ceil(max);
-				double chart_min = Math.floor(min);
-				double avg_percent = ((avg - chart_min) / (chart_max - chart_min));
-				builder.deleteCharAt(builder.length() - 1);
-
-				setUpChart(builder, chart_min, chart_max, avg_percent);
-				chartTitle(builder, "Fuel Price vs Time");
-
-				long end_time = m_dates.get(0);
-				long start_time = m_dates.get(m_dates.size() - 1);
-				long min_time = m_dates.get(min_index);
-				long max_time = m_dates.get(max_index);
-				double min_pos = (((double) min_index) / ((double) m_dates.size())) * 100D;
-				double max_pos = (((double) max_index) / ((double) m_dates.size())) * 100D;
-
-				addLabels(builder, start_time, end_time, min_time, min_pos, max_time, max_pos, avg, avg_percent, chart_min, chart_max);
-
-				showChart(builder);
-			}
-		});
-
-		m_fuelAmountBtn.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				StringBuilder builder = new StringBuilder();
-				builder.append(CHART_URL_BASE);
-				double total = 0D;
-				double max = 0D;
-				double min = Double.MAX_VALUE;
-				int max_index = 0;
-				int min_index = 0;
-				int skip = 1;
-				if (m_amounts.size() > MAX_DATA_POINTS) {
-					skip = (int) Math.floor((double) m_amounts.size() / (double) MAX_DATA_POINTS);
-				}
-				for (int i = 0; i < m_amounts.size(); i += skip) {
-					double amount = m_amounts.get(i);
-					builder.append(m_format.format(amount)).append(",");
-					total += amount;
-
-					if (amount > max) {
-						max = amount;
-						max_index = i;
-					}
-					if (amount < min) {
-						min = amount;
-						min_index = i;
-					}
-				}
-				double avg = total / (MAX_DATA_POINTS > m_amounts.size() ? m_amounts.size() : MAX_DATA_POINTS);
-				double chart_max = Math.ceil(max);
-				double chart_min = 0D; // TODO: support this later?
-				double avg_percent = (avg / chart_max);
-				builder.deleteCharAt(builder.length() - 1);
-
-				setUpChart(builder, 0, chart_max, avg_percent);
-				chartTitle(builder, "Amount of Fuel per Fill-Up vs Time");
-
-				long end_time = m_dates.get(0);
-				long start_time = m_dates.get(m_dates.size() - 1);
-				long min_time = m_dates.get(min_index);
-				long max_time = m_dates.get(max_index);
-				double min_pos = (((double) min_index) / ((double) m_dates.size())) * 100D;
-				double max_pos = (((double) max_index) / ((double) m_dates.size())) * 100D;
-
-				addLabels(builder, start_time, end_time, min_time, min_pos, max_time, max_pos, avg, avg_percent, chart_min, chart_max);
-
-				showChart(builder);
-			}
-		});
-
-		m_economyBtn.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				StringBuilder builder = new StringBuilder();
-				builder.append(CHART_URL_BASE);
-				PreferencesProvider prefs = PreferencesProvider.getInstance(StatisticsView.this);
-				CalculationEngine engine = prefs.getCalculator();
-				double min = engine.getBestEconomy();
-				double max = engine.getWorstEconomy();
-				double fuel = 0D;
-				int min_index = 0;
-				int max_index = 0;
-				int skip = 1;
-				if (m_amounts.size() > MAX_DATA_POINTS) {
-					skip = (int) Math.floor((double) m_amounts.size() / (double) MAX_DATA_POINTS);
-				}
-				double total_distance = 0D;
-				for (int i = 0; i < m_miles.size() - skip; i += skip) {
-					double distance = m_miles.get(i) - m_miles.get(i + skip);
-					total_distance += distance;
-					fuel += m_amounts.get(i);
-					double economy = engine.calculateEconomy(distance, m_amounts.get(i));
-					if (economy > max) {
-						max = economy;
-						max_index = i;
-					}
-					if (economy < min) {
-						min = economy;
-						min_index = i;
-					}
-					builder.append(m_format.format(economy)).append(",");
-				}
-
-				builder.deleteCharAt(builder.length() - 1);
-
-				double chart_min = Math.floor(min);
-				double chart_max = Math.ceil(max);
-				double avg = engine.calculateEconomy(total_distance, fuel);
-				double avg_percent = (avg - chart_min) / (chart_max - chart_min);
-
-				setUpChart(builder, chart_min, chart_max, avg_percent, engine.getBestEconomy() < engine.getWorstEconomy());
-				chartTitle(builder, "Fuel Economy vs Time");
-
-				long end_time = m_dates.get(0);
-				long start_time = m_dates.get(m_dates.size() - 1);
-				long min_time = m_dates.get(min_index);
-				long max_time = m_dates.get(max_index);
-				double min_pos = (((double) min_index) / ((double) m_dates.size())) * 100D;
-				double max_pos = (((double) max_index) / ((double) m_dates.size())) * 100D;
-
-				addLabels(builder, start_time, end_time, min_time, min_pos, max_time, max_pos, avg, avg_percent, chart_min, chart_max);
-
-				showChart(builder);
-			}
-		});
-
-		m_distanceBtn.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				StringBuilder builder = new StringBuilder();
-				builder.append(CHART_URL_BASE);
-				double min = Double.MAX_VALUE;
-				double max = 0D;
-				double total = 0D;
-				int min_index = 0;
-				int max_index = 0;
-				int skip = 1;
-				if (m_amounts.size() > MAX_DATA_POINTS) {
-					skip = (int) Math.floor((double) m_amounts.size() / (double) MAX_DATA_POINTS);
-				}
-				for (int i = 0; i < m_miles.size() - skip; i += skip) {
-					double distance = m_miles.get(i) - m_miles.get(i + skip);
-					builder.append(distance).append(",");
-					total += distance;
-
-					if (distance > max) {
-						max = distance;
-						max_index = i;
-					}
-					if (distance < min) {
-						min = distance;
-						min_index = i;
-					}
-				}
-				builder.deleteCharAt(builder.length() - 1);
-
-				double chart_min = Math.floor(min);
-				double chart_max = Math.ceil(max);
-				double avg = total / (MAX_DATA_POINTS > m_miles.size() ? m_miles.size() : MAX_DATA_POINTS);
-				double avg_percent = (avg - chart_min) / (chart_max - chart_min);
-
-				setUpChart(builder, chart_min, chart_max, avg_percent, false);
-				chartTitle(builder, "Distance Between Fill-ups vs Time");
-
-				long end_time = m_dates.get(0);
-				long start_time = m_dates.get(m_dates.size() - 1);
-				long min_time = m_dates.get(min_index);
-				long max_time = m_dates.get(max_index);
-				double min_pos = (((double) min_index) / ((double) m_dates.size())) * 100D;
-				double max_pos = (((double) max_index) / ((double) m_dates.size())) * 100D;
-
-				addLabels(builder, start_time, end_time, min_time, min_pos, max_time, max_pos, avg, avg_percent, chart_min, chart_max);
-
-				showChart(builder);
-			}
-		});
-	}
-
-	private void chartTitle(StringBuilder builder, String title) {
-		builder.append("&chtt=").append(URLEncoder.encode(title));
-	}
-
-	private void addLabels(StringBuilder builder, long start_time, long end_time, long min_time, double min_pos, long max_time, double max_pos, double avg, double avg_percent, double chart_min, double chart_max) {
-		DecimalFormat format = new DecimalFormat("0.00");
-		SimpleDateFormat monthFmt = new SimpleDateFormat("MMM");
-		SimpleDateFormat yearFmt = new SimpleDateFormat("yyyy");
-
-		Date start_date = new Date(start_time);
-		Date end_date = new Date(end_time);
-		Date min_date = new Date(min_time);
-		Date max_date = new Date(max_time);
-
-		builder.append("&chxt=x,x,y");
-		builder.append("&chxl=");
-
-		builder.append("0:|").append(monthFmt.format(start_date)).append("|");
-		builder.append(monthFmt.format(min_date)).append("|");
-		builder.append(monthFmt.format(max_date)).append("|");
-		builder.append(monthFmt.format(end_date));
-
-		builder.append("|1:|").append(yearFmt.format(start_date));
-		builder.append("|").append(yearFmt.format(min_date));
-		builder.append("|").append(yearFmt.format(max_date));
-		builder.append("|").append(yearFmt.format(end_date));
-
-		builder.append("|2:|").append(chart_min).append("|").append(format.format(avg)).append("|").append(chart_max);
-
-		builder.append("&chxp=");
-		builder.append("0,0,").append(min_pos).append(",").append(max_pos).append(",100");
-		builder.append("|1,0,").append(min_pos).append(",").append(max_pos).append(",100");
-		builder.append("|2,0,").append(format.format(avg_percent * 100)).append(",100");
-	}
-
-	private void showChart(StringBuilder url) {
-		Intent i = new Intent(Intent.ACTION_VIEW);
-		i.setData(Uri.parse(url.toString()));
-		startActivity(i);
-	}
-
-	private void setUpChart(StringBuilder builder, double chart_min, double chart_max, double avg_percent) {
-		setUpChart(builder, chart_min, chart_max, avg_percent, true);
-	}
-
-	private void setUpChart(StringBuilder builder, double chart_min, double chart_max, double avg_percent, boolean good_on_bottom) {
-		builder.append("&chco=000000");
-		builder.append("&chds=").append(chart_min).append(",").append(chart_max);
-
-		builder.append("&chm=");
-		if (good_on_bottom) {
-			builder.append("r,FF8880,0,").append(m_format.format(avg_percent)).append(",1|");
-			builder.append("r,70FF9D,0,0,").append(m_format.format(avg_percent));
-		} else {
-			builder.append("r,70FF9D,0,").append(m_format.format(avg_percent)).append(",1|");
-			builder.append("r,FF8880,0,0,").append(m_format.format(avg_percent));
-		}
-	};
-
-	private void getTextView(int id) {
-		m_stats.put(id, (TextView) findViewById(id));
 	}
 
 	private void populateSpinner() {
@@ -394,262 +98,211 @@ public class StatisticsView extends Activity {
 	}
 
 	private void calculateStatistics(long id) {
-		String[] projection = new String[] {
-				FillUp.AMOUNT,
-				FillUp.PRICE,
-				FillUp.DATE,
-				FillUp.ODOMETER
-		};
-		Cursor c = managedQuery(FillUp.CONTENT_URI, projection, FillUp.VEHICLE_ID + " = ?", new String[] {
-			String.valueOf(id)
-		}, FillUp.DEFAULT_SORT_ORDER);
+		// first, clean up the UI
+		LinearLayout container = (LinearLayout) findViewById(R.id.stats_container);
+		container.removeAllViews();
 
-		HashMap<Integer, String> calculatedData = new HashMap<Integer, String>();
+		// get ready to start storing the StatisticsGroups
+		List<StatisticsGroup> groups = new ArrayList<StatisticsGroup>();
 
-		m_amounts = new ArrayList<Double>();
-		m_costs = new ArrayList<Double>();
-		m_dates = new ArrayList<Long>();
-		m_miles = new ArrayList<Double>();
-
-		int count = 0;
-		c.moveToFirst();
-		int num = c.getCount();
-		while (num > 0) {
-			try {
-				m_amounts.add(c.getDouble(0));
-				m_costs.add(c.getDouble(1));
-				m_dates.add(c.getLong(2));
-				m_miles.add(c.getDouble(3));
-				c.moveToNext();
-			} catch (CursorIndexOutOfBoundsException e) {
-				break;
+		// then get the list of all the FillUps for later processing
+		List<FillUp> fillups = new ArrayList<FillUp>();
+		FillUp first = new Vehicle(id).getOldestFillUp(m_engine);
+		FillUp prev = null;
+		while (first != null) {
+			fillups.add(first);
+			prev = first;
+			first = first.getNext();
+			if (first != null) {
+				first.setPrevious(prev);
 			}
-			count++;
-			num--;
 		}
 
-		if (count < 2) {
-			// throw up a notice
-			AlertDialog dlg = new AlertDialog.Builder(this).create();
-			dlg.setTitle(R.string.statistics_no_data);
-			dlg.setMessage(getString(R.string.statistics_no_data_msg));
-			dlg.setButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int which) {
-					dialog.dismiss();
-				}
-			});
-			dlg.show();
-			return;
-		}
+		// now that we have all the data ready to go, let's get started!
+		groups.add(calcDistances(fillups));
+		groups.add(calcEconomy(fillups));
+		groups.add(calcPrices(fillups));
+		groups.add(calcCosts(fillups));
+		groups.add(calcAmounts(fillups));
+		groups.add(calcExpenses(fillups));
 
-		calculatedData.putAll(distanceStats());
-		calculatedData.putAll(economyStats());
-		calculatedData.putAll(costStats());
-
-		// update the text
-		for (Integer dataId : calculatedData.keySet()) {
-			setText(dataId, calculatedData.get(dataId));
+		// render the groups
+		for (StatisticsGroup group : groups) {
+			container.addView(group.render(StatisticsView.this));
 		}
 	}
 
-	private Map<Integer, String> distanceStats() {
-		HashMap<Integer, String> data = new HashMap<Integer, String>();
-		// total distance tracked
-		double total_distance = 0.0D;
-		// distance between last two fill-ups
-		double running_distance = 0.0D;
-		if (m_miles.size() > 1) {
-			running_distance = Math.abs(m_miles.get(0) - m_miles.get(1));
-			total_distance = Math.abs(m_miles.get(0) - m_miles.get(m_miles.size() - 1));
-		}
+	public StatisticsGroup calcDistances(final List<FillUp> fillups) {
+		StatisticsGroup group = new StatisticsGroup("Distance Between Fill-Ups");
 
-		double max_distance = 0.0D;
+		double total_distance = 0D;
 		double min_distance = Double.MAX_VALUE;
-		for (int i = 0; i < m_miles.size() - 1; i++) {
-			double diff = m_miles.get(i) - m_miles.get(i + 1);
-			if (diff > max_distance) {
-				max_distance = diff;
-			}
-			if (diff < min_distance) {
-				min_distance = diff;
-			}
-		}
-		double avg_distance = total_distance / (m_miles.size() - 1);
-		data.put(R.id.stats_distance_running, string(running_distance, m_engine.getDistanceUnitsAbbr()));
-		data.put(R.id.stats_distance_average, string(avg_distance, m_engine.getDistanceUnitsAbbr()));
-		data.put(R.id.stats_distance_maximum, string(max_distance, m_engine.getDistanceUnitsAbbr()));
-		data.put(R.id.stats_distance_minimum, string(min_distance, m_engine.getDistanceUnitsAbbr()));
-		return data;
-	}
+		double max_distance = 0D;
 
-	private Map<Integer, String> economyStats() {
-		HashMap<Integer, String> data = new HashMap<Integer, String>();
-		double average_mpg = 0.0D;
-		double minimum_mpg = m_engine.getBestEconomy();
-		double maximum_mpg = m_engine.getWorstEconomy();
-		double total_miles = 0.0D;
-		double total_fuel = 0.0D;
-		double running_mpg = 0.0D;
-
-		for (int i = 0; i < m_amounts.size() - 1; i++) {
-			total_fuel += m_amounts.get(i);
-			double mile_diff = m_miles.get(i) - m_miles.get(i + 1);
-			total_miles += mile_diff;
-			double mpg = m_engine.calculateEconomy(mile_diff, m_amounts.get(i));
-			if (m_engine.better(mpg, maximum_mpg)) {
-				maximum_mpg = mpg;
-			}
-			if (m_engine.worse(mpg, minimum_mpg)) {
-				minimum_mpg = mpg;
-			}
-
-			if (i == 0) {
-				running_mpg = mpg;
+		for (FillUp fillup : fillups) {
+			double distance = fillup.calcDistance();
+			if (distance > 0) {
+				total_distance += distance;
+				if (distance < min_distance) {
+					min_distance = distance;
+				}
+				if (distance > max_distance) {
+					max_distance = distance;
+				}
 			}
 		}
-		// note that you don't sum up ALL of m_amounts because the last one
-		// (which is the oldest in history terms) does not relate to the average
-		// mileage.
 
-		average_mpg = m_engine.calculateEconomy(total_miles, total_fuel);
+		group.add(new Statistic("Average", (total_distance / (fillups.size() - 1)), m_engine.getDistanceUnitsAbbr()));
+		group.add(new Statistic("Maximum", max_distance, m_engine.getDistanceUnitsAbbr()));
+		group.add(new Statistic("Minimum", min_distance, m_engine.getDistanceUnitsAbbr()));
+		group.add(new Statistic("Last", fillups.get(fillups.size() - 1).calcDistance(), m_engine.getDistanceUnitsAbbr()));
 
-		data.put(R.id.stats_economy_average, string(average_mpg, m_engine.getEconomyUnits()));
-		data.put(R.id.stats_economy_maximum, string(maximum_mpg, m_engine.getEconomyUnits()));
-		data.put(R.id.stats_economy_minimum, string(minimum_mpg, m_engine.getEconomyUnits()));
-		data.put(R.id.stats_economy_running, string(running_mpg, m_engine.getEconomyUnits()));
-
-		return data;
+		return group;
 	}
 
-	private Map<Integer, String> costStats() {
-		HashMap<Integer, String> data = new HashMap<Integer, String>();
-		double total_cost = 0.0D;
-		double lowest_ppg = Double.MAX_VALUE;
-		double highest_ppg = 0.0D;
-		double total_fuel = 0.0D;
-		double highest_amt = 0.0D;
-		double lowest_amt = Double.MAX_VALUE;
-		double lowest_cost = Double.MAX_VALUE;
-		double highest_cost = 0.0D;
-		double total_expense = 0.0D;
-		double thirty_day_cost = 0.0D;
-		double yearly_cost = 0.0D;
+	public StatisticsGroup calcEconomy(final List<FillUp> fillups) {
+		StatisticsGroup group = new StatisticsGroup("Fuel Economy");
+
+		double total_distance = fillups.get(fillups.size() - 1).getOdometer() - fillups.get(0).getOdometer();
+		double total_fuel = 0D;
+		for (int i = 0; i < fillups.size() - 2; i++) {
+			total_fuel += fillups.get(i).getAmount();
+		}
+
+		double max_economy = 0D;
+		double min_economy = Double.MAX_VALUE;
+		for (FillUp fillup : fillups) {
+			double economy = fillup.calcEconomy();
+			if (economy > 0) {
+				if (m_engine.better(economy, max_economy)) {
+					max_economy = economy;
+				}
+				if (m_engine.worse(economy, min_economy)) {
+					min_economy = economy;
+				}
+			}
+		}
+
+		group.add(new Statistic("Average", m_engine.calculateEconomy(total_distance, total_fuel), m_engine.getEconomyUnits()));
+		group.add(new Statistic("Maximum", max_economy, m_engine.getEconomyUnits()));
+		group.add(new Statistic("Minimum", min_economy, m_engine.getEconomyUnits()));
+		group.add(new Statistic("Last", fillups.get(fillups.size() - 1).calcEconomy(), m_engine.getEconomyUnits()));
+
+		return group;
+	}
+
+	public StatisticsGroup calcPrices(final List<FillUp> fillups) {
+		StatisticsGroup group = new StatisticsGroup("Fuel Prices");
+
+		double min_price = Double.MAX_VALUE;
+		double max_price = 0D;
+		double total_price = 0D;
+
+		for (FillUp fillup : fillups) {
+			double price = fillup.getPrice();
+			total_price += price;
+			if (price < min_price) {
+				min_price = price;
+			}
+			if (price > max_price) {
+				max_price = price;
+			}
+		}
+
+		group.add(new Statistic("Average", m_pref.getCurrency(), total_price / fillups.size(), "/" + m_engine.getVolumeUnitsAbbr()));
+		group.add(new Statistic("Maximum", m_pref.getCurrency(), max_price, "/" + m_engine.getVolumeUnitsAbbr()));
+		group.add(new Statistic("Minimum", m_pref.getCurrency(), min_price, "/" + m_engine.getVolumeUnitsAbbr()));
+		group.add(new Statistic("Last", m_pref.getCurrency(), fillups.get(fillups.size() - 1).getPrice(), "/" + m_engine.getVolumeUnitsAbbr()));
+
+		return group;
+	}
+
+	public StatisticsGroup calcCosts(final List<FillUp> fillups) {
+		StatisticsGroup group = new StatisticsGroup("Fill-Up Costs");
+
+		double min_cost = Double.MAX_VALUE;
+		double max_cost = 0D;
+		double total_cost = 0D;
+
+		for (FillUp fillup : fillups) {
+			double cost = fillup.calcCost();
+			total_cost += cost;
+			if (cost < min_cost) {
+				min_cost = cost;
+			}
+			if (cost > max_cost) {
+				max_cost = cost;
+			}
+		}
+
+		group.add(new Statistic("Average", m_pref.getCurrency(), total_cost / fillups.size()));
+		group.add(new Statistic("Maximum", m_pref.getCurrency(), max_cost));
+		group.add(new Statistic("Minimum", m_pref.getCurrency(), min_cost));
+		group.add(new Statistic("Last", m_pref.getCurrency(), fillups.get(fillups.size() - 1).calcCost()));
+
+		return group;
+	}
+
+	public StatisticsGroup calcAmounts(final List<FillUp> fillups) {
+		StatisticsGroup group = new StatisticsGroup("Fuel Amounts");
+
+		double min_amount = Double.MAX_VALUE;
+		double max_amount = 0D;
+		double total_amount = 0D;
+
+		for (FillUp fillup : fillups) {
+			double amount = fillup.getAmount();
+			total_amount += amount;
+			if (amount < min_amount) {
+				min_amount = amount;
+			}
+			if (amount > max_amount) {
+				max_amount = amount;
+			}
+		}
+
+		int ten_thousand_miles = (int) Math.ceil(m_engine.convertDistance(PreferencesProvider.MILES, m_engine.getOutputDistance(), 10000));
+		double distance = fillups.get(fillups.size() - 1).getOdometer() - fillups.get(0).getOdometer();
+		double fuel_per_10k = (m_engine.convertVolume(total_amount) / m_engine.convertDistance(distance)) * ten_thousand_miles;
+
+		group.add(new Statistic("Total", total_amount, m_engine.getVolumeUnitsAbbr()));
+		group.add(new Statistic("Average", total_amount / fillups.size(), m_engine.getVolumeUnitsAbbr()));
+		group.add(new Statistic("Maximum", max_amount, m_engine.getVolumeUnitsAbbr()));
+		group.add(new Statistic("Minimum", min_amount, m_engine.getVolumeUnitsAbbr()));
+		group.add(new Statistic("Last", fillups.get(fillups.size() - 1).calcCost(), m_engine.getVolumeUnitsAbbr()));
+		group.add(new Statistic(String.format("Fuel / %d %s", ten_thousand_miles, m_engine.getDistanceUnitsAbbr()), fuel_per_10k, m_engine.getVolumeUnitsAbbr()));
+
+		return group;
+	}
+
+	public StatisticsGroup calcExpenses(final List<FillUp> fillups) {
+		StatisticsGroup group = new StatisticsGroup("Fuel Expenses");
 
 		Calendar cal = Calendar.getInstance();
 		cal.setTimeInMillis(System.currentTimeMillis());
 
-		long month_then = new GregorianCalendar(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) - 1, cal.get(Calendar.DAY_OF_MONTH)).getTimeInMillis();
-		long year_then = new GregorianCalendar(cal.get(Calendar.YEAR) - 1, cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH)).getTimeInMillis();
+		long thirty_days_ago = new GregorianCalendar(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) - 1, cal.get(Calendar.DAY_OF_MONTH)).getTimeInMillis();
+		long one_year_ago = new GregorianCalendar(cal.get(Calendar.YEAR) - 1, cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH)).getTimeInMillis();
 
-		for (int i = 0; i < m_costs.size(); i++) {
-			double cost_ppg = m_costs.get(i);
-			if (cost_ppg > highest_ppg) {
-				highest_ppg = cost_ppg;
+		double thirty_day_total = 0D;
+		double yearly_total = 0D;
+		double total = 0D;
+
+		for (FillUp fillup : fillups) {
+			total += fillup.calcCost();
+			long time = fillup.getDate().getTimeInMillis();
+			if (time > thirty_days_ago) {
+				thirty_day_total += fillup.calcCost();
 			}
-			if (cost_ppg < lowest_ppg) {
-				lowest_ppg = cost_ppg;
-			}
-
-			double amount = m_amounts.get(i);
-			if (amount > highest_amt) {
-				highest_amt = amount;
-			}
-			if (amount < lowest_amt) {
-				lowest_amt = amount;
-			}
-
-			double cost = cost_ppg * amount;
-			if (cost > highest_cost) {
-				highest_cost = cost;
-			}
-			if (cost < lowest_cost) {
-				lowest_cost = cost;
-			}
-
-			long date = m_dates.get(i);
-			if (date > month_then) {
-				thirty_day_cost += cost;
-			}
-
-			if (date > year_then) {
-				yearly_cost += cost;
-			}
-
-			total_cost += cost_ppg;
-			total_fuel += amount;
-			total_expense += cost;
-		}
-
-		// set the text on the "per 10k" stat
-		double divisor = Math.ceil(m_engine.convertDistance(PreferencesProvider.MILES, m_pref.getInt(SettingsView.DISTANCE, 0), 10000));
-		String amnt = String.valueOf((int) divisor);
-		((TextView) findViewById(R.id.label_amount_per_10k)).setText(getResources().getString(R.string.stats_amount_per_10k, m_engine.getDistanceUnitsAbbr(), amnt));
-		double fuel_per_10k = (m_engine.convertVolume(total_fuel) / m_engine.convertDistance(range(m_miles))) * divisor;
-
-		data.put(R.id.stats_price_latest, string(m_pref.getCurrency(), m_costs.get(0), "/" + m_engine.getVolumeUnitsAbbr().trim()));
-		data.put(R.id.stats_price_average, string(m_pref.getCurrency(), total_cost / m_costs.size(), "/" + m_engine.getVolumeUnitsAbbr().trim()));
-		data.put(R.id.stats_price_minimum, string(m_pref.getCurrency(), lowest_ppg, "/" + m_engine.getVolumeUnitsAbbr().trim()));
-		data.put(R.id.stats_price_maximum, string(m_pref.getCurrency(), highest_ppg, "/" + m_engine.getVolumeUnitsAbbr().trim()));
-		data.put(R.id.stats_amount_total, string(total_fuel, m_engine.getVolumeUnitsAbbr()));
-		data.put(R.id.stats_amount_last, string(m_amounts.get(0), m_engine.getVolumeUnitsAbbr()));
-		data.put(R.id.stats_amount_average, string(total_fuel / m_amounts.size(), m_engine.getVolumeUnitsAbbr()));
-		data.put(R.id.stats_amount_average_cost, string(m_pref.getCurrency(), total_expense / m_costs.size()));
-		data.put(R.id.stats_amount_maximum, string(highest_amt, m_engine.getVolumeUnitsAbbr()));
-		data.put(R.id.stats_amount_minimum, string(lowest_amt, m_engine.getVolumeUnitsAbbr()));
-		data.put(R.id.stats_amount_maximum_cost, string(m_pref.getCurrency(), highest_cost));
-		data.put(R.id.stats_amount_minimum_cost, string(m_pref.getCurrency(), lowest_cost));
-		data.put(R.id.stats_expense_thirty_days, string(m_pref.getCurrency(), thirty_day_cost));
-		data.put(R.id.stats_expense_running, string(m_pref.getCurrency(), total_expense));
-		data.put(R.id.stats_expense_yearly, string(m_pref.getCurrency(), yearly_cost));
-		data.put(R.id.stats_cost_last, string(m_pref.getCurrency(), m_costs.get(0) * m_amounts.get(0)));
-		data.put(R.id.stats_amount_per_10k, string(fuel_per_10k, m_engine.getVolumeUnitsAbbr()));
-
-		return data;
-	}
-
-	private double range(Collection<Double> coll) {
-		double ret = 0D;
-		if (coll.size() >= 2) {
-			double max = 0D;
-			double min = Double.MAX_VALUE;
-			double c = 0D;
-			Iterator<Double> i = coll.iterator();
-			while (i.hasNext()) {
-				c = i.next();
-				if (c > max) {
-					max = c;
-				}
-				if (c < min) {
-					min = c;
-				}
-			}
-			ret = max - min;
-		}
-		return ret;
-	}
-
-	private void setText(int id, String text) {
-		TextView tv = m_stats.get(id);
-		if (tv == null) {
-			getTextView(id);
-			tv = m_stats.get(id);
-			if (tv == null) {
-				throw new IllegalArgumentException("Invalid ID: " + String.valueOf(id));
+			if (time > one_year_ago) {
+				yearly_total += fillup.calcCost();
 			}
 		}
-		tv.setText(text);
-	}
 
-	private String string(double val, String postfix) {
-		return string("", val, postfix);
-	}
+		group.add(new Statistic("Total", m_pref.getCurrency(), total));
+		group.add(new Statistic("Last Month", m_pref.getCurrency(), thirty_day_total));
+		group.add(new Statistic("Last Year", m_pref.getCurrency(), yearly_total));
 
-	private String string(String prefix, double val) {
-		return string(prefix, val, "");
-	}
-
-	private String string(String prefix, double val, String postfix) {
-		String str = prefix + m_pref.format(val) + postfix;
-		return str;
+		return group;
 	}
 }

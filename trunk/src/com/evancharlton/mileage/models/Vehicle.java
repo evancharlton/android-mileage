@@ -10,6 +10,7 @@ import android.net.Uri;
 
 import com.evancharlton.mileage.FillUpsProvider;
 import com.evancharlton.mileage.R;
+import com.evancharlton.mileage.calculators.CalculationEngine;
 
 public class Vehicle extends Model {
 	public static final String AUTHORITY = "com.evancharlton.provider.Mileage";
@@ -81,8 +82,7 @@ public class Vehicle extends Model {
 				}
 			}
 		}
-
-		closeDatabase();
+		closeDatabase(c);
 	}
 
 	public Vehicle(Map<String, String> data) {
@@ -140,7 +140,7 @@ public class Vehicle extends Model {
 			});
 		}
 		m_defaultState = DEFAULT_UNKNOWN;
-		closeDatabase();
+		closeDatabase(null);
 		return m_id;
 	}
 
@@ -156,7 +156,51 @@ public class Vehicle extends Model {
 		return -1;
 	}
 
-	// From here down, it's just getters and setters
+	public FillUp getOldestFillUp(CalculationEngine ce) {
+		openDatabase();
+		String[] projection = new String[] {
+			FillUp._ID
+		};
+		String selection = FillUp.VEHICLE_ID + " = ?";
+		String[] selectionArgs = new String[] {
+			String.valueOf(m_id)
+		};
+		String groupBy = null;
+		String orderBy = FillUp.ODOMETER + " ASC";
+		String having = null;
+		String limit = "1";
+
+		Cursor c = m_db.query(FillUpsProvider.FILLUPS_TABLE_NAME, projection, selection, selectionArgs, groupBy, having, orderBy, limit);
+		c.moveToFirst();
+
+		long id = c.getLong(0);
+		closeDatabase(c);
+
+		return new FillUp(ce, id);
+	}
+
+	public FillUp getNewestFillUp(CalculationEngine ce) {
+		openDatabase();
+		String[] projection = new String[] {
+			FillUp._ID
+		};
+		String selection = FillUp.VEHICLE_ID + " = ?";
+		String[] selectionArgs = new String[] {
+			String.valueOf(m_id)
+		};
+		String groupBy = null;
+		String orderBy = FillUp.ODOMETER + " DESC";
+		String having = null;
+		String limit = "1";
+
+		Cursor c = m_db.query(FillUpsProvider.VEHICLES_TABLE_NAME, projection, selection, selectionArgs, groupBy, having, orderBy, limit);
+		c.moveToFirst();
+
+		long id = c.getLong(0);
+		closeDatabase(c);
+
+		return new FillUp(ce, id);
+	}
 
 	/**
 	 * See if this is the default vehicle. This field is lazy-loaded, so the
@@ -190,7 +234,7 @@ public class Vehicle extends Model {
 						m_defaultState = DEFAULT_FALSE;
 					}
 				}
-				closeDatabase();
+				closeDatabase(c);
 			}
 		}
 		return (m_defaultState == DEFAULT_TRUE);

@@ -10,7 +10,6 @@ import java.util.Map;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
-import android.util.Log;
 
 import com.evancharlton.mileage.FillUpsProvider;
 import com.evancharlton.mileage.R;
@@ -39,6 +38,7 @@ public class FillUp extends Model {
 	public static final String AMOUNT = "amount";
 	public static final String ODOMETER = "mileage"; // TODO: "odometer"
 	public static final String DATE = "date"; // TODO: "timestamp"
+	public static final String PARTIAL = "is_partial";
 	public static final String VEHICLE_ID = "vehicle_id";
 	public static final String LATITUDE = "latitude";
 	public static final String LONGITUDE = "longitude";
@@ -75,6 +75,7 @@ public class FillUp extends Model {
 	private double m_longitude = 0L;
 	private String m_comment = "";
 	private long m_vehicleId = -1;
+	private boolean m_partial = false;
 
 	private double m_economy = 0D;
 	private double m_distance = 0D;
@@ -111,7 +112,6 @@ public class FillUp extends Model {
 			c.moveToFirst();
 			for (int i = 0; i < c.getColumnCount(); i++) {
 				String name = c.getColumnName(i);
-				Log.d("COLUMN", name);
 				if (name.equals(AMOUNT)) {
 					setAmount(c.getLong(i));
 				} else if (name.equals(COMMENT)) {
@@ -134,8 +134,7 @@ public class FillUp extends Model {
 				}
 			}
 		}
-		c.close();
-		closeDatabase();
+		closeDatabase(c);
 	}
 
 	public FillUp(CalculationEngine calculationEngine, Map<String, String> data) {
@@ -224,7 +223,7 @@ public class FillUp extends Model {
 			m_previous = getPrevious();
 			if (m_previous == null) {
 				// we're at the first fill-up, so there's nothing we can do
-				return 0D;
+				return -1D;
 			}
 			m_distance = m_odometer - m_previous.getOdometer();
 		}
@@ -265,10 +264,10 @@ public class FillUp extends Model {
 			if (c.getCount() == 1) {
 				c.moveToFirst();
 				long id = c.getLong(0);
-				closeDatabase(); // we should close before we recurse
+				closeDatabase(c); // we should close before we recurse
 				m_next = new FillUp(m_calculator, id);
 			}
-			closeDatabase(); // just in case the previous block didn't execute
+			closeDatabase(c); // just in case the previous block didn't execute
 		}
 		return m_next;
 	}
@@ -302,10 +301,10 @@ public class FillUp extends Model {
 			if (c.getCount() == 1) {
 				c.moveToFirst();
 				long id = c.getLong(0);
-				closeDatabase(); // we should close before we recurse
+				closeDatabase(c); // we should close before we recurse
 				m_previous = new FillUp(m_calculator, id);
 			}
-			closeDatabase(); // just in case the previous block didn't execute
+			closeDatabase(c); // just in case the previous block didn't execute
 		}
 		return m_previous;
 	}
@@ -339,7 +338,7 @@ public class FillUp extends Model {
 				String.valueOf(m_id)
 			});
 		}
-		closeDatabase();
+		closeDatabase(null);
 		return m_id;
 	}
 
@@ -355,6 +354,12 @@ public class FillUp extends Model {
 			return R.string.error_vehicle;
 		}
 		return -1;
+	}
+
+	public String toCSV() {
+		StringBuilder csv = new StringBuilder();
+		// TODO: Fill this in
+		return csv.toString();
 	}
 
 	// from here down, it's nothing but getters and setters. Boring!
@@ -452,7 +457,9 @@ public class FillUp extends Model {
 	 * @param comment the comment to set
 	 */
 	public void setComment(String comment) {
-		m_comment = comment.trim();
+		if (comment != null) {
+			m_comment = comment.trim();
+		}
 	}
 
 	/**
@@ -540,5 +547,13 @@ public class FillUp extends Model {
 		} else if (m_amount != 0D && m_price == 0D) {
 			m_price = cost / m_amount;
 		}
+	}
+
+	public void setPartial(boolean partial) {
+		m_partial = partial;
+	}
+
+	public boolean getPartial() {
+		return m_partial;
 	}
 }
