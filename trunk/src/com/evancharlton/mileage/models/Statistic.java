@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.text.DecimalFormat;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.view.Gravity;
 import android.view.ViewGroup.LayoutParams;
@@ -54,6 +55,7 @@ public class Statistic implements Serializable {
 		data.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
 		data.setGravity(Gravity.RIGHT);
 		data.setPadding(0, 0, 10, 0);
+		data.setTextColor(Color.WHITE);
 
 		layout.addView(label);
 		layout.addView(data);

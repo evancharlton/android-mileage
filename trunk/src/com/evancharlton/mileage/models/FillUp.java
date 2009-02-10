@@ -131,6 +131,8 @@ public class FillUp extends Model {
 					setOdometer(c.getLong(i));
 				} else if (name.equals(VEHICLE_ID)) {
 					m_vehicleId = c.getLong(i);
+				} else if (name.equals(PARTIAL)) {
+					m_partial = c.getInt(i) == 1;
 				}
 			}
 		}
@@ -149,6 +151,7 @@ public class FillUp extends Model {
 		String latitude = data.get(LATITUDE);
 		String longitude = data.get(LONGITUDE);
 		String comment = data.get(COMMENT);
+		String partial = data.get(PARTIAL);
 
 		if (id != null) {
 			setId(Long.parseLong(id));
@@ -178,6 +181,9 @@ public class FillUp extends Model {
 		}
 		if (comment != null) {
 			setComment(comment);
+		}
+		if (partial != null) {
+			setPartial(Boolean.getBoolean(partial));
 		}
 	}
 

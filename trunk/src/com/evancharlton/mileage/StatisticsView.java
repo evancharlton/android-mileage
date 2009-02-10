@@ -1,6 +1,5 @@
 package com.evancharlton.mileage;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -30,6 +29,7 @@ public class StatisticsView extends Activity {
 	private Spinner m_vehicles;
 	private PreferencesProvider m_preferences;
 	private CalculationEngine m_calcEngine;
+	private ProgressDialog m_calcDialog;
 
 	private static final String DATA_GROUP = "group";
 	private static final String DATA_DONE = "done";
@@ -108,7 +108,7 @@ public class StatisticsView extends Activity {
 		LinearLayout container = (LinearLayout) findViewById(R.id.stats_container);
 		container.removeAllViews();
 
-		final ProgressDialog calcDialog = ProgressDialog.show(this, "Calculating", "Calculating statistics...");
+		final Vehicle v = new Vehicle(id);
 
 		final Handler statsHandler = new Handler() {
 			public void handleMessage(Message msg) {
@@ -117,34 +117,30 @@ public class StatisticsView extends Activity {
 				if (!done) {
 					LinearLayout container = (LinearLayout) findViewById(R.id.stats_container);
 					StatisticsGroup group = (StatisticsGroup) data.getSerializable(DATA_GROUP);
-					container.addView(group.render(StatisticsView.this));
+					if (group != null) {
+						container.addView(group.render(StatisticsView.this));
+					}
 				} else {
-					calcDialog.dismiss();
+					m_calcDialog.dismiss();
 				}
 			}
 		};
 
-		Thread t = new Thread(new Runnable() {
+		final Thread t = new Thread() {
 			public void run() {
 				// then get the list of all the FillUps for later processing
-				List<FillUp> fillups = new ArrayList<FillUp>();
-				FillUp first = new Vehicle(id).getOldestFillUp(m_calcEngine);
-				FillUp prev = null;
-				while (first != null) {
-					fillups.add(first);
-					prev = first;
-					first = first.getNext();
-					if (first != null) {
-						first.setPrevious(prev);
-					}
-				}
+				// TODO: optimize this. This has huge overhead
+				List<FillUp> fillups = v.getAllFillUps(m_calcEngine);
 
-				// now that we have all the data ready to go, let's get started!
-				send(calcDistances(fillups));
-				send(calcPrices(fillups));
-				send(calcCosts(fillups));
-				send(calcAmounts(fillups));
-				send(calcExpenses(fillups));
+				if (fillups.size() >= 2) {
+					// now that we have all the data ready to go, let's get
+					// started!
+					send(calcDistances(fillups));
+					send(calcPrices(fillups));
+					send(calcCosts(fillups));
+					send(calcAmounts(fillups));
+					send(calcExpenses(fillups));
+				}
 
 				statsHandler.post(new Runnable() {
 					public void run() {
@@ -168,8 +164,13 @@ public class StatisticsView extends Activity {
 					}
 				});
 			}
-		});
+		};
 		t.start();
+
+		m_calcDialog = new ProgressDialog(this);
+		m_calcDialog.setTitle("Calculating");
+		m_calcDialog.setMessage("Calculating statistics...");
+		m_calcDialog.show();
 	}
 
 	public StatisticsGroup calcDistances(final List<FillUp> fillups) {

@@ -1,6 +1,7 @@
 package com.evancharlton.mileage.models;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -310,5 +311,62 @@ public class Vehicle extends Model {
 	 */
 	public void setYear(String year) {
 		m_year = year.trim();
+	}
+
+	public int getFillUpCount() {
+		openDatabase();
+		String[] projection = new String[] {
+			FillUp._ID
+		};
+		String selection = FillUp.VEHICLE_ID + " = ?";
+		String[] selectionArgs = new String[] {
+			String.valueOf(m_id)
+		};
+		String groupBy = null;
+		String orderBy = null;
+		String having = null;
+
+		Cursor c = m_db.query(FillUpsProvider.FILLUPS_TABLE_NAME, projection, selection, selectionArgs, groupBy, having, orderBy);
+		c.moveToFirst();
+
+		int count = c.getCount();
+		closeDatabase(c);
+		return count;
+	}
+
+	/**
+	 * Return a List of all the FillUps for this Vehicle. Note that this is
+	 * *not* cached and will be run every single time this is called.
+	 * 
+	 * @return a List of all FillUps for this Vehicle.
+	 */
+	public List<FillUp> getAllFillUps(CalculationEngine engine) {
+		List<FillUp> all = new ArrayList<FillUp>();
+		openDatabase();
+		String[] projection = FillUp.getProjection();
+		String selection = FillUp.VEHICLE_ID + " = ?";
+		String[] selectionArgs = new String[] {
+			String.valueOf(m_id)
+		};
+		String groupBy = null;
+		String orderBy = FillUp.ODOMETER + " ASC";
+		String having = null;
+
+		Cursor c = m_db.query(FillUpsProvider.FILLUPS_TABLE_NAME, projection, selection, selectionArgs, groupBy, having, orderBy);
+		c.moveToFirst();
+
+		int col_count = c.getColumnCount();
+
+		while (c.isAfterLast() == false) {
+			Map<String, String> data = new HashMap<String, String>();
+			for (int i = 0; i < col_count; i++) {
+				data.put(c.getColumnName(i), c.getString(i));
+			}
+			all.add(new FillUp(engine, data));
+			c.moveToNext();
+		}
+
+		closeDatabase(c);
+		return all;
 	}
 }
