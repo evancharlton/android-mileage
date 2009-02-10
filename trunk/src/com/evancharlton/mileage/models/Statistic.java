@@ -1,5 +1,6 @@
 package com.evancharlton.mileage.models;
 
+import java.io.Serializable;
 import java.text.DecimalFormat;
 
 import android.content.Context;
@@ -9,7 +10,8 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class Statistic {
+public class Statistic implements Serializable {
+	private static final long serialVersionUID = -3427357620326835862L;
 	private String m_label = "";
 	private String m_statistic = "";
 	private String m_units = "";

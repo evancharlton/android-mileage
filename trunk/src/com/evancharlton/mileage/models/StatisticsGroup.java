@@ -1,5 +1,6 @@
 package com.evancharlton.mileage.models;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,7 +9,8 @@ import android.view.Gravity;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class StatisticsGroup {
+public class StatisticsGroup implements Serializable {
+	private static final long serialVersionUID = -3539843841306049324L;
 	private List<Statistic> m_statistics = new ArrayList<Statistic>();
 	private String m_heading = "";
 
