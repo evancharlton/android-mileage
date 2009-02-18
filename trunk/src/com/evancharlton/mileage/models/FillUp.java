@@ -34,10 +34,10 @@ public class FillUp extends Model {
 	public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.evancharlton.fillup";
 	public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.evancharlton.fillup";
 	public static final String DEFAULT_SORT_ORDER = "mileage DESC";
-	public static final String PRICE = "cost"; // TODO: "price"
+	public static final String PRICE = "cost"; // price per unit volume
 	public static final String AMOUNT = "amount";
-	public static final String ODOMETER = "mileage"; // TODO: "odometer"
-	public static final String DATE = "date"; // TODO: "timestamp"
+	public static final String ODOMETER = "mileage"; // odometer, not economy
+	public static final String DATE = "date"; // timestamp in milliseconds
 	public static final String PARTIAL = "is_partial";
 	public static final String VEHICLE_ID = "vehicle_id";
 	public static final String LATITUDE = "latitude";
@@ -55,6 +55,7 @@ public class FillUp extends Model {
 		PLAINTEXT.put(LATITUDE, "Latitude");
 		PLAINTEXT.put(LONGITUDE, "Longitude");
 		PLAINTEXT.put(COMMENT, "Fill-Up Comment");
+		PLAINTEXT.put(PARTIAL, "Partial Fill-up");
 
 		PROJECTION.add(_ID);
 		PROJECTION.add(PRICE);
@@ -65,6 +66,7 @@ public class FillUp extends Model {
 		PROJECTION.add(LATITUDE);
 		PROJECTION.add(LONGITUDE);
 		PROJECTION.add(COMMENT);
+		PROJECTION.add(PARTIAL);
 	}
 
 	private double m_odometer = 0;
@@ -85,6 +87,55 @@ public class FillUp extends Model {
 	private FillUp m_next = null;
 
 	private CalculationEngine m_calculator = null;
+
+	public FillUp(ContentValues values) {
+		this((CalculationEngine) null);
+
+		Double price = values.getAsDouble(PRICE);
+		if (price != null) {
+			setPrice(price);
+		}
+
+		Double odometer = values.getAsDouble(ODOMETER);
+		if (odometer != null) {
+			setOdometer(odometer);
+		}
+
+		Long time = values.getAsLong(DATE);
+		if (time != null) {
+			setDate(time);
+		}
+
+		Double amount = values.getAsDouble(AMOUNT);
+		if (amount != null) {
+			setAmount(amount);
+		}
+
+		Double latitude = values.getAsDouble(LATITUDE);
+		if (latitude != null) {
+			setLatitude(latitude);
+		}
+
+		Double longitude = values.getAsDouble(LONGITUDE);
+		if (longitude != null) {
+			setLongitude(longitude);
+		}
+
+		String comment = values.getAsString(COMMENT);
+		if (comment != null) {
+			setComment(comment);
+		}
+
+		Long vehicleId = values.getAsLong(VEHICLE_ID);
+		if (vehicleId != null) {
+			setVehicleId(vehicleId);
+		}
+
+		Integer isPartial = values.getAsInteger(PARTIAL);
+		if (isPartial != null) {
+			setPartial(isPartial == 1);
+		}
+	}
 
 	public FillUp(CalculationEngine calculator) {
 		super(FillUpsProvider.FILLUPS_TABLE_NAME);
@@ -183,7 +234,7 @@ public class FillUp extends Model {
 			setComment(comment);
 		}
 		if (partial != null) {
-			setPartial(Boolean.getBoolean(partial));
+			setPartial("true".equals(partial) || "1".equals(partial));
 		}
 	}
 
@@ -206,14 +257,25 @@ public class FillUp extends Model {
 	 * @return the fuel economy since the previous fill-up.
 	 */
 	public double calcEconomy() {
+		if (m_partial) {
+			return -1D;
+		}
 		if (m_economy == 0D) {
-			m_previous = getPrevious();
-			if (m_previous == null) {
-				// we're at the first fill-up, so there's nothing we can do
+			FillUp previous = getPrevious();
+			if (previous == null) {
 				return -1D;
 			}
 			double distance = calcDistance();
-			double fuel = m_amount;
+			double fuel = getAmount();
+			while (previous != null) {
+				if (previous.isPartial() == false) {
+					break;
+				}
+				// partial; we need to keep iterating
+				distance += previous.calcDistance();
+				fuel += previous.getAmount();
+				previous = previous.getPrevious();
+			}
 			m_economy = m_calculator.calculateEconomy(distance, fuel);
 		}
 		return m_economy;
@@ -335,6 +397,7 @@ public class FillUp extends Model {
 		values.put(LONGITUDE, m_longitude);
 		values.put(ODOMETER, m_odometer);
 		values.put(VEHICLE_ID, m_vehicleId);
+		values.put(PARTIAL, m_partial);
 		if (m_id == -1) {
 			// save a new record
 			m_id = m_db.insert(FillUpsProvider.FILLUPS_TABLE_NAME, null, values);
@@ -381,12 +444,17 @@ public class FillUp extends Model {
 	 * Set odometer in string format, so that patterns can be parsed out (such
 	 * as the '+' prefix notation. Note that if you are using this feature, the
 	 * caller needs to set the vehicle ID before calling this in order to get
-	 * the previous odometer value!
+	 * the previous odometer value! Also, remember that this method is not free,
+	 * due to the additional database lookup(s)!
 	 * 
 	 * @param odometer The string representing the odometer value
 	 */
 	public void setOdometer(String odometer) throws NumberFormatException {
+		if (m_vehicleId < 0) {
+			throw new IllegalStateException("Need to set vehicle ID before calling setOdometer(String odometer)!");
+		}
 		if (odometer.startsWith("+")) {
+			// m_odometer must be maxed out for getPrevious() to work.
 			m_odometer = Double.MAX_VALUE;
 			FillUp previous = getPrevious();
 			if (previous == null) {
@@ -411,6 +479,12 @@ public class FillUp extends Model {
 	 */
 	public void setDate(Calendar date) {
 		m_date = date;
+	}
+
+	public void setDate(long timestamp) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTimeInMillis(timestamp);
+		setDate(cal);
 	}
 
 	/**
@@ -559,7 +633,7 @@ public class FillUp extends Model {
 		m_partial = partial;
 	}
 
-	public boolean getPartial() {
+	public boolean isPartial() {
 		return m_partial;
 	}
 }

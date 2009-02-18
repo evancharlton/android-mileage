@@ -40,6 +40,7 @@ public class FillUpView extends AddFillUpView {
 				}
 
 				fillup.setId(id);
+				fillup.setPartial(m_partialCheckbox.isChecked());
 
 				fillup.save();
 				finish();
@@ -63,33 +64,24 @@ public class FillUpView extends AddFillUpView {
 
 		Intent data = getIntent();
 
-		// load the data
-		String[] projections = new String[] {
-				FillUp._ID,
-				FillUp.PRICE,
-				FillUp.AMOUNT,
-				FillUp.ODOMETER,
-				FillUp.DATE,
-				FillUp.VEHICLE_ID,
-				FillUp.COMMENT
-		};
-
-		Cursor c = managedQuery(data.getData(), projections, null, null, null);
+		Cursor c = managedQuery(data.getData(), FillUp.getProjection(), null, null, null);
 		c.moveToFirst();
 
-		m_priceEdit.setText(c.getString(1));
-		m_amountEdit.setText(c.getString(2));
-		m_mileageEdit.setText(c.getString(3));
+		m_priceEdit.setText(c.getString(c.getColumnIndex(FillUp.PRICE)));
+		m_amountEdit.setText(c.getString(c.getColumnIndex(FillUp.AMOUNT)));
+		m_mileageEdit.setText(c.getString(c.getColumnIndex(FillUp.ODOMETER)));
+		int checked = c.getInt(c.getColumnIndex(FillUp.PARTIAL));
+		m_partialCheckbox.setChecked(checked == 1);
 
 		Calendar cal = Calendar.getInstance();
-		cal.setTimeInMillis(c.getLong(4));
+		cal.setTimeInMillis(c.getLong(c.getColumnIndex(FillUp.DATE)));
 		m_year = cal.get(Calendar.YEAR);
 		m_month = cal.get(Calendar.MONTH);
 		m_day = cal.get(Calendar.DAY_OF_MONTH);
 		updateDate();
 
-		m_commentEdit.setText(c.getString(6));
-		int vehicleId = c.getInt(5);
+		m_commentEdit.setText(c.getString(c.getColumnIndex(FillUp.COMMENT)));
+		int vehicleId = c.getInt(c.getColumnIndex(FillUp.VEHICLE_ID));
 
 		int position = 0;
 		for (int i = 0; i < m_vehicleAdapter.getCount(); i++) {

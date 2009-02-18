@@ -17,24 +17,34 @@ import android.net.Uri;
 import android.text.TextUtils;
 
 import com.evancharlton.mileage.models.FillUp;
+import com.evancharlton.mileage.models.MaintenanceInterval;
 import com.evancharlton.mileage.models.Vehicle;
 
+/**
+ * Note that this app does not currently (as of version > 1.8.4) use a
+ * ContentProvider for data access (this should all be done through the
+ * appropriate data Model subclasses). As a result, this class might be updated,
+ * but its use is highly discouraged (at least until this class is officially
+ * supported).
+ * 
+ */
 public class FillUpsProvider extends ContentProvider {
-
-	// private static final String TAG = "FillUpsProvider";
 	public static final String DATABASE_NAME = "mileage.db";
-	public static final int DATABASE_VERSION = 3;
+	public static final int DATABASE_VERSION = 4;
 	public static final String FILLUPS_TABLE_NAME = "fillups";
 	public static final String VEHICLES_TABLE_NAME = "vehicles";
+	public static final String MAINTENANCE_TABLE_NAME = "maintenance_intervals";
 
 	private static HashMap<String, String> s_fillUpsProjectionMap;
 	private static HashMap<String, String> s_vehiclesProjectionMap;
+	private static HashMap<String, String> s_maintenanceIntervalsProjectionMap;
 
 	private static final int FILLUPS = 1;
 	private static final int FILLUP_ID = 2;
-
 	private static final int VEHICLES = 3;
 	private static final int VEHICLE_ID = 4;
+	private static final int MAINTENANCE_INTERVALS = 5;
+	private static final int MAINTENANCE_INTERVAL_ID = 6;
 
 	private static final UriMatcher s_uriMatcher;
 
@@ -44,6 +54,8 @@ public class FillUpsProvider extends ContentProvider {
 		s_uriMatcher.addURI(FillUp.AUTHORITY, "fillups/#", FILLUP_ID);
 		s_uriMatcher.addURI(Vehicle.AUTHORITY, "vehicles", VEHICLES);
 		s_uriMatcher.addURI(Vehicle.AUTHORITY, "vehicles/#", VEHICLE_ID);
+		s_uriMatcher.addURI(MaintenanceInterval.AUTHORITY, "intervals", MAINTENANCE_INTERVALS);
+		s_uriMatcher.addURI(MaintenanceInterval.AUTHORITY, "intervals/#", MAINTENANCE_INTERVAL_ID);
 
 		s_fillUpsProjectionMap = new HashMap<String, String>();
 		s_fillUpsProjectionMap.put(FillUp._ID, FillUp._ID);
@@ -55,6 +67,7 @@ public class FillUpsProvider extends ContentProvider {
 		s_fillUpsProjectionMap.put(FillUp.LATITUDE, FillUp.LATITUDE);
 		s_fillUpsProjectionMap.put(FillUp.LONGITUDE, FillUp.LONGITUDE);
 		s_fillUpsProjectionMap.put(FillUp.COMMENT, FillUp.COMMENT);
+		s_fillUpsProjectionMap.put(FillUp.PARTIAL, FillUp.PARTIAL);
 
 		s_vehiclesProjectionMap = new HashMap<String, String>();
 		s_vehiclesProjectionMap.put(Vehicle._ID, Vehicle._ID);
@@ -63,6 +76,15 @@ public class FillUpsProvider extends ContentProvider {
 		s_vehiclesProjectionMap.put(Vehicle.TITLE, Vehicle.TITLE);
 		s_vehiclesProjectionMap.put(Vehicle.YEAR, Vehicle.YEAR);
 		s_vehiclesProjectionMap.put(Vehicle.DEFAULT, Vehicle.DEFAULT);
+
+		s_maintenanceIntervalsProjectionMap = new HashMap<String, String>();
+		s_maintenanceIntervalsProjectionMap.put(MaintenanceInterval._ID, MaintenanceInterval._ID);
+		s_maintenanceIntervalsProjectionMap.put(MaintenanceInterval.CREATE_DATE, MaintenanceInterval.CREATE_DATE);
+		s_maintenanceIntervalsProjectionMap.put(MaintenanceInterval.CREATE_ODOMETER, MaintenanceInterval.CREATE_ODOMETER);
+		s_maintenanceIntervalsProjectionMap.put(MaintenanceInterval.DESCRIPTION, MaintenanceInterval.DESCRIPTION);
+		s_maintenanceIntervalsProjectionMap.put(MaintenanceInterval.DISTANCE, MaintenanceInterval.DISTANCE);
+		s_maintenanceIntervalsProjectionMap.put(MaintenanceInterval.DURATION, MaintenanceInterval.DURATION);
+		s_maintenanceIntervalsProjectionMap.put(MaintenanceInterval.VEHICLE_ID, MaintenanceInterval.VEHICLE_ID);
 	}
 
 	private static class DatabaseHelper extends SQLiteOpenHelper {
@@ -82,7 +104,8 @@ public class FillUpsProvider extends ContentProvider {
 			sql.append(FillUp.DATE).append(" INTEGER,");
 			sql.append(FillUp.LATITUDE).append(" DOUBLE,");
 			sql.append(FillUp.LONGITUDE).append(" DOUBLE,");
-			sql.append(FillUp.COMMENT).append(" TEXT");
+			sql.append(FillUp.COMMENT).append(" TEXT,");
+			sql.append(FillUp.PARTIAL).append(" INTEGER");
 			sql.append(");");
 			db.execSQL(sql.toString());
 
@@ -97,13 +120,40 @@ public class FillUpsProvider extends ContentProvider {
 			sql.append(");");
 			db.execSQL(sql.toString());
 
+			sql = new StringBuilder();
+			sql.append("CREATE TABLE ").append(MAINTENANCE_TABLE_NAME).append(" (");
+			sql.append(MaintenanceInterval._ID).append(" INTEGER PRIMARY KEY AUTOINCREMENT,");
+			sql.append(MaintenanceInterval.CREATE_DATE).append(" INTEGER,");
+			sql.append(MaintenanceInterval.CREATE_ODOMETER).append(" DOUBLE,");
+			sql.append(MaintenanceInterval.DESCRIPTION).append(" TEXT,");
+			sql.append(MaintenanceInterval.DISTANCE).append(" DOUBLE,");
+			sql.append(MaintenanceInterval.DURATION).append(" INTEGER,");
+			sql.append(MaintenanceInterval.VEHICLE_ID).append(" INTEGER");
+			sql.append(");");
+			db.execSQL(sql.toString());
+
 			initTables(db);
 		}
 
 		@Override
 		public void onUpgrade(SQLiteDatabase db, final int oldVersion, final int newVersion) {
-			// TODO: Abstract this out once we get more DB versions
-			if (newVersion == DATABASE_VERSION) {
+			if (oldVersion == 3) {
+				StringBuilder sb = new StringBuilder();
+				sb.append("ALTER TABLE ").append(FILLUPS_TABLE_NAME).append(" ADD COLUMN ").append(FillUp.PARTIAL).append(" INTEGER;");
+				db.execSQL(sb.toString());
+
+				sb = new StringBuilder();
+				sb.append("CREATE TABLE ").append(MAINTENANCE_TABLE_NAME).append(" (");
+				sb.append(MaintenanceInterval._ID).append(" INTEGER PRIMARY KEY AUTOINCREMENT,");
+				sb.append(MaintenanceInterval.CREATE_DATE).append(" INTEGER,");
+				sb.append(MaintenanceInterval.CREATE_ODOMETER).append(" DOUBLE,");
+				sb.append(MaintenanceInterval.DESCRIPTION).append(" TEXT,");
+				sb.append(MaintenanceInterval.DISTANCE).append(" DOUBLE,");
+				sb.append(MaintenanceInterval.DURATION).append(" INTEGER,");
+				sb.append(MaintenanceInterval.VEHICLE_ID).append(" INTEGER");
+				sb.append(");");
+				db.execSQL(sb.toString());
+			} else if (newVersion == 2) {
 				StringBuilder sb = new StringBuilder();
 				sb.append("ALTER TABLE ").append(FILLUPS_TABLE_NAME).append(" ADD COLUMN ").append(FillUp.COMMENT).append(" TEXT;");
 				db.execSQL(sb.toString());
@@ -167,6 +217,15 @@ public class FillUpsProvider extends ContentProvider {
 				count = db.delete(VEHICLES_TABLE_NAME, Vehicle._ID + " = " + vehicleId + (!TextUtils.isEmpty(selection) ? " AND (" + selection + ")" : ""), selectionArgs);
 				break;
 
+			case MAINTENANCE_INTERVALS:
+				count = db.delete(MAINTENANCE_TABLE_NAME, selection, selectionArgs);
+				break;
+
+			case MAINTENANCE_INTERVAL_ID:
+				String intervalId = uri.getPathSegments().get(1);
+				count = db.delete(MAINTENANCE_TABLE_NAME, MaintenanceInterval._ID + " = " + intervalId + (!TextUtils.isEmpty(selection) ? " AND (" + selection + ")" : ""), selectionArgs);
+				break;
+
 			default:
 				throw new IllegalArgumentException("Unknown URI: " + uri);
 		}
@@ -186,6 +245,10 @@ public class FillUpsProvider extends ContentProvider {
 				return Vehicle.CONTENT_TYPE;
 			case VEHICLE_ID:
 				return Vehicle.CONTENT_ITEM_TYPE;
+			case MAINTENANCE_INTERVALS:
+				return MaintenanceInterval.CONTENT_TYPE;
+			case MAINTENANCE_INTERVAL_ID:
+				return MaintenanceInterval.CONTENT_ITEM_TYPE;
 			default:
 				throw new IllegalArgumentException("Unknown URI: " + uri);
 		}
@@ -200,79 +263,42 @@ public class FillUpsProvider extends ContentProvider {
 				return insertFillup(uri, initialValues);
 			case VEHICLES:
 				return insertVehicle(uri, initialValues);
+			case MAINTENANCE_INTERVALS:
+				return insertInterval(uri, initialValues);
 			default:
 				throw new IllegalArgumentException("Unknown URI: " + uri);
 		}
 	}
 
+	private Uri insertInterval(Uri uri, ContentValues initialValues) {
+		MaintenanceInterval interval = new MaintenanceInterval(initialValues);
+		if (interval.validate() <= 0) {
+			long id = interval.save();
+			Uri contentUri = ContentUris.withAppendedId(MaintenanceInterval.CONTENT_URI, id);
+			getContext().getContentResolver().notifyChange(contentUri, null);
+			return contentUri;
+		}
+		throw new SQLException("Failed to insert row into " + uri);
+	}
+
 	private Uri insertFillup(Uri uri, ContentValues initialValues) {
-		ContentValues values;
-		if (initialValues != null) {
-			values = new ContentValues(initialValues);
-		} else {
-			values = new ContentValues();
+		FillUp fillup = new FillUp(initialValues);
+		if (fillup.validate() <= 0) {
+			long id = fillup.save();
+			Uri contentUri = ContentUris.withAppendedId(FillUp.CONTENT_URI, id);
+			getContext().getContentResolver().notifyChange(contentUri, null);
+			return contentUri;
 		}
-
-		Long now = Long.valueOf(System.currentTimeMillis());
-
-		// make sure that the values are all set
-		if (values.containsKey(FillUp.PRICE) == false) {
-			values.put(FillUp.PRICE, 0.00D);
-		}
-
-		if (values.containsKey(FillUp.ODOMETER) == false) {
-			values.put(FillUp.ODOMETER, 0.00D);
-		}
-
-		if (values.containsKey(FillUp.AMOUNT) == false) {
-			values.put(FillUp.AMOUNT, 0.00D);
-		}
-
-		if (values.containsKey(FillUp.DATE) == false) {
-			values.put(FillUp.DATE, now);
-		}
-
-		if (values.containsKey(FillUp.VEHICLE_ID) == false) {
-			values.put(FillUp.VEHICLE_ID, 1);
-		}
-
-		if (values.containsKey(FillUp.LATITUDE) == false) {
-			values.put(FillUp.LATITUDE, "0.00");
-		}
-
-		if (values.containsKey(FillUp.LONGITUDE) == false) {
-			values.put(FillUp.LONGITUDE, "0.00");
-		}
-
-		if (values.containsKey(FillUp.COMMENT) == false) {
-			values.put(FillUp.COMMENT, "");
-		}
-
-		SQLiteDatabase db = m_helper.getWritableDatabase();
-		long rowId = db.insert(FILLUPS_TABLE_NAME, null, values);
-		if (rowId > 0) {
-			Uri fillUpUri = ContentUris.withAppendedId(FillUp.CONTENT_URI, rowId);
-			getContext().getContentResolver().notifyChange(fillUpUri, null);
-			return fillUpUri;
-		}
-
 		throw new SQLException("Failed to insert row into " + uri);
 	}
 
 	private Uri insertVehicle(Uri uri, ContentValues initialValues) {
-		ContentValues values;
-		if (initialValues != null) {
-			values = new ContentValues(initialValues);
-		} else {
-			values = new ContentValues();
-		}
-
-		SQLiteDatabase db = m_helper.getWritableDatabase();
-		long rowId = db.insert(VEHICLES_TABLE_NAME, null, values);
-		if (rowId > 0) {
-			Uri vehicleUri = ContentUris.withAppendedId(Vehicle.CONTENT_URI, rowId);
-			getContext().getContentResolver().notifyChange(vehicleUri, null);
-			return vehicleUri;
+		Vehicle vehicle = new Vehicle(initialValues);
+		if (vehicle.validate() <= 0) {
+			long id = vehicle.save();
+			Uri contentUri = ContentUris.withAppendedId(Vehicle.CONTENT_URI, id);
+			getContext().getContentResolver().notifyChange(contentUri, null);
+			return contentUri;
 		}
 		throw new SQLException("Failed to insert row into " + uri);
 	}
@@ -300,6 +326,14 @@ public class FillUpsProvider extends ContentProvider {
 				qb.setProjectionMap(s_vehiclesProjectionMap);
 				qb.appendWhere(Vehicle._ID + " = " + uri.getPathSegments().get(1));
 				break;
+			case MAINTENANCE_INTERVALS:
+				qb.setTables(MAINTENANCE_TABLE_NAME);
+				qb.setProjectionMap(s_maintenanceIntervalsProjectionMap);
+				break;
+			case MAINTENANCE_INTERVAL_ID:
+				qb.setTables(MAINTENANCE_TABLE_NAME);
+				qb.setProjectionMap(s_maintenanceIntervalsProjectionMap);
+				qb.appendWhere(MaintenanceInterval._ID + " = " + uri.getPathSegments().get(1));
 			default:
 				throw new IllegalArgumentException("Unknown URI: " + uri);
 		}

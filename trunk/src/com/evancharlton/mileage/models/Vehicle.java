@@ -14,7 +14,6 @@ import com.evancharlton.mileage.R;
 import com.evancharlton.mileage.calculators.CalculationEngine;
 
 public class Vehicle extends Model {
-	public static final String AUTHORITY = "com.evancharlton.provider.Mileage";
 	public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/vehicles");
 	public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.evancharlton.vehicle";
 	public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.evancharlton.vehicle";
@@ -49,6 +48,11 @@ public class Vehicle extends Model {
 
 	public Vehicle() {
 		super(FillUpsProvider.VEHICLES_TABLE_NAME);
+	}
+
+	public Vehicle(ContentValues values) {
+		this();
+		// TODO: parse values
 	}
 
 	public Vehicle(long id) {

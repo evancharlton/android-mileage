@@ -330,7 +330,7 @@
 	<target name="test" depends="reinstall">
 		<echo>Installing ${application-package}.${ant.project.name}...</echo>
 		<exec executable="adb">
-			<arg line="install -r tests/bin/MileageTest.apk"/>
+			<arg line="install -r ../../MileageTest/bin/MileageTest.apk"/>
 		</exec>
 		<echo>Running tests ...</echo>
 		<exec executable="adb">

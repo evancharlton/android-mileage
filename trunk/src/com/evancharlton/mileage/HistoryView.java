@@ -49,14 +49,6 @@ public class HistoryView extends Activity implements View.OnCreateContextMenuLis
 
 	public static final String TAG = "HistoryList";
 
-	public static final int COL_ID = FillUp.PROJECTION.indexOf(FillUp._ID);
-	public static final int COL_AMOUNT = FillUp.PROJECTION.indexOf(FillUp.AMOUNT);
-	public static final int COL_PRICE = FillUp.PROJECTION.indexOf(FillUp.PRICE);
-	public static final int COL_TIMESTAMP = FillUp.PROJECTION.indexOf(FillUp.DATE);
-	public static final int COL_COMMENT = FillUp.PROJECTION.indexOf(FillUp.COMMENT);
-	public static final int COL_VEHICLEID = FillUp.PROJECTION.indexOf(FillUp.VEHICLE_ID);
-	public static final int COL_ODOMETER = FillUp.PROJECTION.indexOf(FillUp.ODOMETER);
-
 	private Map<Long, String> m_vehicleTitles = new HashMap<Long, String>();
 	private double m_avgMpg;
 	private AlertDialog m_deleteDialog;
@@ -66,6 +58,14 @@ public class HistoryView extends Activity implements View.OnCreateContextMenuLis
 	private ListView m_listView;
 	private Spinner m_vehicles;
 	private Map<Long, FillUp> m_fillupMap;
+
+	private int COL_AMOUNT;
+	private int COL_PRICE;
+	private int COL_ODOMETER;
+	private int COL_PARTIAL;
+	private int COL_VEHICLEID;
+	private int COL_ID;
+	private int COL_TIMESTAMP;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -162,21 +162,39 @@ public class HistoryView extends Activity implements View.OnCreateContextMenuLis
 
 		String selection;
 		String[] selectionArgs;
+		long vehicle_id;
 		if (m_vehicles.getVisibility() != View.GONE) {
 			selection = FillUp.VEHICLE_ID + " = ?";
+			vehicle_id = m_vehicles.getSelectedItemId();
 			selectionArgs = new String[] {
-				String.valueOf(m_vehicles.getSelectedItemId())
+				String.valueOf(vehicle_id)
 			};
 		} else {
+			Cursor vehicleCursor = managedQuery(Vehicle.CONTENT_URI, new String[] {
+				Vehicle._ID
+			}, null, null, Vehicle.DEFAULT + " desc");
+			vehicleCursor.moveToFirst();
+			vehicle_id = vehicleCursor.getLong(0);
+
 			selection = FillUp.VEHICLE_ID + " = (select " + Vehicle._ID + " from " + FillUpsProvider.VEHICLES_TABLE_NAME + " order by " + Vehicle.DEFAULT + " desc limit 1)";
 			selectionArgs = null;
 		}
 
-		Cursor historyCursor = managedQuery(FillUp.CONTENT_URI, FillUp.getProjection(), selection, selectionArgs, FillUp.DEFAULT_SORT_ORDER);
+		final String[] PROJECTION = FillUp.getProjection();
+		Cursor historyCursor = managedQuery(FillUp.CONTENT_URI, PROJECTION, selection, selectionArgs, FillUp.DEFAULT_SORT_ORDER);
 		if (historyCursor.getCount() > 0) {
 			historyCursor.moveToFirst();
 			double total_distance = 0D;
 			double total_fuel = 0D;
+
+			COL_AMOUNT = historyCursor.getColumnIndex(FillUp.AMOUNT);
+			COL_PRICE = historyCursor.getColumnIndex(FillUp.PRICE);
+			COL_ODOMETER = historyCursor.getColumnIndex(FillUp.ODOMETER);
+			COL_PARTIAL = historyCursor.getColumnIndex(FillUp.PARTIAL);
+			COL_VEHICLEID = historyCursor.getColumnIndex(FillUp.VEHICLE_ID);
+			COL_ID = historyCursor.getColumnIndex(FillUp._ID);
+			COL_TIMESTAMP = historyCursor.getColumnIndex(FillUp.DATE);
+
 			List<FillUp> fillups = new ArrayList<FillUp>();
 			m_fillupMap = new HashMap<Long, FillUp>();
 			while (historyCursor.isAfterLast() == false) {
@@ -184,6 +202,8 @@ public class HistoryView extends Activity implements View.OnCreateContextMenuLis
 				data.put(FillUp.AMOUNT, historyCursor.getString(COL_AMOUNT));
 				data.put(FillUp.PRICE, historyCursor.getString(COL_PRICE));
 				data.put(FillUp.ODOMETER, historyCursor.getString(COL_ODOMETER));
+				data.put(FillUp.VEHICLE_ID, historyCursor.getString(COL_VEHICLEID));
+				data.put(FillUp.PARTIAL, String.valueOf(historyCursor.getInt(COL_PARTIAL) == 1));
 				long id = historyCursor.getLong(COL_ID);
 				data.put(FillUp._ID, String.valueOf(id));
 
@@ -302,17 +322,24 @@ public class HistoryView extends Activity implements View.OnCreateContextMenuLis
 					if (fillup == null) {
 						return true;
 					}
-					double mpg = fillup.calcEconomy();
-					int color = 0xFF666666;
-					if (m_calcEngine.better(mpg, m_avgMpg)) {
-						color = 0xFF0AB807;
-					} else if (mpg == m_avgMpg) {
-						color = 0xFF2469FF;
+					if (fillup.isPartial()) {
+						text = getString(R.string.partial_fillup_economy);
+						textview.setTextColor(0xFF666666);
 					} else {
-						color = 0xFFD90000;
+						double mpg = fillup.calcEconomy();
+						int color = 0xFF666666;
+						if (m_calcEngine.better(mpg, m_avgMpg)) {
+							color = 0xFF0AB807;
+						} else if (mpg == m_avgMpg) {
+							color = 0xFF2469FF;
+						} else {
+							color = 0xFFD90000;
+						}
+						textview.setTextColor(color);
+						text = m_prefs.format(mpg) + m_calcEngine.getEconomyUnits();
 					}
-					textview.setTextColor(color);
-					text = m_prefs.format(mpg) + m_calcEngine.getEconomyUnits();
+				} else {
+					text = "";
 				}
 			}
 			if (text != null) {

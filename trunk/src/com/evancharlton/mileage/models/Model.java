@@ -11,6 +11,7 @@ public abstract class Model implements BaseColumns {
 	protected SQLiteDatabase m_db = null;
 	protected long m_id = -1;
 	private String m_tableName = null;
+	public static final String AUTHORITY = "com.evancharlton.provider.Mileage";
 
 	public abstract long save();
 

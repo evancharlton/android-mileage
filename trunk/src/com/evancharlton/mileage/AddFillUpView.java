@@ -25,6 +25,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -48,6 +49,7 @@ public class AddFillUpView extends Activity implements Persistent {
 	protected static final String SAVED_DATE = "saved_date";
 	protected static final String SAVED_COMMENT = "saved_comment";
 	protected static final String SAVED_VEHICLE = "saved_vehicle";
+	protected static final String SAVED_PARTIAL = "saved_partial";
 
 	protected static final int CONTEXT_CONVERT_TO_UNIT_COST = 1;
 	protected static final int CONTEXT_LITRES_TO_GALLONS = 10;
@@ -72,6 +74,7 @@ public class AddFillUpView extends Activity implements Persistent {
 	protected DatePickerDialog m_dateDlg = null;
 	protected EditText m_commentEdit;
 	protected SimpleCursorAdapter m_vehicleAdapter;
+	protected CheckBox m_partialCheckbox;
 	private LinearLayout m_osk;
 	private List<Button> m_oskButtons = new ArrayList<Button>();
 
@@ -95,6 +98,7 @@ public class AddFillUpView extends Activity implements Persistent {
 		outState.putString(SAVED_COMMENT, m_commentEdit.getText().toString());
 		outState.putString(SAVED_ODOMETER, m_mileageEdit.getText().toString());
 		outState.putInt(SAVED_VEHICLE, m_vehicleSpinner.getSelectedItemPosition());
+		outState.putBoolean(SAVED_PARTIAL, m_partialCheckbox.isChecked());
 		Date d = new Date(m_year, m_month, m_day);
 		outState.putLong(SAVED_DATE, d.getTime());
 	}
@@ -110,6 +114,7 @@ public class AddFillUpView extends Activity implements Persistent {
 		m_day = c.get(Calendar.DAY_OF_MONTH);
 		m_year = c.get(Calendar.YEAR);
 		m_month = c.get(Calendar.MONTH);
+		m_partialCheckbox.setChecked(inState.getBoolean(SAVED_PARTIAL));
 	}
 
 	@Override
@@ -133,6 +138,7 @@ public class AddFillUpView extends Activity implements Persistent {
 		m_priceEdit = (EditText) findViewById(R.id.price_edit);
 		m_commentEdit = (EditText) findViewById(R.id.comment_edit);
 		m_vehicleSpinner = (Spinner) findViewById(R.id.vehicle_spinner);
+		m_partialCheckbox = (CheckBox) findViewById(R.id.partial_checkbox);
 
 		registerForContextMenu(m_amountEdit);
 		registerForContextMenu(m_priceEdit);
@@ -330,6 +336,7 @@ public class AddFillUpView extends Activity implements Persistent {
 		m_priceEdit.setText("");
 		m_mileageEdit.setText("");
 		m_commentEdit.setText("");
+		m_partialCheckbox.setChecked(false);
 
 		m_priceEdit.requestFocus();
 
@@ -397,6 +404,7 @@ public class AddFillUpView extends Activity implements Persistent {
 		fillup.setComment(m_commentEdit.getText().toString());
 		fillup.setVehicleId(vehicleId);
 		fillup.setDate(m_day, m_month, m_year);
+		fillup.setPartial(m_partialCheckbox.isChecked());
 
 		try {
 			double price = Double.parseDouble(m_priceEdit.getText().toString());

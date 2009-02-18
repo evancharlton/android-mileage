@@ -18,12 +18,6 @@
 			android:layout_width="fill_parent"
 			android:layout_height="fill_parent"
 		>
-			<TextView
-				android:layout_width="fill_parent"
-				android:layout_height="wrap_content"
-				style="@style/SeparatorText"
-				android:text="@string/header_charts"
-			/>
 			<Button
 				android:id="@+id/fuel_price_btn"
 				android:layout_width="fill_parent"

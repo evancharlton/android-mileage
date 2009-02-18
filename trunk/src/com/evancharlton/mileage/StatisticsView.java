@@ -136,6 +136,7 @@ public class StatisticsView extends Activity {
 					// now that we have all the data ready to go, let's get
 					// started!
 					send(calcDistances(fillups));
+					send(calcEconomy(fillups));
 					send(calcPrices(fillups));
 					send(calcCosts(fillups));
 					send(calcAmounts(fillups));
@@ -206,20 +207,25 @@ public class StatisticsView extends Activity {
 
 		double total_distance = fillups.get(fillups.size() - 1).getOdometer() - fillups.get(0).getOdometer();
 		double total_fuel = 0D;
-		for (int i = 0; i < fillups.size() - 2; i++) {
+		for (int i = 0; i < fillups.size() - 1; i++) {
 			total_fuel += fillups.get(i).getAmount();
 		}
 
 		double max_economy = 0D;
 		double min_economy = Double.MAX_VALUE;
 		for (FillUp fillup : fillups) {
-			double economy = fillup.calcEconomy();
-			if (economy > 0) {
-				if (m_calcEngine.better(economy, max_economy)) {
-					max_economy = economy;
+			if (!fillup.isPartial()) {
+				double economy = fillup.calcEconomy();
+				if (economy < 0) {
+					continue;
 				}
-				if (m_calcEngine.worse(economy, min_economy)) {
-					min_economy = economy;
+				if (economy > 0) {
+					if (m_calcEngine.better(economy, max_economy)) {
+						max_economy = economy;
+					}
+					if (m_calcEngine.worse(economy, min_economy)) {
+						min_economy = economy;
+					}
 				}
 			}
 		}

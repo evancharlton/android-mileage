@@ -43,6 +43,7 @@
 	<string name="parsing">Parsing data...</string>
 	<string name="parsed_date">Parsed date:</string>
 	<string name="import_options">Import Options</string>
+	<string name="partial_fillup_economy">Partial Fill-up</string>
 	
 	<string name="vehicles">Vehicles</string>
 	<string name="vehicle_make">Make</string>
@@ -68,26 +69,8 @@
 	<string name="context_miles_to_km">Miles to Kilometers</string>
 	<string name="context_km_to_miles">Kilometers to Miles</string>
 	
-	<string name="header_distance">Distance Between Fill-Ups</string>
-	<string name="header_economy">Fuel Economy</string>
-	<string name="header_price">Fuel Prices</string>
-	<string name="header_amount">Fuel Amounts</string>
-	<string name="header_costs">Fill-Up Costs</string>
-	<string name="header_expenses">Fuel Expenses</string>
-	<string name="header_charts">Charts</string>
-	<string name="stats_default">--</string>
-	<string name="last">Last:</string>
-	<string name="average">Average:</string>
-	<string name="minimum">Minimum:</string>
-	<string name="maximum">Maximum:</string>
-	<string name="total">Total:</string>
-	<string name="lowest">Lowest:</string>
-	<string name="highest">Highest:</string>
-	<string name="stats_expense_thirty_days">30-day cost:</string>
-	<string name="stats_expense_yearly">Last year:</string>
-	<string name="stats_amount_per_10k">Fuel / %2$s %1$s:</string>
-	<string name="statistics_no_data">Not enough data!</string>
-	<string name="statistics_no_data_msg">There is not enough data stored for this vehicle; not calculating statistics.</string>
+	<string name="partial_fillup">This was a partial fill-up</string>
+	
 	<string name="charts_fuel_price">Fuel Price</string>
 	<string name="charts_fuel_amount">Amount of Fuel</string>
 	<string name="charts_fuel_economy">Fuel Economy</string>
