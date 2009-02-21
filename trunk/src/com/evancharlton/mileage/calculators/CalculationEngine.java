@@ -313,4 +313,8 @@ public class CalculationEngine {
 		}
 		return a < b;
 	}
+
+	public boolean isInverted() {
+		return m_inverse;
+	}
 }

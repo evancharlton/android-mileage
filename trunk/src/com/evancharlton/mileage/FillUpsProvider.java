@@ -11,6 +11,7 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
@@ -34,6 +35,9 @@ public class FillUpsProvider extends ContentProvider {
 	public static final String FILLUPS_TABLE_NAME = "fillups";
 	public static final String VEHICLES_TABLE_NAME = "vehicles";
 	public static final String MAINTENANCE_TABLE_NAME = "maintenance_intervals";
+	public static final String VERSION_TABLE_NAME = "version";
+
+	public static final String VERSION = "version";
 
 	private static HashMap<String, String> s_fillUpsProjectionMap;
 	private static HashMap<String, String> s_vehiclesProjectionMap;
@@ -132,6 +136,12 @@ public class FillUpsProvider extends ContentProvider {
 			sql.append(");");
 			db.execSQL(sql.toString());
 
+			sql = new StringBuilder();
+			sql.append("CREATE TABLE ").append(VERSION_TABLE_NAME).append(" (");
+			sql.append(VERSION).append(" INTEGER");
+			sql.append(");");
+			db.execSQL(sql.toString());
+
 			initTables(db);
 		}
 
@@ -153,7 +163,14 @@ public class FillUpsProvider extends ContentProvider {
 				sb.append(MaintenanceInterval.VEHICLE_ID).append(" INTEGER");
 				sb.append(");");
 				db.execSQL(sb.toString());
-			} else if (newVersion == 2) {
+
+				sb = new StringBuilder();
+				sb.append("CREATE TABLE ").append(VERSION_TABLE_NAME).append(" (");
+				sb.append(VERSION).append(" INTEGER");
+				sb.append(");");
+				db.execSQL(sb.toString());
+				return;
+			} else if (oldVersion == 2) {
 				StringBuilder sb = new StringBuilder();
 				sb.append("ALTER TABLE ").append(FILLUPS_TABLE_NAME).append(" ADD COLUMN ").append(FillUp.COMMENT).append(" TEXT;");
 				db.execSQL(sb.toString());
@@ -161,16 +178,16 @@ public class FillUpsProvider extends ContentProvider {
 				sb = new StringBuilder();
 				sb.append("ALTER TABLE ").append(VEHICLES_TABLE_NAME).append(" ADD COLUMN ").append(Vehicle.DEFAULT).append(" INTEGER;");
 				db.execSQL(sb.toString());
-			} else {
-				StringBuilder sb = new StringBuilder();
-				sb.append("DROP TABLE IF EXISTS ").append(FILLUPS_TABLE_NAME).append(";");
-				db.execSQL(sb.toString());
-
-				sb = new StringBuilder();
-				sb.append("DROP TABLE IF EXISTS ").append(VEHICLES_TABLE_NAME).append(";");
-				db.execSQL(sb.toString());
-				onCreate(db);
+				return;
 			}
+			StringBuilder sb = new StringBuilder();
+			sb.append("DROP TABLE IF EXISTS ").append(FILLUPS_TABLE_NAME).append(";");
+			db.execSQL(sb.toString());
+
+			sb = new StringBuilder();
+			sb.append("DROP TABLE IF EXISTS ").append(VEHICLES_TABLE_NAME).append(";");
+			db.execSQL(sb.toString());
+			onCreate(db);
 		}
 	}
 
@@ -184,6 +201,12 @@ public class FillUpsProvider extends ContentProvider {
 		sql.append(Calendar.getInstance().get(Calendar.YEAR));
 		sql.append("', 'Default Vehicle', '").append(System.currentTimeMillis()).append("');");
 		db.execSQL(sql.toString());
+
+		sql = new StringBuilder();
+		sql.append("INSERT INTO ").append(VERSION_TABLE_NAME).append(" (").append(VERSION).append(") VALUES (?)");
+		db.execSQL(sql.toString(), new String[] {
+			String.valueOf(3)
+		});
 	}
 
 	private DatabaseHelper m_helper;
@@ -349,7 +372,13 @@ public class FillUpsProvider extends ContentProvider {
 			orderBy = sortOrder;
 		}
 
-		SQLiteDatabase db = m_helper.getReadableDatabase();
+		SQLiteDatabase db;
+		try {
+			db = m_helper.getReadableDatabase();
+		} catch (SQLiteException e) {
+			e.printStackTrace();
+			db = m_helper.getWritableDatabase();
+		}
 		Cursor c = qb.query(db, projection, selection, selectionArgs, null, null, orderBy);
 		c.setNotificationUri(getContext().getContentResolver(), uri);
 
@@ -392,5 +421,33 @@ public class FillUpsProvider extends ContentProvider {
 
 	public static HashMap<String, String> getVehiclesProjection() {
 		return s_vehiclesProjectionMap;
+	}
+
+	public boolean upgradeDatabase(SQLiteDatabase db) {
+		// see if we can determine what version we have
+		int oldVersion = -1;
+		Cursor c = db.rawQuery("PRAGMA table_info(?)", new String[] {
+			VERSION_TABLE_NAME
+		});
+		if (c.getCount() == 0) {
+			oldVersion = 3;
+		} else {
+			Cursor versionQuery = db.query(VERSION_TABLE_NAME, new String[] {
+				VERSION
+			}, null, null, null, null, null);
+			if (versionQuery.getCount() == 1) {
+				versionQuery.moveToFirst();
+				oldVersion = versionQuery.getInt(versionQuery.getColumnIndex(VERSION));
+			}
+			versionQuery.close();
+		}
+		c.close();
+
+		if (oldVersion > 0 && oldVersion != DATABASE_VERSION) {
+			// Let's do this shit!
+			m_helper.onUpgrade(db, oldVersion, oldVersion + 1);
+			return true;
+		}
+		return false;
 	}
 }

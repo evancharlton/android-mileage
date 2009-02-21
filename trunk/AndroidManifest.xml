@@ -17,7 +17,6 @@
 		<activity android:name="AddVehicleView"/>
 		<activity android:name="EditVehicleView"/>
 		<activity android:name="StatisticsView"/>
-		<activity android:name=".views.ChartsView"/>
 		<activity android:name="ImportExportView"/>
 		<activity android:name="SettingsView"/>
 		<activity android:name="AddFillUpView"/>
@@ -27,5 +26,10 @@
 		<activity android:name=".io.input.DBView"/>
 		<activity android:name=".io.input.CSVView"/>
 		<activity android:name=".io.input.SQLView"/>
+		<activity android:name=".views.ChartsView"/>
+		<activity android:name=".views.FuelPriceChart"/>
+		<activity android:name=".views.FuelAmountChart"/>
+		<activity android:name=".views.DistanceChart"/>
+		<activity android:name=".views.FuelEconomyChart"/>
 	</application>
 </manifest> 

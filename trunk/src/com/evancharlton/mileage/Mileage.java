@@ -11,6 +11,8 @@ import android.view.Window;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 
+import com.evancharlton.mileage.views.ChartsView;
+
 public class Mileage extends TabActivity {
 	public static final String EXTRA_IGNORE_STATE = "ignore-state";
 	public static final String PACKAGE = "com.evancharlton.mileage";
@@ -34,6 +36,7 @@ public class Mileage extends TabActivity {
 		addFillUpTab();
 		addHistoryTab();
 		addStatisticsTab();
+		addChartsTab();
 
 		if (savedInstanceState != null) {
 			int c = savedInstanceState.getInt(CURRENT_TAB, 0);
@@ -66,7 +69,7 @@ public class Mileage extends TabActivity {
 		i.setClass(Mileage.this, AddFillUpView.class);
 
 		TabSpec spec = m_tabHost.newTabSpec("fillup");
-		spec.setIndicator(getString(R.string.fillup), getResources().getDrawable(R.drawable.gaspump_i));
+		spec.setIndicator(getString(R.string.fillup), getResources().getDrawable(R.drawable.gas_i));
 		spec.setContent(i);
 		m_tabHost.addTab(spec);
 	}
@@ -87,6 +90,16 @@ public class Mileage extends TabActivity {
 
 		TabSpec spec = m_tabHost.newTabSpec("fillup");
 		spec.setIndicator(getString(R.string.statistics), getResources().getDrawable(R.drawable.statistics_i));
+		spec.setContent(i);
+		m_tabHost.addTab(spec);
+	}
+
+	private void addChartsTab() {
+		Intent i = new Intent();
+		i.setClass(Mileage.this, ChartsView.class);
+
+		TabSpec spec = m_tabHost.newTabSpec("fillup");
+		spec.setIndicator(getString(R.string.charts), getResources().getDrawable(R.drawable.charts_i));
 		spec.setContent(i);
 		m_tabHost.addTab(spec);
 	}
