@@ -4,7 +4,6 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -25,7 +24,7 @@ import com.evancharlton.mileage.models.Statistic;
 import com.evancharlton.mileage.models.StatisticsGroup;
 import com.evancharlton.mileage.models.Vehicle;
 
-public class StatisticsView extends Activity {
+public class StatisticsView extends TabChildActivity {
 	private Spinner m_vehicles;
 	private PreferencesProvider m_preferences;
 	private CalculationEngine m_calcEngine;
@@ -71,15 +70,6 @@ public class StatisticsView extends Activity {
 
 	private void initUI() {
 		m_vehicles = (Spinner) findViewById(R.id.stats_vehicle_spinner);
-		m_vehicles.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-			public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-				calculateStatistics(m_vehicles.getSelectedItemId());
-			}
-
-			public void onNothingSelected(AdapterView<?> arg0) {
-				// uh, do nothing?
-			}
-		});
 	}
 
 	private void populateSpinner() {
@@ -93,6 +83,18 @@ public class StatisticsView extends Activity {
 		vehicleAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		vehicleAdapter.setViewBinder(new VehicleBinder());
 		m_vehicles.setAdapter(vehicleAdapter);
+
+		setVehicleSelection(m_vehicles);
+		m_vehicles.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+			public void onItemSelected(AdapterView<?> adapter, View view, int position, long id) {
+				updateVehicleSelection(position);
+				calculateStatistics(m_vehicles.getSelectedItemId());
+			}
+
+			public void onNothingSelected(AdapterView<?> arg0) {
+				// uh, do nothing?
+			}
+		});
 
 		if (vehicleAdapter.getCount() == 1) {
 			m_vehicles.setVisibility(View.GONE);
@@ -125,13 +127,11 @@ public class StatisticsView extends Activity {
 
 		final Thread t = new Thread() {
 			public void run() {
-				// then get the list of all the FillUps for later processing
 				// TODO: optimize this. This has huge overhead
-				List<FillUp> fillups = v.getAllFillUps(m_calcEngine);
+				final List<FillUp> fillups = v.getAllFillUps(m_calcEngine);
 
 				if (fillups.size() >= 2) {
-					// now that we have all the data ready to go, let's get
-					// started!
+					// crunch the numbers
 					send(calcDistances(fillups));
 					send(calcEconomy(fillups));
 					send(calcPrices(fillups));

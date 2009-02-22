@@ -43,6 +43,7 @@ public class DBView extends ImportView {
 					// make sure the schema is up to date
 					SQLiteDatabase db = SQLiteDatabase.openDatabase("/data/data/" + Mileage.PACKAGE + "/databases/" + FillUpsProvider.DATABASE_NAME, null, SQLiteDatabase.OPEN_READWRITE);
 					FillUpsProvider.upgradeDatabase(db);
+					db.close();
 				} catch (final IOException ioe) {
 					m_handler.post(new Runnable() {
 						public void run() {

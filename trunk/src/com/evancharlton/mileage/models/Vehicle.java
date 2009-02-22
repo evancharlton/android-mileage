@@ -366,6 +366,8 @@ public class Vehicle extends Model {
 			for (int i = 0; i < col_count; i++) {
 				data.put(c.getColumnName(i), c.getString(i));
 			}
+			data.put(FillUp.DATE, String.valueOf(c.getLong(c.getColumnIndex(FillUp.DATE))));
+
 			all.add(new FillUp(engine, data));
 			c.moveToNext();
 		}

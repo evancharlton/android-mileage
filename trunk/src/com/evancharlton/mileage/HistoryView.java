@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ContentUris;
@@ -32,7 +31,7 @@ import com.evancharlton.mileage.calculators.CalculationEngine;
 import com.evancharlton.mileage.models.FillUp;
 import com.evancharlton.mileage.models.Vehicle;
 
-public class HistoryView extends Activity implements View.OnCreateContextMenuListener {
+public class HistoryView extends TabChildActivity implements View.OnCreateContextMenuListener {
 	public static final int MENU_IMPORT_EXPORT = Menu.FIRST;
 	public static final int MENU_EXPORT = Menu.FIRST;
 	public static final int MENU_EXPORT_DB = Menu.FIRST + 1;
@@ -109,8 +108,12 @@ public class HistoryView extends Activity implements View.OnCreateContextMenuLis
 		vehicleAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		vehicleAdapter.setViewBinder(new VehicleBinder());
 		m_vehicles.setAdapter(vehicleAdapter);
+
+		setVehicleSelection(m_vehicles);
+
 		m_vehicles.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-			public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+			public void onItemSelected(AdapterView<?> adapter, View view, int position, long id) {
+				updateVehicleSelection(position);
 				onResume();
 			}
 

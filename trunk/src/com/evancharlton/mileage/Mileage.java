@@ -25,6 +25,8 @@ public class Mileage extends TabActivity {
 	private static final String CURRENT_TAB = "current_tab";
 	private static final String CURRENT_VIEW = "current_view";
 
+	private int m_selectedVehicleIndex = -1;
+
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
@@ -139,5 +141,21 @@ public class Mileage extends TabActivity {
 		}
 		View focused = getCurrentFocus();
 		outState.putInt(CURRENT_VIEW, focused.getId());
+	}
+
+	/**
+	 * Returns the index of the last selected vehicle. This is used so that the
+	 * vehicle selection list (for history, stats, charts, etc) isn't constantly
+	 * resetting to the default vehicle. Note that this shouldn't be used to set
+	 * selections when recording (or editing) fill-ups or anything
+	 * 
+	 * @return index of last selected vehicle
+	 */
+	public int getSelectedVehicleIndex() {
+		return m_selectedVehicleIndex;
+	}
+
+	public void setSelectedVehicleIndex(int pos) {
+		m_selectedVehicleIndex = pos;
 	}
 }

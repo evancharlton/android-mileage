@@ -1,12 +1,12 @@
 package com.evancharlton.mileage.views;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
@@ -14,10 +14,11 @@ import android.widget.Spinner;
 import com.evancharlton.mileage.HelpDialog;
 import com.evancharlton.mileage.Mileage;
 import com.evancharlton.mileage.R;
+import com.evancharlton.mileage.TabChildActivity;
 import com.evancharlton.mileage.binders.VehicleBinder;
 import com.evancharlton.mileage.models.Vehicle;
 
-public class ChartsView extends Activity {
+public class ChartsView extends TabChildActivity {
 	private Button m_fuelPriceBtn;
 	private Button m_fuelAmountBtn;
 	private Button m_distanceBtn;
@@ -86,6 +87,15 @@ public class ChartsView extends Activity {
 			}
 		});
 
+		m_vehicles.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+			public void onItemSelected(AdapterView<?> adapter, View view, int position, long id) {
+				updateVehicleSelection(position);
+			}
+
+			public void onNothingSelected(AdapterView<?> arg0) {
+			}
+		});
+
 		populateSpinner();
 	}
 
@@ -100,6 +110,8 @@ public class ChartsView extends Activity {
 		vehicleAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		vehicleAdapter.setViewBinder(new VehicleBinder());
 		m_vehicles.setAdapter(vehicleAdapter);
+
+		setVehicleSelection(m_vehicles);
 
 		if (vehicleAdapter.getCount() == 1) {
 			m_vehicles.setVisibility(View.GONE);
