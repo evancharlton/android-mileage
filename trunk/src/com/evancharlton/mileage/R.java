@@ -193,7 +193,7 @@ public final class R {
         public static final int fillup_saved=0x7f050036;
         public static final int graphs=0x7f050005;
         public static final int help=0x7f05006e;
-        public static final int help_charts=0x7f05008d;
+        public static final int help_charts=0x7f05008e;
         public static final int help_export_csv=0x7f05007a;
         public static final int help_export_csv_title=0x7f050079;
         public static final int help_export_db=0x7f050078;
@@ -212,6 +212,7 @@ public final class R {
         public static final int help_import_sql_title=0x7f050075;
         public static final int help_settings=0x7f05008a;
         public static final int help_statistics=0x7f05008c;
+        public static final int help_title_charts=0x7f05008d;
         public static final int help_title_fillup_edit=0x7f050087;
         public static final int help_title_fillup_new=0x7f050083;
         public static final int help_title_history=0x7f050085;

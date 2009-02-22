@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Message;
 import android.widget.TextView;
@@ -38,6 +39,10 @@ public class DBView extends ImportView {
 					outChannel.close();
 					in.close();
 					out.close();
+
+					// make sure the schema is up to date
+					SQLiteDatabase db = SQLiteDatabase.openDatabase("/data/data/" + Mileage.PACKAGE + "/databases/" + FillUpsProvider.DATABASE_NAME, null, SQLiteDatabase.OPEN_READWRITE);
+					FillUpsProvider.upgradeDatabase(db);
 				} catch (final IOException ioe) {
 					m_handler.post(new Runnable() {
 						public void run() {

@@ -63,10 +63,7 @@ public class StatisticsView extends Activity {
 		}
 		switch (item.getItemId()) {
 			case HelpDialog.MENU_HELP:
-				HelpDialog.create(this, R.string.help_title_statistics, new int[] {
-						R.string.help_statistics,
-						R.string.help_charts
-				});
+				HelpDialog.create(this, R.string.help_title_statistics, R.string.help_statistics);
 				break;
 		}
 		return super.onOptionsItemSelected(item);

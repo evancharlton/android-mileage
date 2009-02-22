@@ -1,5 +1,6 @@
 package com.evancharlton.mileage.views;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import android.os.Bundle;
@@ -23,8 +24,7 @@ public class DistanceChart extends ChartDisplay {
 
 		final int size = m_fillups.size() - 1;
 
-		float[] data = new float[size * 2];
-		int j = 0;
+		ArrayList<Float> data = new ArrayList<Float>();
 		FillUp f;
 		float total = (float) (m_fillups.get(size).getOdometer() - m_fillups.get(0).getOdometer());
 		float distance;
@@ -38,8 +38,8 @@ public class DistanceChart extends ChartDisplay {
 			if (distance == -1) {
 				continue;
 			}
-			data[j++] = (float) i;
-			data[j++] = distance;
+			data.add((float) i);
+			data.add(distance);
 
 			if (distance < min) {
 				min = distance;
@@ -58,7 +58,7 @@ public class DistanceChart extends ChartDisplay {
 		float avg = (total / size);
 		m_chart.setAverageLabel(m_format.format(avg) + calc.getDistanceUnitsAbbr());
 
-		m_chart.setDataPoints(data);
+		m_chart.setDataPoints(data.toArray(new Float[data.size()]));
 		m_chart.thaw();
 	}
 }

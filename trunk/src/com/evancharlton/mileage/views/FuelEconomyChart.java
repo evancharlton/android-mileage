@@ -1,5 +1,6 @@
 package com.evancharlton.mileage.views;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import android.os.Bundle;
@@ -21,11 +22,9 @@ public class FuelEconomyChart extends ChartDisplay {
 		CalculationEngine calc = m_prefs.getCalculator();
 
 		m_chart.setYAxisLabel(calc.getEconomyUnits());
-
-		float[] data = new float[m_fillups.size() * 2];
+		ArrayList<Float> data = new ArrayList<Float>();
 
 		final int size = m_fillups.size();
-		int j = 0;
 		FillUp f;
 		double total_fuel = 0F;
 		double total_distance = m_fillups.get(m_fillups.size() - 1).getOdometer() - m_fillups.get(0).getOdometer();
@@ -39,11 +38,10 @@ public class FuelEconomyChart extends ChartDisplay {
 			economy = (float) f.calcEconomy();
 			total_fuel += (float) f.getAmount();
 			if (economy == -1F) {
-				j += 2;
 				continue;
 			}
-			data[j++] = (float) i;
-			data[j++] = economy;
+			data.add((float) i);
+			data.add(economy);
 
 			if (calc.better(min, economy)) {
 				min = economy;
@@ -64,7 +62,7 @@ public class FuelEconomyChart extends ChartDisplay {
 		float avg = (float) calc.calculateEconomy(total_distance, total_fuel);
 		m_chart.setAverageLabel(m_format.format(avg) + calc.getEconomyUnits());
 
-		m_chart.setDataPoints(data);
+		m_chart.setDataPoints(data.toArray(new Float[data.size()]));
 		m_chart.thaw();
 	}
 }

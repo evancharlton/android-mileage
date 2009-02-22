@@ -98,96 +98,12 @@ public class FillUpsProvider extends ContentProvider {
 
 		@Override
 		public void onCreate(SQLiteDatabase db) {
-			StringBuilder sql = new StringBuilder();
-			sql.append("CREATE TABLE ").append(FILLUPS_TABLE_NAME).append(" (");
-			sql.append(FillUp._ID).append(" INTEGER PRIMARY KEY AUTOINCREMENT,");
-			sql.append(FillUp.PRICE).append(" DOUBLE,");
-			sql.append(FillUp.AMOUNT).append(" DOUBLE,");
-			sql.append(FillUp.ODOMETER).append(" DOUBLE,");
-			sql.append(FillUp.VEHICLE_ID).append(" INTEGER,");
-			sql.append(FillUp.DATE).append(" INTEGER,");
-			sql.append(FillUp.LATITUDE).append(" DOUBLE,");
-			sql.append(FillUp.LONGITUDE).append(" DOUBLE,");
-			sql.append(FillUp.COMMENT).append(" TEXT,");
-			sql.append(FillUp.PARTIAL).append(" INTEGER");
-			sql.append(");");
-			db.execSQL(sql.toString());
-
-			sql = new StringBuilder();
-			sql.append("CREATE TABLE ").append(VEHICLES_TABLE_NAME).append(" (");
-			sql.append(Vehicle._ID).append(" INTEGER PRIMARY KEY AUTOINCREMENT,");
-			sql.append(Vehicle.MAKE).append(" TEXT,");
-			sql.append(Vehicle.MODEL).append(" TEXT,");
-			sql.append(Vehicle.TITLE).append(" TEXT,");
-			sql.append(Vehicle.YEAR).append(" TEXT,");
-			sql.append(Vehicle.DEFAULT).append(" INTEGER");
-			sql.append(");");
-			db.execSQL(sql.toString());
-
-			sql = new StringBuilder();
-			sql.append("CREATE TABLE ").append(MAINTENANCE_TABLE_NAME).append(" (");
-			sql.append(MaintenanceInterval._ID).append(" INTEGER PRIMARY KEY AUTOINCREMENT,");
-			sql.append(MaintenanceInterval.CREATE_DATE).append(" INTEGER,");
-			sql.append(MaintenanceInterval.CREATE_ODOMETER).append(" DOUBLE,");
-			sql.append(MaintenanceInterval.DESCRIPTION).append(" TEXT,");
-			sql.append(MaintenanceInterval.DISTANCE).append(" DOUBLE,");
-			sql.append(MaintenanceInterval.DURATION).append(" INTEGER,");
-			sql.append(MaintenanceInterval.VEHICLE_ID).append(" INTEGER");
-			sql.append(");");
-			db.execSQL(sql.toString());
-
-			sql = new StringBuilder();
-			sql.append("CREATE TABLE ").append(VERSION_TABLE_NAME).append(" (");
-			sql.append(VERSION).append(" INTEGER");
-			sql.append(");");
-			db.execSQL(sql.toString());
-
-			initTables(db);
+			createDatabase(db);
 		}
 
 		@Override
 		public void onUpgrade(SQLiteDatabase db, final int oldVersion, final int newVersion) {
-			if (oldVersion == 3) {
-				StringBuilder sb = new StringBuilder();
-				sb.append("ALTER TABLE ").append(FILLUPS_TABLE_NAME).append(" ADD COLUMN ").append(FillUp.PARTIAL).append(" INTEGER;");
-				db.execSQL(sb.toString());
-
-				sb = new StringBuilder();
-				sb.append("CREATE TABLE ").append(MAINTENANCE_TABLE_NAME).append(" (");
-				sb.append(MaintenanceInterval._ID).append(" INTEGER PRIMARY KEY AUTOINCREMENT,");
-				sb.append(MaintenanceInterval.CREATE_DATE).append(" INTEGER,");
-				sb.append(MaintenanceInterval.CREATE_ODOMETER).append(" DOUBLE,");
-				sb.append(MaintenanceInterval.DESCRIPTION).append(" TEXT,");
-				sb.append(MaintenanceInterval.DISTANCE).append(" DOUBLE,");
-				sb.append(MaintenanceInterval.DURATION).append(" INTEGER,");
-				sb.append(MaintenanceInterval.VEHICLE_ID).append(" INTEGER");
-				sb.append(");");
-				db.execSQL(sb.toString());
-
-				sb = new StringBuilder();
-				sb.append("CREATE TABLE ").append(VERSION_TABLE_NAME).append(" (");
-				sb.append(VERSION).append(" INTEGER");
-				sb.append(");");
-				db.execSQL(sb.toString());
-				return;
-			} else if (oldVersion == 2) {
-				StringBuilder sb = new StringBuilder();
-				sb.append("ALTER TABLE ").append(FILLUPS_TABLE_NAME).append(" ADD COLUMN ").append(FillUp.COMMENT).append(" TEXT;");
-				db.execSQL(sb.toString());
-
-				sb = new StringBuilder();
-				sb.append("ALTER TABLE ").append(VEHICLES_TABLE_NAME).append(" ADD COLUMN ").append(Vehicle.DEFAULT).append(" INTEGER;");
-				db.execSQL(sb.toString());
-				return;
-			}
-			StringBuilder sb = new StringBuilder();
-			sb.append("DROP TABLE IF EXISTS ").append(FILLUPS_TABLE_NAME).append(";");
-			db.execSQL(sb.toString());
-
-			sb = new StringBuilder();
-			sb.append("DROP TABLE IF EXISTS ").append(VEHICLES_TABLE_NAME).append(";");
-			db.execSQL(sb.toString());
-			onCreate(db);
+			upgradeDatabase(db, oldVersion, newVersion);
 		}
 	}
 
@@ -205,7 +121,7 @@ public class FillUpsProvider extends ContentProvider {
 		sql = new StringBuilder();
 		sql.append("INSERT INTO ").append(VERSION_TABLE_NAME).append(" (").append(VERSION).append(") VALUES (?)");
 		db.execSQL(sql.toString(), new String[] {
-			String.valueOf(3)
+			String.valueOf(DATABASE_VERSION)
 		});
 	}
 
@@ -423,12 +339,10 @@ public class FillUpsProvider extends ContentProvider {
 		return s_vehiclesProjectionMap;
 	}
 
-	public boolean upgradeDatabase(SQLiteDatabase db) {
+	public static boolean upgradeDatabase(SQLiteDatabase db) {
 		// see if we can determine what version we have
 		int oldVersion = -1;
-		Cursor c = db.rawQuery("PRAGMA table_info(?)", new String[] {
-			VERSION_TABLE_NAME
-		});
+		Cursor c = db.rawQuery("PRAGMA table_info(" + VERSION_TABLE_NAME + ");", null);
 		if (c.getCount() == 0) {
 			oldVersion = 3;
 		} else {
@@ -445,9 +359,104 @@ public class FillUpsProvider extends ContentProvider {
 
 		if (oldVersion > 0 && oldVersion != DATABASE_VERSION) {
 			// Let's do this shit!
-			m_helper.onUpgrade(db, oldVersion, oldVersion + 1);
+			upgradeDatabase(db, oldVersion, oldVersion + 1);
 			return true;
 		}
 		return false;
+	}
+
+	private static void upgradeDatabase(SQLiteDatabase db, final int oldVersion, final int newVersion) {
+		if (newVersion == DATABASE_VERSION) {
+			return;
+		}
+		if (oldVersion == 3) {
+			StringBuilder sb = new StringBuilder();
+			sb.append("ALTER TABLE ").append(FILLUPS_TABLE_NAME).append(" ADD COLUMN ").append(FillUp.PARTIAL).append(" INTEGER;");
+			db.execSQL(sb.toString());
+
+			sb = new StringBuilder();
+			sb.append("CREATE TABLE ").append(MAINTENANCE_TABLE_NAME).append(" (");
+			sb.append(MaintenanceInterval._ID).append(" INTEGER PRIMARY KEY AUTOINCREMENT,");
+			sb.append(MaintenanceInterval.CREATE_DATE).append(" INTEGER,");
+			sb.append(MaintenanceInterval.CREATE_ODOMETER).append(" DOUBLE,");
+			sb.append(MaintenanceInterval.DESCRIPTION).append(" TEXT,");
+			sb.append(MaintenanceInterval.DISTANCE).append(" DOUBLE,");
+			sb.append(MaintenanceInterval.DURATION).append(" INTEGER,");
+			sb.append(MaintenanceInterval.VEHICLE_ID).append(" INTEGER");
+			sb.append(");");
+			db.execSQL(sb.toString());
+
+			sb = new StringBuilder();
+			sb.append("CREATE TABLE ").append(VERSION_TABLE_NAME).append(" (");
+			sb.append(VERSION).append(" INTEGER");
+			sb.append(");");
+			db.execSQL(sb.toString());
+			return;
+		} else if (oldVersion == 2) {
+			StringBuilder sb = new StringBuilder();
+			sb.append("ALTER TABLE ").append(FILLUPS_TABLE_NAME).append(" ADD COLUMN ").append(FillUp.COMMENT).append(" TEXT;");
+			db.execSQL(sb.toString());
+
+			sb = new StringBuilder();
+			sb.append("ALTER TABLE ").append(VEHICLES_TABLE_NAME).append(" ADD COLUMN ").append(Vehicle.DEFAULT).append(" INTEGER;");
+			db.execSQL(sb.toString());
+			return;
+		}
+		StringBuilder sb = new StringBuilder();
+		sb.append("DROP TABLE IF EXISTS ").append(FILLUPS_TABLE_NAME).append(";");
+		db.execSQL(sb.toString());
+
+		sb = new StringBuilder();
+		sb.append("DROP TABLE IF EXISTS ").append(VEHICLES_TABLE_NAME).append(";");
+		db.execSQL(sb.toString());
+		createDatabase(db);
+	}
+
+	private static void createDatabase(SQLiteDatabase db) {
+		StringBuilder sql = new StringBuilder();
+		sql.append("CREATE TABLE ").append(FILLUPS_TABLE_NAME).append(" (");
+		sql.append(FillUp._ID).append(" INTEGER PRIMARY KEY AUTOINCREMENT,");
+		sql.append(FillUp.PRICE).append(" DOUBLE,");
+		sql.append(FillUp.AMOUNT).append(" DOUBLE,");
+		sql.append(FillUp.ODOMETER).append(" DOUBLE,");
+		sql.append(FillUp.VEHICLE_ID).append(" INTEGER,");
+		sql.append(FillUp.DATE).append(" INTEGER,");
+		sql.append(FillUp.LATITUDE).append(" DOUBLE,");
+		sql.append(FillUp.LONGITUDE).append(" DOUBLE,");
+		sql.append(FillUp.COMMENT).append(" TEXT,");
+		sql.append(FillUp.PARTIAL).append(" INTEGER");
+		sql.append(");");
+		db.execSQL(sql.toString());
+
+		sql = new StringBuilder();
+		sql.append("CREATE TABLE ").append(VEHICLES_TABLE_NAME).append(" (");
+		sql.append(Vehicle._ID).append(" INTEGER PRIMARY KEY AUTOINCREMENT,");
+		sql.append(Vehicle.MAKE).append(" TEXT,");
+		sql.append(Vehicle.MODEL).append(" TEXT,");
+		sql.append(Vehicle.TITLE).append(" TEXT,");
+		sql.append(Vehicle.YEAR).append(" TEXT,");
+		sql.append(Vehicle.DEFAULT).append(" INTEGER");
+		sql.append(");");
+		db.execSQL(sql.toString());
+
+		sql = new StringBuilder();
+		sql.append("CREATE TABLE ").append(MAINTENANCE_TABLE_NAME).append(" (");
+		sql.append(MaintenanceInterval._ID).append(" INTEGER PRIMARY KEY AUTOINCREMENT,");
+		sql.append(MaintenanceInterval.CREATE_DATE).append(" INTEGER,");
+		sql.append(MaintenanceInterval.CREATE_ODOMETER).append(" DOUBLE,");
+		sql.append(MaintenanceInterval.DESCRIPTION).append(" TEXT,");
+		sql.append(MaintenanceInterval.DISTANCE).append(" DOUBLE,");
+		sql.append(MaintenanceInterval.DURATION).append(" INTEGER,");
+		sql.append(MaintenanceInterval.VEHICLE_ID).append(" INTEGER");
+		sql.append(");");
+		db.execSQL(sql.toString());
+
+		sql = new StringBuilder();
+		sql.append("CREATE TABLE ").append(VERSION_TABLE_NAME).append(" (");
+		sql.append(VERSION).append(" INTEGER");
+		sql.append(");");
+		db.execSQL(sql.toString());
+
+		initTables(db);
 	}
 }

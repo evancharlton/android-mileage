@@ -40,7 +40,7 @@ public class HelpDialog extends Dialog {
 			TextView text = new TextView(m_context);
 			String t = getContext().getString(i);
 			t = t.replaceAll("\\s+", " ");
-			text.setText(i);
+			text.setText(t);
 			text.setPadding(5, 10, 5, 10);
 			container.addView(text);
 		}
@@ -49,7 +49,7 @@ public class HelpDialog extends Dialog {
 	public void setContents(String contents) {
 		LinearLayout container = (LinearLayout) findViewById(R.id.help_container);
 		TextView text = new TextView(m_context);
-		text.setText(contents);
+		text.setText(contents.replaceAll("\\s+", " "));
 		text.setPadding(5, 10, 5, 10);
 		container.addView(text);
 	}
@@ -69,11 +69,7 @@ public class HelpDialog extends Dialog {
 	}
 
 	public static HelpDialog create(Context context, int title, String contents) {
-		HelpDialog dlg = new HelpDialog(context);
-		dlg.setTitle(title);
-		dlg.setContents(contents);
-		dlg.show();
-		return dlg;
+		return HelpDialog.create(context, context.getString(title), contents);
 	}
 
 	public static HelpDialog create(Context context, String title, String contents) {

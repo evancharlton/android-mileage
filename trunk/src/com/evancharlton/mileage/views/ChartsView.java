@@ -49,10 +49,7 @@ public class ChartsView extends Activity {
 		}
 		switch (item.getItemId()) {
 			case HelpDialog.MENU_HELP:
-				HelpDialog.create(this, R.string.help_title_statistics, new int[] {
-						R.string.help_statistics,
-						R.string.help_charts
-				});
+				HelpDialog.create(this, R.string.help_title_charts, R.string.help_charts);
 				break;
 		}
 		return super.onOptionsItemSelected(item);

@@ -144,7 +144,6 @@ public class LineChart extends View {
 				canvas.drawRect(axisTextHeight + 1, 0, width, m_avg * height, m_belowAveragePaint);
 				canvas.drawRect(axisTextHeight + 1, m_avg * height, width, height - (axisTextHeight + 1), m_aboveAveragePaint);
 			}
-			canvas.drawText(m_avgLabel, axisTextHeight + 1, (m_avg * height) - 1, m_unitPaint);
 
 			// data points
 			if (m_data != null) {
@@ -170,13 +169,13 @@ public class LineChart extends View {
 
 					// render the labels
 					if (y_raw == m_maxY && maxRendered == false) {
-						if (i < m_data.length / 4) {
+						if (i < (m_data.length + 1) / 4) {
 							m_maxXPaint.setTextAlign(Align.LEFT);
 						}
 						canvas.drawText(m_maxXLabel, posX, height, m_maxXPaint);
 						maxRendered = true;
 					} else if (y_raw == m_minY && minRendered == false) {
-						if (i > m_data.length / 4) {
+						if (i > (m_data.length + 1) / 4) {
 							// we need to flip the alignment
 							m_minXPaint.setTextAlign(Align.RIGHT);
 						}
@@ -194,6 +193,8 @@ public class LineChart extends View {
 				canvas.drawText(m_maxYLabel, axisTextHeight + 1, m_unitPaint.getTextSize(), m_unitPaint);
 				canvas.drawText(m_minYLabel, axisTextHeight + 1, height - (m_unitPaint.getTextSize() + 3), m_unitPaint);
 			}
+
+			canvas.drawText(m_avgLabel, axisTextHeight + 1, (m_avg * height) - 1, m_unitPaint);
 		}
 	}
 
@@ -279,5 +280,13 @@ public class LineChart extends View {
 
 	public void setBetterOnBottom(boolean b) {
 		m_betterOnBottom = b;
+	}
+
+	public void setDataPoints(final Float[] array) {
+		float[] data = new float[array.length];
+		for (int i = 0; i < array.length; i++) {
+			data[i] = array[i];
+		}
+		setDataPoints(data);
 	}
 }
