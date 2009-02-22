@@ -425,10 +425,43 @@ public class FillUp extends Model {
 		return -1;
 	}
 
-	public String toCSV() {
-		StringBuilder csv = new StringBuilder();
-		// TODO: Fill this in
-		return csv.toString();
+	public static String[] getCSVColumns() {
+		String[] cols = new String[PLAINTEXT.size()];
+		int i = 0;
+		for (String key : PLAINTEXT.keySet()) {
+			cols[i++] = PLAINTEXT.get(key);
+		}
+		return cols;
+	}
+
+	public String[] toCSV(final String[] columns) {
+		final int size = columns.length;
+		String[] data = new String[size];
+		String col;
+		for (int i = 0; i < size; i++) {
+			col = columns[i];
+
+			if (col.equals(FillUp.AMOUNT) || col.equals(FillUp.PLAINTEXT.get(FillUp.AMOUNT))) {
+				data[i] = String.valueOf(m_amount);
+			} else if (col.equals(FillUp.COMMENT) || col.equals(FillUp.PLAINTEXT.get(FillUp.COMMENT))) {
+				data[i] = m_comment;
+			} else if (col.equals(FillUp.DATE) || col.equals(FillUp.PLAINTEXT.get(FillUp.DATE))) {
+				data[i] = String.valueOf(m_date.getTimeInMillis());
+			} else if (col.equals(FillUp.LATITUDE) || col.equals(FillUp.PLAINTEXT.get(FillUp.LATITUDE))) {
+				data[i] = String.valueOf(m_latitude);
+			} else if (col.equals(FillUp.LONGITUDE) || col.equals(FillUp.PLAINTEXT.get(FillUp.LONGITUDE))) {
+				data[i] = String.valueOf(m_longitude);
+			} else if (col.equals(FillUp.ODOMETER) || col.equals(FillUp.PLAINTEXT.get(FillUp.ODOMETER))) {
+				data[i] = String.valueOf(m_odometer);
+			} else if (col.equals(FillUp.PARTIAL) || col.equals(FillUp.PLAINTEXT.get(FillUp.PARTIAL))) {
+				data[i] = m_partial ? "1" : "0";
+			} else if (col.equals(FillUp.PRICE) || col.equals(FillUp.PLAINTEXT.get(FillUp.PRICE))) {
+				data[i] = String.valueOf(m_price);
+			} else if (col.equals(FillUp.VEHICLE_ID) || col.equals(FillUp.PLAINTEXT.get(FillUp.VEHICLE_ID))) {
+				data[i] = String.valueOf(m_vehicleId);
+			}
+		}
+		return data;
 	}
 
 	// from here down, it's nothing but getters and setters. Boring!

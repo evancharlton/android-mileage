@@ -2,9 +2,7 @@ package com.evancharlton.mileage.io.output;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Set;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -17,6 +15,7 @@ import au.com.bytecode.opencsv.CSVWriter;
 import com.evancharlton.mileage.FillUpsProvider;
 import com.evancharlton.mileage.Mileage;
 import com.evancharlton.mileage.R;
+import com.evancharlton.mileage.calculators.CalculationEngine;
 import com.evancharlton.mileage.models.FillUp;
 
 public class CSVView extends ExportView {
@@ -30,32 +29,24 @@ public class CSVView extends ExportView {
 				try {
 					CSVWriter csv = new CSVWriter(new FileWriter(Environment.getExternalStorageDirectory() + "/" + getFilename()));
 
-					HashMap<String, String> fillupsProjection = FillUpsProvider.getFillUpsProjection();
-					Set<String> tmp_keySet = fillupsProjection.keySet();
-					ArrayList<String> keySet = new ArrayList<String>(tmp_keySet);
-					keySet.remove(FillUp._ID);
-					String[] proj = keySet.toArray(new String[keySet.size()]);
+					// write out the column headers
+					String[] columns = FillUp.getCSVColumns();
+					csv.writeNext(columns);
+
+					// load all the fill-ups
 					SQLiteDatabase db = SQLiteDatabase.openDatabase("/data/data/" + Mileage.PACKAGE + "/databases/" + FillUpsProvider.DATABASE_NAME, null, SQLiteDatabase.OPEN_READONLY);
-					Cursor c = db.query(FillUpsProvider.FILLUPS_TABLE_NAME, proj, null, null, null, null, FillUp._ID + " ASC");
+					Cursor c = db.query(FillUpsProvider.FILLUPS_TABLE_NAME, FillUp.getProjection(), null, null, null, null, FillUp.DEFAULT_SORT_ORDER);
 					c.moveToFirst();
-
-					// transform the column keySet into the plain English form
-					int i = 0;
-					for (String key : keySet) {
-						String english = FillUp.PLAINTEXT.get(key);
-						if (english != null) {
-							keySet.set(i, english);
+					while (!c.isAfterLast()) {
+						HashMap<String, String> info = new HashMap<String, String>();
+						for (int i = 0; i < c.getColumnCount(); i++) {
+							info.put(c.getColumnName(i), c.getString(i));
 						}
-						i++;
-					}
+						FillUp f = new FillUp((CalculationEngine) null, info);
 
-					csv.writeNext(keySet.toArray(new String[keySet.size()]));
-					while (c.isAfterLast() == false) {
-						String[] data = new String[keySet.size()];
-						for (i = 0; i < c.getColumnCount(); i++) {
-							data[i] = c.getString(i);
-						}
-						csv.writeNext(data);
+						// write each fill-up
+						csv.writeNext(f.toCSV(columns));
+
 						c.moveToNext();
 					}
 					c.close();
@@ -65,6 +56,7 @@ public class CSVView extends ExportView {
 							Bundle data = new Bundle();
 							data.putString(MESSAGE, getString(R.string.export_finished_msg) + "\n" + getFilename());
 							data.putString(TITLE, getString(R.string.success));
+							data.putBoolean(SUCCESS, true);
 
 							Message msg = new Message();
 							msg.setData(data);
@@ -78,6 +70,7 @@ public class CSVView extends ExportView {
 							Bundle data = new Bundle();
 							data.putString(MESSAGE, e.getMessage());
 							data.putString(TITLE, getString(R.string.error));
+							data.putBoolean(SUCCESS, false);
 
 							Message msg = new Message();
 							msg.setData(data);

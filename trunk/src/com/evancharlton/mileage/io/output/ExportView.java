@@ -24,6 +24,7 @@ import com.evancharlton.mileage.R;
 public abstract class ExportView extends Activity {
 	protected final static String MESSAGE = "msg";
 	protected final static String TITLE = "title";
+	protected final static String SUCCESS = "success";
 
 	protected TextView m_title;
 	protected Button m_startBtn;
@@ -148,6 +149,10 @@ public abstract class ExportView extends Activity {
 				}
 			});
 			dlg.show();
+
+			if (data.getBoolean(SUCCESS, false)) {
+				finish();
+			}
 		}
 	};
 }

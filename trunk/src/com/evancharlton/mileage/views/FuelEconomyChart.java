@@ -43,7 +43,7 @@ public class FuelEconomyChart extends ChartDisplay {
 			data.add((float) i);
 			data.add(economy);
 
-			if (calc.better(min, economy)) {
+			if (calc.worse(economy, min)) {
 				min = economy;
 				Calendar d = f.getDate();
 				min_label = m_prefs.format(d.getTime());

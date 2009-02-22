@@ -77,6 +77,7 @@ public class SQLView extends ExportView {
 							Bundle data = new Bundle();
 							data.putString(MESSAGE, e.getMessage());
 							data.putString(TITLE, getString(R.string.error));
+							data.putBoolean(SUCCESS, false);
 
 							Message msg = new Message();
 							msg.setData(data);
@@ -91,6 +92,7 @@ public class SQLView extends ExportView {
 						Bundle data = new Bundle();
 						data.putString(MESSAGE, getString(R.string.export_finished_msg) + "\n" + getFilename());
 						data.putString(TITLE, getString(R.string.success));
+						data.putBoolean(SUCCESS, true);
 
 						Message msg = new Message();
 						msg.setData(data);
