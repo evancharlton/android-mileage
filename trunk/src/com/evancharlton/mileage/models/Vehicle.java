@@ -1,7 +1,6 @@
 package com.evancharlton.mileage.models;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,6 +21,8 @@ public class Vehicle extends Model {
 	public static final String MODEL = "model";
 	public static final String YEAR = "year";
 	public static final String DEFAULT = "def";
+	public static final String DISTANCE_UNITS = "distance";
+	public static final String VOLUME_UNITS = "volume";
 	public static final String DEFAULT_SORT_ORDER = DEFAULT + " DESC, " + TITLE + " ASC";
 
 	public static final List<String> PROJECTION = new ArrayList<String>();
@@ -33,6 +34,8 @@ public class Vehicle extends Model {
 		PROJECTION.add(MODEL);
 		PROJECTION.add(YEAR);
 		PROJECTION.add(DEFAULT);
+		PROJECTION.add(DISTANCE_UNITS);
+		PROJECTION.add(VOLUME_UNITS);
 	}
 
 	private static final int DEFAULT_UNKNOWN = 0;
@@ -45,6 +48,8 @@ public class Vehicle extends Model {
 	private String m_model = "";
 	private String m_year = "";
 	private int m_defaultState = DEFAULT_UNKNOWN;
+	private int m_volumeUnits = -1;
+	private int m_distanceUnits = -1;
 
 	public Vehicle() {
 		super(FillUpsProvider.VEHICLES_TABLE_NAME);
@@ -84,6 +89,10 @@ public class Vehicle extends Model {
 					setModel(c.getString(i));
 				} else if (name.equals(YEAR)) {
 					setYear(c.getString(i));
+				} else if (name.equals(DISTANCE_UNITS)) {
+					setDistanceUnits(c.getInt(i));
+				} else if (name.equals(VOLUME_UNITS)) {
+					setVolumeUnits(c.getInt(i));
 				}
 			}
 		}
@@ -98,6 +107,8 @@ public class Vehicle extends Model {
 		String year = data.get(YEAR);
 		String title = data.get(TITLE);
 		String id = data.get(_ID);
+		String distance = data.get(DISTANCE_UNITS);
+		String volume = data.get(VOLUME_UNITS);
 
 		if (id != null) {
 			setId(Long.parseLong(id));
@@ -113,6 +124,12 @@ public class Vehicle extends Model {
 		}
 		if (title != null) {
 			setTitle(title);
+		}
+		if (distance != null) {
+			setDistanceUnits(Integer.parseInt(distance));
+		}
+		if (volume != null) {
+			setVolumeUnits(Integer.parseInt(volume));
 		}
 	}
 
@@ -359,20 +376,40 @@ public class Vehicle extends Model {
 		Cursor c = m_db.query(FillUpsProvider.FILLUPS_TABLE_NAME, projection, selection, selectionArgs, groupBy, having, orderBy);
 		c.moveToFirst();
 
-		int col_count = c.getColumnCount();
-
 		while (c.isAfterLast() == false) {
-			Map<String, String> data = new HashMap<String, String>();
-			for (int i = 0; i < col_count; i++) {
-				data.put(c.getColumnName(i), c.getString(i));
-			}
-			data.put(FillUp.DATE, String.valueOf(c.getLong(c.getColumnIndex(FillUp.DATE))));
-
-			all.add(new FillUp(engine, data));
+			all.add(new FillUp(engine, c));
 			c.moveToNext();
 		}
 
 		closeDatabase(c);
 		return all;
+	}
+
+	/**
+	 * @return the volumeUnits
+	 */
+	public int getVolumeUnits() {
+		return m_volumeUnits;
+	}
+
+	/**
+	 * @param volumeUnits the volumeUnits to set
+	 */
+	public void setVolumeUnits(int volumeUnits) {
+		m_volumeUnits = volumeUnits;
+	}
+
+	/**
+	 * @return the distanceUnits
+	 */
+	public int getDistanceUnits() {
+		return m_distanceUnits;
+	}
+
+	/**
+	 * @param distanceUnits the distanceUnits to set
+	 */
+	public void setDistanceUnits(int distanceUnits) {
+		m_distanceUnits = distanceUnits;
 	}
 }

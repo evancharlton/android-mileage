@@ -31,5 +31,11 @@
 		<activity android:name=".views.FuelAmountChart"/>
 		<activity android:name=".views.DistanceChart"/>
 		<activity android:name=".views.FuelEconomyChart"/>
+		
+		<!-- For the maintenance intervals -->
+		<receiver android:name=".alarms.IntervalReceiver" android:process=":remote"/>
+		<activity android:name=".views.intervals.ServiceIntervalsView"/>
+		<activity android:name=".views.intervals.AddServiceIntervalView"/>
+		<activity android:name=".views.intervals.EditServiceIntervalView"/>
 	</application>
 </manifest> 

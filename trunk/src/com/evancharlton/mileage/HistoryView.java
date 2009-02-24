@@ -61,9 +61,7 @@ public class HistoryView extends TabChildActivity implements View.OnCreateContex
 	private int COL_AMOUNT;
 	private int COL_PRICE;
 	private int COL_ODOMETER;
-	private int COL_PARTIAL;
 	private int COL_VEHICLEID;
-	private int COL_ID;
 	private int COL_TIMESTAMP;
 
 	@Override
@@ -193,24 +191,13 @@ public class HistoryView extends TabChildActivity implements View.OnCreateContex
 			COL_AMOUNT = historyCursor.getColumnIndex(FillUp.AMOUNT);
 			COL_PRICE = historyCursor.getColumnIndex(FillUp.PRICE);
 			COL_ODOMETER = historyCursor.getColumnIndex(FillUp.ODOMETER);
-			COL_PARTIAL = historyCursor.getColumnIndex(FillUp.PARTIAL);
 			COL_VEHICLEID = historyCursor.getColumnIndex(FillUp.VEHICLE_ID);
-			COL_ID = historyCursor.getColumnIndex(FillUp._ID);
 			COL_TIMESTAMP = historyCursor.getColumnIndex(FillUp.DATE);
 
 			List<FillUp> fillups = new ArrayList<FillUp>();
 			m_fillupMap = new HashMap<Long, FillUp>();
 			while (historyCursor.isAfterLast() == false) {
-				Map<String, String> data = new HashMap<String, String>();
-				data.put(FillUp.AMOUNT, historyCursor.getString(COL_AMOUNT));
-				data.put(FillUp.PRICE, historyCursor.getString(COL_PRICE));
-				data.put(FillUp.ODOMETER, historyCursor.getString(COL_ODOMETER));
-				data.put(FillUp.VEHICLE_ID, historyCursor.getString(COL_VEHICLEID));
-				data.put(FillUp.PARTIAL, String.valueOf(historyCursor.getInt(COL_PARTIAL) == 1));
-				long id = historyCursor.getLong(COL_ID);
-				data.put(FillUp._ID, String.valueOf(id));
-
-				FillUp f = new FillUp(m_calcEngine, data);
+				FillUp f = new FillUp(m_calcEngine, historyCursor);
 
 				Map<String, String> vehicleData = new HashMap<String, String>();
 				long vehicleId = historyCursor.getLong(COL_VEHICLEID);
@@ -219,7 +206,7 @@ public class HistoryView extends TabChildActivity implements View.OnCreateContex
 
 				fillups.add(0, f);
 
-				m_fillupMap.put(id, f);
+				m_fillupMap.put(f.getId(), f);
 
 				total_fuel += f.getAmount();
 

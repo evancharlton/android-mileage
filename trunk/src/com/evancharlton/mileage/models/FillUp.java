@@ -28,12 +28,6 @@ import com.evancharlton.mileage.calculators.CalculationEngine;
  * 
  */
 public class FillUp extends Model {
-
-	public static final String AUTHORITY = "com.evancharlton.provider.Mileage";
-	public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/fillups");
-	public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.evancharlton.fillup";
-	public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.evancharlton.fillup";
-	public static final String DEFAULT_SORT_ORDER = "mileage DESC";
 	public static final String PRICE = "cost"; // price per unit volume
 	public static final String AMOUNT = "amount";
 	public static final String ODOMETER = "mileage"; // odometer, not economy
@@ -43,6 +37,13 @@ public class FillUp extends Model {
 	public static final String LATITUDE = "latitude";
 	public static final String LONGITUDE = "longitude";
 	public static final String COMMENT = "comment";
+
+	public static final String AUTHORITY = "com.evancharlton.provider.Mileage";
+	public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/fillups");
+	public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.evancharlton.fillup";
+	public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.evancharlton.fillup";
+	public static final String DEFAULT_SORT_ORDER = ODOMETER + " DESC";
+
 	public static final Map<String, String> PLAINTEXT = new HashMap<String, String>();
 	public static final List<String> PROJECTION = new ArrayList<String>();
 
@@ -142,6 +143,60 @@ public class FillUp extends Model {
 		m_calculator = calculator;
 	}
 
+	public FillUp(CalculationEngine calculator, Cursor c) {
+		this(calculator);
+
+		int index = c.getColumnIndex(VEHICLE_ID);
+		if (index >= 0) {
+			setVehicleId(c.getLong(index));
+		}
+
+		index = c.getColumnIndex(_ID);
+		if (index >= 0) {
+			setId(c.getLong(index));
+		}
+
+		index = c.getColumnIndex(PRICE);
+		if (index >= 0) {
+			setPrice(c.getDouble(index));
+		}
+
+		index = c.getColumnIndex(AMOUNT);
+		if (index >= 0) {
+			setAmount(c.getDouble(index));
+		}
+
+		index = c.getColumnIndex(ODOMETER);
+		if (index >= 0) {
+			setOdometer(c.getDouble(index));
+		}
+
+		index = c.getColumnIndex(DATE);
+		if (index >= 0) {
+			setDate(c.getLong(index));
+		}
+
+		index = c.getColumnIndex(LATITUDE);
+		if (index >= 0) {
+			setLatitude(c.getDouble(index));
+		}
+
+		index = c.getColumnIndex(LONGITUDE);
+		if (index >= 0) {
+			setLongitude(c.getDouble(index));
+		}
+
+		index = c.getColumnIndex(COMMENT);
+		if (index >= 0) {
+			setComment(c.getString(index));
+		}
+
+		index = c.getColumnIndex(PARTIAL);
+		if (index >= 0) {
+			setPartial(c.getInt(index));
+		}
+	}
+
 	public FillUp(CalculationEngine calculator, long id) {
 		this(calculator);
 		String selection = _ID + " = ?";
@@ -188,54 +243,6 @@ public class FillUp extends Model {
 			}
 		}
 		closeDatabase(c);
-	}
-
-	public FillUp(CalculationEngine calculationEngine, Map<String, String> data) {
-		this(calculationEngine);
-
-		String id = data.get(_ID);
-		String vehicleId = data.get(VEHICLE_ID);
-		String timestamp = data.get(DATE);
-		String odometer = data.get(ODOMETER);
-		String amount = data.get(AMOUNT);
-		String price = data.get(PRICE);
-		String latitude = data.get(LATITUDE);
-		String longitude = data.get(LONGITUDE);
-		String comment = data.get(COMMENT);
-		String partial = data.get(PARTIAL);
-
-		if (id != null) {
-			setId(Long.parseLong(id));
-		}
-		if (vehicleId != null) {
-			setVehicleId(Long.parseLong(vehicleId));
-		}
-		if (timestamp != null) {
-			Calendar cal = GregorianCalendar.getInstance();
-			cal.setTimeInMillis(Long.parseLong(timestamp));
-			setDate(cal);
-		}
-		if (odometer != null) {
-			setOdometer(odometer);
-		}
-		if (amount != null) {
-			setAmount(Double.parseDouble(amount));
-		}
-		if (price != null) {
-			setPrice(Double.parseDouble(price));
-		}
-		if (latitude != null) {
-			setLatitude(Double.parseDouble(latitude));
-		}
-		if (longitude != null) {
-			setLongitude(Double.parseDouble(longitude));
-		}
-		if (comment != null) {
-			setComment(comment);
-		}
-		if (partial != null) {
-			setPartial("true".equals(partial) || "1".equals(partial));
-		}
 	}
 
 	/**
@@ -664,6 +671,10 @@ public class FillUp extends Model {
 
 	public void setPartial(boolean partial) {
 		m_partial = partial;
+	}
+
+	public void setPartial(int partial) {
+		setPartial(partial == 1);
 	}
 
 	public boolean isPartial() {

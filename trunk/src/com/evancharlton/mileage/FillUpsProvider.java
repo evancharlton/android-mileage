@@ -18,7 +18,7 @@ import android.net.Uri;
 import android.text.TextUtils;
 
 import com.evancharlton.mileage.models.FillUp;
-import com.evancharlton.mileage.models.MaintenanceInterval;
+import com.evancharlton.mileage.models.ServiceInterval;
 import com.evancharlton.mileage.models.Vehicle;
 
 /**
@@ -58,8 +58,8 @@ public class FillUpsProvider extends ContentProvider {
 		s_uriMatcher.addURI(FillUp.AUTHORITY, "fillups/#", FILLUP_ID);
 		s_uriMatcher.addURI(Vehicle.AUTHORITY, "vehicles", VEHICLES);
 		s_uriMatcher.addURI(Vehicle.AUTHORITY, "vehicles/#", VEHICLE_ID);
-		s_uriMatcher.addURI(MaintenanceInterval.AUTHORITY, "intervals", MAINTENANCE_INTERVALS);
-		s_uriMatcher.addURI(MaintenanceInterval.AUTHORITY, "intervals/#", MAINTENANCE_INTERVAL_ID);
+		s_uriMatcher.addURI(ServiceInterval.AUTHORITY, "intervals", MAINTENANCE_INTERVALS);
+		s_uriMatcher.addURI(ServiceInterval.AUTHORITY, "intervals/#", MAINTENANCE_INTERVAL_ID);
 
 		s_fillUpsProjectionMap = new HashMap<String, String>();
 		s_fillUpsProjectionMap.put(FillUp._ID, FillUp._ID);
@@ -80,15 +80,18 @@ public class FillUpsProvider extends ContentProvider {
 		s_vehiclesProjectionMap.put(Vehicle.TITLE, Vehicle.TITLE);
 		s_vehiclesProjectionMap.put(Vehicle.YEAR, Vehicle.YEAR);
 		s_vehiclesProjectionMap.put(Vehicle.DEFAULT, Vehicle.DEFAULT);
+		s_vehiclesProjectionMap.put(Vehicle.DISTANCE_UNITS, Vehicle.DISTANCE_UNITS);
+		s_vehiclesProjectionMap.put(Vehicle.VOLUME_UNITS, Vehicle.VOLUME_UNITS);
 
 		s_maintenanceIntervalsProjectionMap = new HashMap<String, String>();
-		s_maintenanceIntervalsProjectionMap.put(MaintenanceInterval._ID, MaintenanceInterval._ID);
-		s_maintenanceIntervalsProjectionMap.put(MaintenanceInterval.CREATE_DATE, MaintenanceInterval.CREATE_DATE);
-		s_maintenanceIntervalsProjectionMap.put(MaintenanceInterval.CREATE_ODOMETER, MaintenanceInterval.CREATE_ODOMETER);
-		s_maintenanceIntervalsProjectionMap.put(MaintenanceInterval.DESCRIPTION, MaintenanceInterval.DESCRIPTION);
-		s_maintenanceIntervalsProjectionMap.put(MaintenanceInterval.DISTANCE, MaintenanceInterval.DISTANCE);
-		s_maintenanceIntervalsProjectionMap.put(MaintenanceInterval.DURATION, MaintenanceInterval.DURATION);
-		s_maintenanceIntervalsProjectionMap.put(MaintenanceInterval.VEHICLE_ID, MaintenanceInterval.VEHICLE_ID);
+		s_maintenanceIntervalsProjectionMap.put(ServiceInterval._ID, ServiceInterval._ID);
+		s_maintenanceIntervalsProjectionMap.put(ServiceInterval.CREATE_DATE, ServiceInterval.CREATE_DATE);
+		s_maintenanceIntervalsProjectionMap.put(ServiceInterval.CREATE_ODOMETER, ServiceInterval.CREATE_ODOMETER);
+		s_maintenanceIntervalsProjectionMap.put(ServiceInterval.DESCRIPTION, ServiceInterval.DESCRIPTION);
+		s_maintenanceIntervalsProjectionMap.put(ServiceInterval.DISTANCE, ServiceInterval.DISTANCE);
+		s_maintenanceIntervalsProjectionMap.put(ServiceInterval.DURATION, ServiceInterval.DURATION);
+		s_maintenanceIntervalsProjectionMap.put(ServiceInterval.VEHICLE_ID, ServiceInterval.VEHICLE_ID);
+		s_maintenanceIntervalsProjectionMap.put(ServiceInterval.REPEATING, ServiceInterval.REPEATING);
 	}
 
 	private static class DatabaseHelper extends SQLiteOpenHelper {
@@ -162,7 +165,7 @@ public class FillUpsProvider extends ContentProvider {
 
 			case MAINTENANCE_INTERVAL_ID:
 				String intervalId = uri.getPathSegments().get(1);
-				count = db.delete(MAINTENANCE_TABLE_NAME, MaintenanceInterval._ID + " = " + intervalId + (!TextUtils.isEmpty(selection) ? " AND (" + selection + ")" : ""), selectionArgs);
+				count = db.delete(MAINTENANCE_TABLE_NAME, ServiceInterval._ID + " = " + intervalId + (!TextUtils.isEmpty(selection) ? " AND (" + selection + ")" : ""), selectionArgs);
 				break;
 
 			default:
@@ -185,9 +188,9 @@ public class FillUpsProvider extends ContentProvider {
 			case VEHICLE_ID:
 				return Vehicle.CONTENT_ITEM_TYPE;
 			case MAINTENANCE_INTERVALS:
-				return MaintenanceInterval.CONTENT_TYPE;
+				return ServiceInterval.CONTENT_TYPE;
 			case MAINTENANCE_INTERVAL_ID:
-				return MaintenanceInterval.CONTENT_ITEM_TYPE;
+				return ServiceInterval.CONTENT_ITEM_TYPE;
 			default:
 				throw new IllegalArgumentException("Unknown URI: " + uri);
 		}
@@ -210,10 +213,10 @@ public class FillUpsProvider extends ContentProvider {
 	}
 
 	private Uri insertInterval(Uri uri, ContentValues initialValues) {
-		MaintenanceInterval interval = new MaintenanceInterval(initialValues);
+		ServiceInterval interval = new ServiceInterval(initialValues);
 		if (interval.validate() <= 0) {
 			long id = interval.save();
-			Uri contentUri = ContentUris.withAppendedId(MaintenanceInterval.CONTENT_URI, id);
+			Uri contentUri = ContentUris.withAppendedId(ServiceInterval.CONTENT_URI, id);
 			getContext().getContentResolver().notifyChange(contentUri, null);
 			return contentUri;
 		}
@@ -272,7 +275,7 @@ public class FillUpsProvider extends ContentProvider {
 			case MAINTENANCE_INTERVAL_ID:
 				qb.setTables(MAINTENANCE_TABLE_NAME);
 				qb.setProjectionMap(s_maintenanceIntervalsProjectionMap);
-				qb.appendWhere(MaintenanceInterval._ID + " = " + uri.getPathSegments().get(1));
+				qb.appendWhere(ServiceInterval._ID + " = " + uri.getPathSegments().get(1));
 			default:
 				throw new IllegalArgumentException("Unknown URI: " + uri);
 		}
@@ -373,14 +376,23 @@ public class FillUpsProvider extends ContentProvider {
 				db.execSQL(sb.toString());
 
 				sb = new StringBuilder();
+				sb.append("ALTER TABLE ").append(VEHICLES_TABLE_NAME).append(" ADD COLUMN ").append(Vehicle.DISTANCE_UNITS).append(" INTEGER DEFAULT -1;");
+				db.execSQL(sb.toString());
+
+				sb = new StringBuilder();
+				sb.append("ALTER TABLE ").append(VEHICLES_TABLE_NAME).append(" ADD COLUMN ").append(Vehicle.VOLUME_UNITS).append(" INTEGER DEFAULT -1;");
+				db.execSQL(sb.toString());
+
+				sb = new StringBuilder();
 				sb.append("CREATE TABLE ").append(MAINTENANCE_TABLE_NAME).append(" (");
-				sb.append(MaintenanceInterval._ID).append(" INTEGER PRIMARY KEY AUTOINCREMENT,");
-				sb.append(MaintenanceInterval.CREATE_DATE).append(" INTEGER,");
-				sb.append(MaintenanceInterval.CREATE_ODOMETER).append(" DOUBLE,");
-				sb.append(MaintenanceInterval.DESCRIPTION).append(" TEXT,");
-				sb.append(MaintenanceInterval.DISTANCE).append(" DOUBLE,");
-				sb.append(MaintenanceInterval.DURATION).append(" INTEGER,");
-				sb.append(MaintenanceInterval.VEHICLE_ID).append(" INTEGER");
+				sb.append(ServiceInterval._ID).append(" INTEGER PRIMARY KEY AUTOINCREMENT,");
+				sb.append(ServiceInterval.CREATE_DATE).append(" INTEGER,");
+				sb.append(ServiceInterval.CREATE_ODOMETER).append(" DOUBLE,");
+				sb.append(ServiceInterval.DESCRIPTION).append(" TEXT,");
+				sb.append(ServiceInterval.DISTANCE).append(" DOUBLE,");
+				sb.append(ServiceInterval.DURATION).append(" INTEGER,");
+				sb.append(ServiceInterval.VEHICLE_ID).append(" INTEGER,");
+				sb.append(ServiceInterval.REPEATING).append(" INTEGER");
 				sb.append(");");
 				db.execSQL(sb.toString());
 
@@ -407,6 +419,11 @@ public class FillUpsProvider extends ContentProvider {
 			sb = new StringBuilder();
 			sb.append("DROP TABLE IF EXISTS ").append(VEHICLES_TABLE_NAME).append(";");
 			db.execSQL(sb.toString());
+
+			sb = new StringBuilder();
+			sb.append("DROP TABLE IF EXISTS ").append(MAINTENANCE_TABLE_NAME).append(";");
+			db.execSQL(sb.toString());
+
 			createDatabase(db);
 		} catch (SQLiteException e) {
 			e.printStackTrace();
@@ -436,19 +453,22 @@ public class FillUpsProvider extends ContentProvider {
 		sql.append(Vehicle.MODEL).append(" TEXT,");
 		sql.append(Vehicle.TITLE).append(" TEXT,");
 		sql.append(Vehicle.YEAR).append(" TEXT,");
-		sql.append(Vehicle.DEFAULT).append(" INTEGER");
+		sql.append(Vehicle.DEFAULT).append(" INTEGER,");
+		sql.append(Vehicle.DISTANCE_UNITS).append(" INTEGER DEFAULT -1,");
+		sql.append(Vehicle.VOLUME_UNITS).append(" INTEGER DEFAULT -1");
 		sql.append(");");
 		db.execSQL(sql.toString());
 
 		sql = new StringBuilder();
 		sql.append("CREATE TABLE ").append(MAINTENANCE_TABLE_NAME).append(" (");
-		sql.append(MaintenanceInterval._ID).append(" INTEGER PRIMARY KEY AUTOINCREMENT,");
-		sql.append(MaintenanceInterval.CREATE_DATE).append(" INTEGER,");
-		sql.append(MaintenanceInterval.CREATE_ODOMETER).append(" DOUBLE,");
-		sql.append(MaintenanceInterval.DESCRIPTION).append(" TEXT,");
-		sql.append(MaintenanceInterval.DISTANCE).append(" DOUBLE,");
-		sql.append(MaintenanceInterval.DURATION).append(" INTEGER,");
-		sql.append(MaintenanceInterval.VEHICLE_ID).append(" INTEGER");
+		sql.append(ServiceInterval._ID).append(" INTEGER PRIMARY KEY AUTOINCREMENT,");
+		sql.append(ServiceInterval.CREATE_DATE).append(" INTEGER,");
+		sql.append(ServiceInterval.CREATE_ODOMETER).append(" DOUBLE,");
+		sql.append(ServiceInterval.DESCRIPTION).append(" TEXT,");
+		sql.append(ServiceInterval.DISTANCE).append(" DOUBLE,");
+		sql.append(ServiceInterval.DURATION).append(" INTEGER,");
+		sql.append(ServiceInterval.VEHICLE_ID).append(" INTEGER,");
+		sql.append(ServiceInterval.REPEATING).append(" INTEGER");
 		sql.append(");");
 		db.execSQL(sql.toString());
 

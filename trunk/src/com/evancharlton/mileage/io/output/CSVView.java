@@ -2,7 +2,6 @@ package com.evancharlton.mileage.io.output;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.HashMap;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -38,11 +37,7 @@ public class CSVView extends ExportView {
 					Cursor c = db.query(FillUpsProvider.FILLUPS_TABLE_NAME, FillUp.getProjection(), null, null, null, null, FillUp.DEFAULT_SORT_ORDER);
 					c.moveToFirst();
 					while (!c.isAfterLast()) {
-						HashMap<String, String> info = new HashMap<String, String>();
-						for (int i = 0; i < c.getColumnCount(); i++) {
-							info.put(c.getColumnName(i), c.getString(i));
-						}
-						FillUp f = new FillUp((CalculationEngine) null, info);
+						FillUp f = new FillUp((CalculationEngine) null, c);
 
 						// write each fill-up
 						csv.writeNext(f.toCSV(columns));

@@ -193,6 +193,11 @@ public class PreferencesProvider {
 		return formatter.format(number);
 	}
 
+	public String shortFormat(double number) {
+		DecimalFormat formatter = new DecimalFormat("#,##0.##");
+		return formatter.format(number);
+	}
+
 	public String format(Date d) {
 		SimpleDateFormat format = new SimpleDateFormat();
 		format.applyPattern(getString(R.array.date_patterns, SettingsView.DATE));

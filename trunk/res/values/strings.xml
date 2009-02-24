@@ -45,6 +45,8 @@
 	<string name="parsed_date">Parsed date:</string>
 	<string name="import_options">Import Options</string>
 	<string name="partial_fillup_economy">Partial Fill-up</string>
+	<string name="description">Description</string>
+	<string name="save">Save</string>
 	
 	<string name="vehicles">Vehicles</string>
 	<string name="vehicle_make">Make</string>
@@ -96,6 +98,25 @@
 	<string name="sqlite">SQLite DB</string>
 	<string name="sql_file">SQL</string>
 	<string name="csv_file">CSV</string>
+	
+	<string name="service_intervals">Service Intervals</string>
+	<string name="add_service_interval">Add Service Interval</string>
+	<string name="edit_service_interval">Edit Service Interval</string>
+	<string name="service_interval_saved">Service interval saved!</string>
+	<string name="service_interval_error_saving">There was an error while saving the service interval!</string>
+	<string name="service_interval_confirm_delete_expired">This service for %s is due. Would you like to delete this service reminder?</string>
+	<string name="service_interval_remind">Remind Tomorrow</string>
+	<string name="service_interval_repeat_alarm">Repeat this alarm</string>
+	<string name="service_interval_description">A quick description of the service</string>
+	<string name="service_interval_duration">Duration</string>
+	<string name="service_interval_distance">Distance</string>
+	<string name="service_interval_reminder_alarm">Reminder Alarm</string>
+	<string name="service_interval_alarm_date">Date</string>
+	<string name="service_interval_odometer">Odometer</string>
+	<string name="service_interval_reminder_start">Interval Start</string>
+	<string name="service_interval_vehicle">Vehicle</string>
+	<string name="service_interval_presets">Presets</string>
+	<string name="service_interval_empty">Press Menu to add a new Service Interval</string>
 	
 	<string name="settings_header_locale">Localization</string>
 	<string name="settings_date_format">Date:</string>

@@ -7,7 +7,11 @@
 	</string-array>
 	<string-array name="units_distance">
 		<item>Miles</item>
-		<item>Kilometer</item>
+		<item>Kilometers</item>
+	</string-array>
+	<string-array name="units_distance_abbr">
+		<item>Mi</item>
+		<item>Km</item>
 	</string-array>
 	<string-array name="units_economy">
 		<item>Mi per Gallon</item>
@@ -70,5 +74,13 @@
     	<item>#,##0.00</item>
     	<item>###0,00</item>
     	<item>#.##0,00</item>
+    </string-array>
+    
+    <string-array name="duration_units">
+    	<item>Days</item>
+    	<item>Weeks</item>
+    	<item>Months</item>
+    	<item>Years</item>
+    	<item>Seconds</item>
     </string-array>
 </resources>

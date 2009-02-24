@@ -12,6 +12,7 @@ import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 
 import com.evancharlton.mileage.views.ChartsView;
+import com.evancharlton.mileage.views.intervals.ServiceIntervalsView;
 
 public class Mileage extends TabActivity {
 	public static final String EXTRA_IGNORE_STATE = "ignore-state";
@@ -21,6 +22,7 @@ public class Mileage extends TabActivity {
 	private static final int MENU_SETTINGS = Menu.FIRST;
 	private static final int MENU_IMPORT_EXPORT = Menu.FIRST + 1;
 	private static final int MENU_VEHICLES = Menu.FIRST + 2;
+	private static final int MENU_SERVICE_INTERVALS = Menu.FIRST + 3;
 
 	private static final String CURRENT_TAB = "current_tab";
 	private static final String CURRENT_VIEW = "current_view";
@@ -110,6 +112,7 @@ public class Mileage extends TabActivity {
 		menu.add(Menu.NONE, MENU_VEHICLES, Menu.NONE, R.string.vehicles).setShortcut('1', 'v').setIcon(R.drawable.vehicles_i);
 		menu.add(Menu.NONE, MENU_SETTINGS, Menu.NONE, R.string.settings).setShortcut('2', 'e').setIcon(R.drawable.ic_menu_preferences);
 		menu.add(Menu.NONE, MENU_IMPORT_EXPORT, Menu.NONE, R.string.import_export).setShortcut('3', 'i').setIcon(R.drawable.importexport_i);
+		menu.add(Menu.NONE, MENU_SERVICE_INTERVALS, Menu.NONE, R.string.service_intervals).setShortcut('4', 's').setIcon(R.drawable.importexport_i);
 	}
 
 	public static boolean parseMenuItem(MenuItem item, Activity base) {
@@ -127,6 +130,10 @@ public class Mileage extends TabActivity {
 				i.setClass(base, ImportExportView.class);
 				base.startActivity(i);
 				return true;
+			case MENU_SERVICE_INTERVALS:
+				i.setClass(base, ServiceIntervalsView.class);
+				base.startActivity(i);
+				return true;
 		}
 		return false;
 	}
@@ -140,7 +147,9 @@ public class Mileage extends TabActivity {
 			p.saveState(outState);
 		}
 		View focused = getCurrentFocus();
-		outState.putInt(CURRENT_VIEW, focused.getId());
+		if (focused != null) {
+			outState.putInt(CURRENT_VIEW, focused.getId());
+		}
 	}
 
 	/**
