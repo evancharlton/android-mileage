@@ -1,5 +1,6 @@
 package com.evancharlton.mileage;
 
+import java.io.File;
 import java.util.Calendar;
 import java.util.HashMap;
 
@@ -72,6 +73,7 @@ public class FillUpsProvider extends ContentProvider {
 		s_fillUpsProjectionMap.put(FillUp.LONGITUDE, FillUp.LONGITUDE);
 		s_fillUpsProjectionMap.put(FillUp.COMMENT, FillUp.COMMENT);
 		s_fillUpsProjectionMap.put(FillUp.PARTIAL, FillUp.PARTIAL);
+		s_fillUpsProjectionMap.put(FillUp.RESTART, FillUp.RESTART);
 
 		s_vehiclesProjectionMap = new HashMap<String, String>();
 		s_vehiclesProjectionMap.put(Vehicle._ID, Vehicle._ID);
@@ -342,6 +344,13 @@ public class FillUpsProvider extends ContentProvider {
 		return s_vehiclesProjectionMap;
 	}
 
+	public static boolean upgradeDatabase() {
+		SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(new File("/data/data/" + Mileage.PACKAGE + "/databases/" + FillUpsProvider.DATABASE_NAME), null);
+		boolean result = upgradeDatabase(db);
+		db.close();
+		return result;
+	}
+
 	public static boolean upgradeDatabase(SQLiteDatabase db) {
 		// see if we can determine what version we have
 		int oldVersion = -1;
@@ -373,6 +382,10 @@ public class FillUpsProvider extends ContentProvider {
 			if (oldVersion == 3) {
 				StringBuilder sb = new StringBuilder();
 				sb.append("ALTER TABLE ").append(FILLUPS_TABLE_NAME).append(" ADD COLUMN ").append(FillUp.PARTIAL).append(" INTEGER;");
+				db.execSQL(sb.toString());
+
+				sb = new StringBuilder();
+				sb.append("ALTER TABLE ").append(FILLUPS_TABLE_NAME).append(" ADD COLUMN ").append(FillUp.RESTART).append(" INTEGER;");
 				db.execSQL(sb.toString());
 
 				sb = new StringBuilder();
@@ -442,7 +455,8 @@ public class FillUpsProvider extends ContentProvider {
 		sql.append(FillUp.LATITUDE).append(" DOUBLE,");
 		sql.append(FillUp.LONGITUDE).append(" DOUBLE,");
 		sql.append(FillUp.COMMENT).append(" TEXT,");
-		sql.append(FillUp.PARTIAL).append(" INTEGER");
+		sql.append(FillUp.PARTIAL).append(" INTEGER,");
+		sql.append(FillUp.RESTART).append(" INTEGER");
 		sql.append(");");
 		db.execSQL(sql.toString());
 

@@ -37,6 +37,7 @@ public class FillUp extends Model {
 	public static final String LATITUDE = "latitude";
 	public static final String LONGITUDE = "longitude";
 	public static final String COMMENT = "comment";
+	public static final String RESTART = "restart";
 
 	public static final String AUTHORITY = "com.evancharlton.provider.Mileage";
 	public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/fillups");
@@ -56,7 +57,8 @@ public class FillUp extends Model {
 		PLAINTEXT.put(LATITUDE, "Latitude");
 		PLAINTEXT.put(LONGITUDE, "Longitude");
 		PLAINTEXT.put(COMMENT, "Fill-Up Comment");
-		PLAINTEXT.put(PARTIAL, "Partial Fill-up");
+		PLAINTEXT.put(PARTIAL, "Partial Fill-up?");
+		PLAINTEXT.put(RESTART, "Restart calculations?");
 
 		PROJECTION.add(_ID);
 		PROJECTION.add(PRICE);
@@ -68,6 +70,7 @@ public class FillUp extends Model {
 		PROJECTION.add(LONGITUDE);
 		PROJECTION.add(COMMENT);
 		PROJECTION.add(PARTIAL);
+		PROJECTION.add(RESTART);
 	}
 
 	private double m_odometer = 0;
@@ -414,6 +417,7 @@ public class FillUp extends Model {
 				String.valueOf(m_id)
 			});
 		}
+
 		closeDatabase(null);
 		return m_id;
 	}

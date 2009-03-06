@@ -38,8 +38,6 @@ public class VehiclesView extends ListActivity implements View.OnCreateContextMe
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		setTitle(R.string.vehicles);
-
 		m_deleteDialog = new AlertDialog.Builder(this).create();
 		m_deleteDialog.setMessage(getString(R.string.confirm_delete));
 		m_deleteDialog.setCancelable(false);

@@ -90,13 +90,16 @@ public class EditServiceIntervalView extends AddServiceIntervalView {
 				m_deleteDialog.show();
 				return true;
 			case HelpDialog.MENU_HELP:
-				HelpDialog.create(this, R.string.help_title_vehicle_edit, R.string.help_vehicle_edit);
+				HelpDialog.create(this, R.string.help_title_edit_service_interval, R.string.help_edit_service_interval);
 				return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
 
 	private void delete() {
+		long id = Long.parseLong(getIntent().getData().getLastPathSegment());
+		ServiceInterval interval = new ServiceInterval(id);
+		interval.cancelAlarm(this);
 		getContentResolver().delete(getIntent().getData(), null, null);
 	}
 

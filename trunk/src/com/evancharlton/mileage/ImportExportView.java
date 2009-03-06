@@ -83,6 +83,8 @@ public class ImportExportView extends Activity {
 		db.execSQL(sql);
 		sql = "DELETE FROM " + FillUpsProvider.VEHICLES_TABLE_NAME;
 		db.execSQL(sql);
+		sql = "DELETE FROM " + FillUpsProvider.MAINTENANCE_TABLE_NAME;
+		db.execSQL(sql);
 		FillUpsProvider.initTables(db);
 		db.close();
 	}

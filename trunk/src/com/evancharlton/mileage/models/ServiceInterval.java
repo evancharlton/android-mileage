@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import android.app.Activity;
 import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Context;
@@ -13,7 +16,9 @@ import android.database.Cursor;
 import android.net.Uri;
 
 import com.evancharlton.mileage.FillUpsProvider;
+import com.evancharlton.mileage.R;
 import com.evancharlton.mileage.alarms.IntervalReceiver;
+import com.evancharlton.mileage.views.intervals.ServiceIntervalsView;
 
 public class ServiceInterval extends Model {
 	public static final String VEHICLE_ID = "vehicle_id";
@@ -27,7 +32,7 @@ public class ServiceInterval extends Model {
 	public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/intervals");
 	public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.evancharlton.interval";
 	public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.evancharlton.interval";
-	public static final String DEFAULT_SORT_BY = VEHICLE_ID + " ASC";
+	public static final String DEFAULT_SORT_ORDER = VEHICLE_ID + " ASC";
 
 	public static final List<String> PROJECTION = new ArrayList<String>();
 
@@ -79,7 +84,7 @@ public class ServiceInterval extends Model {
 	}
 
 	protected void load(Cursor c) {
-		int index = c.getColumnIndex(VEHICLE_ID);
+		int index = c.getColumnIndex(_ID);
 		if (index >= 0) {
 			setId(c.getLong(index));
 		}
@@ -132,7 +137,7 @@ public class ServiceInterval extends Model {
 		List<ServiceInterval> intervals = new ArrayList<ServiceInterval>();
 		openDatabase();
 		String[] projection = ServiceInterval.getProjection();
-		Cursor c = m_db.query(FillUpsProvider.MAINTENANCE_TABLE_NAME, projection, null, null, null, null, DEFAULT_SORT_BY);
+		Cursor c = m_db.query(FillUpsProvider.MAINTENANCE_TABLE_NAME, projection, null, null, null, null, DEFAULT_SORT_ORDER);
 		c.moveToFirst();
 
 		while (!c.isAfterLast()) {
@@ -210,7 +215,53 @@ public class ServiceInterval extends Model {
 
 	@Override
 	public int validate() {
+		if (m_createDate.getTimeInMillis() == 0) {
+			return R.string.service_interval_error_create_date;
+		}
+		if (m_createOdometer < 0) {
+			return R.string.service_interval_error_create_odometer;
+		}
+		if (m_duration < 0) {
+			return R.string.service_interval_error_duration;
+		}
+		if (m_distance < 0) {
+			return R.string.service_interval_error_distance;
+		}
+		if (m_vehicleId < 0) {
+			return R.string.service_interval_error_vehicle_id;
+		}
+		if (m_description == null || m_description.length() == 0) {
+			return R.string.service_interval_error_description;
+		}
 		return 0;
+	}
+
+	public void raiseNotification(Context context) {
+		Intent i = new Intent(context, ServiceIntervalsView.class);
+
+		Vehicle v = new Vehicle(m_vehicleId);
+		String description = String.format("Due for %s", v.getTitle());
+
+		Notification notification = new Notification(R.drawable.gasbuttonx, getDescription(), System.currentTimeMillis());
+		i.putExtra(ServiceInterval._ID, m_id);
+		PendingIntent contentIntent = PendingIntent.getActivity(context, 0, i, 0);
+
+		notification.flags = Notification.FLAG_SHOW_LIGHTS | Notification.FLAG_AUTO_CANCEL;
+		notification.ledARGB = 0xFFFCAF15;
+		notification.ledOffMS = 500;
+		notification.ledOnMS = 500;
+		notification.vibrate = new long[] {
+				250,
+				250,
+				250,
+				250
+		};
+		notification.defaults = Notification.DEFAULT_ALL;
+		notification.setLatestEventInfo(context, getDescription(), description, contentIntent);
+		NotificationManager notificationMgr = (NotificationManager) context.getSystemService(Activity.NOTIFICATION_SERVICE);
+		if (notificationMgr != null) {
+			notificationMgr.notify((int) m_id, notification);
+		}
 	}
 
 	/**

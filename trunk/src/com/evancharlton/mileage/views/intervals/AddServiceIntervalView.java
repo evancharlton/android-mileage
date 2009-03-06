@@ -11,6 +11,8 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -22,6 +24,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.evancharlton.mileage.HelpDialog;
 import com.evancharlton.mileage.PreferencesProvider;
 import com.evancharlton.mileage.R;
 import com.evancharlton.mileage.binders.VehicleBinder;
@@ -48,6 +51,14 @@ public class AddServiceIntervalView extends Activity {
 	protected int m_day;
 
 	protected static final int DATE_DIALOG_ID = 1;
+	protected static final String PRESET_POS = "preset_position";
+	protected static final String VEHICLE_POS = "vehicle_position";
+	protected static final String ODOMETER = "odometer";
+	protected static final String START_DATE = "start_date";
+	protected static final String DISTANCE = "distance";
+	protected static final String DURATION = "duration";
+	protected static final String DURATION_UNITS = "duration_units";
+	protected static final String DESCRIPTION = "description";
 
 	protected static final ArrayList<PresetServiceInterval> PRESETS = new ArrayList<PresetServiceInterval>();
 
@@ -73,6 +84,64 @@ public class AddServiceIntervalView extends Activity {
 		setContentView(R.layout.interval);
 
 		initUI();
+
+		Bundle data = (Bundle) getLastNonConfigurationInstance();
+		if (data != null) {
+			m_presetSpinner.setSelection(data.getInt(PRESET_POS, 0));
+			m_vehicleSpinner.setSelection(data.getInt(VEHICLE_POS, 0));
+			m_odometerEdit.setText(data.getString(ODOMETER));
+			m_startDate.setTimeInMillis(data.getLong(START_DATE, System.currentTimeMillis()));
+			m_distanceEdit.setText(data.getString(DISTANCE));
+			m_durationEdit.setText(data.getString(DURATION));
+			m_durationUnitsSpinner.setSelection(data.getInt(DURATION_UNITS, 0));
+			m_descriptionEdit.setText(data.getString(DESCRIPTION));
+
+			m_month = m_startDate.get(Calendar.MONTH);
+			m_year = m_startDate.get(Calendar.YEAR);
+			m_day = m_startDate.get(Calendar.DAY_OF_MONTH);
+
+			updateDate();
+		}
+	}
+
+	public void onResume() {
+		super.onResume();
+		buildVehicleSpinner();
+	}
+
+	@Override
+	public Object onRetainNonConfigurationInstance() {
+		Bundle data = new Bundle();
+
+		data.putInt(PRESET_POS, m_presetSpinner.getSelectedItemPosition());
+		data.putInt(VEHICLE_POS, m_vehicleSpinner.getSelectedItemPosition());
+		data.putString(ODOMETER, m_odometerEdit.getText().toString());
+		data.putLong(START_DATE, m_startDate.getTimeInMillis());
+		data.putString(DISTANCE, m_distanceEdit.getText().toString());
+		data.putString(DURATION, m_durationEdit.getText().toString());
+		data.putInt(DURATION_UNITS, m_durationUnitsSpinner.getSelectedItemPosition());
+		data.putString(DESCRIPTION, m_descriptionEdit.getText().toString());
+
+		return data;
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
+
+		HelpDialog.injectHelp(menu, 'h');
+
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case HelpDialog.MENU_HELP:
+				HelpDialog.create(this, R.string.help_title_add_service_interval, R.string.help_add_service_interval);
+				break;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	protected void initUI() {
@@ -126,8 +195,6 @@ public class AddServiceIntervalView extends Activity {
 			public void onNothingSelected(AdapterView<?> adapter) {
 			}
 		});
-
-		buildVehicleSpinner();
 
 		Calendar c = Calendar.getInstance();
 		m_year = c.get(Calendar.YEAR);

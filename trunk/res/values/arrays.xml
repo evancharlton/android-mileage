@@ -81,6 +81,5 @@
     	<item>Weeks</item>
     	<item>Months</item>
     	<item>Years</item>
-    	<item>Seconds</item>
     </string-array>
 </resources>

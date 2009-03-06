@@ -61,6 +61,8 @@ public class Mileage extends TabActivity {
 				}
 			}
 		}
+
+		FillUpsProvider.upgradeDatabase();
 	}
 
 	public void onResume() {

@@ -35,6 +35,7 @@ import android.widget.Toast;
 
 import com.evancharlton.mileage.binders.VehicleBinder;
 import com.evancharlton.mileage.models.FillUp;
+import com.evancharlton.mileage.models.ServiceInterval;
 import com.evancharlton.mileage.models.Vehicle;
 
 public class AddFillUpView extends Activity implements Persistent {
@@ -265,6 +266,7 @@ public class AddFillUpView extends Activity implements Persistent {
 				if (fillup != null) {
 					fillup.save();
 					resetForm(v);
+					findServiceIntervals(fillup);
 					showMessage(true);
 				} else {
 					showMessage(false);
@@ -448,6 +450,30 @@ public class AddFillUpView extends Activity implements Persistent {
 		}
 
 		return fillup;
+	}
+
+	protected void findServiceIntervals(FillUp fillup) {
+		// find any relevant service intervals
+		List<ServiceInterval> intervals = new ArrayList<ServiceInterval>();
+
+		String[] args = new String[] {
+				String.valueOf(fillup.getVehicleId()),
+				String.valueOf(fillup.getOdometer())
+		};
+		String query = ServiceInterval.VEHICLE_ID + " = ? AND (" + ServiceInterval.CREATE_ODOMETER + " + " + ServiceInterval.DISTANCE + ") <= ?";
+		Cursor c = managedQuery(ServiceInterval.CONTENT_URI, ServiceInterval.getProjection(), query, args, ServiceInterval.DEFAULT_SORT_ORDER);
+
+		if (c.getCount() > 0) {
+			c.moveToFirst();
+			while (!c.isAfterLast()) {
+				intervals.add(new ServiceInterval(c));
+				c.moveToNext();
+			}
+		}
+
+		for (ServiceInterval interval : intervals) {
+			interval.raiseNotification(this);
+		}
 	}
 
 	@Override

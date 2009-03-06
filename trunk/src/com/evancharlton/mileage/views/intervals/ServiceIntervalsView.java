@@ -1,5 +1,6 @@
 package com.evancharlton.mileage.views.intervals;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,7 +37,7 @@ public class ServiceIntervalsView extends ListActivity {
 	private static final int MENU_ADD = Menu.FIRST;
 	private static final int MENU_DELETE = Menu.FIRST + 1;
 	private static final int MENU_EDIT = Menu.FIRST + 2;
-	private static final int DELETE_DIALOG_ID = 1;
+	private static final String DELETE_ID = "delete_id";
 
 	private long m_deleteId = -1;
 	private AlertDialog m_deleteDialog;
@@ -63,7 +64,7 @@ public class ServiceIntervalsView extends ListActivity {
 			vehicleCursor.moveToNext();
 		}
 
-		Cursor c = managedQuery(ServiceInterval.CONTENT_URI, ServiceInterval.getProjection(), null, null, ServiceInterval.DEFAULT_SORT_BY);
+		Cursor c = managedQuery(ServiceInterval.CONTENT_URI, ServiceInterval.getProjection(), null, null, ServiceInterval.DEFAULT_SORT_ORDER);
 
 		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.intervals_row, c, new String[] {
 				ServiceInterval.DESCRIPTION,
@@ -109,6 +110,20 @@ public class ServiceIntervalsView extends ListActivity {
 				}
 			}
 		}
+
+		Bundle data = (Bundle) getLastNonConfigurationInstance();
+		if (data != null) {
+			m_deleteId = data.getLong(DELETE_ID, -1);
+		}
+	}
+
+	@Override
+	public Object onRetainNonConfigurationInstance() {
+		Bundle data = new Bundle();
+
+		data.putLong(DELETE_ID, m_deleteId);
+
+		return data;
 	}
 
 	@Override
@@ -130,7 +145,7 @@ public class ServiceIntervalsView extends ListActivity {
 				startActivity(i);
 				break;
 			case HelpDialog.MENU_HELP:
-				HelpDialog.create(this, R.string.help_title_vehicles, R.string.help_vehicles);
+				HelpDialog.create(this, R.string.help_title_service_intervals, R.string.help_service_intervals);
 				break;
 		}
 		return super.onOptionsItemSelected(item);
@@ -159,7 +174,7 @@ public class ServiceIntervalsView extends ListActivity {
 			switch (item.getItemId()) {
 				case MENU_DELETE:
 					m_deleteId = id;
-					showDialog(DELETE_DIALOG_ID);
+					m_deleteDialog.show();
 					return true;
 				case MENU_EDIT:
 					onListItemClick(getListView(), info.targetView, info.position, id);
@@ -169,14 +184,6 @@ public class ServiceIntervalsView extends ListActivity {
 			// fail gracefully?
 		}
 		return super.onContextItemSelected(item);
-	}
-
-	public Dialog onCreateDialog(int id) {
-		switch (id) {
-			case DELETE_DIALOG_ID:
-				return m_deleteDialog;
-		}
-		return super.onCreateDialog(id);
 	}
 
 	private void delete() {
@@ -189,8 +196,11 @@ public class ServiceIntervalsView extends ListActivity {
 
 	private void procrastinate() {
 		ServiceInterval interval = new ServiceInterval(m_deleteId);
-		long day = 1000L * 60L * 60L * 24L;
-		interval.setDuration(interval.getDuration() + day);
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.DAY_OF_MONTH, 1);
+		long now = cal.getTimeInMillis();
+		long duration = now - interval.getCreateDate().getTimeInMillis();
+		interval.setDuration(duration);
 		interval.save();
 		interval.scheduleAlarm(ServiceIntervalsView.this);
 		finish();

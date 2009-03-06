@@ -43,6 +43,7 @@ public class FillUpView extends AddFillUpView {
 				fillup.setPartial(m_partialCheckbox.isChecked());
 
 				fillup.save();
+				findServiceIntervals(fillup);
 				finish();
 				showMessage(true);
 			}

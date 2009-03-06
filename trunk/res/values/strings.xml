@@ -55,12 +55,14 @@
 	<string name="vehicle_title">Title (e.g. Mom's car)</string>
 	<string name="vehicle_add">Add Vehicle</string>
 	<string name="vehicle_save">Save Vehicle</string>
+	<string name="vehicle_edit">Edit Vehicle</string>
 
 	<string name="vehicle_saved">Vehicle saved</string>
 	<string name="vehicle_error_saving">Error while saving vehicle!</string>
 	<string name="fillup_saved">Fill-up saved</string>
 	<string name="fillup_error_saving">Error while saving fill-up!</string>
 	<string name="fillup_deleted">Fill-up deleted</string>
+	<string name="fillup_edit">Edit Fill-up</string>
 	
 	<string name="context_litres_to_gallons">Litres to Gallons</string>
 	<string name="context_litres_to_imp_gallons">Litres to Imperial Gallons</string>
@@ -89,9 +91,12 @@
 	<string name="exporting_title">Exporting...</string>
 	<string name="importing_title">Importing...</string>
 	<string name="import_header">Import</string>
-	<string name="import_db">DB</string>
-	<string name="import_sql">SQL</string>
-	<string name="import_csv">CSV</string>
+	<string name="import_sqlite">Import SQLite</string>
+	<string name="import_sql">Import SQL</string>
+	<string name="import_csv">Import CSV</string>
+	<string name="export_sqlite">Export SQLite</string>
+	<string name="export_csv">Export CSV</string>
+	<string name="export_sql">Export SQL</string>
 	<string name="import_done">Success!</string>
 	<string name="import_done_msg">The data in the following file has been imported:</string>
 	<string name="error_importing_data">Error while importing</string>
@@ -117,6 +122,12 @@
 	<string name="service_interval_vehicle">Vehicle</string>
 	<string name="service_interval_presets">Presets</string>
 	<string name="service_interval_empty">Press Menu to add a new Service Interval</string>
+	<string name="service_interval_error_description">No description set! This is a required field!</string>
+	<string name="service_interval_error_create_date">No start date was set!</string>
+	<string name="service_interval_error_create_odometer">Start mileage was never set, or is invalid.</string>
+	<string name="service_interval_error_duration">No interval duration has been specified, or is invalid.</string>
+	<string name="service_interval_error_distance">Interval duration has not been set, or is invalid.</string>
+	<string name="service_interval_error_vehicle_id">Vehicle ID was not set</string>
 	
 	<string name="settings_header_locale">Localization</string>
 	<string name="settings_date_format">Date:</string>
@@ -204,4 +215,18 @@
 	<string name="help_title_charts">Charts Help</string>
 	<string name="help_charts">The charting buttons display graphs of various statistics, usually over time. The divider between the sections
 	marks the average value. The red section shows which values are below average and the green, above average.</string>
+	
+	<string name="help_title_service_intervals">Service Intervals Help</string>
+	<string name="help_service_intervals">Here you can add a new Service Interval, or edit an existing one by selecting it from the list.
+	You can also delete one directly by long-pressing on the item in the list and choosing the "delete" option.</string>
+	
+	<string name="help_title_add_service_interval">Add Service Interval Help</string>
+	<string name="help_add_service_interval">This screen allows you to create a new Service Interval. For your convenience, there are several
+	preset intervals with generic distances and durations. When creating your Service Interval, you specify the mileage when you last had this
+	service done, and the date which it was done. You then enter how long it should be before the next one, and how far you have to go. You will
+	then be reminded when you either pass the date or the mileage; whichever comes first.</string>
+	
+	<string name="help_title_edit_service_interval">Edit Service Interval Help</string>
+	<string name="help_edit_service_interval">Here you can edit an exisiting Service Interval, as well as delete the Interval by pressing Menu
+	and choosing the "Delete" option.</string>
 </resources>

@@ -279,10 +279,20 @@ public class StatisticsView extends TabChildActivity {
 			}
 		}
 
-		group.add(new Statistic("Average", m_preferences.getCurrency(), total_cost / fillups.size()));
+		FillUp last = fillups.get(fillups.size() - 1);
+		double last_cost = last.calcCost();
+		double last_cost_per_mile = last_cost / last.calcDistance();
+
+		double avg_cost = total_cost / fillups.size();
+		double total_distance = last.getOdometer() - fillups.get(0).getOdometer();
+		double avg_cost_per_mile = total_cost / total_distance;
+
+		group.add(new Statistic("Average", m_preferences.getCurrency(), avg_cost));
+		group.add(new Statistic(String.format("Average Cost per %s", m_calcEngine.getDistanceUnitsAbbr().trim()), m_preferences.getCurrency(), avg_cost_per_mile));
 		group.add(new Statistic("Maximum", m_preferences.getCurrency(), max_cost));
 		group.add(new Statistic("Minimum", m_preferences.getCurrency(), min_cost));
-		group.add(new Statistic("Last", m_preferences.getCurrency(), fillups.get(fillups.size() - 1).calcCost()));
+		group.add(new Statistic("Last", m_preferences.getCurrency(), last_cost));
+		group.add(new Statistic(String.format("Last Cost per %s", m_calcEngine.getDistanceUnitsAbbr().trim()), m_preferences.getCurrency(), last_cost_per_mile));
 
 		return group;
 	}
