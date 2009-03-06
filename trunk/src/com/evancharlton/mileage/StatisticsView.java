@@ -267,6 +267,8 @@ public class StatisticsView extends TabChildActivity {
 		double min_cost = Double.MAX_VALUE;
 		double max_cost = 0D;
 		double total_cost = 0D;
+		double min_cost_per_mile = Double.MAX_VALUE;
+		double max_cost_per_mile = 0D;
 
 		for (FillUp fillup : fillups) {
 			double cost = fillup.calcCost();
@@ -277,22 +279,37 @@ public class StatisticsView extends TabChildActivity {
 			if (cost > max_cost) {
 				max_cost = cost;
 			}
+
+			double cost_per_mile = fillup.calcCostPerDistance();
+			if (cost_per_mile < 0) {
+				continue;
+			}
+			if (cost_per_mile < min_cost_per_mile) {
+				min_cost_per_mile = cost_per_mile;
+			}
+			if (cost_per_mile > max_cost_per_mile) {
+				max_cost_per_mile = cost_per_mile;
+			}
 		}
 
 		FillUp last = fillups.get(fillups.size() - 1);
 		double last_cost = last.calcCost();
-		double last_cost_per_mile = last_cost / last.calcDistance();
+		double last_cost_per_mile = last.calcCostPerDistance();
 
 		double avg_cost = total_cost / fillups.size();
 		double total_distance = last.getOdometer() - fillups.get(0).getOdometer();
 		double avg_cost_per_mile = total_cost / total_distance;
 
+		String distanceUnits = m_calcEngine.getDistanceUnitsAbbr().trim();
+
 		group.add(new Statistic("Average", m_preferences.getCurrency(), avg_cost));
-		group.add(new Statistic(String.format("Average Cost per %s", m_calcEngine.getDistanceUnitsAbbr().trim()), m_preferences.getCurrency(), avg_cost_per_mile));
+		group.add(new Statistic(String.format("Average Cost per %s", distanceUnits), m_preferences.getCurrency(), avg_cost_per_mile));
 		group.add(new Statistic("Maximum", m_preferences.getCurrency(), max_cost));
+		group.add(new Statistic(String.format("Maximum cost per %s", distanceUnits), m_preferences.getCurrency(), max_cost_per_mile));
 		group.add(new Statistic("Minimum", m_preferences.getCurrency(), min_cost));
+		group.add(new Statistic(String.format("Minimum cost per %s", distanceUnits), m_preferences.getCurrency(), min_cost_per_mile));
 		group.add(new Statistic("Last", m_preferences.getCurrency(), last_cost));
-		group.add(new Statistic(String.format("Last Cost per %s", m_calcEngine.getDistanceUnitsAbbr().trim()), m_preferences.getCurrency(), last_cost_per_mile));
+		group.add(new Statistic(String.format("Last Cost per %s", distanceUnits), m_preferences.getCurrency(), last_cost_per_mile));
 
 		return group;
 	}

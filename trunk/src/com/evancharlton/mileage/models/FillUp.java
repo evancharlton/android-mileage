@@ -291,6 +291,16 @@ public class FillUp extends Model {
 		return m_economy;
 	}
 
+	public double calcCostPerDistance() {
+		FillUp previous = getPrevious();
+		if (previous == null) {
+			return -1D;
+		}
+		double distance = calcDistance();
+		double cost = calcCost();
+		return cost / distance;
+	}
+
 	/**
 	 * Calculates the distance since the previous fill-up.
 	 * 
