@@ -6,6 +6,7 @@ import java.util.Arrays;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -28,11 +29,17 @@ public abstract class ImportView extends Activity {
 	protected final static String TITLE = "title";
 	protected final static String SUCCESS = "success";
 
+	protected final static int DIALOG_FINISHED = 1;
+	protected final static int DIALOG_IMPORTING = 2;
+
 	protected TextView m_title;
 	protected String m_ext = "";
-	protected ProgressDialog m_progress = null;
 	protected Spinner m_fileSelector;
 	protected Button m_startBtn;
+
+	protected static int s_title;
+	protected static String s_message;
+	protected static boolean s_success = false;
 
 	public void onCreate(Bundle savedInstanceState, String ext) {
 		super.onCreate(savedInstanceState);
@@ -103,24 +110,30 @@ public abstract class ImportView extends Activity {
 	}
 
 	protected void input() {
-		m_progress = ProgressDialog.show(this, getString(R.string.importing_title), getString(R.string.importing));
-		Thread t = new Thread(m_importer);
-		t.start();
+		s_success = false;
+		new Thread(m_importer).start();
+		showDialog(DIALOG_IMPORTING);
 	}
 
-	protected void showAlert(final String title, final String message) {
-		m_alertHandler.post(new Runnable() {
-			public void run() {
-				Bundle data = new Bundle();
-				data.putString(MESSAGE, message);
-				data.putString(TITLE, title);
-				data.putBoolean(SUCCESS, false);
-
-				Message msg = new Message();
-				msg.setData(data);
-				m_alertHandler.handleMessage(msg);
-			}
-		});
+	@Override
+	protected Dialog onCreateDialog(int which) {
+		switch (which) {
+			case DIALOG_FINISHED:
+				return new AlertDialog.Builder(ImportView.this).setTitle(s_title).setMessage(s_message).setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						dismissDialog(DIALOG_FINISHED);
+						if (s_success) {
+							postProcessing();
+						}
+					}
+				}).create();
+			case DIALOG_IMPORTING:
+				ProgressDialog dlg = new ProgressDialog(this);
+				dlg.setTitle(R.string.importing_title);
+				dlg.setMessage(getString(R.string.importing));
+				return dlg;
+		}
+		return null;
 	}
 
 	protected Runnable m_importer = null;
@@ -139,45 +152,14 @@ public abstract class ImportView extends Activity {
 
 	protected Handler m_handler = new Handler() {
 		public void handleMessage(Message msg) {
-			if (m_progress != null) {
-				m_progress.dismiss();
-			}
+			dismissDialog(DIALOG_IMPORTING);
 
 			final Bundle data = msg.getData();
 
-			AlertDialog dlg = new AlertDialog.Builder(ImportView.this).create();
 			final boolean success = data.getBoolean(SUCCESS, false);
-			if (success) {
-				dlg.setTitle(R.string.success);
-			} else {
-				dlg.setTitle(R.string.error);
-			}
-			dlg.setMessage(data.getString(MESSAGE));
-			dlg.setButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int which) {
-					dialog.dismiss();
-					if (success) {
-						postProcessing();
-					}
-				}
-			});
-			dlg.show();
-		}
-	};
-
-	protected Handler m_alertHandler = new Handler() {
-		public void handleMessage(Message msg) {
-			final Bundle data = msg.getData();
-
-			AlertDialog dlg = new AlertDialog.Builder(ImportView.this).create();
-			dlg.setMessage(data.getString(MESSAGE));
-			dlg.setTitle(data.getString(TITLE));
-			dlg.setButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int which) {
-					dialog.dismiss();
-				}
-			});
-			dlg.show();
+			s_title = success ? R.string.success : R.string.error;
+			s_success = success;
+			s_message = data.getString(MESSAGE);
 		}
 	};
 }

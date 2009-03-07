@@ -99,7 +99,7 @@ public class ImportExportView extends Activity {
 
 	private DialogInterface.OnClickListener m_eraseListener = new DialogInterface.OnClickListener() {
 		public void onClick(DialogInterface dialog, int which) {
-			dialog.dismiss();
+			dismissDialog(ERASE_DIALOG_ID);
 			if (which == Dialog.BUTTON1) {
 				erase();
 			}

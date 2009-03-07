@@ -128,6 +128,9 @@ public class CSVViewConfirm extends Dialog {
 				dismiss();
 			}
 		});
+
+		vehicleCursor.close();
+		db.close();
 	}
 
 	private void doImport() {

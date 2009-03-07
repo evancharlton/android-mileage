@@ -61,11 +61,12 @@ public class SQLView extends ExportView {
 				}
 				sb.append("-- End table: ").append(FillUpsProvider.VEHICLES_TABLE_NAME).append("\n");
 
+				c.close();
 				db.close();
 
 				// write to a file
 				try {
-					File output = new File(Environment.getExternalStorageDirectory() + "/mileage.sql");
+					File output = new File(Environment.getExternalStorageDirectory() + "/" + getFilename());
 					FileWriter out = new FileWriter(output);
 
 					out.write(sb.toString());

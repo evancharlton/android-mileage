@@ -17,9 +17,8 @@ import com.evancharlton.mileage.R;
 public class DBView extends ImportView {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState, "db");
-
 		m_title = (TextView) findViewById(R.id.title);
-		m_title.setText(getString(R.string.sqlite));
+		m_title.setText(R.string.sqlite);
 
 		super.m_importer = new Runnable() {
 			public void run() {

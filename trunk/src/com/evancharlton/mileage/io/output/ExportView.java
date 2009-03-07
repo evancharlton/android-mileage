@@ -5,6 +5,7 @@ import java.io.FilenameFilter;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -26,11 +27,16 @@ public abstract class ExportView extends Activity {
 	protected final static String TITLE = "title";
 	protected final static String SUCCESS = "success";
 
+	protected final static int DIALOG_FINISHED = 1;
+	protected final static int DIALOG_EXPORTING = 2;
+
+	protected static String s_title = "";
+	protected static String s_message = "";
+
 	protected TextView m_title;
 	protected Button m_startBtn;
 	protected EditText m_filename;
 	protected String m_ext = "";
-	protected ProgressDialog m_progress = null;
 
 	public void onCreate(Bundle savedInstanceState, String ext) {
 		super.onCreate(savedInstanceState);
@@ -112,9 +118,27 @@ public abstract class ExportView extends Activity {
 	}
 
 	protected void export() {
-		m_progress = ProgressDialog.show(this, getString(R.string.exporting_title), getString(R.string.exporting));
-		Thread t = new Thread(m_exporter);
-		t.start();
+		showDialog(DIALOG_EXPORTING);
+		new Thread(m_exporter).start();
+	}
+
+	@Override
+	protected Dialog onCreateDialog(int which) {
+		switch (which) {
+			case DIALOG_EXPORTING:
+				ProgressDialog dlg = new ProgressDialog(this);
+				dlg.setTitle(R.string.exporting_title);
+				dlg.setMessage(getString(R.string.exporting));
+				return dlg;
+			case DIALOG_FINISHED:
+				return new AlertDialog.Builder(ExportView.this).setTitle(s_title).setMessage(s_message).setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						dismissDialog(DIALOG_FINISHED);
+						finish();
+					}
+				}).create();
+		}
+		return null;
 	}
 
 	protected Runnable m_exporter = null;
@@ -133,26 +157,14 @@ public abstract class ExportView extends Activity {
 
 	protected Handler m_handler = new Handler() {
 		public void handleMessage(Message msg) {
-			if (m_progress != null) {
-				m_progress.dismiss();
-			}
+			dismissDialog(DIALOG_EXPORTING);
 
 			Bundle data = msg.getData();
 
-			AlertDialog dlg = new AlertDialog.Builder(ExportView.this).create();
-			dlg.setTitle(data.getString(TITLE));
-			dlg.setMessage(data.getString(MESSAGE));
-			dlg.setButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int which) {
-					dialog.dismiss();
-					findFilename();
-				}
-			});
-			dlg.show();
+			s_title = data.getString(TITLE);
+			s_message = data.getString(MESSAGE);
 
-			if (data.getBoolean(SUCCESS, false)) {
-				finish();
-			}
+			showDialog(DIALOG_FINISHED);
 		}
 	};
 }

@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import android.app.ProgressDialog;
+import android.app.Dialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -29,6 +29,8 @@ public class CSVView extends ImportView {
 	private Map<String, Integer> m_vehicleMapping = new HashMap<String, Integer>();
 
 	public static final String INTENT_EXTRA = "intent_extra";
+
+	private static final int DIALOG_CSV_IMPORT = 3;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState, "csv");
@@ -152,12 +154,20 @@ public class CSVView extends ImportView {
 			public void handleMessage(Message msg) {
 				Bundle data = msg.getData();
 				if (data.getBoolean(SUCCESS, false)) {
-					m_progress.dismiss();
-					CSVViewConfirm confirm = new CSVViewConfirm(CSVView.this);
-					confirm.show();
+					dismissDialog(DIALOG_IMPORTING);
+					showDialog(DIALOG_CSV_IMPORT);
 				}
 			}
 		};
+	}
+
+	@Override
+	protected Dialog onCreateDialog(int which) {
+		switch (which) {
+			case DIALOG_CSV_IMPORT:
+				return new CSVViewConfirm(this);
+		}
+		return super.onCreateDialog(which);
 	}
 
 	public List<Map<String, String>> getData() {
@@ -166,13 +176,6 @@ public class CSVView extends ImportView {
 
 	public Map<String, Integer> getVehicleMapping() {
 		return m_vehicleMapping;
-	}
-
-	@Override
-	protected void input() {
-		m_progress = ProgressDialog.show(this, getString(R.string.parsing_title), getString(R.string.parsing));
-		Thread t = new Thread(m_importer);
-		t.start();
 	}
 
 	@Override

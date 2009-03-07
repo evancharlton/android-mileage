@@ -4,6 +4,8 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -28,10 +30,11 @@ public class StatisticsView extends TabChildActivity {
 	private Spinner m_vehicles;
 	private PreferencesProvider m_preferences;
 	private CalculationEngine m_calcEngine;
-	private ProgressDialog m_calcDialog;
 
 	private static final String DATA_GROUP = "group";
 	private static final String DATA_DONE = "done";
+
+	private static final int DIALOG_STATS_PROGRESS = 1;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -120,7 +123,7 @@ public class StatisticsView extends TabChildActivity {
 						container.addView(group.render(StatisticsView.this));
 					}
 				} else {
-					m_calcDialog.dismiss();
+					dismissDialog(DIALOG_STATS_PROGRESS);
 				}
 			}
 		};
@@ -164,11 +167,20 @@ public class StatisticsView extends TabChildActivity {
 			}
 		};
 		t.start();
+		showDialog(DIALOG_STATS_PROGRESS);
+	}
 
-		m_calcDialog = new ProgressDialog(this);
-		m_calcDialog.setTitle("Calculating");
-		m_calcDialog.setMessage("Calculating statistics...");
-		m_calcDialog.show();
+	@Override
+	protected Dialog onCreateDialog(int which) {
+		AlertDialog dlg;
+		switch (which) {
+			case DIALOG_STATS_PROGRESS:
+				dlg = new ProgressDialog(this);
+				dlg.setTitle("Calculating");
+				dlg.setMessage("Calculating statistics...");
+				return dlg;
+		}
+		return null;
 	}
 
 	public StatisticsGroup calcDistances(final List<FillUp> fillups) {

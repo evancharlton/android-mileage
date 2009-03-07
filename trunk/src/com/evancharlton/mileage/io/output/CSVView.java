@@ -45,6 +45,7 @@ public class CSVView extends ExportView {
 						c.moveToNext();
 					}
 					c.close();
+					db.close();
 					csv.close();
 					m_handler.post(new Runnable() {
 						public void run() {
