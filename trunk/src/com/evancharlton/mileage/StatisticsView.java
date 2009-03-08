@@ -222,6 +222,10 @@ public class StatisticsView extends TabChildActivity {
 
 		double max_economy = 0D;
 		double min_economy = Double.MAX_VALUE;
+		if (m_calcEngine.isInverted()) {
+			max_economy = Double.MAX_VALUE;
+			min_economy = 0D;
+		}
 		for (FillUp fillup : fillups) {
 			if (!fillup.isPartial()) {
 				double economy = fillup.calcEconomy();

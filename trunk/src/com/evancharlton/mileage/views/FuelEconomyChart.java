@@ -31,6 +31,10 @@ public class FuelEconomyChart extends ChartDisplay {
 		float economy;
 		float min = Float.MAX_VALUE;
 		float max = Float.MIN_VALUE;
+		if (calc.isInverted()) {
+			max = Float.MAX_VALUE;
+			min = 0F;
+		}
 		String min_label = "";
 		String max_label = "";
 		for (int i = 1; i < size; i++) {
@@ -54,8 +58,6 @@ public class FuelEconomyChart extends ChartDisplay {
 				max_label = m_prefs.format(d.getTime());
 			}
 		}
-
-		m_chart.setBetterOnBottom(calc.isInverted());
 
 		m_chart.setXAxisLabels(min_label, max_label);
 		m_chart.setYAxisLabels(m_format.format(min) + calc.getEconomyUnits(), m_format.format(max) + calc.getEconomyUnits());
