@@ -459,10 +459,9 @@ public class AddFillUpView extends Activity implements Persistent {
 		List<ServiceInterval> intervals = new ArrayList<ServiceInterval>();
 
 		String[] args = new String[] {
-				String.valueOf(fillup.getVehicleId()),
-				String.valueOf(fillup.getOdometer())
+			String.valueOf(fillup.getVehicleId())
 		};
-		String query = ServiceInterval.VEHICLE_ID + " = ? AND (" + ServiceInterval.CREATE_ODOMETER + " + " + ServiceInterval.DISTANCE + ") <= ?";
+		String query = ServiceInterval.VEHICLE_ID + " = ? AND (" + ServiceInterval.CREATE_ODOMETER + " + " + ServiceInterval.DISTANCE + ") <= " + fillup.getOdometer();
 		Cursor c = managedQuery(ServiceInterval.CONTENT_URI, ServiceInterval.getProjection(), query, args, ServiceInterval.DEFAULT_SORT_ORDER);
 
 		if (c.getCount() > 0) {
