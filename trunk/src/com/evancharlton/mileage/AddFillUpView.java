@@ -62,9 +62,9 @@ public class AddFillUpView extends Activity implements Persistent {
 	protected static final int CONTEXT_MILES_TO_KILOMETERS = 20;
 	protected static final int CONTEXT_KILOMETERS_TO_MILES = 21;
 
-	protected int m_year;
-	protected int m_month;
-	protected int m_day;
+	protected int m_year = 0;
+	protected int m_month = 0;
+	protected int m_day = 0;
 
 	protected Button m_customDateButton;
 	protected Button m_saveButton;
@@ -122,12 +122,14 @@ public class AddFillUpView extends Activity implements Persistent {
 	public void onResume() {
 		super.onResume();
 
-		Calendar c = Calendar.getInstance();
-		m_year = c.get(Calendar.YEAR);
-		m_month = c.get(Calendar.MONTH);
-		m_day = c.get(Calendar.DAY_OF_MONTH);
+		if (m_year == 0) {
+			Calendar c = Calendar.getInstance();
+			m_year = c.get(Calendar.YEAR);
+			m_month = c.get(Calendar.MONTH);
+			m_day = c.get(Calendar.DAY_OF_MONTH);
+			updateDate();
+		}
 
-		updateDate();
 		loadPrefs();
 	}
 
