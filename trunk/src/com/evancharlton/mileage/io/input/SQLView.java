@@ -41,6 +41,10 @@ public class SQLView extends ImportView {
 						if (line.startsWith("--")) {
 							continue;
 						}
+						line = line.trim();
+						if (line.endsWith("\\")) {
+							line += "\n" + in.readLine();
+						}
 						db.execSQL(line);
 					}
 					db.close();

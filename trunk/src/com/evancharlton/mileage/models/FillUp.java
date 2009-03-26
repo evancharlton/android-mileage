@@ -92,6 +92,24 @@ public class FillUp extends Model {
 
 	private CalculationEngine m_calculator = null;
 
+	/**
+	 * Creates a blank FillUp with the specified CalculationEngine
+	 * 
+	 * @param calculator CalculationEngine to use
+	 */
+	public FillUp(CalculationEngine calculator) {
+		super(FillUpsProvider.FILLUPS_TABLE_NAME);
+		m_calculator = calculator;
+	}
+
+	/**
+	 * Initialize a FillUp based on a set of ContentValues. This is likely to be
+	 * used when saving a new FillUp into the database. By initializing the data
+	 * before sending, we can perform sanity checks to make sure that there
+	 * isn't anything weird with the data before we commit it to the database.
+	 * 
+	 * @param values A ContentValues mapping of the data to load.
+	 */
 	public FillUp(ContentValues values) {
 		this((CalculationEngine) null);
 
@@ -141,14 +159,52 @@ public class FillUp extends Model {
 		}
 	}
 
-	public FillUp(CalculationEngine calculator) {
-		super(FillUpsProvider.FILLUPS_TABLE_NAME);
-		m_calculator = calculator;
-	}
-
+	/**
+	 * Create a new FillUp and have it initialize itself from the specified
+	 * database Cursor. Note that this should never change the cursor (it won't
+	 * move the cursor to the next row or anything), so the caller needs to be
+	 * aware of that.
+	 * 
+	 * @param calculator The CalculationEngine to use when doing calculations
+	 * @param c The cursor to use to get the FillUp's information
+	 */
 	public FillUp(CalculationEngine calculator, Cursor c) {
 		this(calculator);
 
+		load(c);
+	}
+
+	/**
+	 * Load a FillUp based on its ID.
+	 * 
+	 * @param calculator The CalculationEngine to use when doing calculations.
+	 * @param id The ID of the FillUp in the database.
+	 */
+	public FillUp(CalculationEngine calculator, long id) {
+		this(calculator);
+		String selection = _ID + " = ?";
+		String[] selectionArgs = new String[] {
+			String.valueOf(id)
+		};
+		String groupBy = null;
+		String having = null;
+		String orderBy = null;
+
+		String[] projection = getProjection();
+
+		openDatabase();
+
+		Cursor c = m_db.query(FillUpsProvider.FILLUPS_TABLE_NAME, projection, selection, selectionArgs, groupBy, having, orderBy);
+
+		if (c.getCount() == 1) {
+			m_id = id;
+			c.moveToFirst();
+			load(c);
+		}
+		closeDatabase(c);
+	}
+
+	private void load(Cursor c) {
 		int index = c.getColumnIndex(VEHICLE_ID);
 		if (index >= 0) {
 			setVehicleId(c.getLong(index));
@@ -198,54 +254,6 @@ public class FillUp extends Model {
 		if (index >= 0) {
 			setPartial(c.getInt(index));
 		}
-	}
-
-	public FillUp(CalculationEngine calculator, long id) {
-		this(calculator);
-		String selection = _ID + " = ?";
-		String[] selectionArgs = new String[] {
-			String.valueOf(id)
-		};
-		String groupBy = null;
-		String having = null;
-		String orderBy = null;
-
-		String[] projection = getProjection();
-
-		openDatabase();
-
-		Cursor c = m_db.query(FillUpsProvider.FILLUPS_TABLE_NAME, projection, selection, selectionArgs, groupBy, having, orderBy);
-
-		if (c.getCount() == 1) {
-			m_id = id;
-			c.moveToFirst();
-			for (int i = 0; i < c.getColumnCount(); i++) {
-				String name = c.getColumnName(i);
-				if (name.equals(AMOUNT)) {
-					setAmount(c.getLong(i));
-				} else if (name.equals(COMMENT)) {
-					setComment(c.getString(i));
-				} else if (name.equals(PRICE)) {
-					setPrice(c.getDouble(i));
-				} else if (name.equals(DATE)) {
-					long time = c.getLong(i);
-					Calendar cal = GregorianCalendar.getInstance();
-					cal.setTimeInMillis(time);
-					setDate(cal);
-				} else if (name.equals(LATITUDE)) {
-					setLatitude(c.getDouble(i));
-				} else if (name.equals(LONGITUDE)) {
-					setLongitude(c.getDouble(i));
-				} else if (name.equals(ODOMETER)) {
-					setOdometer(c.getLong(i));
-				} else if (name.equals(VEHICLE_ID)) {
-					m_vehicleId = c.getLong(i);
-				} else if (name.equals(PARTIAL)) {
-					m_partial = c.getInt(i) == 1;
-				}
-			}
-		}
-		closeDatabase(c);
 	}
 
 	/**
@@ -484,8 +492,6 @@ public class FillUp extends Model {
 		}
 		return data;
 	}
-
-	// from here down, it's nothing but getters and setters. Boring!
 
 	/**
 	 * @param odometer the odometer to set
