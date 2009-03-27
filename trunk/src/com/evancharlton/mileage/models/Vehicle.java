@@ -2,7 +2,6 @@ package com.evancharlton.mileage.models;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -57,7 +56,26 @@ public class Vehicle extends Model {
 
 	public Vehicle(ContentValues values) {
 		this();
-		// TODO: parse values
+
+		String title = values.getAsString(TITLE);
+		if (title != null) {
+			setTitle(title);
+		}
+
+		String make = values.getAsString(MAKE);
+		if (make != null) {
+			setMake(make);
+		}
+
+		String model = values.getAsString(MODEL);
+		if (model != null) {
+			setModel(model);
+		}
+
+		String year = values.getAsString(YEAR);
+		if (year != null) {
+			setYear(year);
+		}
 	}
 
 	public Vehicle(long id) {
@@ -79,57 +97,55 @@ public class Vehicle extends Model {
 
 		if (c.getCount() == 1) {
 			c.moveToFirst();
-			for (int i = 0; i < c.getColumnCount(); i++) {
-				String name = c.getColumnName(i);
-				if (name.equals(TITLE)) {
-					setTitle(c.getString(i));
-				} else if (name.equals(MAKE)) {
-					setMake(c.getString(i));
-				} else if (name.equals(MODEL)) {
-					setModel(c.getString(i));
-				} else if (name.equals(YEAR)) {
-					setYear(c.getString(i));
-				} else if (name.equals(DISTANCE_UNITS)) {
-					setDistanceUnits(c.getInt(i));
-				} else if (name.equals(VOLUME_UNITS)) {
-					setVolumeUnits(c.getInt(i));
-				}
-			}
+			load(c);
 		}
 		closeDatabase(c);
 	}
 
-	public Vehicle(Map<String, String> data) {
+	/**
+	 * Populate this vehicle's data from a database Cursor instance.
+	 * 
+	 * @param c the cursor to use when building the object
+	 */
+	public Vehicle(Cursor c) {
 		this();
+		load(c);
+	}
 
-		String make = data.get(MAKE);
-		String model = data.get(MODEL);
-		String year = data.get(YEAR);
-		String title = data.get(TITLE);
-		String id = data.get(_ID);
-		String distance = data.get(DISTANCE_UNITS);
-		String volume = data.get(VOLUME_UNITS);
+	private void load(Cursor c) {
+		int index = c.getColumnIndex(_ID);
+		if (index >= 0) {
+			setId(c.getLong(index));
+		}
 
-		if (id != null) {
-			setId(Long.parseLong(id));
+		index = c.getColumnIndex(TITLE);
+		if (index >= 0) {
+			setTitle(c.getString(index));
 		}
-		if (make != null) {
-			setMake(make);
+
+		index = c.getColumnIndex(MAKE);
+		if (index >= 0) {
+			setMake(c.getString(index));
 		}
-		if (model != null) {
-			setModel(model);
+
+		index = c.getColumnIndex(MODEL);
+		if (index >= 0) {
+			setModel(c.getString(index));
 		}
-		if (year != null) {
-			setYear(year);
+
+		index = c.getColumnIndex(YEAR);
+		if (index >= 0) {
+			setYear(c.getString(index));
 		}
-		if (title != null) {
-			setTitle(title);
+
+		index = c.getColumnIndex(DISTANCE_UNITS);
+		if (index >= 0) {
+			setDistanceUnits(c.getInt(index));
 		}
-		if (distance != null) {
-			setDistanceUnits(Integer.parseInt(distance));
-		}
-		if (volume != null) {
-			setVolumeUnits(Integer.parseInt(volume));
+
+		index = c.getColumnIndex(VOLUME_UNITS);
+		if (index >= 0) {
+			setVolumeUnits(c.getInt(index));
 		}
 	}
 

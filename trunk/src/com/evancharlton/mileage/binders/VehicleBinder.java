@@ -21,7 +21,7 @@ public class VehicleBinder implements SimpleCursorAdapter.ViewBinder {
 				data.put(Vehicle.MAKE, cursor.getString(Vehicle.PROJECTION.indexOf(Vehicle.MAKE)));
 				data.put(Vehicle.YEAR, cursor.getString(Vehicle.PROJECTION.indexOf(Vehicle.YEAR)));
 				data.put(Vehicle.MODEL, cursor.getString(Vehicle.PROJECTION.indexOf(Vehicle.MODEL)));
-				Vehicle vehicle = new Vehicle(data);
+				Vehicle vehicle = new Vehicle(cursor);
 				title = vehicle.getTitle();
 			}
 			((TextView) view).setText(title);
