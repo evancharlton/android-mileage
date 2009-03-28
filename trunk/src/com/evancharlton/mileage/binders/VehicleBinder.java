@@ -1,8 +1,5 @@
 package com.evancharlton.mileage.binders;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import android.database.Cursor;
 import android.view.View;
 import android.widget.SimpleCursorAdapter;
@@ -17,10 +14,6 @@ public class VehicleBinder implements SimpleCursorAdapter.ViewBinder {
 		if (columnIndex == COL_TITLE) {
 			String title = cursor.getString(COL_TITLE);
 			if (title.trim().length() == 0) {
-				Map<String, String> data = new HashMap<String, String>();
-				data.put(Vehicle.MAKE, cursor.getString(Vehicle.PROJECTION.indexOf(Vehicle.MAKE)));
-				data.put(Vehicle.YEAR, cursor.getString(Vehicle.PROJECTION.indexOf(Vehicle.YEAR)));
-				data.put(Vehicle.MODEL, cursor.getString(Vehicle.PROJECTION.indexOf(Vehicle.MODEL)));
 				Vehicle vehicle = new Vehicle(cursor);
 				title = vehicle.getTitle();
 			}

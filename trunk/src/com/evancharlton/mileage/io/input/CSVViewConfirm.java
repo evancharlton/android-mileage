@@ -7,10 +7,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -28,11 +28,12 @@ import android.widget.TextView;
 import com.evancharlton.mileage.FillUpsProvider;
 import com.evancharlton.mileage.Mileage;
 import com.evancharlton.mileage.R;
+import com.evancharlton.mileage.binders.VehicleBinder;
 import com.evancharlton.mileage.models.FillUp;
 import com.evancharlton.mileage.models.Vehicle;
 
 public class CSVViewConfirm extends Dialog {
-	private Context m_context;
+	private Activity m_context;
 	private ProgressDialog m_progress;
 	private List<Map<String, String>> m_data;
 	private List<String> m_sqls;
@@ -45,7 +46,7 @@ public class CSVViewConfirm extends Dialog {
 	private static final String PARSED_ID = "parsed_id";
 	private static final String PICKED_ID = "picked_id";
 
-	public CSVViewConfirm(Context context) {
+	public CSVViewConfirm(Activity context) {
 		super(context);
 		m_context = context;
 	}
@@ -89,10 +90,10 @@ public class CSVViewConfirm extends Dialog {
 			android.R.id.text1
 		};
 
-		SQLiteDatabase db = SQLiteDatabase.openDatabase("/data/data/" + Mileage.PACKAGE + "/databases/" + FillUpsProvider.DATABASE_NAME, null, SQLiteDatabase.OPEN_READWRITE);
-		Cursor vehicleCursor = db.query(FillUpsProvider.VEHICLES_TABLE_NAME, projection, null, null, null, null, null);
+		Cursor vehicleCursor = m_context.managedQuery(Vehicle.CONTENT_URI, projection, null, null, Vehicle.DEFAULT_SORT_ORDER);
 		m_vehiclesAdapter = new SimpleCursorAdapter(m_context, android.R.layout.simple_spinner_item, vehicleCursor, vehicle_from, vehicle_to);
 		m_vehiclesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		m_vehiclesAdapter.setViewBinder(new VehicleBinder());
 
 		String[] from = new String[] {
 				PARSED_ID,
@@ -128,9 +129,6 @@ public class CSVViewConfirm extends Dialog {
 				dismiss();
 			}
 		});
-
-		vehicleCursor.close();
-		db.close();
 	}
 
 	private void doImport() {
