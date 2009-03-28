@@ -98,15 +98,19 @@ public class ServiceIntervalsView extends ListActivity {
 		if (extras != null) {
 			long id = extras.getLong(ServiceInterval._ID, -1L);
 			if (id >= 0) {
-				ServiceInterval si = new ServiceInterval(id);
-				Vehicle v = new Vehicle(si.getVehicleId());
-				m_deleteId = id;
-				m_deleteExpiredDialog.setTitle(si.getDescription());
-				m_deleteExpiredDialog.setMessage(getString(R.string.service_interval_confirm_delete_expired, v.getTitle()));
-				m_deleteExpiredDialog.show();
-				NotificationManager notificationMgr = (NotificationManager) this.getSystemService(Activity.NOTIFICATION_SERVICE);
-				if (notificationMgr != null) {
-					notificationMgr.cancel((int) id);
+				try {
+					ServiceInterval si = new ServiceInterval(id);
+					Vehicle v = new Vehicle(si.getVehicleId());
+					m_deleteId = id;
+					m_deleteExpiredDialog.setTitle(si.getDescription());
+					m_deleteExpiredDialog.setMessage(getString(R.string.service_interval_confirm_delete_expired, v.getTitle()));
+					m_deleteExpiredDialog.show();
+					NotificationManager notificationMgr = (NotificationManager) this.getSystemService(Activity.NOTIFICATION_SERVICE);
+					if (notificationMgr != null) {
+						notificationMgr.cancel((int) id);
+					}
+				} catch (IllegalArgumentException e) {
+					e.printStackTrace();
 				}
 			}
 		}
