@@ -1,10 +1,10 @@
 package com.evancharlton.mileage;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.database.Cursor;
@@ -35,6 +35,12 @@ public class StatisticsView extends TabChildActivity {
 	private static final String DATA_DONE = "done";
 
 	private static final int DIALOG_STATS_PROGRESS = 1;
+
+	private static final int MSG_TOTAL = 1;
+	private static final int MSG_UPDATE = 2;
+	private static final int MSG_CALCULATING = 3;
+
+	private ProgressDialog m_dlg = null;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -95,7 +101,6 @@ public class StatisticsView extends TabChildActivity {
 			}
 
 			public void onNothingSelected(AdapterView<?> arg0) {
-				// uh, do nothing?
 			}
 		});
 
@@ -110,8 +115,6 @@ public class StatisticsView extends TabChildActivity {
 		LinearLayout container = (LinearLayout) findViewById(R.id.stats_container);
 		container.removeAllViews();
 
-		final Vehicle v = new Vehicle(id);
-
 		final Handler statsHandler = new Handler() {
 			public void handleMessage(Message msg) {
 				Bundle data = msg.getData();
@@ -124,6 +127,7 @@ public class StatisticsView extends TabChildActivity {
 					}
 				} else {
 					dismissDialog(DIALOG_STATS_PROGRESS);
+					m_dlg = null;
 				}
 			}
 		};
@@ -131,7 +135,7 @@ public class StatisticsView extends TabChildActivity {
 		final Thread t = new Thread() {
 			public void run() {
 				// TODO: optimize this. This has huge overhead
-				final List<FillUp> fillups = v.getAllFillUps(m_calcEngine);
+				final List<FillUp> fillups = getAllFillUps(id, m_calcEngine);
 
 				if (fillups.size() >= 2) {
 					// crunch the numbers
@@ -170,15 +174,74 @@ public class StatisticsView extends TabChildActivity {
 		showDialog(DIALOG_STATS_PROGRESS);
 	}
 
+	private List<FillUp> getAllFillUps(long id, CalculationEngine engine) {
+		List<FillUp> all = new ArrayList<FillUp>();
+		String[] projection = FillUp.getProjection();
+		String selection = FillUp.VEHICLE_ID + " = ?";
+		String[] selectionArgs = new String[] {
+			String.valueOf(id)
+		};
+
+		Cursor c = managedQuery(FillUp.CONTENT_URI, projection, selection, selectionArgs, FillUp.ODOMETER + " ASC");
+		c.moveToFirst();
+
+		final int t = c.getCount();
+		calculationHandler.post(new Runnable() {
+			public void run() {
+				Message msg = new Message();
+				msg.what = t;
+				msg.arg1 = MSG_TOTAL;
+				calculationHandler.sendMessage(msg);
+			}
+		});
+
+		int i = 0;
+		FillUp prev = null;
+		FillUp curr = null;
+		while (c.isAfterLast() == false) {
+			curr = new FillUp(engine, c);
+			all.add(curr);
+
+			curr.setPrevious(prev);
+			if (prev != null) {
+				prev.setNext(curr);
+			}
+			prev = curr;
+
+			c.moveToNext();
+
+			final int p = ++i;
+			calculationHandler.post(new Runnable() {
+				public void run() {
+					Message msg = new Message();
+					msg.what = p;
+					msg.arg1 = MSG_UPDATE;
+					calculationHandler.sendMessage(msg);
+				}
+			});
+		}
+		calculationHandler.post(new Runnable() {
+			public void run() {
+				Message msg = new Message();
+				msg.arg1 = MSG_CALCULATING;
+				calculationHandler.sendMessage(msg);
+			}
+		});
+
+		return all;
+	}
+
 	@Override
 	protected Dialog onCreateDialog(int which) {
-		AlertDialog dlg;
 		switch (which) {
 			case DIALOG_STATS_PROGRESS:
-				dlg = new ProgressDialog(this);
-				dlg.setTitle("Calculating");
-				dlg.setMessage("Calculating statistics...");
-				return dlg;
+				m_dlg = new ProgressDialog(this);
+				m_dlg.setTitle("Calculating");
+				m_dlg.setMessage("Calculating statistics...");
+				m_dlg.setIndeterminate(false);
+				m_dlg.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+				m_dlg.setProgress(0);
+				return m_dlg;
 		}
 		return null;
 	}
@@ -392,4 +455,22 @@ public class StatisticsView extends TabChildActivity {
 
 		return group;
 	}
+
+	private Handler calculationHandler = new Handler() {
+		public void handleMessage(Message msg) {
+			if (msg.arg1 == MSG_TOTAL) {
+				if (m_dlg != null) {
+					m_dlg.setMax(msg.what);
+				}
+			} else if (msg.arg1 == MSG_UPDATE) {
+				if (m_dlg != null) {
+					m_dlg.setProgress(msg.what);
+				}
+			} else if (msg.arg1 == MSG_CALCULATING) {
+				if (m_dlg != null) {
+					m_dlg.setIndeterminate(true);
+				}
+			}
+		}
+	};
 }

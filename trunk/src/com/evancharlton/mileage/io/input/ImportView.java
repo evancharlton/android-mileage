@@ -160,6 +160,8 @@ public abstract class ImportView extends Activity {
 			s_title = success ? R.string.success : R.string.error;
 			s_success = success;
 			s_message = data.getString(MESSAGE);
+
+			showDialog(DIALOG_FINISHED);
 		}
 	};
 }

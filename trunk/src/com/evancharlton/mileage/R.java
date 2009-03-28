@@ -46,6 +46,7 @@ public final class R {
         public static final int spreadsheet=0x7f02000f;
         public static final int statistics_i=0x7f020010;
         public static final int vehicles_i=0x7f020011;
+        public static final int wrench=0x7f020012;
     }
     public static final class id {
         public static final int about_app_btn=0x7f070027;

@@ -114,7 +114,7 @@ public class Mileage extends TabActivity {
 		menu.add(Menu.NONE, MENU_VEHICLES, Menu.NONE, R.string.vehicles).setShortcut('1', 'v').setIcon(R.drawable.vehicles_i);
 		menu.add(Menu.NONE, MENU_SETTINGS, Menu.NONE, R.string.settings).setShortcut('2', 'e').setIcon(R.drawable.ic_menu_preferences);
 		menu.add(Menu.NONE, MENU_IMPORT_EXPORT, Menu.NONE, R.string.import_export).setShortcut('3', 'i').setIcon(R.drawable.importexport_i);
-		menu.add(Menu.NONE, MENU_SERVICE_INTERVALS, Menu.NONE, R.string.service_intervals).setShortcut('4', 's').setIcon(R.drawable.importexport_i);
+		menu.add(Menu.NONE, MENU_SERVICE_INTERVALS, Menu.NONE, R.string.service_intervals).setShortcut('4', 's').setIcon(R.drawable.wrench);
 	}
 
 	public static boolean parseMenuItem(MenuItem item, Activity base) {

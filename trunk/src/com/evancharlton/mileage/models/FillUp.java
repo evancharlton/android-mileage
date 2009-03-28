@@ -10,6 +10,7 @@ import java.util.Map;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
+import android.util.Log;
 
 import com.evancharlton.mileage.FillUpsProvider;
 import com.evancharlton.mileage.R;
@@ -99,6 +100,7 @@ public class FillUp extends Model {
 	 */
 	public FillUp(CalculationEngine calculator) {
 		super(FillUpsProvider.FILLUPS_TABLE_NAME);
+		Log.d("FillUp", "LLoading from database");
 		m_calculator = calculator;
 	}
 
@@ -207,27 +209,27 @@ public class FillUp extends Model {
 	private void load(Cursor c) {
 		int index = c.getColumnIndex(VEHICLE_ID);
 		if (index >= 0) {
-			setVehicleId(c.getLong(index));
+			m_vehicleId = c.getLong(index);
 		}
 
 		index = c.getColumnIndex(_ID);
 		if (index >= 0) {
-			setId(c.getLong(index));
+			m_id = c.getLong(index);
 		}
 
 		index = c.getColumnIndex(PRICE);
 		if (index >= 0) {
-			setPrice(c.getDouble(index));
+			m_price = c.getDouble(index);
 		}
 
 		index = c.getColumnIndex(AMOUNT);
 		if (index >= 0) {
-			setAmount(c.getDouble(index));
+			m_amount = c.getDouble(index);
 		}
 
 		index = c.getColumnIndex(ODOMETER);
 		if (index >= 0) {
-			setOdometer(c.getDouble(index));
+			m_odometer = c.getDouble(index);
 		}
 
 		index = c.getColumnIndex(DATE);
@@ -237,22 +239,22 @@ public class FillUp extends Model {
 
 		index = c.getColumnIndex(LATITUDE);
 		if (index >= 0) {
-			setLatitude(c.getDouble(index));
+			m_latitude = c.getDouble(index);
 		}
 
 		index = c.getColumnIndex(LONGITUDE);
 		if (index >= 0) {
-			setLongitude(c.getDouble(index));
+			m_longitude = c.getDouble(index);
 		}
 
 		index = c.getColumnIndex(COMMENT);
 		if (index >= 0) {
-			setComment(c.getString(index));
+			m_comment = c.getString(index);
 		}
 
 		index = c.getColumnIndex(PARTIAL);
 		if (index >= 0) {
-			setPartial(c.getInt(index));
+			m_partial = c.getInt(index) == 1;
 		}
 	}
 
