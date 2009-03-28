@@ -10,7 +10,6 @@ import java.util.Map;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
-import android.util.Log;
 
 import com.evancharlton.mileage.FillUpsProvider;
 import com.evancharlton.mileage.R;
@@ -100,7 +99,6 @@ public class FillUp extends Model {
 	 */
 	public FillUp(CalculationEngine calculator) {
 		super(FillUpsProvider.FILLUPS_TABLE_NAME);
-		Log.d("FillUp", "LLoading from database");
 		m_calculator = calculator;
 	}
 
