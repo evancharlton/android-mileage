@@ -307,8 +307,8 @@ public class StatisticsView extends TabChildActivity {
 		}
 
 		group.add(new Statistic("Average", m_calcEngine.calculateEconomy(total_distance, total_fuel), m_calcEngine.getEconomyUnits()));
-		group.add(new Statistic("Maximum", max_economy, m_calcEngine.getEconomyUnits()));
-		group.add(new Statistic("Minimum", min_economy, m_calcEngine.getEconomyUnits()));
+		group.add(new Statistic("Best", max_economy, m_calcEngine.getEconomyUnits()));
+		group.add(new Statistic("Worst", min_economy, m_calcEngine.getEconomyUnits()));
 		group.add(new Statistic("Last", fillups.get(fillups.size() - 1).calcEconomy(), m_calcEngine.getEconomyUnits()));
 
 		return group;
