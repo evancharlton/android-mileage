@@ -79,7 +79,6 @@ public class AddFillUpView extends Activity implements Persistent {
 	private LinearLayout m_osk;
 	private List<Button> m_oskButtons = new ArrayList<Button>();
 
-	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -89,7 +88,6 @@ public class AddFillUpView extends Activity implements Persistent {
 		setUpOSK();
 		loadData();
 		initHandlers();
-		updateDate();
 		loadPrefs();
 	}
 
@@ -119,16 +117,14 @@ public class AddFillUpView extends Activity implements Persistent {
 	}
 
 	@Override
-	public void onResume() {
+	protected void onResume() {
 		super.onResume();
 
-		if (m_year == 0) {
-			Calendar c = Calendar.getInstance();
-			m_year = c.get(Calendar.YEAR);
-			m_month = c.get(Calendar.MONTH);
-			m_day = c.get(Calendar.DAY_OF_MONTH);
-			updateDate();
-		}
+		Calendar c = Calendar.getInstance();
+		m_year = c.get(Calendar.YEAR);
+		m_month = c.get(Calendar.MONTH);
+		m_day = c.get(Calendar.DAY_OF_MONTH);
+		updateDate();
 
 		loadPrefs();
 	}

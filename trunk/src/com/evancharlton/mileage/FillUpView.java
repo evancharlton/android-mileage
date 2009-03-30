@@ -55,6 +55,13 @@ public class FillUpView extends AddFillUpView {
 	}
 
 	@Override
+	protected void onResume() {
+		super.onResume();
+
+		loadData();
+	}
+
+	@Override
 	protected void loadData() {
 		super.loadData();
 		m_deleteDialog = new AlertDialog.Builder(this).create();
