@@ -419,7 +419,7 @@ public class StatisticsView extends TabChildActivity {
 		group.add(new Statistic("Average", total_amount / fillups.size(), m_calcEngine.getVolumeUnitsAbbr()));
 		group.add(new Statistic("Maximum", max_amount, m_calcEngine.getVolumeUnitsAbbr()));
 		group.add(new Statistic("Minimum", min_amount, m_calcEngine.getVolumeUnitsAbbr()));
-		group.add(new Statistic("Last", fillups.get(fillups.size() - 1).calcCost(), m_calcEngine.getVolumeUnitsAbbr()));
+		group.add(new Statistic("Last", fillups.get(fillups.size() - 1).getAmount(), m_calcEngine.getVolumeUnitsAbbr()));
 		group.add(new Statistic(String.format("Fuel / %d %s", ten_thousand_miles, m_calcEngine.getDistanceUnitsAbbr()), fuel_per_10k, m_calcEngine.getVolumeUnitsAbbr()));
 
 		return group;
