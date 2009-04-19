@@ -4,7 +4,7 @@
 	<property environment="env"/>
 	<property file="build.properties"/>
 	<property name="sdk-folder" value="${env.ANDROID_SDK}" />
-	<property name="android-tools" value="${env.ANDROID_SDK}/platforms/android-1.5/tools" />
+	<property name="android-tools" value="${env.ANDROID_SDK}/tools" />
 	<property name="src.tests" value="test/"/>
 	<property name="reports.tests" value="reports/"/>
 	
