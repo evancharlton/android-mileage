@@ -208,7 +208,9 @@ public class HistoryView extends TabChildActivity implements View.OnCreateContex
 
 				m_fillupMap.put(f.getId(), f);
 
-				total_fuel += f.getAmount();
+				if (fillups.size() > 1) {
+					total_fuel += f.getAmount();
+				}
 
 				historyCursor.moveToNext();
 			}
