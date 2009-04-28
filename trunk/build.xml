@@ -30,7 +30,7 @@
 		<os family="windows"/>
 	</condition>
 
-	<property name="external-libs" value="libs" />
+	<property name="external-libs" value="../libs" />
 	<condition property="external-libs-ospath"
 			value="${basedir}\${external-libs}"
 			else="${basedir}/${external-libs}" >
@@ -46,7 +46,7 @@
 	</condition>
 
 	<!-- Create R.java in the source directory -->
-	<property name="outdir-r" value="src" />
+	<property name="outdir-r" value="gen" />
 
 	<!-- Intermediate files -->
 	<property name="dex-file" value="classes.dex" />
