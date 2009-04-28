@@ -53,6 +53,7 @@ public class FuelPriceChart extends ChartDisplay {
 		m_chart.setYAxisLabels(m_prefs.getCurrency() + m_format.format(min), m_prefs.getCurrency() + m_format.format(max));
 		float avg = (total / m_fillups.size());
 		m_chart.setAverageLabel(m_prefs.getCurrency() + m_format.format(avg));
+		m_chart.setBetterOnBottom(true);
 
 		m_chart.setDataPoints(data);
 		m_chart.thaw();
