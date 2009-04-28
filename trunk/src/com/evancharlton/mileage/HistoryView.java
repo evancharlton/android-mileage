@@ -196,6 +196,7 @@ public class HistoryView extends TabChildActivity implements View.OnCreateContex
 
 			List<FillUp> fillups = new ArrayList<FillUp>();
 			m_fillupMap = new HashMap<Long, FillUp>();
+			int numFillUps = historyCursor.getCount();
 			while (historyCursor.isAfterLast() == false) {
 				FillUp f = new FillUp(m_calcEngine, historyCursor);
 
@@ -208,7 +209,7 @@ public class HistoryView extends TabChildActivity implements View.OnCreateContex
 
 				m_fillupMap.put(f.getId(), f);
 
-				if (fillups.size() > 1) {
+				if (fillups.size() < numFillUps) {
 					total_fuel += f.getAmount();
 				}
 

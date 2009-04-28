@@ -15,20 +15,15 @@ import android.database.Cursor;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.Selection;
 import android.view.ContextMenu;
-import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -76,8 +71,6 @@ public class AddFillUpView extends Activity implements Persistent {
 	protected EditText m_commentEdit;
 	protected SimpleCursorAdapter m_vehicleAdapter;
 	protected CheckBox m_partialCheckbox;
-	private LinearLayout m_osk;
-	private List<Button> m_oskButtons = new ArrayList<Button>();
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -85,7 +78,6 @@ public class AddFillUpView extends Activity implements Persistent {
 
 		setContentView(R.layout.fillup);
 
-		setUpOSK();
 		loadData();
 		initHandlers();
 		loadPrefs();
@@ -279,56 +271,7 @@ public class AddFillUpView extends Activity implements Persistent {
 			}
 		});
 
-		m_amountEdit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-			public void onFocusChange(View v, boolean hasFocus) {
-				setOskVisibility(hasFocus, false);
-			}
-		});
-
-		m_priceEdit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-			public void onFocusChange(View v, boolean hasFocus) {
-				setOskVisibility(hasFocus, false);
-			}
-		});
-
-		m_mileageEdit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-			public void onFocusChange(View v, boolean hasFocus) {
-				setOskVisibility(hasFocus);
-			}
-		});
-
 		m_priceEdit.requestFocus();
-
-		// m_priceEdit.setKeyListener(new KeyFocuser(m_amountEdit));
-		// m_amountEdit.setKeyListener(new KeyFocuser(m_mileageEdit));
-		// m_mileageEdit.setKeyListener(new KeyFocuser(m_commentEdit));
-		// m_commentEdit.setKeyListener(new KeyFocuser(m_saveButton));
-	}
-
-	protected void setOskVisibility(boolean visible, boolean plus_sign) {
-		Button plus = (Button) findViewById(R.id.plus_btn);
-		if (plus_sign) {
-			plus.setVisibility(View.VISIBLE);
-		} else {
-			plus.setVisibility(View.GONE);
-		}
-		if (m_osk != null) {
-			if (visible && isPortrait()) {
-				m_osk.setVisibility(View.VISIBLE);
-			} else {
-				m_osk.setVisibility(View.GONE);
-			}
-		}
-	}
-
-	protected void setOskVisibility(boolean visible) {
-		setOskVisibility(visible, true);
-	}
-
-	protected boolean isPortrait() {
-		WindowManager wm = getWindowManager();
-		Display d = wm.getDefaultDisplay();
-		return d.getWidth() < d.getHeight();
 	}
 
 	private void resetForm(View v) {
@@ -350,46 +293,6 @@ public class AddFillUpView extends Activity implements Persistent {
 		m_customDateButton.setText(PreferencesProvider.getInstance(AddFillUpView.this).format(d));
 		if (m_dateDlg != null) {
 			m_dateDlg.updateDate(m_year, m_month, m_day);
-		}
-	}
-
-	protected void setUpOSK() {
-		m_osk = (LinearLayout) findViewById(R.id.number_osk);
-
-		m_oskButtons.add((Button) findViewById(R.id.zero_btn));
-		m_oskButtons.add((Button) findViewById(R.id.one_btn));
-		m_oskButtons.add((Button) findViewById(R.id.two_btn));
-		m_oskButtons.add((Button) findViewById(R.id.three_btn));
-		m_oskButtons.add((Button) findViewById(R.id.four_btn));
-		m_oskButtons.add((Button) findViewById(R.id.five_btn));
-		m_oskButtons.add((Button) findViewById(R.id.six_btn));
-		m_oskButtons.add((Button) findViewById(R.id.seven_btn));
-		m_oskButtons.add((Button) findViewById(R.id.eight_btn));
-		m_oskButtons.add((Button) findViewById(R.id.nine_btn));
-		m_oskButtons.add((Button) findViewById(R.id.plus_btn));
-		m_oskButtons.add((Button) findViewById(R.id.dot_btn));
-		m_oskButtons.add((Button) findViewById(R.id.backspace_btn));
-
-		for (Button btn : m_oskButtons) {
-			btn.setOnClickListener(new View.OnClickListener() {
-				public void onClick(View v) {
-					View focus = getCurrentFocus();
-					if (focus instanceof EditText) {
-						EditText focusedText = (EditText) focus;
-						CharSequence text = ((Button) v).getText();
-						if (text.length() == 1) {
-							focusedText.append(text);
-						} else {
-							// backspace
-							Editable seq = focusedText.getText();
-							int index = Selection.getSelectionStart(seq);
-							if (index >= 1) {
-								seq.delete(index - 1, index);
-							}
-						}
-					}
-				}
-			});
 		}
 	}
 
