@@ -8,9 +8,8 @@ import java.util.List;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.database.Cursor;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,14 +30,7 @@ public class StatisticsView extends TabChildActivity {
 	private PreferencesProvider m_preferences;
 	private CalculationEngine m_calcEngine;
 
-	private static final String DATA_GROUP = "group";
-	private static final String DATA_DONE = "done";
-
 	private static final int DIALOG_STATS_PROGRESS = 1;
-
-	private static final int MSG_TOTAL = 1;
-	private static final int MSG_UPDATE = 2;
-	private static final int MSG_CALCULATING = 3;
 
 	private ProgressDialog m_dlg = null;
 
@@ -111,124 +103,10 @@ public class StatisticsView extends TabChildActivity {
 	}
 
 	private void calculateStatistics(final long id) {
-		// first, clean up the UI
 		LinearLayout container = (LinearLayout) findViewById(R.id.stats_container);
 		container.removeAllViews();
 
-		final Handler statsHandler = new Handler() {
-			public void handleMessage(Message msg) {
-				Bundle data = msg.getData();
-				boolean done = data.getBoolean(DATA_DONE, false);
-				if (!done) {
-					LinearLayout container = (LinearLayout) findViewById(R.id.stats_container);
-					StatisticsGroup group = (StatisticsGroup) data.getSerializable(DATA_GROUP);
-					if (group != null) {
-						container.addView(group.render(StatisticsView.this));
-					}
-				} else {
-					dismissDialog(DIALOG_STATS_PROGRESS);
-					m_dlg = null;
-				}
-			}
-		};
-
-		final Thread t = new Thread() {
-			public void run() {
-				// TODO: optimize this. This has huge overhead
-				final List<FillUp> fillups = getAllFillUps(id, m_calcEngine);
-
-				if (fillups.size() >= 2) {
-					// crunch the numbers
-					send(calcDistances(fillups));
-					send(calcEconomy(fillups));
-					send(calcPrices(fillups));
-					send(calcCosts(fillups));
-					send(calcAmounts(fillups));
-					send(calcExpenses(fillups));
-				}
-
-				statsHandler.post(new Runnable() {
-					public void run() {
-						Bundle data = new Bundle();
-						data.putBoolean(DATA_DONE, true);
-						Message msg = new Message();
-						msg.setData(data);
-						statsHandler.handleMessage(msg);
-					}
-				});
-			}
-
-			private void send(final StatisticsGroup results) {
-				statsHandler.post(new Runnable() {
-					public void run() {
-						Bundle data = new Bundle();
-						data.putSerializable(DATA_GROUP, results);
-						Message msg = new Message();
-						msg.setData(data);
-						statsHandler.handleMessage(msg);
-					}
-				});
-			}
-		};
-		t.start();
-		showDialog(DIALOG_STATS_PROGRESS);
-	}
-
-	private List<FillUp> getAllFillUps(long id, CalculationEngine engine) {
-		List<FillUp> all = new ArrayList<FillUp>();
-		String[] projection = FillUp.getProjection();
-		String selection = FillUp.VEHICLE_ID + " = ?";
-		String[] selectionArgs = new String[] {
-			String.valueOf(id)
-		};
-
-		Cursor c = managedQuery(FillUp.CONTENT_URI, projection, selection, selectionArgs, FillUp.ODOMETER + " ASC");
-		c.moveToFirst();
-
-		final int t = c.getCount();
-		calculationHandler.post(new Runnable() {
-			public void run() {
-				Message msg = new Message();
-				msg.what = t;
-				msg.arg1 = MSG_TOTAL;
-				calculationHandler.sendMessage(msg);
-			}
-		});
-
-		int i = 0;
-		FillUp prev = null;
-		FillUp curr = null;
-		while (c.isAfterLast() == false) {
-			curr = new FillUp(engine, c);
-			all.add(curr);
-
-			curr.setPrevious(prev);
-			if (prev != null) {
-				prev.setNext(curr);
-			}
-			prev = curr;
-
-			c.moveToNext();
-
-			final int p = ++i;
-			calculationHandler.post(new Runnable() {
-				public void run() {
-					Message msg = new Message();
-					msg.what = p;
-					msg.arg1 = MSG_UPDATE;
-					calculationHandler.sendMessage(msg);
-				}
-			});
-		}
-		calculationHandler.post(new Runnable() {
-			public void run() {
-				Message msg = new Message();
-				msg.arg1 = MSG_CALCULATING;
-				calculationHandler.sendMessage(msg);
-			}
-		});
-
-		return all;
+		new CalculationTask().execute(id);
 	}
 
 	@Override
@@ -348,6 +226,8 @@ public class StatisticsView extends TabChildActivity {
 		double total_cost = 0D;
 		double min_cost_per_mile = Double.MAX_VALUE;
 		double max_cost_per_mile = 0D;
+		double avg_cost_per_mile = 0D;
+		int count = 0;
 
 		for (FillUp fillup : fillups) {
 			double cost = fillup.calcCost();
@@ -369,6 +249,8 @@ public class StatisticsView extends TabChildActivity {
 			if (cost_per_mile > max_cost_per_mile) {
 				max_cost_per_mile = cost_per_mile;
 			}
+			avg_cost_per_mile += cost_per_mile;
+			count++;
 		}
 
 		FillUp last = fillups.get(fillups.size() - 1);
@@ -376,8 +258,8 @@ public class StatisticsView extends TabChildActivity {
 		double last_cost_per_mile = last.calcCostPerDistance();
 
 		double avg_cost = total_cost / fillups.size();
-		double total_distance = last.getOdometer() - fillups.get(0).getOdometer();
-		double avg_cost_per_mile = total_cost / total_distance;
+
+		avg_cost_per_mile = avg_cost_per_mile / ((double) count);
 
 		String distanceUnits = m_calcEngine.getDistanceUnitsAbbr().trim();
 
@@ -456,21 +338,74 @@ public class StatisticsView extends TabChildActivity {
 		return group;
 	}
 
-	private Handler calculationHandler = new Handler() {
-		public void handleMessage(Message msg) {
-			if (msg.arg1 == MSG_TOTAL) {
-				if (m_dlg != null) {
-					m_dlg.setMax(msg.what);
+	private class CalculationTask extends AsyncTask<Long, StatisticsGroup, Boolean> {
+		private LinearLayout m_container = (LinearLayout) findViewById(R.id.stats_container);
+		private int t = 0;
+		private int p = 0;
+
+		@Override
+		protected void onPreExecute() {
+			showDialog(DIALOG_STATS_PROGRESS);
+		}
+
+		@Override
+		protected Boolean doInBackground(Long... ids) {
+			// TODO: optimize this. This has huge overhead
+			List<FillUp> fillups = new ArrayList<FillUp>();
+			String[] projection = FillUp.getProjection();
+			String selection = FillUp.VEHICLE_ID + " = ?";
+			String[] selectionArgs = new String[] {
+				String.valueOf(ids[0])
+			};
+
+			Cursor c = managedQuery(FillUp.CONTENT_URI, projection, selection, selectionArgs, FillUp.ODOMETER + " ASC");
+			c.moveToFirst();
+
+			t = c.getCount();
+			publishProgress();
+
+			FillUp prev = null;
+			FillUp curr = null;
+			while (c.isAfterLast() == false) {
+				curr = new FillUp(m_calcEngine, c);
+				fillups.add(curr);
+
+				curr.setPrevious(prev);
+				if (prev != null) {
+					prev.setNext(curr);
 				}
-			} else if (msg.arg1 == MSG_UPDATE) {
-				if (m_dlg != null) {
-					m_dlg.setProgress(msg.what);
-				}
-			} else if (msg.arg1 == MSG_CALCULATING) {
-				if (m_dlg != null) {
-					m_dlg.setIndeterminate(true);
-				}
+				prev = curr;
+
+				c.moveToNext();
+				p++;
+				publishProgress();
+			}
+
+			if (fillups.size() >= 2) {
+				// crunch the numbers
+				publishProgress(calcDistances(fillups));
+				publishProgress(calcEconomy(fillups));
+				publishProgress(calcPrices(fillups));
+				publishProgress(calcCosts(fillups));
+				publishProgress(calcAmounts(fillups));
+				publishProgress(calcExpenses(fillups));
+			}
+			return true;
+		}
+
+		@Override
+		protected void onProgressUpdate(StatisticsGroup... update) {
+			if (update.length == 0) {
+				m_dlg.setMax(t);
+				m_dlg.setProgress(p);
+			} else {
+				m_container.addView(update[0].render(StatisticsView.this));
 			}
 		}
-	};
+
+		@Override
+		protected void onPostExecute(Boolean result) {
+			removeDialog(DIALOG_STATS_PROGRESS);
+		}
+	}
 }
