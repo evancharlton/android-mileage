@@ -1,6 +1,13 @@
 package com.evancharlton.mileage.views;
 
-import android.content.Intent;
+import java.util.List;
+
+import org.achartengine.ChartFactory;
+import org.achartengine.model.XYMultipleSeriesDataset;
+import org.achartengine.model.XYSeries;
+import org.achartengine.renderer.XYMultipleSeriesRenderer;
+import org.achartengine.renderer.XYSeriesRenderer;
+
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.Menu;
@@ -13,9 +20,11 @@ import android.widget.Spinner;
 
 import com.evancharlton.mileage.HelpDialog;
 import com.evancharlton.mileage.Mileage;
+import com.evancharlton.mileage.PreferencesProvider;
 import com.evancharlton.mileage.R;
 import com.evancharlton.mileage.TabChildActivity;
 import com.evancharlton.mileage.binders.VehicleBinder;
+import com.evancharlton.mileage.models.FillUp;
 import com.evancharlton.mileage.models.Vehicle;
 
 public class ChartsView extends TabChildActivity {
@@ -56,6 +65,13 @@ public class ChartsView extends TabChildActivity {
 		return super.onOptionsItemSelected(item);
 	}
 
+	private int calculateSkip(int size, int max) {
+		if (size > max) {
+			return (int) (Math.ceil((double) size) / ((double) max));
+		}
+		return 1;
+	}
+
 	private void initUI() {
 		m_vehicles = (Spinner) findViewById(R.id.stats_vehicle_spinner);
 		m_fuelPriceBtn = (Button) findViewById(R.id.fuel_price_btn);
@@ -65,25 +81,61 @@ public class ChartsView extends TabChildActivity {
 
 		m_fuelPriceBtn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View arg0) {
-				showChart(FuelPriceChart.class);
+				XYSeries series = new XYSeries("Price of fuel");
+				Vehicle v = new Vehicle(ChartsView.this, m_vehicles.getSelectedItemId());
+				List<FillUp> fillups = v.getAllFillUps(PreferencesProvider.getInstance(ChartsView.this).getCalculator());
+				int size = fillups.size();
+				int skip = calculateSkip(size, 50);
+				for (int i = 0; i < size; i += skip) {
+					FillUp fillup = fillups.get(i);
+					series.add(fillup.getDate().getTimeInMillis(), fillup.getPrice());
+				}
+				showChart(series);
 			}
 		});
 
 		m_fuelAmountBtn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View arg0) {
-				showChart(FuelAmountChart.class);
+				XYSeries series = new XYSeries("Amount of fuel");
+				Vehicle v = new Vehicle(ChartsView.this, m_vehicles.getSelectedItemId());
+				List<FillUp> fillups = v.getAllFillUps(PreferencesProvider.getInstance(ChartsView.this).getCalculator());
+				int size = fillups.size();
+				int skip = calculateSkip(size, 50);
+				for (int i = 0; i < size; i += skip) {
+					FillUp fillup = fillups.get(i);
+					series.add(fillup.getDate().getTimeInMillis(), fillup.getAmount());
+				}
+				showChart(series);
 			}
 		});
 
 		m_distanceBtn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View arg0) {
-				showChart(DistanceChart.class);
+				XYSeries series = new XYSeries("Distance between fill-ups");
+				Vehicle v = new Vehicle(ChartsView.this, m_vehicles.getSelectedItemId());
+				List<FillUp> fillups = v.getAllFillUps(PreferencesProvider.getInstance(ChartsView.this).getCalculator());
+				int size = fillups.size();
+				int skip = calculateSkip(size, 50);
+				for (int i = 0; i < size; i += skip) {
+					FillUp fillup = fillups.get(i);
+					series.add(fillup.getDate().getTimeInMillis(), fillup.calcDistance());
+				}
+				showChart(series);
 			}
 		});
 
 		m_fuelEconomyBtn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View arg0) {
-				showChart(FuelEconomyChart.class);
+				XYSeries series = new XYSeries("Fuel economy");
+				Vehicle v = new Vehicle(ChartsView.this, m_vehicles.getSelectedItemId());
+				List<FillUp> fillups = v.getAllFillUps(PreferencesProvider.getInstance(ChartsView.this).getCalculator());
+				int size = fillups.size();
+				int skip = calculateSkip(size, 50);
+				for (int i = 0; i < size; i += skip) {
+					FillUp fillup = fillups.get(i);
+					series.add(fillup.getDate().getTimeInMillis(), fillup.calcEconomy());
+				}
+				showChart(series);
 			}
 		});
 
@@ -118,10 +170,19 @@ public class ChartsView extends TabChildActivity {
 		}
 	}
 
-	private void showChart(Class<?> cls) {
-		Intent i = new Intent();
-		i.setClass(ChartsView.this, cls);
-		i.putExtra(ChartDisplay.VEHICLE_ID, m_vehicles.getSelectedItemId());
-		startActivity(i);
+	private void showChart(XYSeries series) {
+		XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
+		dataset.addSeries(series);
+
+		XYMultipleSeriesRenderer renderer = new XYMultipleSeriesRenderer();
+		XYSeriesRenderer seriesRenderer = new XYSeriesRenderer();
+		seriesRenderer.setColor(0xFFFF9C24);
+		renderer.addSeriesRenderer(seriesRenderer);
+		renderer.setShowLegend(false);
+		renderer.setAxesColor(0x66666666);
+
+		PreferencesProvider prefs = PreferencesProvider.getInstance(this);
+		String format = prefs.getString(PreferencesProvider.DATE, "MM/dd/yy");
+		startActivity(ChartFactory.getTimeChartIntent(ChartsView.this, dataset, renderer, format));
 	}
 }

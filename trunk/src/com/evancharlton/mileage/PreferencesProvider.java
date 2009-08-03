@@ -6,7 +6,6 @@ import java.util.Date;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
 
 import com.evancharlton.mileage.calculators.CalculationEngine;
 
@@ -16,7 +15,14 @@ public class PreferencesProvider {
 	private SharedPreferences m_settings;
 	private CalculationEngine m_calcEngine;
 
-	private static final String PREFS_NAME = "MileageSettings";
+	public static final String DATE = "date_pref";
+	public static final String NUMBER = "number_pref";
+	public static final String CURRENCY = "currency_pref";
+	public static final String VOLUME = "volume_pref";
+	public static final String DISTANCE = "distance_pref";
+	public static final String ECONOMY = "economy_pref";
+
+	private static final String PREFS_NAME = "com.evancharlton.mileage_preferences";
 	private static final int BOOLEAN = 0;
 	private static final int FLOAT = 1;
 	private static final int INT = 2;
@@ -106,7 +112,11 @@ public class PreferencesProvider {
 	}
 
 	public int getInt(String key, int defValue) {
-		return m_settings.getInt(key, defValue);
+		try {
+			return m_settings.getInt(key, defValue);
+		} catch (ClassCastException ce) {
+			return Integer.parseInt(m_settings.getString(key, String.valueOf(defValue)));
+		}
 	}
 
 	public long getLong(String key, long defValue) {
@@ -128,13 +138,13 @@ public class PreferencesProvider {
 	}
 
 	public String getCurrency() {
-		return getString(R.array.currencies, SettingsView.CURRENCY);
+		return getString(CURRENCY, "$");
 	}
 
 	public CalculationEngine getCalculator() {
-		int volume = getInt(SettingsView.VOLUME, 0);
-		int distance = getInt(SettingsView.DISTANCE, 0);
-		int economy = getInt(SettingsView.ECONOMY, 0);
+		int volume = getInt(VOLUME, 0);
+		int distance = getInt(DISTANCE, 0);
+		int economy = getInt(ECONOMY, 0);
 		m_calcEngine = getCalculator(volume, distance, economy);
 		return m_calcEngine;
 	}
@@ -200,16 +210,7 @@ public class PreferencesProvider {
 
 	public String format(Date d) {
 		SimpleDateFormat format = new SimpleDateFormat();
-		format.applyPattern(getString(R.array.date_patterns, SettingsView.DATE));
+		format.applyPattern(getString(PreferencesProvider.DATE, "MM/dd/yy"));
 		return format.format(d);
-	}
-
-	public int getOrientation() {
-		int orientation = getInt(SettingsView.ORIENTATION, 0);
-		switch (orientation) {
-			case 1:
-				return ActivityInfo.SCREEN_ORIENTATION_USER;
-		}
-		return ActivityInfo.SCREEN_ORIENTATION_SENSOR;
 	}
 }
