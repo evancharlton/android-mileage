@@ -119,7 +119,7 @@ public abstract class ImportView extends Activity {
 	protected Dialog onCreateDialog(int which) {
 		switch (which) {
 			case DIALOG_FINISHED:
-				return new AlertDialog.Builder(ImportView.this).setTitle(s_title).setMessage(s_message).setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+				return new AlertDialog.Builder(ImportView.this).setTitle(s_title).setMessage(s_message).setPositiveButton(getString(android.R.string.ok), new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int which) {
 						dismissDialog(DIALOG_FINISHED);
 						if (s_success) {
