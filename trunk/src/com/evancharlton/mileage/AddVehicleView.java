@@ -1,6 +1,5 @@
 package com.evancharlton.mileage;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.Menu;
@@ -13,7 +12,7 @@ import android.widget.Toast;
 
 import com.evancharlton.mileage.models.Vehicle;
 
-public class AddVehicleView extends Activity {
+public class AddVehicleView extends DeleteActivity {
 	protected EditText m_year;
 	protected EditText m_make;
 	protected EditText m_model;

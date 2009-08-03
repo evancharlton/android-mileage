@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -33,7 +32,7 @@ import com.evancharlton.mileage.models.FillUp;
 import com.evancharlton.mileage.models.ServiceInterval;
 import com.evancharlton.mileage.models.Vehicle;
 
-public class AddFillUpView extends Activity implements Persistent {
+public class AddFillUpView extends DeleteActivity implements Persistent {
 	public static final String PACKAGE = "com.evancharlton.mileage";
 	public static final int DATE_DIALOG_ID = 0;
 	public static final int MENU_VEHICLES = Menu.FIRST;

@@ -16,10 +16,6 @@
 	<string name="confirm_erase">Are you sure you want to completely erase the database? This can not be undone!</string>
 	<string name="confirm_data">Confirm data</string>
 	<string name="confirm_import">Is the following data correct?</string>
-	<string name="yes">Yes</string>
-	<string name="no">No</string>
-	<string name="ok">OK</string>
-	<string name="cancel">Cancel</string>
 	<string name="date">Date</string>
 	<string name="statistics">Statistics</string>
 	<string name="charts">Charts</string>
@@ -47,6 +43,29 @@
 	<string name="partial_fillup_economy">Partial Fill-up</string>
 	<string name="description">Description</string>
 	<string name="save">Save</string>
+	<string name="unknown_version">Unknown version</string>
+	
+	<string name="calculating">Calculating</string>
+	<string name="statistics_calculating">Calculating statistics ...</string>
+	<string name="average">Average</string>
+	<string name="maximum">Maximum</string>
+	<string name="minimum">Minimum</string>
+	<string name="last">Last</string>
+	<string name="total">Total</string>
+	<string name="last_month">Last month</string>
+	<string name="last_year">Last year</string>
+	<string name="fuel_per">Fuel / %1$d %1$s</string>
+	<string name="average_cost_per">Average cost per %1$s</string>
+	<string name="maximum_cost_per">Maximum cost per %1$s</string>
+	<string name="minimum_cost_per">Minimum cost per %1$s</string>
+	<string name="last_cost_per">Last cost per %1$s</string>
+	<!-- statistics headings -->
+	<string name="fuel_economy">Fuel Economy</string>
+	<string name="fuel_expenses">Fuel Expenses</string>
+	<string name="fuel_amounts">Fuel Amounts</string>
+	<string name="fuel_prices">Fuel Prices</string>
+	<string name="fillup_costs">Fill-Up Costs</string>
+	<string name="distance_between_fillups">Distance Between Fill-Ups</string>
 	
 	<string name="vehicles">Vehicles</string>
 	<string name="vehicle_make">Make</string>

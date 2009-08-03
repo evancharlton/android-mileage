@@ -1,8 +1,5 @@
 package com.evancharlton.mileage;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.Menu;
@@ -12,11 +9,9 @@ import android.view.View;
 import com.evancharlton.mileage.models.Vehicle;
 
 public class EditVehicleView extends AddVehicleView {
-	private AlertDialog m_deleteDialog;
 	private Cursor m_vehicleCursor;
 	private boolean m_vehicleWasDefault = false;
 
-	private static final int DELETE_DIALOG_ID = Menu.FIRST;
 	private static final int MENU_DELETE = Menu.FIRST + 1;
 
 	public void onCreate(Bundle savedInstanceState) {
@@ -43,12 +38,6 @@ public class EditVehicleView extends AddVehicleView {
 				showMessage(true);
 			}
 		});
-
-		m_deleteDialog = new AlertDialog.Builder(this).create();
-		m_deleteDialog.setMessage(getString(R.string.confirm_delete));
-		m_deleteDialog.setCancelable(false);
-		m_deleteDialog.setButton(getString(R.string.yes), m_deleteListener);
-		m_deleteDialog.setButton2(getString(R.string.no), m_deleteListener);
 
 		m_vehicleCursor = managedQuery(Vehicle.CONTENT_URI, new String[] {
 				Vehicle._ID,
@@ -88,7 +77,8 @@ public class EditVehicleView extends AddVehicleView {
 		}
 	}
 
-	private void delete() {
+	@Override
+	protected void delete() {
 		getContentResolver().delete(getIntent().getData(), null, null);
 	}
 
@@ -110,22 +100,4 @@ public class EditVehicleView extends AddVehicleView {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-
-	protected Dialog onCreateDialog(int id) {
-		switch (id) {
-			case DELETE_DIALOG_ID:
-				return m_deleteDialog;
-		}
-		return null;
-	}
-
-	private DialogInterface.OnClickListener m_deleteListener = new DialogInterface.OnClickListener() {
-		public void onClick(DialogInterface dialog, int which) {
-			dialog.dismiss();
-			if (which == Dialog.BUTTON1) {
-				delete();
-				finish();
-			}
-		}
-	};
 }

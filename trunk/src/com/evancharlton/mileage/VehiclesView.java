@@ -1,11 +1,7 @@
 package com.evancharlton.mileage;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.ListActivity;
 import android.content.ContentUris;
 import android.content.ContentValues;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -23,7 +19,7 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
 import com.evancharlton.mileage.binders.VehicleBinder;
 import com.evancharlton.mileage.models.Vehicle;
 
-public class VehiclesView extends ListActivity implements View.OnCreateContextMenuListener {
+public class VehiclesView extends DeleteActivity implements View.OnCreateContextMenuListener {
 	public static final String TAG = "VehiclesList";
 	public static final int MENU_ADD = Menu.FIRST;
 	public static final int MENU_DEFAULT = Menu.FIRST;
@@ -32,17 +28,10 @@ public class VehiclesView extends ListActivity implements View.OnCreateContextMe
 	public static final int DELETE_DIALOG_ID = 1;
 
 	private long m_deleteId;
-	private AlertDialog m_deleteDialog;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		m_deleteDialog = new AlertDialog.Builder(this).create();
-		m_deleteDialog.setMessage(getString(R.string.confirm_delete));
-		m_deleteDialog.setCancelable(false);
-		m_deleteDialog.setButton(getString(R.string.yes), m_deleteListener);
-		m_deleteDialog.setButton2(getString(R.string.no), m_deleteListener);
 
 		setDefaultKeyMode(DEFAULT_KEYS_SHORTCUT);
 
@@ -134,25 +123,9 @@ public class VehiclesView extends ListActivity implements View.OnCreateContextMe
 		return super.onContextItemSelected(item);
 	}
 
-	public Dialog onCreateDialog(int id) {
-		switch (id) {
-			case DELETE_DIALOG_ID:
-				return m_deleteDialog;
-		}
-		return super.onCreateDialog(id);
-	}
-
-	private void delete() {
+	@Override
+	protected void delete() {
 		Uri uri = ContentUris.withAppendedId(Vehicle.CONTENT_URI, m_deleteId);
 		getContentResolver().delete(uri, null, null);
 	}
-
-	private DialogInterface.OnClickListener m_deleteListener = new DialogInterface.OnClickListener() {
-		public void onClick(DialogInterface dialog, int which) {
-			dialog.dismiss();
-			if (which == Dialog.BUTTON1) {
-				delete();
-			}
-		}
-	};
 }

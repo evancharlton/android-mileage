@@ -55,8 +55,8 @@ public class ImportExportView extends Activity {
 		m_eraseDialog = new AlertDialog.Builder(this).create();
 		m_eraseDialog.setMessage(getString(R.string.confirm_erase));
 		m_eraseDialog.setCancelable(false);
-		m_eraseDialog.setButton(getString(R.string.yes), m_eraseListener);
-		m_eraseDialog.setButton2(getString(R.string.no), m_eraseListener);
+		m_eraseDialog.setButton(getString(android.R.string.yes), m_eraseListener);
+		m_eraseDialog.setButton2(getString(android.R.string.no), m_eraseListener);
 	}
 
 	public boolean onOptionsItemSelected(MenuItem item) {

@@ -2,16 +2,12 @@ package com.evancharlton.mileage;
 
 import java.util.Calendar;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.evancharlton.mileage.models.FillUp;
 
@@ -19,8 +15,6 @@ public class FillUpView extends AddFillUpView {
 	private static final int DELETE_DIALOG_ID = 1;
 
 	public static final int MENU_DELETE = Menu.FIRST;
-
-	private AlertDialog m_deleteDialog = null;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -50,7 +44,8 @@ public class FillUpView extends AddFillUpView {
 		});
 	}
 
-	private void delete() {
+	@Override
+	protected void delete() {
 		getContentResolver().delete(getIntent().getData(), null, null);
 	}
 
@@ -64,12 +59,6 @@ public class FillUpView extends AddFillUpView {
 	@Override
 	protected void loadData() {
 		super.loadData();
-		m_deleteDialog = new AlertDialog.Builder(this).create();
-		m_deleteDialog.setMessage(getString(R.string.confirm_delete));
-		m_deleteDialog.setCancelable(false);
-		m_deleteDialog.setButton(getString(R.string.yes), m_deleteListener);
-		m_deleteDialog.setButton2(getString(R.string.no), m_deleteListener);
-
 		Intent data = getIntent();
 
 		Cursor c = managedQuery(data.getData(), FillUp.getProjection(), null, null, null);
@@ -104,8 +93,7 @@ public class FillUpView extends AddFillUpView {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(Menu.NONE, MENU_DELETE, Menu.NONE, R.string.delete).setShortcut('1', 'd').setIcon(R.drawable.ic_menu_delete);
 		HelpDialog.injectHelp(menu, 'h');
-
-		return true;
+		return super.onCreateOptionsMenu(menu);
 	}
 
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -119,24 +107,4 @@ public class FillUpView extends AddFillUpView {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-
-	@Override
-	protected Dialog onCreateDialog(int id) {
-		switch (id) {
-			case DELETE_DIALOG_ID:
-				return m_deleteDialog;
-		}
-		return super.onCreateDialog(id);
-	}
-
-	private DialogInterface.OnClickListener m_deleteListener = new DialogInterface.OnClickListener() {
-		public void onClick(DialogInterface dialog, int which) {
-			dialog.dismiss();
-			if (which == Dialog.BUTTON1) {
-				delete();
-				Toast.makeText(FillUpView.this, getString(R.string.fillup_deleted), Toast.LENGTH_SHORT);
-				finish();
-			}
-		}
-	};
 }

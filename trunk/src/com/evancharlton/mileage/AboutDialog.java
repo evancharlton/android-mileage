@@ -22,7 +22,7 @@ public class AboutDialog extends Dialog {
 		try {
 			title = getContext().getString(R.string.app_name) + " : " + getContext().getPackageManager().getPackageInfo(getContext().getPackageName(), PackageManager.GET_ACTIVITIES).versionName;
 		} catch (NameNotFoundException e) {
-			title = "Unknown version";
+			title = getContext().getString(R.string.unknown_version);
 		}
 		setTitle(title);
 	}

@@ -114,8 +114,8 @@ public class StatisticsView extends TabChildActivity {
 		switch (which) {
 			case DIALOG_STATS_PROGRESS:
 				m_dlg = new ProgressDialog(this);
-				m_dlg.setTitle("Calculating");
-				m_dlg.setMessage("Calculating statistics...");
+				m_dlg.setTitle(getString(R.string.calculating));
+				m_dlg.setMessage(getString(R.string.statistics_calculating));
 				m_dlg.setIndeterminate(false);
 				m_dlg.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 				m_dlg.setProgress(0);
@@ -125,7 +125,7 @@ public class StatisticsView extends TabChildActivity {
 	}
 
 	public StatisticsGroup calcDistances(final List<FillUp> fillups) {
-		StatisticsGroup group = new StatisticsGroup("Distance Between Fill-Ups");
+		StatisticsGroup group = new StatisticsGroup(getString(R.string.distance_between_fillups));
 
 		double total_distance = 0D;
 		double min_distance = Double.MAX_VALUE;
@@ -144,16 +144,16 @@ public class StatisticsView extends TabChildActivity {
 			}
 		}
 
-		group.add(new Statistic("Average", (total_distance / (fillups.size() - 1)), m_calcEngine.getDistanceUnitsAbbr()));
-		group.add(new Statistic("Maximum", max_distance, m_calcEngine.getDistanceUnitsAbbr()));
-		group.add(new Statistic("Minimum", min_distance, m_calcEngine.getDistanceUnitsAbbr()));
-		group.add(new Statistic("Last", fillups.get(fillups.size() - 1).calcDistance(), m_calcEngine.getDistanceUnitsAbbr()));
+		group.add(new Statistic(getString(R.string.average), (total_distance / (fillups.size() - 1)), m_calcEngine.getDistanceUnitsAbbr()));
+		group.add(new Statistic(getString(R.string.maximum), max_distance, m_calcEngine.getDistanceUnitsAbbr()));
+		group.add(new Statistic(getString(R.string.minimum), min_distance, m_calcEngine.getDistanceUnitsAbbr()));
+		group.add(new Statistic(getString(R.string.last), fillups.get(fillups.size() - 1).calcDistance(), m_calcEngine.getDistanceUnitsAbbr()));
 
 		return group;
 	}
 
 	public StatisticsGroup calcEconomy(final List<FillUp> fillups) {
-		StatisticsGroup group = new StatisticsGroup("Fuel Economy");
+		StatisticsGroup group = new StatisticsGroup(getString(R.string.fuel_economy));
 
 		double total_distance = fillups.get(fillups.size() - 1).getOdometer() - fillups.get(0).getOdometer();
 		double total_fuel = 0D;
@@ -184,16 +184,16 @@ public class StatisticsView extends TabChildActivity {
 			}
 		}
 
-		group.add(new Statistic("Average", m_calcEngine.calculateEconomy(total_distance, total_fuel), m_calcEngine.getEconomyUnits()));
+		group.add(new Statistic(getString(R.string.average), m_calcEngine.calculateEconomy(total_distance, total_fuel), m_calcEngine.getEconomyUnits()));
 		group.add(new Statistic("Best", max_economy, m_calcEngine.getEconomyUnits()));
 		group.add(new Statistic("Worst", min_economy, m_calcEngine.getEconomyUnits()));
-		group.add(new Statistic("Last", fillups.get(fillups.size() - 1).calcEconomy(), m_calcEngine.getEconomyUnits()));
+		group.add(new Statistic(getString(R.string.last), fillups.get(fillups.size() - 1).calcEconomy(), m_calcEngine.getEconomyUnits()));
 
 		return group;
 	}
 
 	public StatisticsGroup calcPrices(final List<FillUp> fillups) {
-		StatisticsGroup group = new StatisticsGroup("Fuel Prices");
+		StatisticsGroup group = new StatisticsGroup(getString(R.string.fuel_prices));
 
 		double min_price = Double.MAX_VALUE;
 		double max_price = 0D;
@@ -210,16 +210,16 @@ public class StatisticsView extends TabChildActivity {
 			}
 		}
 
-		group.add(new Statistic("Average", m_preferences.getCurrency(), total_price / fillups.size(), "/" + m_calcEngine.getVolumeUnitsAbbr()));
-		group.add(new Statistic("Maximum", m_preferences.getCurrency(), max_price, "/" + m_calcEngine.getVolumeUnitsAbbr()));
-		group.add(new Statistic("Minimum", m_preferences.getCurrency(), min_price, "/" + m_calcEngine.getVolumeUnitsAbbr()));
-		group.add(new Statistic("Last", m_preferences.getCurrency(), fillups.get(fillups.size() - 1).getPrice(), "/" + m_calcEngine.getVolumeUnitsAbbr()));
+		group.add(new Statistic(getString(R.string.average), m_preferences.getCurrency(), total_price / fillups.size(), "/" + m_calcEngine.getVolumeUnitsAbbr()));
+		group.add(new Statistic(getString(R.string.maximum), m_preferences.getCurrency(), max_price, "/" + m_calcEngine.getVolumeUnitsAbbr()));
+		group.add(new Statistic(getString(R.string.minimum), m_preferences.getCurrency(), min_price, "/" + m_calcEngine.getVolumeUnitsAbbr()));
+		group.add(new Statistic(getString(R.string.last), m_preferences.getCurrency(), fillups.get(fillups.size() - 1).getPrice(), "/" + m_calcEngine.getVolumeUnitsAbbr()));
 
 		return group;
 	}
 
 	public StatisticsGroup calcCosts(final List<FillUp> fillups) {
-		StatisticsGroup group = new StatisticsGroup("Fill-Up Costs");
+		StatisticsGroup group = new StatisticsGroup(getString(R.string.fillup_costs));
 
 		double min_cost = Double.MAX_VALUE;
 		double max_cost = 0D;
@@ -263,20 +263,20 @@ public class StatisticsView extends TabChildActivity {
 
 		String distanceUnits = m_calcEngine.getDistanceUnitsAbbr().trim();
 
-		group.add(new Statistic("Average", m_preferences.getCurrency(), avg_cost));
-		group.add(new Statistic(String.format("Average Cost per %s", distanceUnits), m_preferences.getCurrency(), avg_cost_per_mile));
-		group.add(new Statistic("Maximum", m_preferences.getCurrency(), max_cost));
-		group.add(new Statistic(String.format("Maximum cost per %s", distanceUnits), m_preferences.getCurrency(), max_cost_per_mile));
-		group.add(new Statistic("Minimum", m_preferences.getCurrency(), min_cost));
-		group.add(new Statistic(String.format("Minimum cost per %s", distanceUnits), m_preferences.getCurrency(), min_cost_per_mile));
-		group.add(new Statistic("Last", m_preferences.getCurrency(), last_cost));
-		group.add(new Statistic(String.format("Last Cost per %s", distanceUnits), m_preferences.getCurrency(), last_cost_per_mile));
+		group.add(new Statistic(getString(R.string.average), m_preferences.getCurrency(), avg_cost));
+		group.add(new Statistic(String.format(getString(R.string.average_cost_per), distanceUnits), m_preferences.getCurrency(), avg_cost_per_mile));
+		group.add(new Statistic(getString(R.string.maximum), m_preferences.getCurrency(), max_cost));
+		group.add(new Statistic(String.format(getString(R.string.maximum_cost_per), distanceUnits), m_preferences.getCurrency(), max_cost_per_mile));
+		group.add(new Statistic(getString(R.string.minimum), m_preferences.getCurrency(), min_cost));
+		group.add(new Statistic(String.format(getString(R.string.minimum_cost_per), distanceUnits), m_preferences.getCurrency(), min_cost_per_mile));
+		group.add(new Statistic(getString(R.string.last), m_preferences.getCurrency(), last_cost));
+		group.add(new Statistic(String.format(getString(R.string.last_cost_per), distanceUnits), m_preferences.getCurrency(), last_cost_per_mile));
 
 		return group;
 	}
 
 	public StatisticsGroup calcAmounts(final List<FillUp> fillups) {
-		StatisticsGroup group = new StatisticsGroup("Fuel Amounts");
+		StatisticsGroup group = new StatisticsGroup(getString(R.string.fuel_amounts));
 
 		double min_amount = Double.MAX_VALUE;
 		double max_amount = 0D;
@@ -297,18 +297,18 @@ public class StatisticsView extends TabChildActivity {
 		double distance = fillups.get(fillups.size() - 1).getOdometer() - fillups.get(0).getOdometer();
 		double fuel_per_10k = (m_calcEngine.convertVolume(total_amount) / m_calcEngine.convertDistance(distance)) * ten_thousand_miles;
 
-		group.add(new Statistic("Total", total_amount, m_calcEngine.getVolumeUnitsAbbr()));
-		group.add(new Statistic("Average", total_amount / fillups.size(), m_calcEngine.getVolumeUnitsAbbr()));
-		group.add(new Statistic("Maximum", max_amount, m_calcEngine.getVolumeUnitsAbbr()));
-		group.add(new Statistic("Minimum", min_amount, m_calcEngine.getVolumeUnitsAbbr()));
-		group.add(new Statistic("Last", fillups.get(fillups.size() - 1).getAmount(), m_calcEngine.getVolumeUnitsAbbr()));
-		group.add(new Statistic(String.format("Fuel / %d %s", ten_thousand_miles, m_calcEngine.getDistanceUnitsAbbr()), fuel_per_10k, m_calcEngine.getVolumeUnitsAbbr()));
+		group.add(new Statistic(getString(R.string.total), total_amount, m_calcEngine.getVolumeUnitsAbbr()));
+		group.add(new Statistic(getString(R.string.average), total_amount / fillups.size(), m_calcEngine.getVolumeUnitsAbbr()));
+		group.add(new Statistic(getString(R.string.maximum), max_amount, m_calcEngine.getVolumeUnitsAbbr()));
+		group.add(new Statistic(getString(R.string.minimum), min_amount, m_calcEngine.getVolumeUnitsAbbr()));
+		group.add(new Statistic(getString(R.string.last), fillups.get(fillups.size() - 1).getAmount(), m_calcEngine.getVolumeUnitsAbbr()));
+		group.add(new Statistic(String.format(getString(R.string.fuel_per), ten_thousand_miles, m_calcEngine.getDistanceUnitsAbbr()), fuel_per_10k, m_calcEngine.getVolumeUnitsAbbr()));
 
 		return group;
 	}
 
 	public StatisticsGroup calcExpenses(final List<FillUp> fillups) {
-		StatisticsGroup group = new StatisticsGroup("Fuel Expenses");
+		StatisticsGroup group = new StatisticsGroup(getString(R.string.fuel_expenses));
 
 		Calendar cal = Calendar.getInstance();
 		cal.setTimeInMillis(System.currentTimeMillis());
@@ -331,9 +331,9 @@ public class StatisticsView extends TabChildActivity {
 			}
 		}
 
-		group.add(new Statistic("Total", m_preferences.getCurrency(), total));
-		group.add(new Statistic("Last Month", m_preferences.getCurrency(), thirty_day_total));
-		group.add(new Statistic("Last Year", m_preferences.getCurrency(), yearly_total));
+		group.add(new Statistic(getString(R.string.total), m_preferences.getCurrency(), total));
+		group.add(new Statistic(getString(R.string.last_month), m_preferences.getCurrency(), thirty_day_total));
+		group.add(new Statistic(getString(R.string.last_year), m_preferences.getCurrency(), yearly_total));
 
 		return group;
 	}

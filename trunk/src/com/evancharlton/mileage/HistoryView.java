@@ -6,10 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.ContentUris;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -44,13 +41,11 @@ public class HistoryView extends TabChildActivity implements View.OnCreateContex
 
 	public static final int MENU_DELETE = Menu.FIRST;
 	public static final int MENU_EDIT = Menu.FIRST + 1;
-	public static final int DELETE_DIALOG_ID = 1;
 
 	public static final String TAG = "HistoryList";
 
 	private Map<Long, String> m_vehicleTitles = new HashMap<Long, String>();
 	private double m_avgMpg;
-	private AlertDialog m_deleteDialog;
 	private long m_deleteId;
 	private PreferencesProvider m_prefs;
 	private CalculationEngine m_calcEngine;
@@ -68,12 +63,6 @@ public class HistoryView extends TabChildActivity implements View.OnCreateContex
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.history);
-
-		m_deleteDialog = new AlertDialog.Builder(this).create();
-		m_deleteDialog.setMessage(getString(R.string.confirm_delete));
-		m_deleteDialog.setCancelable(false);
-		m_deleteDialog.setButton(getString(R.string.yes), m_deleteListener);
-		m_deleteDialog.setButton2(getString(R.string.no), m_deleteListener);
 
 		m_listView = (ListView) findViewById(android.R.id.list);
 		m_listView.setOnCreateContextMenuListener(this);
@@ -280,15 +269,8 @@ public class HistoryView extends TabChildActivity implements View.OnCreateContex
 		return super.onOptionsItemSelected(item);
 	}
 
-	public Dialog onCreateDialog(int id) {
-		switch (id) {
-			case DELETE_DIALOG_ID:
-				return m_deleteDialog;
-		}
-		return super.onCreateDialog(id);
-	}
-
-	private void delete() {
+	@Override
+	protected void delete() {
 		Uri uri = ContentUris.withAppendedId(FillUp.CONTENT_URI, m_deleteId);
 		getContentResolver().delete(uri, null, null);
 		onResume();
@@ -340,15 +322,6 @@ public class HistoryView extends TabChildActivity implements View.OnCreateContex
 				return true;
 			}
 			return false;
-		}
-	};
-
-	private DialogInterface.OnClickListener m_deleteListener = new DialogInterface.OnClickListener() {
-		public void onClick(DialogInterface dialog, int which) {
-			dialog.dismiss();
-			if (which == Dialog.BUTTON1) {
-				delete();
-			}
 		}
 	};
 }
