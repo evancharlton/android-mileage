@@ -236,8 +236,8 @@ public class AddFillUpView extends Activity implements Persistent {
 
 	protected void loadPrefs() {
 		PreferencesProvider prefs = PreferencesProvider.getInstance(AddFillUpView.this);
-		m_priceEdit.setHint(prefs.getString(R.array.unit_price_hints, SettingsView.VOLUME));
-		m_amountEdit.setHint(prefs.getString(R.array.unit_amount_hints, SettingsView.VOLUME));
+		m_priceEdit.setHint(prefs.getString(R.array.unit_price_hints, PreferencesProvider.VOLUME));
+		m_amountEdit.setHint(prefs.getString(R.array.unit_amount_hints, PreferencesProvider.VOLUME));
 	}
 
 	protected void showMessage(boolean success) {

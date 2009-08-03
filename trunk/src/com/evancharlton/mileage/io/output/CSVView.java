@@ -37,7 +37,7 @@ public class CSVView extends ExportView {
 					Cursor c = db.query(FillUpsProvider.FILLUPS_TABLE_NAME, FillUp.getProjection(), null, null, null, null, FillUp.DEFAULT_SORT_ORDER);
 					c.moveToFirst();
 					while (!c.isAfterLast()) {
-						FillUp f = new FillUp(CSVView.this, (CalculationEngine) null, c);
+						FillUp f = new FillUp((CalculationEngine) null, c);
 
 						// write each fill-up
 						csv.writeNext(f.toCSV(columns));

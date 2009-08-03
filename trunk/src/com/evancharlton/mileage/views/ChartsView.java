@@ -82,7 +82,7 @@ public class ChartsView extends TabChildActivity {
 		m_fuelPriceBtn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View arg0) {
 				XYSeries series = new XYSeries("Price of fuel");
-				Vehicle v = new Vehicle(ChartsView.this, m_vehicles.getSelectedItemId());
+				Vehicle v = new Vehicle(m_vehicles.getSelectedItemId());
 				List<FillUp> fillups = v.getAllFillUps(PreferencesProvider.getInstance(ChartsView.this).getCalculator());
 				int size = fillups.size();
 				int skip = calculateSkip(size, 50);
@@ -97,7 +97,7 @@ public class ChartsView extends TabChildActivity {
 		m_fuelAmountBtn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View arg0) {
 				XYSeries series = new XYSeries("Amount of fuel");
-				Vehicle v = new Vehicle(ChartsView.this, m_vehicles.getSelectedItemId());
+				Vehicle v = new Vehicle(m_vehicles.getSelectedItemId());
 				List<FillUp> fillups = v.getAllFillUps(PreferencesProvider.getInstance(ChartsView.this).getCalculator());
 				int size = fillups.size();
 				int skip = calculateSkip(size, 50);
@@ -112,7 +112,7 @@ public class ChartsView extends TabChildActivity {
 		m_distanceBtn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View arg0) {
 				XYSeries series = new XYSeries("Distance between fill-ups");
-				Vehicle v = new Vehicle(ChartsView.this, m_vehicles.getSelectedItemId());
+				Vehicle v = new Vehicle(m_vehicles.getSelectedItemId());
 				List<FillUp> fillups = v.getAllFillUps(PreferencesProvider.getInstance(ChartsView.this).getCalculator());
 				int size = fillups.size();
 				int skip = calculateSkip(size, 50);
@@ -127,7 +127,7 @@ public class ChartsView extends TabChildActivity {
 		m_fuelEconomyBtn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View arg0) {
 				XYSeries series = new XYSeries("Fuel economy");
-				Vehicle v = new Vehicle(ChartsView.this, m_vehicles.getSelectedItemId());
+				Vehicle v = new Vehicle(m_vehicles.getSelectedItemId());
 				List<FillUp> fillups = v.getAllFillUps(PreferencesProvider.getInstance(ChartsView.this).getCalculator());
 				int size = fillups.size();
 				int skip = calculateSkip(size, 50);
