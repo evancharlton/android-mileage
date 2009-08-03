@@ -126,7 +126,7 @@
 	<string name="service_interval_error_create_date">No start date was set!</string>
 	<string name="service_interval_error_create_odometer">Start mileage was never set, or is invalid.</string>
 	<string name="service_interval_error_duration">No interval duration has been specified, or is invalid.</string>
-	<string name="service_interval_error_distance">Interval duration has not been set, or is invalid.</string>
+	<string name="service_interval_error_distance">Interval distance has not been set, or is invalid.</string>
 	<string name="service_interval_error_vehicle_id">Vehicle ID was not set</string>
 	
 	<string name="settings_header_locale">Localization</string>
@@ -150,6 +150,8 @@
 	<string name="error_model">Model can not be blank!</string>
 	<string name="error_title">Title can not be blank!</string>
 	<string name="error_vehicle">No vehicle ID set!</string>
+	
+	<string name="input_label_fillup">Fill-Up Input</string>
 	
 	<string name="help">Help</string>
 	<string name="help_import_export">Select an item to import or export that file format</string>

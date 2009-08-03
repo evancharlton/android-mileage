@@ -5,9 +5,18 @@
 		<item>Litres</item>
 		<item>Imperial Gallons</item>
 	</string-array>
+	<string-array name="values_volume">
+		<item>0</item>
+		<item>1</item>
+		<item>2</item>
+	</string-array>
 	<string-array name="units_distance">
 		<item>Miles</item>
 		<item>Kilometers</item>
+	</string-array>
+	<string-array name="values_distance">
+		<item>0</item>
+		<item>1</item>
 	</string-array>
 	<string-array name="units_distance_abbr">
 		<item>Mi</item>
@@ -24,7 +33,17 @@
 		<item>Litres per 100 km</item>
 		<item>Imp. Gal. per 100 km</item>
 	</string-array>
-    <!-- I know that this is terrible, but I don't have i18n, so I have to do this crap -->
+	<string-array name="values_economy">
+		<item>0</item>
+		<item>1</item>
+		<item>2</item>
+		<item>3</item>
+		<item>4</item>
+		<item>5</item>
+		<item>6</item>
+		<item>7</item>
+		<item>8</item>
+	</string-array>
     <string-array name="unit_price_hints">
     	<item>Price per gallon</item>
     	<item>Price per litre</item>
@@ -34,17 +53,6 @@
     	<item>Gallons of fuel</item>
     	<item>Litres of fuel</item>
     	<item>Gallons of fuel</item>
-    </string-array>
-    <string-array name="orientations">
-    	<item>Device</item>
-    	<item>Keyboard</item>
-    </string-array>
-    
-    <string-array name="currencies">
-    	<item>$</item>
-    	<item>€</item>
-    	<item>£</item>
-    	<item>Kč</item>
     </string-array>
     <string-array name="date_formats">
     	<item>MM/DD/YY</item>
