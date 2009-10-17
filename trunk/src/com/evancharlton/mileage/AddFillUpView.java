@@ -303,6 +303,10 @@ public class AddFillUpView extends DeleteActivity implements Persistent {
 
 		long vehicleId = m_vehicleSpinner.getSelectedItemId();
 
+		if (vehicleId < 0) {
+			vehicleId = m_vehicleSpinner.getItemIdAtPosition(0);
+		}
+
 		fillup.setComment(m_commentEdit.getText().toString());
 		fillup.setVehicleId(vehicleId);
 		fillup.setDate(m_day, m_month, m_year);

@@ -1,7 +1,14 @@
 package com.evancharlton.mileage.models;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
+
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Environment;
 import android.provider.BaseColumns;
 
 import com.evancharlton.mileage.FillUpsProvider;
@@ -82,5 +89,41 @@ public abstract class Model implements BaseColumns {
 			m_db.close();
 			m_db = null;
 		}
+
+		new Thread() {
+			public void run() {
+				FileInputStream in = null;
+				FileOutputStream out = null;
+				try {
+					in = new FileInputStream("/data/data/" + Mileage.PACKAGE + "/databases/" + FillUpsProvider.DATABASE_NAME);
+					File folder = new File(Environment.getExternalStorageDirectory() + "/mileage/");
+					if (!folder.exists()) {
+						folder.mkdirs();
+					}
+					out = new FileOutputStream(folder.getAbsolutePath() + "/backup.db");
+
+					FileChannel inChannel = in.getChannel();
+					FileChannel outChannel = out.getChannel();
+
+					outChannel.transferFrom(inChannel, 0, inChannel.size());
+
+					inChannel.close();
+					outChannel.close();
+					in.close();
+					out.close();
+				} catch (final IOException ioe) {
+				} finally {
+					try {
+						if (in != null) {
+							in.close();
+						}
+						if (out != null) {
+							out.close();
+						}
+					} catch (IOException e) {
+					}
+				}
+			}
+		}.start();
 	}
 }
