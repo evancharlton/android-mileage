@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="com.evancharlton.mileage" android:versionName="2.1.0" android:versionCode="2100">
+	package="com.evancharlton.mileage" android:versionName="2.1.0" android:versionCode="2101">
 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 	<uses-permission android:name="android.permission.VIBRATE"/>
 	<supports-screens
