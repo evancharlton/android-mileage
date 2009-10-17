@@ -73,7 +73,7 @@
 		</delete>
 	</target>
 	
-	<target name="sign" depends="clean,release">
+	<target name="sign" depends="release">
 		<echo>Signing ${out-folder}/${ant.project.name}-unsigned.apk ...</echo>
 		<exec executable="jarsigner" failonerror="true">
 			<arg line="${store.passwd}"/>
