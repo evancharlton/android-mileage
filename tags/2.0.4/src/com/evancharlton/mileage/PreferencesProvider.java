@@ -200,7 +200,7 @@ public class PreferencesProvider {
 
 	public String format(Date d) {
 		SimpleDateFormat format = new SimpleDateFormat();
-		format.applyPattern(getString(SettingsView.DATE, "MM/DD/YY"));
+		format.applyPattern(getString(SettingsView.DATE, "MM/DD/yy"));
 		return format.format(d);
 	}
 
