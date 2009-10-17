@@ -16,7 +16,7 @@ public class PreferencesProvider {
 	private SharedPreferences m_settings;
 	private CalculationEngine m_calcEngine;
 
-	private static final String PREFS_NAME = "MileageSettings";
+	private static final String PREFS_NAME = "com.evancharlton.mileage_preferences";
 	private static final int BOOLEAN = 0;
 	private static final int FLOAT = 1;
 	private static final int INT = 2;
@@ -106,7 +106,7 @@ public class PreferencesProvider {
 	}
 
 	public int getInt(String key, int defValue) {
-		return m_settings.getInt(key, defValue);
+		return Integer.parseInt(getString(key, "0"));
 	}
 
 	public long getLong(String key, long defValue) {
@@ -120,15 +120,15 @@ public class PreferencesProvider {
 	public String getString(int array, String key) {
 		try {
 			int index = getInt(key, 0);
-			String data = m_activity.getResources().getStringArray(array)[index];
-			return data;
+			String[] items = m_activity.getResources().getStringArray(array);
+			return items[index];
 		} catch (IndexOutOfBoundsException e) {
 			return "";
 		}
 	}
 
 	public String getCurrency() {
-		return m_settings.getString("currency_pref", "$");
+		return getString(SettingsView.CURRENCY, "#");
 	}
 
 	public CalculationEngine getCalculator() {
@@ -200,7 +200,7 @@ public class PreferencesProvider {
 
 	public String format(Date d) {
 		SimpleDateFormat format = new SimpleDateFormat();
-		format.applyPattern(getString(R.array.date_patterns, SettingsView.DATE));
+		format.applyPattern(getString(SettingsView.DATE, "MM/DD/YY"));
 		return format.format(d);
 	}
 
