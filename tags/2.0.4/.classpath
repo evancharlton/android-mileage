@@ -4,6 +4,5 @@
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry kind="lib" path="libs/opencsv-1.8.jar"/>
 	<classpathentry kind="src" path="gen"/>
-	<classpathentry kind="lib" path="libs/achartengine-0.3.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
