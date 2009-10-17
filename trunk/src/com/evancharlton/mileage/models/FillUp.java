@@ -1,5 +1,6 @@
 package com.evancharlton.mileage.models;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -475,7 +476,7 @@ public class FillUp extends Model {
 			} else if (col.equals(FillUp.COMMENT) || col.equals(FillUp.PLAINTEXT.get(FillUp.COMMENT))) {
 				data[i] = m_comment;
 			} else if (col.equals(FillUp.DATE) || col.equals(FillUp.PLAINTEXT.get(FillUp.DATE))) {
-				data[i] = String.valueOf(m_date.getTimeInMillis());
+				data[i] = String.valueOf(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(m_date.getTime()));
 			} else if (col.equals(FillUp.LATITUDE) || col.equals(FillUp.PLAINTEXT.get(FillUp.LATITUDE))) {
 				data[i] = String.valueOf(m_latitude);
 			} else if (col.equals(FillUp.LONGITUDE) || col.equals(FillUp.PLAINTEXT.get(FillUp.LONGITUDE))) {
