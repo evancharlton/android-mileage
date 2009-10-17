@@ -128,7 +128,7 @@ public class PreferencesProvider {
 	}
 
 	public String getCurrency() {
-		return getString(R.array.currencies, SettingsView.CURRENCY);
+		return m_settings.getString("currency_pref", "$");
 	}
 
 	public CalculationEngine getCalculator() {

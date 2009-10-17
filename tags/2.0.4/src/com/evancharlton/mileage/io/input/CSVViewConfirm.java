@@ -249,7 +249,7 @@ public class CSVViewConfirm extends Dialog {
 				dlg.setTitle(R.string.error);
 			}
 			dlg.setMessage(data.getString(CSVView.MESSAGE) + ((CSVView) m_context).getInput());
-			dlg.setButton(m_context.getString(R.string.ok), new DialogInterface.OnClickListener() {
+			dlg.setButton(m_context.getString(android.R.string.ok), new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int which) {
 					dialog.dismiss();
 				}

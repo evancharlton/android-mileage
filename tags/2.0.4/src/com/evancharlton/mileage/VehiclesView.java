@@ -41,8 +41,8 @@ public class VehiclesView extends ListActivity implements View.OnCreateContextMe
 		m_deleteDialog = new AlertDialog.Builder(this).create();
 		m_deleteDialog.setMessage(getString(R.string.confirm_delete));
 		m_deleteDialog.setCancelable(false);
-		m_deleteDialog.setButton(getString(R.string.yes), m_deleteListener);
-		m_deleteDialog.setButton2(getString(R.string.no), m_deleteListener);
+		m_deleteDialog.setButton(getString(android.R.string.yes), m_deleteListener);
+		m_deleteDialog.setButton2(getString(android.R.string.no), m_deleteListener);
 
 		setDefaultKeyMode(DEFAULT_KEYS_SHORTCUT);
 

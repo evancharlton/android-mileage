@@ -83,13 +83,13 @@ public class ServiceIntervalsView extends ListActivity {
 		m_deleteDialog = new AlertDialog.Builder(this).create();
 		m_deleteDialog.setMessage(getString(R.string.confirm_delete));
 		m_deleteDialog.setCancelable(false);
-		m_deleteDialog.setButton(getString(R.string.yes), m_deleteListener);
-		m_deleteDialog.setButton2(getString(R.string.no), m_deleteListener);
+		m_deleteDialog.setButton(getString(android.R.string.yes), m_deleteListener);
+		m_deleteDialog.setButton2(getString(android.R.string.no), m_deleteListener);
 
 		m_deleteExpiredDialog = new AlertDialog.Builder(this).create();
 		m_deleteExpiredDialog.setCancelable(false);
-		m_deleteExpiredDialog.setButton(getString(R.string.yes), m_deleteExpiredListener);
-		m_deleteExpiredDialog.setButton2(getString(R.string.no), m_deleteExpiredListener);
+		m_deleteExpiredDialog.setButton(getString(android.R.string.yes), m_deleteExpiredListener);
+		m_deleteExpiredDialog.setButton2(getString(android.R.string.no), m_deleteExpiredListener);
 		m_deleteExpiredDialog.setButton3(getString(R.string.service_interval_remind), m_deleteExpiredListener);
 
 		// see if we came here from a notification
