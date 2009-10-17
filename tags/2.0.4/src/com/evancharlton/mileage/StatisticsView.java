@@ -351,7 +351,9 @@ public class StatisticsView extends TabChildActivity {
 
 		for (FillUp fillup : fillups) {
 			double cost = fillup.calcCost();
-			total_cost += cost;
+			if (fillup.getPrevious() != null) {
+				total_cost += cost;
+			}
 			if (cost < min_cost) {
 				min_cost = cost;
 			}
@@ -360,7 +362,7 @@ public class StatisticsView extends TabChildActivity {
 			}
 
 			double cost_per_mile = fillup.calcCostPerDistance();
-			if (cost_per_mile < 0) {
+			if (cost_per_mile <= 0) {
 				continue;
 			}
 			if (cost_per_mile < min_cost_per_mile) {
@@ -382,12 +384,12 @@ public class StatisticsView extends TabChildActivity {
 		String distanceUnits = m_calcEngine.getDistanceUnitsAbbr().trim();
 
 		group.add(new Statistic("Average", m_preferences.getCurrency(), avg_cost));
-		group.add(new Statistic(String.format("Average Cost per %s", distanceUnits), m_preferences.getCurrency(), avg_cost_per_mile));
 		group.add(new Statistic("Maximum", m_preferences.getCurrency(), max_cost));
-		group.add(new Statistic(String.format("Maximum cost per %s", distanceUnits), m_preferences.getCurrency(), max_cost_per_mile));
 		group.add(new Statistic("Minimum", m_preferences.getCurrency(), min_cost));
-		group.add(new Statistic(String.format("Minimum cost per %s", distanceUnits), m_preferences.getCurrency(), min_cost_per_mile));
 		group.add(new Statistic("Last", m_preferences.getCurrency(), last_cost));
+		group.add(new Statistic(String.format("Average Cost per %s", distanceUnits), m_preferences.getCurrency(), avg_cost_per_mile));
+		group.add(new Statistic(String.format("Maximum cost per %s", distanceUnits), m_preferences.getCurrency(), max_cost_per_mile));
+		group.add(new Statistic(String.format("Minimum cost per %s", distanceUnits), m_preferences.getCurrency(), min_cost_per_mile));
 		group.add(new Statistic(String.format("Last Cost per %s", distanceUnits), m_preferences.getCurrency(), last_cost_per_mile));
 
 		return group;

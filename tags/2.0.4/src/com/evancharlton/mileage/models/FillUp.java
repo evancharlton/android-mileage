@@ -300,11 +300,9 @@ public class FillUp extends Model {
 	}
 
 	public double calcCostPerDistance() {
-		FillUp previous = getPrevious();
-		if (previous == null) {
-			return -1D;
-		}
 		double distance = calcDistance();
+		if (distance < 0)
+			return 0;
 		double cost = calcCost();
 		return cost / distance;
 	}
