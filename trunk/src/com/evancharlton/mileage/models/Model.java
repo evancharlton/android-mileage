@@ -90,40 +90,42 @@ public abstract class Model implements BaseColumns {
 			m_db = null;
 		}
 
-		new Thread() {
-			public void run() {
-				FileInputStream in = null;
-				FileOutputStream out = null;
-				try {
-					in = new FileInputStream("/data/data/" + Mileage.PACKAGE + "/databases/" + FillUpsProvider.DATABASE_NAME);
-					File folder = new File(Environment.getExternalStorageDirectory() + "/mileage/");
-					if (!folder.exists()) {
-						folder.mkdirs();
-					}
-					out = new FileOutputStream(folder.getAbsolutePath() + "/backup.db");
-
-					FileChannel inChannel = in.getChannel();
-					FileChannel outChannel = out.getChannel();
-
-					outChannel.transferFrom(inChannel, 0, inChannel.size());
-
-					inChannel.close();
-					outChannel.close();
-					in.close();
-					out.close();
-				} catch (final IOException ioe) {
-				} finally {
+		if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) {
+			new Thread() {
+				public void run() {
+					FileInputStream in = null;
+					FileOutputStream out = null;
 					try {
-						if (in != null) {
-							in.close();
+						in = new FileInputStream("/data/data/" + Mileage.PACKAGE + "/databases/" + FillUpsProvider.DATABASE_NAME);
+						File folder = new File(Environment.getExternalStorageDirectory() + "/mileage/");
+						if (!folder.exists()) {
+							folder.mkdirs();
 						}
-						if (out != null) {
-							out.close();
+						out = new FileOutputStream(folder.getAbsolutePath() + "/backup.db");
+
+						FileChannel inChannel = in.getChannel();
+						FileChannel outChannel = out.getChannel();
+
+						outChannel.transferFrom(inChannel, 0, inChannel.size());
+
+						inChannel.close();
+						outChannel.close();
+						in.close();
+						out.close();
+					} catch (final IOException ioe) {
+					} finally {
+						try {
+							if (in != null) {
+								in.close();
+							}
+							if (out != null) {
+								out.close();
+							}
+						} catch (IOException e) {
 						}
-					} catch (IOException e) {
 					}
 				}
-			}
-		}.start();
+			}.start();
+		}
 	}
 }
