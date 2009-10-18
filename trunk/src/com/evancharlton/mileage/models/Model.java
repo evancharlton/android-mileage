@@ -90,7 +90,7 @@ public abstract class Model implements BaseColumns {
 			m_db = null;
 		}
 
-		if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) {
+		if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
 			new Thread() {
 				public void run() {
 					FileInputStream in = null;

@@ -95,6 +95,10 @@
 	
 	<string name="partial_fillup">Tank was not filled to the top</string>
 	
+	<string name="restore_database">Restore from latest backup</string>
+	<string name="backup_restored">Backup Restored!</string>
+	<string name="backup_restored_msg">Your database has been successfully restored from backup!</string>
+	
 	<string name="charts_fuel_price">Fuel Price</string>
 	<string name="charts_fuel_amount">Amount of Fuel</string>
 	<string name="charts_fillup_cost">Fill-up Cost</string>
