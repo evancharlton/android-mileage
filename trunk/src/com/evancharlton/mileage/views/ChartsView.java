@@ -32,6 +32,8 @@ public class ChartsView extends TabChildActivity {
 	private Button m_fuelAmountBtn;
 	private Button m_distanceBtn;
 	private Button m_fuelEconomyBtn;
+	private Button m_costBtn;
+	private Button m_odometerBtn;
 	private Spinner m_vehicles;
 
 	public void onCreate(Bundle savedInstanceState) {
@@ -78,10 +80,12 @@ public class ChartsView extends TabChildActivity {
 		m_fuelAmountBtn = (Button) findViewById(R.id.fuel_amount_btn);
 		m_distanceBtn = (Button) findViewById(R.id.delta_distance_btn);
 		m_fuelEconomyBtn = (Button) findViewById(R.id.fuel_economy_btn);
+		m_costBtn = (Button) findViewById(R.id.fillup_cost_btn);
+		m_odometerBtn = (Button) findViewById(R.id.vehicle_odometer_btn);
 
 		m_fuelPriceBtn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View arg0) {
-				XYSeries series = new XYSeries("Price of fuel");
+				XYSeries series = new XYSeries(getString(R.string.charts_fuel_price));
 				Vehicle v = new Vehicle(m_vehicles.getSelectedItemId());
 				List<FillUp> fillups = v.getAllFillUps(PreferencesProvider.getInstance(ChartsView.this).getCalculator());
 				int size = fillups.size();
@@ -96,7 +100,7 @@ public class ChartsView extends TabChildActivity {
 
 		m_fuelAmountBtn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View arg0) {
-				XYSeries series = new XYSeries("Amount of fuel");
+				XYSeries series = new XYSeries(getString(R.string.charts_fuel_amount));
 				Vehicle v = new Vehicle(m_vehicles.getSelectedItemId());
 				List<FillUp> fillups = v.getAllFillUps(PreferencesProvider.getInstance(ChartsView.this).getCalculator());
 				int size = fillups.size();
@@ -109,14 +113,29 @@ public class ChartsView extends TabChildActivity {
 			}
 		});
 
-		m_distanceBtn.setOnClickListener(new View.OnClickListener() {
+		m_costBtn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View arg0) {
-				XYSeries series = new XYSeries("Distance between fill-ups");
+				XYSeries series = new XYSeries(getString(R.string.charts_fillup_cost));
 				Vehicle v = new Vehicle(m_vehicles.getSelectedItemId());
 				List<FillUp> fillups = v.getAllFillUps(PreferencesProvider.getInstance(ChartsView.this).getCalculator());
 				int size = fillups.size();
 				int skip = calculateSkip(size, 50);
 				for (int i = 0; i < size; i += skip) {
+					FillUp fillup = fillups.get(i);
+					series.add(fillup.getDate().getTimeInMillis(), fillup.calcCost());
+				}
+				showChart(series);
+			}
+		});
+
+		m_distanceBtn.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View arg0) {
+				XYSeries series = new XYSeries(getString(R.string.charts_delta_distance));
+				Vehicle v = new Vehicle(m_vehicles.getSelectedItemId());
+				List<FillUp> fillups = v.getAllFillUps(PreferencesProvider.getInstance(ChartsView.this).getCalculator());
+				int size = fillups.size();
+				int skip = calculateSkip(size, 50);
+				for (int i = 1; i < size; i += skip) {
 					FillUp fillup = fillups.get(i);
 					series.add(fillup.getDate().getTimeInMillis(), fillup.calcDistance());
 				}
@@ -124,9 +143,24 @@ public class ChartsView extends TabChildActivity {
 			}
 		});
 
+		m_odometerBtn.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View arg0) {
+				XYSeries series = new XYSeries(getString(R.string.charts_odometer));
+				Vehicle v = new Vehicle(m_vehicles.getSelectedItemId());
+				List<FillUp> fillups = v.getAllFillUps(PreferencesProvider.getInstance(ChartsView.this).getCalculator());
+				int size = fillups.size();
+				int skip = calculateSkip(size, 50);
+				for (int i = 1; i < size; i += skip) {
+					FillUp fillup = fillups.get(i);
+					series.add(fillup.getDate().getTimeInMillis(), fillup.getOdometer());
+				}
+				showChart(series);
+			}
+		});
+
 		m_fuelEconomyBtn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View arg0) {
-				XYSeries series = new XYSeries("Fuel economy");
+				XYSeries series = new XYSeries(getString(R.string.charts_fuel_economy));
 				Vehicle v = new Vehicle(m_vehicles.getSelectedItemId());
 				List<FillUp> fillups = v.getAllFillUps(PreferencesProvider.getInstance(ChartsView.this).getCalculator());
 				int size = fillups.size();

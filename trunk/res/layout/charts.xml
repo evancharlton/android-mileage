@@ -33,10 +33,22 @@
 				android:text="@string/charts_fuel_amount"
 			/>
 			<Button
+				android:id="@+id/fillup_cost_btn"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:text="@string/charts_fillup_cost"
+			/>
+			<Button
 				android:id="@+id/delta_distance_btn"
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
 				android:text="@string/charts_delta_distance"
+			/>
+			<Button
+				android:id="@+id/vehicle_odometer_btn"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:text="@string/charts_odometer"
 			/>
 			<Button
 				android:id="@+id/fuel_economy_btn"

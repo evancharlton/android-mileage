@@ -97,8 +97,10 @@
 	
 	<string name="charts_fuel_price">Fuel Price</string>
 	<string name="charts_fuel_amount">Amount of Fuel</string>
+	<string name="charts_fillup_cost">Fill-up Cost</string>
 	<string name="charts_fuel_economy">Fuel Economy</string>
 	<string name="charts_delta_distance">Distance Between Fill-ups</string>
+	<string name="charts_odometer">Vehicle Odometer</string>
 	
 	<string name="import_export">Import / Export</string>
 	<string name="export_header">Export</string>	
