@@ -25,7 +25,6 @@ public class VehiclesView extends DeleteActivity implements View.OnCreateContext
 	public static final int MENU_DEFAULT = Menu.FIRST;
 	public static final int MENU_EDIT = Menu.FIRST + 1;
 	public static final int MENU_DELETE = Menu.FIRST + 2;
-	public static final int DELETE_DIALOG_ID = 1;
 
 	private long m_deleteId;
 

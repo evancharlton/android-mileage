@@ -131,7 +131,7 @@ public class ChartsView extends TabChildActivity {
 				List<FillUp> fillups = v.getAllFillUps(PreferencesProvider.getInstance(ChartsView.this).getCalculator());
 				int size = fillups.size();
 				int skip = calculateSkip(size, 50);
-				for (int i = 0; i < size; i += skip) {
+				for (int i = 1; i < size; i += skip) {
 					FillUp fillup = fillups.get(i);
 					series.add(fillup.getDate().getTimeInMillis(), fillup.calcEconomy());
 				}
