@@ -209,8 +209,6 @@ public class PreferencesProvider {
 	}
 
 	public String format(Date d) {
-		SimpleDateFormat format = new SimpleDateFormat();
-		format.applyPattern(getString(PreferencesProvider.DATE, "MM/dd/yy"));
-		return format.format(d);
+		return new SimpleDateFormat(getString(PreferencesProvider.DATE, "MM/dd/yyyy")).format(d);
 	}
 }
