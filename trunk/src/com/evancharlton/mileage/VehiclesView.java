@@ -40,6 +40,7 @@ public class VehiclesView extends DeleteActivity implements View.OnCreateContext
 			intent.setData(Vehicle.CONTENT_URI);
 		}
 
+		setContentView(R.layout.vehicles_list);
 		getListView().setOnCreateContextMenuListener(this);
 
 		Cursor c = managedQuery(intent.getData(), Vehicle.getProjection(), null, null, Vehicle.DEFAULT_SORT_ORDER);
