@@ -42,7 +42,7 @@ public class HistoryView extends TabChildActivity implements View.OnCreateContex
 	public static final int MENU_DELETE = Menu.FIRST;
 	public static final int MENU_EDIT = Menu.FIRST + 1;
 
-	public static final String TAG = "HistoryList";
+	public static final String TAG = "HistoryList"; //$NON-NLS-1$
 
 	private Map<Long, String> m_vehicleTitles = new HashMap<Long, String>();
 	private double m_avgMpg;
@@ -154,7 +154,7 @@ public class HistoryView extends TabChildActivity implements View.OnCreateContex
 		String[] selectionArgs;
 		long vehicle_id;
 		if (m_vehicles.getVisibility() != View.GONE) {
-			selection = FillUp.VEHICLE_ID + " = ?";
+			selection = FillUp.VEHICLE_ID + " = ?"; //$NON-NLS-1$
 			vehicle_id = m_vehicles.getSelectedItemId();
 			selectionArgs = new String[] {
 				String.valueOf(vehicle_id)
@@ -162,11 +162,11 @@ public class HistoryView extends TabChildActivity implements View.OnCreateContex
 		} else {
 			Cursor vehicleCursor = managedQuery(Vehicle.CONTENT_URI, new String[] {
 				Vehicle._ID
-			}, null, null, Vehicle.DEFAULT + " desc");
+			}, null, null, Vehicle.DEFAULT + " desc"); //$NON-NLS-1$
 			vehicleCursor.moveToFirst();
 			vehicle_id = vehicleCursor.getLong(0);
 
-			selection = FillUp.VEHICLE_ID + " = (select " + Vehicle._ID + " from " + FillUpsProvider.VEHICLES_TABLE_NAME + " order by " + Vehicle.DEFAULT + " desc limit 1)";
+			selection = FillUp.VEHICLE_ID + " = (select " + Vehicle._ID + " from " + FillUpsProvider.VEHICLES_TABLE_NAME + " order by " + Vehicle.DEFAULT + " desc limit 1)"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 			selectionArgs = null;
 		}
 
@@ -286,7 +286,7 @@ public class HistoryView extends TabChildActivity implements View.OnCreateContex
 				text = m_prefs.format(gallons) + m_calcEngine.getVolumeUnitsAbbr();
 			} else if (columnIndex == COL_PRICE) {
 				double price = cursor.getDouble(columnIndex);
-				text = m_prefs.getCurrency() + m_prefs.format(price) + "/" + m_calcEngine.getVolumeUnitsAbbr().trim();
+				text = m_prefs.getCurrency() + m_prefs.format(price) + "/" + m_calcEngine.getVolumeUnitsAbbr().trim(); //$NON-NLS-1$
 			} else if (columnIndex == COL_TIMESTAMP) {
 				long time = cursor.getLong(columnIndex);
 				Date date = new Date(time);
@@ -314,7 +314,7 @@ public class HistoryView extends TabChildActivity implements View.OnCreateContex
 						text = m_prefs.format(mpg) + m_calcEngine.getEconomyUnits();
 					}
 				} else {
-					text = "";
+					text = ""; //$NON-NLS-1$
 				}
 			}
 			if (text != null) {

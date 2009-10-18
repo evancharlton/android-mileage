@@ -11,7 +11,7 @@
 		android:entries="@array/units_volume"
 		android:entryValues="@array/values_volume"
 		android:title="Volume"
-		android:summary="Units of volume to use when recording fill-ups"
+		android:summary="@string/settings_volume_summary"
 	/>
 	<ListPreference
 		android:key="distance_pref"
@@ -19,7 +19,7 @@
 		android:entries="@array/units_distance"
 		android:entryValues="@array/values_distance"
 		android:title="Distance"
-		android:summary="Units of distance to use when recording fill-ups"
+		android:summary="@string/settings_distance_summary"
 	/>
 	<ListPreference
 		android:key="economy_pref"
@@ -27,7 +27,7 @@
 		android:entries="@array/units_economy"
 		android:entryValues="@array/values_economy"
 		android:title="Fuel Economy"
-		android:summary="Units to use when calculating fuel economy"
+		android:summary="@string/settings_economy_summary"
 	/>
 	<ListPreference
 		android:key="date_pref"
@@ -35,12 +35,12 @@
 		android:entries="@array/date_formats"
 		android:entryValues="@array/date_patterns"
 		android:title="Date format"
-		android:summary="What format to use when displaying dates"
+		android:summary="@string/settings_date_summary"
 	/>
 	<EditTextPreference
 		android:key="currency_pref"
 		android:defaultValue="$"
 		android:title="Currency"
-		android:summary="What currency symbol to use"
+		android:summary="@string/settings_currency_summary"
 	/>
 </PreferenceScreen>

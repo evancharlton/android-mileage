@@ -15,8 +15,8 @@ import com.evancharlton.mileage.views.ChartsView;
 import com.evancharlton.mileage.views.intervals.ServiceIntervalsView;
 
 public class Mileage extends TabActivity {
-	public static final String EXTRA_IGNORE_STATE = "ignore-state";
-	public static final String PACKAGE = "com.evancharlton.mileage";
+	public static final String EXTRA_IGNORE_STATE = "ignore-state"; //$NON-NLS-1$
+	public static final String PACKAGE = "com.evancharlton.mileage"; //$NON-NLS-1$
 	private TabHost m_tabHost;
 
 	private static final int MENU_SETTINGS = Menu.FIRST;
@@ -24,8 +24,8 @@ public class Mileage extends TabActivity {
 	private static final int MENU_VEHICLES = Menu.FIRST + 2;
 	private static final int MENU_SERVICE_INTERVALS = Menu.FIRST + 3;
 
-	private static final String CURRENT_TAB = "current_tab";
-	private static final String CURRENT_VIEW = "current_view";
+	private static final String CURRENT_TAB = "current_tab"; //$NON-NLS-1$
+	private static final String CURRENT_VIEW = "current_view"; //$NON-NLS-1$
 
 	private int m_selectedVehicleIndex = -1;
 
@@ -73,7 +73,7 @@ public class Mileage extends TabActivity {
 		Intent i = new Intent();
 		i.setClass(Mileage.this, AddFillUpView.class);
 
-		TabSpec spec = m_tabHost.newTabSpec("fillup");
+		TabSpec spec = m_tabHost.newTabSpec("fillup"); //$NON-NLS-1$
 		spec.setIndicator(getString(R.string.fillup), getResources().getDrawable(R.drawable.gas_i));
 		spec.setContent(i);
 		m_tabHost.addTab(spec);
@@ -83,7 +83,7 @@ public class Mileage extends TabActivity {
 		Intent i = new Intent();
 		i.setClass(Mileage.this, HistoryView.class);
 
-		TabSpec spec = m_tabHost.newTabSpec("fillup");
+		TabSpec spec = m_tabHost.newTabSpec("fillup"); //$NON-NLS-1$
 		spec.setIndicator(getString(R.string.fillup_history), getResources().getDrawable(R.drawable.history_i));
 		spec.setContent(i);
 		m_tabHost.addTab(spec);
@@ -93,7 +93,7 @@ public class Mileage extends TabActivity {
 		Intent i = new Intent();
 		i.setClass(Mileage.this, StatisticsView.class);
 
-		TabSpec spec = m_tabHost.newTabSpec("fillup");
+		TabSpec spec = m_tabHost.newTabSpec("fillup"); //$NON-NLS-1$
 		spec.setIndicator(getString(R.string.statistics), getResources().getDrawable(R.drawable.statistics_i));
 		spec.setContent(i);
 		m_tabHost.addTab(spec);
@@ -103,7 +103,7 @@ public class Mileage extends TabActivity {
 		Intent i = new Intent();
 		i.setClass(Mileage.this, ChartsView.class);
 
-		TabSpec spec = m_tabHost.newTabSpec("fillup");
+		TabSpec spec = m_tabHost.newTabSpec("fillup"); //$NON-NLS-1$
 		spec.setIndicator(getString(R.string.charts), getResources().getDrawable(R.drawable.charts_i));
 		spec.setContent(i);
 		m_tabHost.addTab(spec);

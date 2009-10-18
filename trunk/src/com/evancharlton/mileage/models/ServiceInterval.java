@@ -240,7 +240,7 @@ public class ServiceInterval extends Model {
 		Intent i = new Intent(context, ServiceIntervalsView.class);
 
 		Vehicle v = new Vehicle(m_vehicleId);
-		String description = String.format("Due for %s", v.getTitle());
+		String description = String.format(context.getString(R.string.service_interval_due), v.getTitle());
 
 		Notification notification = new Notification(R.drawable.gasbuttonx, getDescription(), System.currentTimeMillis());
 		i.putExtra(ServiceInterval._ID, m_id);

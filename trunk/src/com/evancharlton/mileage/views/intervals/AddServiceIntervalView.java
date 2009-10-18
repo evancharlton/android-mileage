@@ -59,27 +59,32 @@ public class AddServiceIntervalView extends Activity {
 	protected static final String DURATION = "duration";
 	protected static final String DURATION_UNITS = "duration_units";
 	protected static final String DESCRIPTION = "description";
+	private static final long MONTH;
 
-	protected static final ArrayList<PresetServiceInterval> PRESETS = new ArrayList<PresetServiceInterval>();
+	protected static ArrayList<PresetServiceInterval> PRESETS = new ArrayList<PresetServiceInterval>();
 
 	static {
 		Calendar cal = Calendar.getInstance();
 		cal.setTimeInMillis(0);
 		cal.add(Calendar.MONTH, 1);
-		final long MONTH = cal.getTimeInMillis();
+		MONTH = cal.getTimeInMillis();
 		cal = null;
-		PRESETS.add(new PresetServiceInterval(3000, MONTH * 3, "Oil Change (standard)"));
-		PRESETS.add(new PresetServiceInterval(10000, MONTH * 10, "Oil Change (synthetic)"));
-		PRESETS.add(new PresetServiceInterval(15000, MONTH * 15, "Replace Air Filter"));
-		PRESETS.add(new PresetServiceInterval(30000, MONTH * 30, "Replace Power Steering Fluid"));
-		PRESETS.add(new PresetServiceInterval(25000, MONTH * 25, "Replace Transmission Fluid"));
-		PRESETS.add(new PresetServiceInterval(60000, MONTH * 60, "Replace Timing Belt"));
-		PRESETS.add(new PresetServiceInterval(25000, MONTH * 25, "Replace Fuel Filter"));
 	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		if (PRESETS.size() == 0) {
+			PRESETS.add(new PresetServiceInterval(0, 0, getString(R.string.preset_custom)));
+			PRESETS.add(new PresetServiceInterval(3000, MONTH * 3, getString(R.string.preset_oil_change_standard)));
+			PRESETS.add(new PresetServiceInterval(10000, MONTH * 10, getString(R.string.preset_oil_change_synthetic)));
+			PRESETS.add(new PresetServiceInterval(15000, MONTH * 15, getString(R.string.preset_air_filter)));
+			PRESETS.add(new PresetServiceInterval(30000, MONTH * 30, getString(R.string.preset_power_steering)));
+			PRESETS.add(new PresetServiceInterval(25000, MONTH * 25, getString(R.string.preset_transmission_fluid)));
+			PRESETS.add(new PresetServiceInterval(60000, MONTH * 60, getString(R.string.preset_timing_belt)));
+			PRESETS.add(new PresetServiceInterval(25000, MONTH * 25, getString(R.string.preset_fuel_filter)));
+		}
 
 		setContentView(R.layout.interval);
 

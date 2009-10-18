@@ -147,6 +147,16 @@
 	<string name="service_interval_error_duration">No interval duration has been specified, or is invalid.</string>
 	<string name="service_interval_error_distance">Interval distance has not been set, or is invalid.</string>
 	<string name="service_interval_error_vehicle_id">Vehicle ID was not set</string>
+	<string name="service_interval_due">Due for %s</string>
+	
+	<string name="preset_oil_change_standard">Oil Change (standard)</string>
+	<string name="preset_oil_change_synthetic">Oil Change (synthetic)</string>
+	<string name="preset_air_filter">Replace Air Filter</string>
+	<string name="preset_power_steering">Replace Power Steering Fluid</string>
+	<string name="preset_transmission_fluid">Replace Transmission Fluid</string>
+	<string name="preset_timing_belt">Replace Timing Belt</string>
+	<string name="preset_fuel_filter">Replace Fuel Filter</string>
+	<string name="preset_custom">Custom</string>
 	
 	<string name="settings_header_locale">Localization</string>
 	<string name="settings_date_format">Date:</string>
@@ -159,6 +169,11 @@
 	<string name="system_help">Calculation Help</string>
 	<string name="settings_header_application">Application</string>
 	<string name="settings_orientation">Orientation</string>
+	<string name="settings_volume_summary">Units to use when recording fill-ups</string>
+	<string name="settings_distance_summary">Units of distance to use when recording fill-ups</string>
+	<string name="settings_economy_summary">Units to use when calculating fuel economy</string>
+	<string name="settings_date_summary">What format to use when displaying dates</string>
+	<string name="settings_currency_summary">What currency symbol to use</string>
 		
 	<string name="error">Error!</string>
 	<string name="error_cost">Invalid number format for price of fuel.</string>

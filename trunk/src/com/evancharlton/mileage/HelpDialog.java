@@ -39,7 +39,7 @@ public class HelpDialog extends Dialog {
 		for (int i : strings) {
 			TextView text = new TextView(m_context);
 			String t = getContext().getString(i);
-			t = t.replaceAll("\\s+", " ");
+			t = t.replaceAll("\\s+", " "); //$NON-NLS-1$ //$NON-NLS-2$
 			text.setText(t);
 			text.setPadding(5, 10, 5, 10);
 			container.addView(text);
@@ -49,7 +49,7 @@ public class HelpDialog extends Dialog {
 	public void setContents(String contents) {
 		LinearLayout container = (LinearLayout) findViewById(R.id.help_container);
 		TextView text = new TextView(m_context);
-		text.setText(contents.replaceAll("\\s+", " "));
+		text.setText(contents.replaceAll("\\s+", " ")); //$NON-NLS-1$ //$NON-NLS-2$
 		text.setPadding(5, 10, 5, 10);
 		container.addView(text);
 	}
