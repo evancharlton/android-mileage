@@ -8,6 +8,7 @@ import java.util.List;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -35,10 +36,24 @@ public class StatisticsView extends TabChildActivity {
 
 	private ProgressDialog m_dlg = null;
 
+	private CalculationTask m_calculationTask;
+
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.statistics);
+
+		m_calculationTask = (CalculationTask) getLastNonConfigurationInstance();
+		if (m_calculationTask == null) {
+			m_calculationTask = new CalculationTask();
+		}
+		m_calculationTask.activity = this;
+	}
+
+	@Override
+	public Object onRetainNonConfigurationInstance() {
+		// FIXME: This is horrible. Why am I recalculating on screen rotation?
+		return m_calculationTask.getStatus() == AsyncTask.Status.FINISHED ? null : m_calculationTask;
 	}
 
 	public void onResume() {
@@ -107,7 +122,11 @@ public class StatisticsView extends TabChildActivity {
 		LinearLayout container = (LinearLayout) findViewById(R.id.stats_container);
 		container.removeAllViews();
 
-		new CalculationTask().execute(id);
+		if (m_calculationTask.getStatus() == AsyncTask.Status.PENDING) {
+			m_calculationTask.execute(id);
+		} else if (m_calculationTask.getStatus() == AsyncTask.Status.RUNNING) {
+			showDialog(DIALOG_STATS_PROGRESS);
+		}
 	}
 
 	@Override
@@ -120,6 +139,14 @@ public class StatisticsView extends TabChildActivity {
 				m_dlg.setIndeterminate(false);
 				m_dlg.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 				m_dlg.setProgress(0);
+				m_dlg.setOnCancelListener(new DialogInterface.OnCancelListener() {
+					@Override
+					public void onCancel(DialogInterface dialog) {
+						if (m_calculationTask != null && m_calculationTask.getStatus().equals(AsyncTask.Status.RUNNING)) {
+							m_calculationTask.cancel(true);
+						}
+					}
+				});
 				return m_dlg;
 		}
 		return null;
@@ -340,14 +367,19 @@ public class StatisticsView extends TabChildActivity {
 		return group;
 	}
 
-	private class CalculationTask extends AsyncTask<Long, StatisticsGroup, Boolean> {
-		private LinearLayout m_container = (LinearLayout) findViewById(R.id.stats_container);
+	private static class CalculationTask extends AsyncTask<Long, StatisticsGroup, Boolean> {
+		public StatisticsView activity;
+
 		private int t = 0;
 		private int p = 0;
 
+		private LinearLayout getContainer() {
+			return (LinearLayout) activity.findViewById(R.id.stats_container);
+		}
+
 		@Override
 		protected void onPreExecute() {
-			showDialog(DIALOG_STATS_PROGRESS);
+			activity.showDialog(DIALOG_STATS_PROGRESS);
 		}
 
 		@Override
@@ -360,7 +392,7 @@ public class StatisticsView extends TabChildActivity {
 				String.valueOf(ids[0])
 			};
 
-			Cursor c = managedQuery(FillUp.CONTENT_URI, projection, selection, selectionArgs, FillUp.ODOMETER + " ASC");
+			Cursor c = activity.getContentResolver().query(FillUp.CONTENT_URI, projection, selection, selectionArgs, FillUp.ODOMETER + " ASC");
 			c.moveToFirst();
 
 			t = c.getCount();
@@ -369,7 +401,7 @@ public class StatisticsView extends TabChildActivity {
 			FillUp prev = null;
 			FillUp curr = null;
 			while (c.isAfterLast() == false) {
-				curr = new FillUp(m_calcEngine, c);
+				curr = new FillUp(activity.m_calcEngine, c);
 				fillups.add(curr);
 
 				curr.setPrevious(prev);
@@ -383,31 +415,44 @@ public class StatisticsView extends TabChildActivity {
 				publishProgress();
 			}
 
+			c.close();
+
 			if (fillups.size() >= 2) {
 				// crunch the numbers
-				publishProgress(calcDistances(fillups));
-				publishProgress(calcEconomy(fillups));
-				publishProgress(calcPrices(fillups));
-				publishProgress(calcCosts(fillups));
-				publishProgress(calcAmounts(fillups));
-				publishProgress(calcExpenses(fillups));
+				// TODO: Is there a way to remove this copy-pasta?
+				if (!isCancelled())
+					publishProgress(activity.calcDistances(fillups));
+				if (!isCancelled())
+					publishProgress(activity.calcEconomy(fillups));
+				if (!isCancelled())
+					publishProgress(activity.calcPrices(fillups));
+				if (!isCancelled())
+					publishProgress(activity.calcCosts(fillups));
+				if (!isCancelled())
+					publishProgress(activity.calcAmounts(fillups));
+				if (!isCancelled())
+					publishProgress(activity.calcExpenses(fillups));
 			}
 			return true;
 		}
 
 		@Override
 		protected void onProgressUpdate(StatisticsGroup... update) {
-			if (update.length == 0) {
-				m_dlg.setMax(t);
-				m_dlg.setProgress(p);
-			} else {
-				m_container.addView(update[0].render(StatisticsView.this));
+			if (!isCancelled()) {
+				if (update.length == 0) {
+					if (activity != null && activity.m_dlg != null) {
+						activity.m_dlg.setMax(t);
+						activity.m_dlg.setProgress(p);
+					}
+				} else {
+					getContainer().addView(update[0].render(activity));
+				}
 			}
 		}
 
 		@Override
 		protected void onPostExecute(Boolean result) {
-			removeDialog(DIALOG_STATS_PROGRESS);
+			activity.removeDialog(DIALOG_STATS_PROGRESS);
 		}
 	}
 }
