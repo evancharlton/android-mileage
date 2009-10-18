@@ -93,7 +93,7 @@
 	<string name="context_miles_to_km">Miles to Kilometers</string>
 	<string name="context_km_to_miles">Kilometers to Miles</string>
 	
-	<string name="partial_fillup">This was a partial fill-up</string>
+	<string name="partial_fillup">Tank was not filled to the top</string>
 	
 	<string name="charts_fuel_price">Fuel Price</string>
 	<string name="charts_fuel_amount">Amount of Fuel</string>

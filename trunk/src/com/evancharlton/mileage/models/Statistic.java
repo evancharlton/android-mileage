@@ -22,10 +22,17 @@ public class Statistic implements Serializable {
 		this(label, prefix, statistic, "");
 	}
 
+	public Statistic(String label, String prefix, double statistic, DecimalFormat fmt) {
+		this(label, prefix, statistic, "", fmt);
+	}
+
 	public Statistic(String label, String prefix, double statistic, String units) {
+		this(label, "", statistic, units, new DecimalFormat("0.00"));
+	}
+
+	public Statistic(String label, String prefix, double statistic, String units, DecimalFormat format) {
 		this(label, "", units);
 		m_prefix = prefix;
-		DecimalFormat format = new DecimalFormat("0.00");
 		m_statistic = format.format(statistic);
 	}
 

@@ -34,7 +34,7 @@
 			   		android:layout_weight="1"
 					android:layout_height="wrap_content"
 					android:hint="@string/vehicle_make"
-					android:capitalize="words"
+					android:inputType="textPersonName"
 				/>
 			</LinearLayout>
 			<EditText
@@ -42,14 +42,14 @@
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
 				android:hint="@string/vehicle_model"
-				android:capitalize="words"
+				android:inputType="textPersonName"
 			/>
 			<EditText
 				android:id="@+id/vehicle_title"
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
 				android:hint="@string/vehicle_title"
-				android:capitalize="sentences"
+				android:inputType="textShortMessage"
 			/>
 			<CheckBox
 				android:id="@+id/vehicle_default"

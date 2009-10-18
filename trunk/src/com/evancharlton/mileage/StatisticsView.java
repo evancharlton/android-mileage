@@ -1,5 +1,6 @@
 package com.evancharlton.mileage;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -264,13 +265,14 @@ public class StatisticsView extends TabChildActivity {
 		String distanceUnits = m_calcEngine.getDistanceUnitsAbbr().trim();
 
 		group.add(new Statistic(getString(R.string.average), m_preferences.getCurrency(), avg_cost));
-		group.add(new Statistic(String.format(getString(R.string.average_cost_per), distanceUnits), m_preferences.getCurrency(), avg_cost_per_mile));
 		group.add(new Statistic(getString(R.string.maximum), m_preferences.getCurrency(), max_cost));
-		group.add(new Statistic(String.format(getString(R.string.maximum_cost_per), distanceUnits), m_preferences.getCurrency(), max_cost_per_mile));
 		group.add(new Statistic(getString(R.string.minimum), m_preferences.getCurrency(), min_cost));
-		group.add(new Statistic(String.format(getString(R.string.minimum_cost_per), distanceUnits), m_preferences.getCurrency(), min_cost_per_mile));
 		group.add(new Statistic(getString(R.string.last), m_preferences.getCurrency(), last_cost));
-		group.add(new Statistic(String.format(getString(R.string.last_cost_per), distanceUnits), m_preferences.getCurrency(), last_cost_per_mile));
+		DecimalFormat fmt = new DecimalFormat("0.000");
+		group.add(new Statistic(String.format(getString(R.string.average_cost_per), distanceUnits), m_preferences.getCurrency(), avg_cost_per_mile, fmt));
+		group.add(new Statistic(String.format(getString(R.string.maximum_cost_per), distanceUnits), m_preferences.getCurrency(), max_cost_per_mile, fmt));
+		group.add(new Statistic(String.format(getString(R.string.minimum_cost_per), distanceUnits), m_preferences.getCurrency(), min_cost_per_mile, fmt));
+		group.add(new Statistic(String.format(getString(R.string.last_cost_per), distanceUnits), m_preferences.getCurrency(), last_cost_per_mile, fmt));
 
 		return group;
 	}
