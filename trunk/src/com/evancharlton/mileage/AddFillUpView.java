@@ -296,7 +296,8 @@ public class AddFillUpView extends DeleteActivity implements Persistent {
 	}
 
 	protected FillUp saveData() {
-		FillUp fillup = new FillUp(PreferencesProvider.getInstance(this).getCalculator());
+		PreferencesProvider prefs = PreferencesProvider.getInstance(this);
+		FillUp fillup = new FillUp(prefs.getCalculator());
 
 		boolean error = false;
 		int errorMsg = 0;
@@ -336,12 +337,14 @@ public class AddFillUpView extends DeleteActivity implements Persistent {
 			errorMsg = R.string.error_mileage;
 		}
 
-		LocationManager location = (LocationManager) getSystemService(LOCATION_SERVICE);
-		if (location != null) {
-			Location loc = location.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-			if (loc != null) {
-				fillup.setLatitude(loc.getLatitude());
-				fillup.setLongitude(loc.getLongitude());
+		if (prefs.getBoolean(PreferencesProvider.LOCATION, true)) {
+			LocationManager location = (LocationManager) getSystemService(LOCATION_SERVICE);
+			if (location != null) {
+				Location loc = location.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+				if (loc != null) {
+					fillup.setLatitude(loc.getLatitude());
+					fillup.setLongitude(loc.getLongitude());
+				}
 			}
 		}
 

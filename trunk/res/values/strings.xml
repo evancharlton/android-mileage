@@ -8,12 +8,15 @@
 	<string name="graphs">Graphs</string>
 	<string name="save_changes">Save Changes</string>
 	<string name="delete">Delete</string>
+	<string name="deleted">Deleted</string>
 	<string name="backspace">Del</string>
 	<string name="edit">Edit</string>
 	<string name="edit_fillup">Edit Fill-up</string>
 	<string name="cancel_changes">Cancel Changes</string>
 	<string name="confirm_delete">Are you sure you want to delete this?</string>
 	<string name="confirm_erase">Are you sure you want to completely erase the database? This can not be undone!</string>
+	<string name="confirm_erase_location">Are you sure you want to wipe *all* location data? This can not be undone!</string>
+	<string name="location_data_erased">All location data has been wiped!</string>
 	<string name="confirm_data">Confirm data</string>
 	<string name="confirm_import">Is the following data correct?</string>
 	<string name="date">Date</string>
@@ -180,6 +183,9 @@
 	<string name="settings_economy_summary">Units to use when calculating fuel economy</string>
 	<string name="settings_date_summary">What format to use when displaying dates</string>
 	<string name="settings_currency_summary">What currency symbol to use</string>
+	<string name="settings_location_on">Location data will be collected (private; never leaves your phone!)</string>
+	<string name="settings_location_off">No location data will be collected</string>
+	<string name="settings_erase_location_data">Erase location data</string>
 		
 	<string name="error">Error!</string>
 	<string name="error_cost">Invalid number format for price of fuel.</string>

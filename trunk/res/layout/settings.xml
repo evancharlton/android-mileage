@@ -43,4 +43,11 @@
 		android:title="Currency"
 		android:summary="@string/settings_currency_summary"
 	/>
+	<CheckBoxPreference
+		android:key="location_pref"
+		android:defaultValue="true"
+		android:title="Collect Location Data"
+		android:summaryOn="@string/settings_location_on"
+		android:summaryOff="@string/settings_location_off"
+	/>
 </PreferenceScreen>

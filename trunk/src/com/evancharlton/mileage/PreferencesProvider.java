@@ -21,6 +21,7 @@ public class PreferencesProvider {
 	public static final String VOLUME = "volume_pref";
 	public static final String DISTANCE = "distance_pref";
 	public static final String ECONOMY = "economy_pref";
+	public static final String LOCATION = "location_pref";
 
 	private static final String PREFS_NAME = "com.evancharlton.mileage_preferences";
 	private static final int BOOLEAN = 0;
