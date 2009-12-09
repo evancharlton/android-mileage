@@ -48,6 +48,10 @@
 	<string name="save">Save</string>
 	<string name="unknown_version">Unknown version</string>
 	
+	<string name="price_per_unit">Price per %s</string>
+	<string name="total_cost">Total cost</string>
+	<string name="total_volume">%s of fuel</string>
+	
 	<string name="calculating">Calculating</string>
 	<string name="statistics_calculating">Calculating statistics ...</string>
 	<string name="average">Average</string>
@@ -69,6 +73,11 @@
 	<string name="fuel_prices">Fuel Prices</string>
 	<string name="fillup_costs">Fill-Up Costs</string>
 	<string name="distance_between_fillups">Distance Between Fill-Ups</string>
+	<string name="fillup_locations">Fill-Up Locations</string>
+	<string name="location_north">Farthest North</string>
+	<string name="location_south">Farthest South</string>
+	<string name="location_east">Farthest East</string>
+	<string name="location_west">Farthest West</string>
 	
 	<string name="vehicles">Vehicles</string>
 	<string name="vehicle_make">Make</string>
@@ -186,6 +195,12 @@
 	<string name="settings_location_on">Location data will be collected (private; never leaves your phone!)</string>
 	<string name="settings_location_off">No location data will be collected</string>
 	<string name="settings_erase_location_data">Erase location data</string>
+	<string name="settings_fillup_options">Fill-up Options</string>
+	<string name="settings_fillup_options_summary">Choose the most convenient data fields to enter</string>
+	
+	<string name="total_volume_unit_price">Unit price, total volume</string>
+	<string name="total_volume_total_cost">Total cost, total volume</string>
+	<string name="total_cost_unit_price">Total cost, unit price</string>
 		
 	<string name="error">Error!</string>
 	<string name="error_cost">Invalid number format for price of fuel.</string>

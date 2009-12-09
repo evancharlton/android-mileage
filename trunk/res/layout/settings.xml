@@ -50,4 +50,12 @@
 		android:summaryOn="@string/settings_location_on"
 		android:summaryOff="@string/settings_location_off"
 	/>
+	<ListPreference
+		android:key="fillup_data_pref"
+		android:defaultValue="0"
+		android:entries="@array/fillup_data_options"
+		android:entryValues="@array/fillup_data_values"
+		android:title="@string/settings_fillup_options"
+		android:summary="@string/settings_fillup_options_summary"
+	/>
 </PreferenceScreen>

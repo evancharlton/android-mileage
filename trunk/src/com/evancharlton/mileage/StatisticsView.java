@@ -367,6 +367,48 @@ public class StatisticsView extends TabChildActivity {
 		return group;
 	}
 
+	public StatisticsGroup calcLocations(final List<FillUp> fillups) {
+		StatisticsGroup group = new StatisticsGroup(getString(R.string.fillup_locations));
+
+		if (m_preferences.getBoolean(PreferencesProvider.LOCATION, true)) {
+			double north = -90;
+			double south = 90;
+			double east = -180;
+			double west = 180;
+
+			double lat, lon;
+			for (FillUp f : fillups) {
+				lat = f.getLatitude();
+				lon = f.getLongitude();
+
+				if (lat >= north) {
+					north = lat;
+				}
+
+				if (lat <= south) {
+					south = lat;
+				}
+
+				if (lon >= east) {
+					east = lon;
+				}
+
+				if (lon <= west) {
+					west = lon;
+				}
+			}
+
+			final String DEG = "°";
+			final DecimalFormat fmt = new DecimalFormat("0.0000");
+			group.add(new Statistic(getString(R.string.location_north), north, DEG, fmt));
+			group.add(new Statistic(getString(R.string.location_south), south, DEG, fmt));
+			group.add(new Statistic(getString(R.string.location_east), east, DEG, fmt));
+			group.add(new Statistic(getString(R.string.location_west), west, DEG, fmt));
+		}
+
+		return group;
+	}
+
 	private static class CalculationTask extends AsyncTask<Long, StatisticsGroup, Boolean> {
 		public StatisticsView activity;
 
@@ -432,6 +474,8 @@ public class StatisticsView extends TabChildActivity {
 					publishProgress(activity.calcAmounts(fillups));
 				if (!isCancelled())
 					publishProgress(activity.calcExpenses(fillups));
+				if (!isCancelled())
+					publishProgress(activity.calcLocations(fillups));
 			}
 			return true;
 		}

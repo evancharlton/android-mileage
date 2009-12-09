@@ -235,8 +235,28 @@ public class AddFillUpView extends DeleteActivity implements Persistent {
 
 	protected void loadPrefs() {
 		PreferencesProvider prefs = PreferencesProvider.getInstance(AddFillUpView.this);
-		m_priceEdit.setHint(prefs.getString(R.array.unit_price_hints, PreferencesProvider.VOLUME));
-		m_amountEdit.setHint(prefs.getString(R.array.unit_amount_hints, PreferencesProvider.VOLUME));
+		final int setting = prefs.getInt(PreferencesProvider.FILLUP_DATA, 0);
+		String price = prefs.getString(R.array.unit_price_hints, PreferencesProvider.VOLUME);
+		String amount = prefs.getString(R.array.unit_amount_hints, PreferencesProvider.VOLUME);
+		switch (setting) {
+			case 0:
+				// unit price, total volume
+				price = getString(R.string.price_per_unit, prefs.getVolume());
+				amount = getString(R.string.total_volume, prefs.getVolume());
+				break;
+			case 1:
+				// total cost, total volume
+				price = getString(R.string.total_cost);
+				amount = getString(R.string.total_volume, prefs.getVolume());
+				break;
+			case 2:
+				// total cost, unit price
+				price = getString(R.string.total_cost);
+				amount = getString(R.string.price_per_unit, prefs.getVolume());
+				break;
+		}
+		m_priceEdit.setHint(price);
+		m_amountEdit.setHint(amount);
 	}
 
 	protected void showMessage(boolean success) {
@@ -312,21 +332,47 @@ public class AddFillUpView extends DeleteActivity implements Persistent {
 		fillup.setVehicleId(vehicleId);
 		fillup.setDate(m_day, m_month, m_year);
 		fillup.setPartial(m_partialCheckbox.isChecked());
+		double price = 0D;
+		double amount = 0D;
+
+		double first = 0D, second = 0D;
 
 		try {
-			double price = Double.parseDouble(m_priceEdit.getText().toString());
-			fillup.setPrice(price);
+			first = Double.parseDouble(m_priceEdit.getText().toString());
 		} catch (NumberFormatException nfe) {
 			error = true;
 			errorMsg = R.string.error_cost;
 		}
 
 		try {
-			double amount = Double.parseDouble(m_amountEdit.getText().toString());
-			fillup.setAmount(amount);
+			second = Double.parseDouble(m_amountEdit.getText().toString());
 		} catch (NumberFormatException nfe) {
 			error = true;
 			errorMsg = R.string.error_amount;
+		}
+
+		if (!error) {
+			switch (prefs.getInt(PreferencesProvider.FILLUP_DATA, 0)) {
+				case 0:
+					// total volume, unit price
+					// we don't need to do anything! \o/
+					price = first;
+					amount = second;
+					break;
+				case 1:
+					// total volume, total cost
+					amount = second;
+					price = first / amount;
+					break;
+				case 2:
+					// total cost, unit price
+					price = first;
+					amount = second / price;
+					break;
+			}
+
+			fillup.setAmount(amount);
+			fillup.setPrice(price);
 		}
 
 		try {

@@ -40,6 +40,10 @@ public class Statistic implements Serializable {
 		this(label, "", statistic, units);
 	}
 
+	public Statistic(String label, double statistic, String units, DecimalFormat format) {
+		this(label, "", statistic, units, format);
+	}
+
 	public Statistic(String label, String statistic, String units) {
 		m_label = label;
 		m_statistic = statistic;

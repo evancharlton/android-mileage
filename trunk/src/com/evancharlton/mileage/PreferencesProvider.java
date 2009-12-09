@@ -15,13 +15,14 @@ public class PreferencesProvider {
 	private SharedPreferences m_settings;
 	private CalculationEngine m_calcEngine;
 
-	public static final String DATE = "date_pref";
+	public static final String DATE = "date_format_pref";
 	public static final String NUMBER = "number_pref";
 	public static final String CURRENCY = "currency_pref";
 	public static final String VOLUME = "volume_pref";
 	public static final String DISTANCE = "distance_pref";
 	public static final String ECONOMY = "economy_pref";
 	public static final String LOCATION = "location_pref";
+	public static final String FILLUP_DATA = "fillup_data_pref";
 
 	private static final String PREFS_NAME = "com.evancharlton.mileage_preferences";
 	private static final int BOOLEAN = 0;
@@ -140,6 +141,10 @@ public class PreferencesProvider {
 
 	public String getCurrency() {
 		return getString(CURRENCY, "$");
+	}
+
+	public String getVolume() {
+		return getString(R.array.units_volume, VOLUME);
 	}
 
 	public CalculationEngine getCalculator() {

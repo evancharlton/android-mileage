@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">Verbruik</string>
+	<string name="odometer">Kilometerstand</string>
+	<string name="add_fillup">Sla tankbeurt op</string>
+	<string name="fillup">Tankbeurt</string>
+	<string name="fillup_history">Geschiedenis</string>
+	<string name="graphs">Grafieken</string>
+	<string name="save_changes">Sla veranderingen op</string>
+	<string name="delete">Verwijder</string>
+	<string name="deleted">Verwijderd</string>
+	<string name="backspace">verwijder</string>
+	<string name="edit">Aanpassen</string>
+	<string name="edit_fillup">Pas tankbeurt aan</string>
+	<string name="cancel_changes">veranderingen annuleren</string>
+	<string name="confirm_delete">Weet u zeker dat u dit wilt verwijderen?</string>
+	<string name="confirm_erase">Weet u zeker dat u de database geheel wilt verwijderen? Dit kan niet teruggedraait worden!</string>
+	<string name="confirm_erase_location">Weet u zeker dat u *alle* locatiegegevens wilt wissen? Dit kan niet teruggedraait worden!</string>
+	<string name="location_data_erased">Alle locatiegegevens zijn gewist!</string>
+	<string name="confirm_data">Gegevens bevestigen</string>
+	<string name="confirm_import">Zijn de volgende gegevens correct?</string>
+	<string name="date">Datum</string>
+	<string name="statistics">Statistieken</string>
+	<string name="charts">Grafieken</string>
+	<string name="close">Sluiten</string>
+	<string name="about">Over het programma</string>
+	<string name="author">Evan Charlton</string>
+	<string name="contact">mileage@evancharlton.com</string>
+	<string name="website">http://evancharlton.com/projects/mileage</string>
+	<string name="today">Vandaag</string>
+	<string name="comment">Commentaar (optioneel)</string>
+	<string name="make_default">Dit voertuig het standaard voertuig maken</string>
+	<string name="make_default_short">Maak standaard</string>
+	<string name="settings">Instellingen</string>
+	<string name="operations">Activiteiten</string>
+	<string name="erase">Wis</string>
+	<string name="filename">Bestandsnaam</string>
+	<string name="success">Succes</string>
+	<string name="save_as">Bestand opslaan als:</string>
+	<string name="select_file">Selecteer te importeren bestand:</string>
+	<string name="data_parsed">Gegevens geparseerd, bevestig a.u.b. de invoer</string>
+	<string name="parsing_title">Parseren</string>
+	<string name="parsing">Gegevens parseren...</string>
+	<string name="parsed_date">Parseer datum:</string>
+	<string name="import_options">Import Opties</string>
+	<string name="partial_fillup_economy">Gedeeltelijke tankbeurt</string>
+	<string name="description">Omschrijving</string>
+	<string name="save">Opslaan</string>
+	<string name="unknown_version">Onbekende versie</string>
+	
+	<string name="calculating">Berekenen</string>
+	<string name="statistics_calculating">Statistieken berekenen...</string>
+	<string name="average">Gemiddelde</string>
+	<string name="maximum">Maximum</string>
+	<string name="minimum">Minimum</string>
+	<string name="last">Laaste</string>
+	<string name="total">Totaal</string>
+	<string name="last_month">Afgelopen maand</string>
+	<string name="last_year">Afgelopen jaar</string>
+	<string name="fuel_per">Brandstof / %1$d %1$s</string>
+	<string name="average_cost_per">Gemiddelde kosten per %1$s</string>
+	<string name="maximum_cost_per">Maximum kosten per %1$s</string>
+	<string name="minimum_cost_per">Minimum kosten per %1$s</string>
+	<string name="last_cost_per">Afgelopen kosten per %1$s</string>
+	<!-- statistics headings -->
+	<string name="fuel_economy">Brandstofverbruik</string>
+	<string name="fuel_expenses">Brandstofkosten</string>
+	<string name="fuel_amounts">Hoeveelheid Brandstof</string>
+	<string name="fuel_prices">Brandstofprijs</string>
+	<string name="fillup_costs">Tankbeurtkosten</string>
+	<string name="distance_between_fillups">Afstand tussen tankbeurten</string>
+	
+	<string name="vehicles">Voertuigen</string>
+	<string name="vehicle_make">Merk</string>
+	<string name="vehicle_model">Model</string>
+	<string name="vehicle_year">Bouwjaar</string>
+	<string name="vehicle_title">Titel (bijv. Mama's auto)</string>
+	<string name="vehicle_add">Voertuig toevoegen</string>
+	<string name="vehicle_save">Voertuig opslaan</string>
+	<string name="vehicle_edit">Voertuig bewerken</string>
+
+	<string name="vehicle_saved">Voertuig opgeslagen</string>
+	<string name="vehicle_error_saving">Fout tijdens opslaan van voertuig!</string>
+	<string name="fillup_saved">Tankbeurt opgeslagen</string>
+	<string name="fillup_error_saving">Fout tijdens opslaan van tankbeurt!</string>
+	<string name="fillup_deleted">Tankbeurt verwijderd</string>
+	<string name="fillup_edit">Tankbeurt aanpassen</string>
+	
+	<string name="context_litres_to_gallons">Liters naar Gallons</string>
+	<string name="context_litres_to_imp_gallons">Liters naar Imperial Gallons</string>
+	<string name="context_gallons_to_litres">Gallons naar Liters</string>
+	<string name="context_gallons_to_imp_gallons">Gallons naar Imperial Gallons</string>
+	<string name="context_imp_gallons_to_litres">Imperial Gallons naar Liters</string>
+	<string name="context_imp_gallons_to_gallons">Imperial Gallons naar Gallons</string>
+	<string name="context_convert_to_unit_cost">Converteer naar eenheidskosten</string>
+	<string name="context_miles_to_km">Mijlen naar Kilometers</string>
+	<string name="context_km_to_miles">Kilometers naar Mijlen</string>
+	
+	<string name="partial_fillup">Tank werd niet geheel gevuld</string>
+	
+	<string name="restore_database">Vanuit laatste back-up herstellen</string>
+	<string name="backup_restored">Back-up hersteld!</string>
+	<string name="backup_restored_msg">Uw database is succesvol hersteld vanuit de back-up!</string>
+	
+	<string name="charts_fuel_price">Brandstofprijs</string>
+	<string name="charts_fuel_amount">Hoeveelheid brandstof</string>
+	<string name="charts_fillup_cost">Kosten van tankbeurt</string>
+	<string name="charts_fuel_economy">Brandstofverbruik</string>
+	<string name="charts_delta_distance">Afstand tussen tankbeurten</string>
+	<string name="charts_odometer">Kilometerstand voertuig</string>
+	
+	<string name="import_export">Importeren / Exporteren</string>
+	<string name="export_header">Exporteren</string>	
+	<string name="error_exporting_data">Fout tijdens exporteren</string>
+	<string name="export_finished">Geslaagd!</string>
+	<string name="export_finished_msg">Het geëxporteerde bestand staat op uw SD-kaart onder de naam:</string>
+	<string name="exporting">Bezig database te exporteren</string>
+	<string name="importing">Bezig gegevens in de database te importeren</string>
+	<string name="exporting_title">Exporteren...</string>
+	<string name="importing_title">Importeren...</string>
+	<string name="import_header">Import</string>
+	<string name="import_sqlite">Import SQLite</string>
+	<string name="import_sql">Importeer SQL</string>
+	<string name="import_csv">Importeer CSV</string>
+	<string name="export_sqlite">Exporteer SQLite</string>
+	<string name="export_csv">Exporteer CSV</string>
+	<string name="export_sql">Exporteer SQL</string>
+	<string name="import_done">Geslaagd!</string>
+	<string name="import_done_msg">De gegevens in het volgende bestand zijn geimporteerd:</string>
+	<string name="error_importing_data">Fout tijdens importeren</string>
+	<string name="sqlite">SQLite DB</string>
+	<string name="sql_file">SQL</string>
+	<string name="csv_file">CSV</string>
+	
+	<string name="service_intervals">Servicebeurt</string>
+	<string name="add_service_interval">Servicebeurt toevoegen</string>
+	<string name="edit_service_interval">Servicebeurt aanpassen</string>
+	<string name="service_interval_saved">Servicebeurt opgeslagen!</string>
+	<string name="service_interval_error_saving">Fout tijdens opslaan van servicebeurt!</string>
+	<string name="service_interval_confirm_delete_expired">Deze servicebeurt voor %s is verstreken. Wilt u deze herinnering verwijderen?</string>
+	<string name="service_interval_remind">Morgen nogmaals melden</string>
+	<string name="service_interval_repeat_alarm">Deze melding herhalen</string>
+	<string name="service_interval_description">Een snelle omschrijving van de servicebeurt</string>
+	<string name="service_interval_duration">Duuur</string>
+	<string name="service_interval_distance">Afstand</string>
+	<string name="service_interval_reminder_alarm">Herinnerings melding</string>
+	<string name="service_interval_alarm_date">Datum</string>
+	<string name="service_interval_odometer">Kilometerstand</string>
+	<string name="service_interval_reminder_start">Start van servicebeurt</string>
+	<string name="service_interval_vehicle">Voertuig</string>
+	<string name="service_interval_presets">Servicebeurt instellingen</string>
+	<string name="service_interval_empty">Duw op menu om een nieuwe servicebeurt toe te voegen</string>
+	<string name="service_interval_error_description">Geen omschrijving ingesteld! Dit is een verplicht veld!</string>
+	<string name="service_interval_error_create_date">Geen datum van aanvang ingesteld!</string>
+	<string name="service_interval_error_create_odometer">Beginkilometerstand nooit ingesteld, of ongeldig.</string>
+	<string name="service_interval_error_duration">Geen of ongeldige duur tussen servicebeurten ingesteld.</string>
+	<string name="service_interval_error_distance">Geen of ongeldige afstand tussen servicebeurten ingesteld.</string>
+	<string name="service_interval_error_vehicle_id">Voertuig ID niet ingesteld!</string>
+	<string name="service_interval_due">Voertuig heeft %s nodig</string>
+	
+	<string name="preset_oil_change_standard">Olie verversen (standaard)</string>
+	<string name="preset_oil_change_synthetic">Olie verversen (synthetisch)</string>
+	<string name="preset_air_filter">Luchtfilter vervangen</string>
+	<string name="preset_power_steering">Stuurbekrachtigingsvloeistof vervangen</string>
+	<string name="preset_transmission_fluid">Versnellingsbakvloeistof vervangen</string>
+	<string name="preset_timing_belt">Distributieriem vervangen</string>
+	<string name="preset_fuel_filter">Brandstoffilter vervangen</string>
+	<string name="preset_custom">Aangepast</string>
+	
+	<string name="settings_header_locale">Locatie</string>
+	<string name="settings_date_format">Datum:</string>
+	<string name="settings_number_format">Nummer:</string>
+	<string name="settings_header_system">Meetsysteem</string>
+	<string name="settings_volume">Volume</string>
+	<string name="settings_distance">Afstand</string>
+	<string name="settings_economy">Economisch</string>
+	<string name="settings_currency">Munteenheid</string>
+	<string name="system_help">Berekeningshulp</string>
+	<string name="settings_header_application">Toepassing</string>
+	<string name="settings_orientation">Oriëntatie</string>
+	<string name="settings_volume_summary">Eenheden te gebruiken bij invoer tankbeurten</string>
+	<string name="settings_distance_summary">Te gebruiken eenheid van afstand tijdens invoer van tankbeurten</string>
+	<string name="settings_economy_summary">Te gebruiken eenheid bij berekenen van brandstofverbruik</string>
+	<string name="settings_date_summary">Welk formaat te gebruiken om de datum weer te geven</string>
+	<string name="settings_currency_summary">Welk symbool van munteenheid te gebruiken</string>
+	<string name="settings_location_on">Locatiegegevens worden opgeslagen (prive, blijft altijd op uw telefoon!)</string>
+	<string name="settings_location_off">Locatiegegevens worden niet opgeslagen</string>
+	<string name="settings_erase_location_data">Locatiegegevens wissen</string>
+		
+	<string name="error">Fout!</string>
+	<string name="error_cost">Ongeldige nummerinvoer voor brandstofprijs.</string>
+	<string name="error_amount">Ongeldige nummerinvoer voor brandstofhoeveelheid.</string>
+	<string name="error_mileage">Ongeldige nummerinvoer voor kilometerstand.</string>
+	<string name="error_year">Jaartal kan niet leeg gelaten worden!</string>
+	<string name="error_make">Merk kan niet leeg gelaten worden!</string>
+	<string name="error_model">Model kan niet leeg gelaten worden!</string>
+	<string name="error_title">Titel kan niet leeg gelaten worden!</string>
+	<string name="error_vehicle">Geen voertuig ID ingesteld!</string>
+	
+	<string name="input_label_fillup">Tankbeurt invoer</string>
+	
+	<string name="help">Help</string>
+	<string name="help_import_export">Selecteer een item om dat bestandsformaat te importeren of exporteren</string>
+	<string name="help_title_import_export">Importeer/Exporteer Help</string>
+	<string name="help_import_db_title">SQLite importeren</string>
+	<string name="help_import_db">Tijdens het importeren van SQLite databases is het erg belangrijk te weten dat dit uw huidige database zal overschrijven. Alle lokale aanpassingen zullen voorgoed verloren zijn.</string>
+	<string name="help_import_csv_title">CSV importeren</string>
+	<string name="help_import_csv">Het importeren van comma-separated value (CSV) bestanden is nuttig om spreadsheets te integreren. Let op dat de opbouw can een CSV-bestand vrij specifiek is. Bent u niet zeker van de opbouw, dan is het aan te raden een CSV bestand te exporteren, dit bestand te openenen in Excel, uw eigen waarden in dit bestand in te voeren, en het resultaat weer te importeren.</string>
+	<string name="help_import_sql_title">SQL importeren</string>
+	<string name="help_import_sql">Het importeren van SQL bestanden is erg afhankelijk van het database schema. Als u niet bekend bent met SQL, is het aan te raden een andere optie te kiezen.</string>
+	<string name="help_export_db_title">DB exporteren</string>
+	<string name="help_export_db">Het exporteren van de SQLite database zal een directe kopie creëren van uw huidige SQLite database op uw SD kaart.</string>
+	<string name="help_export_csv_title">CSV Exporteren</string>
+	<string name="help_export_csv">Als u een comma-separated value (CSV) bestand exporteert, zal dit uw huidige database exporteren in een CSV bestand naar uw SD kaart. Dit bestand kan gebruikt worden in Excel of een ander spreadsheet-programma.</string>
+	<string name="help_export_sql_title">SQL exporteren</string>
+	<string name="help_export_sql">Als u een SQL bestand exporteert, zal dit uw huidige database exporteren in een .sql bestand naar uw SD kaart. Deze SQL commands kunnen dan geimporteerd worden in een database programma naar keuze, zolang de opbouw overeen komt. Let op: De tabel-creatie SQL is weggelaten; de eindgebruiker zal zelf de nodige tabellen moeten creëeren.</string>
+	
+	<string name="help_title_vehicles">Voertuig help</string>
+	<string name="help_vehicles">Vanuit dit scherm kunt u een nieuw voertuig toevoegen of een bestaand voertuig aanpassen. Let op dat u verschillende opties voor een voertuig aan kunt passen door lang op het betreffende voertuig te duwen.</string>
+	
+	<string name="help_title_vehicle_edit">Voertuig aanpassen Help</string>
+	<string name="help_vehicle_edit">Met deze functie kunt u de verschillende gegevens van een bestaand voertuig aanpassen. Als u besluit de veranderingen te negeren, duwt u simpelweg op de 'terug' knop om de veranderingen ongedaan te maken. Let op dat er altijd minstens 1 voertuig moet zijn, waardoor u niet het laatste voertuig kan verwijderen. Als u meerdere voertuigen heeft, kunt u een voertuig als standaard voertuig instellen, zodat deze altijd als eerste in de lijst staat.</string>
+	
+	<string name="help_title_vehicle_add">Voertuig toevoegen Help</string>
+	<string name="help_vehicle_add">Met deze functie kunt u een nieuw voertuig aan uw database toevoegen. Dit kan handig zijn als u veelvuldig gebruik maakt van meerdere voertuigen of als meerdere voertuigen gebruik maken van dezelfde database. U kunt er voor kiezen om dit voertuig als standaard voertuig in te stellen.</string>
+	
+	<string name="help_title_fillup_new">Een tankbeurt instellen Help</string>
+	<string name="help_fillup_new">U kunt het gereden aantal kilometer sinds de vorige tankbeurt toevoegen door bij kilometerstand eerst een '+' in te vullen, gevolgd door het aantal gereden kilometers> Heeft u op de afgelopen tank bijvoorbeeld 300 kilometer gereden, dan kunt u '+300' invullen. Als u het invullen in portret-modus doet, zal een toetsenbord in het scherm verschijnen om snelle aanpassingen makkelijker te maken. Let op: Dit toetsenbord is slechts numeriek.</string>
+	
+	<string name="help_title_history">Geschiedenis Help</string>
+	<string name="help_history">De geschiedenis browser stelt u in staat om een lijst te bekijken van alle ingevulde tankbeurten, voor alle voertuigen. Als u een tankbeurt geselecteerd heeft, kunt u deze aanpassen of verwijderen. Als het verbruik in rood wordt weergegeven, betekent dit dat dat specifieke verbruik slechter is dan het gemiddelde verbruik. Een groen gekleurd verbruik duidt op een beter verbruik dan gemiddeld. Blauw, tenslotte, duidt op een verbruik dat exact gelijk is aan uw gemiddelde verbruik.</string>
+	
+	<string name="help_title_fillup_edit">Tankbeurt aanpassen Help</string>
+	<string name="help_fillup_edit">Vanuit hier kunt u een eerder opgeslagen tankbeurt aanpassen of verwijderen. Met de 'terug' knop kunt u aanpassingen ongedaan maken en terugkeren naar de geschiedenis browser. U kunt hier ook optioneel commentaar voor een tankbeurt invullen.</string>
+	
+	<string name="help_title_settings">Instellingen Help</string>
+	<string name="help_settings">In dit scherm kunt u uw voorkeuren invoeren voor het gebruik van het programma. The orientatie instelling geeft aan wanneer de UI zal roteren. Als u 'apparaat' invult, zal de UI roteren als u de gehele telefoon draait. Als u 'toetsenboard' kiest, zal de UI roteren als u de telefoon open schuift.</string>
+	
+	<string name="help_title_statistics">Statistieken Help</string>
+	<string name="help_statistics">Dit scherm toont u een veelvoud aan berekende statistieken per voertuig.  Als u meerdere voertuigen gebruikt, zal er een drop-down menu zichtbaar worden waarin u tussen de verschillende voertuigen kan kiezen. Let op: statistieken kunnen niet berekent worden voor voertuigen waarvoor niet genoeg gegevens beschikbaar zijn. Als dit het geval is, zal u een waarschuwing hierover zien.</string>
+	
+	<string name="help_title_charts">Grafieken Help</string>
+	<string name="help_charts">De knoppen in dit menu geven u toegang tot een aantal grafische weergaven van statistieken, meestal uitgezet tegen de tijd. De lijn tussen de twee secties is het gemiddelde. De rode sectie toont waarden die onder het gemiddelde vallen, de groene sectie toont de waarden van boven het gemiddelde.</string>
+	
+	<string name="help_title_service_intervals">Servicebeurt Help</string>
+	<string name="help_service_intervals">Hier kunt u een niewe servicebeurt toevoegen, of een reeds bestaande servicebeurt aanpassen door deze in de lijst te selecteren. Ook kunt u een servicebeurt verwijderen door lang op de specifieke servicebeurt te duwen en vervolgens de optie 'verwijderen' te kiezen.</string>
+	
+	<string name="help_title_add_service_interval">Servicebeurt toevoegen help</string>
+	<string name="help_add_service_interval">Dit scherm stelt u in staat om een nieuwe servicebeurt toe toe voegen. Om dit voor u te vergemakkelijken, zijn er verscheidene reeds ingevulde instellingen met verschillende afstanden en duraties. Als u een servicebeurt toevoegt, kiest u de kilometerstand wanneer u deze service voor het laatst uit heb laten voeren, en de datum dat ik gebeurd is. This screen allows you to create a new Service Interval. Vervolgens vult u in hoe lang het moet duren voor de volgende servicebeurt, en hoeveel kilometer u hiervoor gereden moet hebben. U wordt aan uw servicebeurt herinnert als u de ingevulde datum òf de ingevulde afstand heeft bereikt, afhankelijk van welke voorwaarde u eerder bereikt.</string>
+	
+	<string name="help_title_edit_service_interval">Servicebeurt aanpassen Help</string>
+	<string name="help_edit_service_interval">Hier kunt u een bestaande servicebeurt aanpassen alsook de servicebeurt verwijderen door op menu te duwen en de optie "verwijderen" te kiezen.</string>
+</resources>
