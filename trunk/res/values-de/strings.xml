@@ -48,6 +48,10 @@
 	<string name="save">Speichern</string>
 	<string name="unknown_version">Unbekannte Version</string>
 	
+	<string name="price_per_unit">Preis pro %</string>
+	<string name="total_cost">Gesamtkosten</string>
+	<string name="total_volume">%s des Kraftstoffs</string>
+	
 	<string name="calculating">Berechne</string>
 	<string name="statistics_calculating">Berechne Statistiken ...</string>
 	<string name="average">Durchschnitt</string>
@@ -69,6 +73,11 @@
 	<string name="fuel_prices">Treibstoffpreise</string>
 	<string name="fillup_costs">Betankungskosten</string>
 	<string name="distance_between_fillups">Distanz zwischen Betankungen</string>
+	<string name="fillup_locations">Betankungsposition</string>
+	<string name="location_north">am weitesten Nördlich</string>
+	<string name="location_south">am weitesten Südlich</string>
+	<string name="location_east">am weitesten Östlich</string>
+	<string name="location_west">am weitesten Westlich</string>
 	
 	<string name="vehicles">Fahrzeuge</string>
 	<string name="vehicle_make">Marke</string>
@@ -186,6 +195,12 @@
 	<string name="settings_location_on">Standortdaten werden gesammelt (privat; verlassen nie das Telefon)</string>
 	<string name="settings_location_off">Standortdaten werden nicht gesammelt</string>
 	<string name="settings_erase_location_data">Lösche Standortdaten</string>
+	<string name="settings_fillup_options">Betankungsoptionen</string>
+	<string name="settings_fillup_options_summary">Wähle das günstigste Datenfeld zur Eingabe</string>
+	
+	<string name="total_volume_unit_price">Preiseinheit, Gesamtvolumen</string>
+	<string name="total_volume_total_cost">Gesamtkosten, Gesamtvolumen</string>
+	<string name="total_cost_unit_price">Gesamtkosten, Preiseinheit</string>
 		
 	<string name="error">Fehler!</string>
 	<string name="error_cost">Ungültiges Format für den Treibstoffpreis</string>

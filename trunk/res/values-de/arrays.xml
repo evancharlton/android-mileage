@@ -94,5 +94,16 @@
     	<item>Wochen</item>
     	<item>Monate</item>
     	<item>Jahre</item>
+    </string-array>  
+    <string-array name="fillup_data_options">
+    	<item>@string/total_volume_unit_price</item>
+    	<item>@string/total_volume_total_cost</item>
+    	<item>@string/total_cost_unit_price</item>
+    </string-array>
+    
+    <string-array name="fillup_data_values">
+    	<item>0</item>
+    	<item>1</item>
+    	<item>2</item>
     </string-array>
 </resources>
