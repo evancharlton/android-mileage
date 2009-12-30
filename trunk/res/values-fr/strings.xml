@@ -85,8 +85,8 @@
 	<string name="vehicle_year">Années</string>
 	<string name="vehicle_title">Titre (ex: voiture de maman)</string>
 	<string name="vehicle_add">Ajouter véhicule</string>
-	<string name="veicle_save">Sauver véhicule</string>
-	<string name="véhicule_edit">Editer véhicule</string>
+	<string name="vehicle_save">Sauver véhicule</string>
+	<string name="vehicle_edit">Editer véhicule</string>
 
 	<string name="vehicle_saved">véhicule sauvegarder</string>
 	<string name="vehicle_error_saving">Erreur lors de la sauvegarder du véhicule!</string>
