@@ -48,7 +48,7 @@
 	<string name="save">Speichern</string>
 	<string name="unknown_version">Unbekannte Version</string>
 	
-	<string name="price_per_unit">Preis pro %</string>
+	<string name="price_per_unit">Preis pro %s</string>
 	<string name="total_cost">Gesamtkosten</string>
 	<string name="total_volume">%s des Kraftstoffs</string>
 	
