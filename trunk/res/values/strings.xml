@@ -61,7 +61,7 @@
 	<string name="total">Total</string>
 	<string name="last_month">Last month</string>
 	<string name="last_year">Last year</string>
-	<string name="fuel_per">Fuel / %1$d %1$s</string>
+	<string name="fuel_per">Fuel / %1$d %2$s</string>
 	<string name="average_cost_per">Average cost per %1$s</string>
 	<string name="maximum_cost_per">Maximum cost per %1$s</string>
 	<string name="minimum_cost_per">Minimum cost per %1$s</string>
@@ -215,81 +215,4 @@
 	<string name="input_label_fillup">Fill-Up Input</string>
 	
 	<string name="help">Help</string>
-	<string name="help_import_export">Select an item to import or export that file format</string>
-	<string name="help_title_import_export">Import/Export Help</string>
-	<string name="help_import_db_title">Import SQLite</string>
-	<string name="help_import_db">When importing SQLite databases it is extremely important to know that it will overwrite your current database.
-	All local changes will be lost forever.</string>
-	<string name="help_import_csv_title">Import CSV</string>
-	<string name="help_import_csv">Importing comma-separated value (CSV) files is useful for providing spreadsheet integration. Note that the format
-	is pretty specific; if you are not sure of the format, it's highly recommended that you export a CSV, open it in Excel, insert your values, and
-	then import the resulting spreadsheet.</string>
-	<string name="help_import_sql_title">Import SQL</string>
-	<string name="help_import_sql">Importing SQL is highly dependent on the database schema. If you do not know what you're doing with this, it is
-	recommended you use another option.</string>
-	<string name="help_export_db_title">Export DB</string>
-	<string name="help_export_db">Exporting the SQLite database will create a direct copy of your current SQLite database and place the resulting
-	copy on your SD card.</string>
-	<string name="help_export_csv_title">Export CSV</string>
-	<string name="help_export_csv">Exporting a comma-separated value (CSV) file will export your current database into a .csv file on
-	your SD card. This file can then be used in Excel or any other spreadsheet editor.</string>
-	<string name="help_export_sql_title">Export SQL</string>
-	<string name="help_export_sql">Exporting your database as SQL will create a .sql file on your SD card. These SQL commands can then
-	be imported into any other database engine of choice, provided that the schemas match. Note that the table-creation SQL is omitted; it is up
-	to the end user to create the necessary tables.</string>
-	
-	<string name="help_title_vehicles">Vehicles Help</string>
-	<string name="help_vehicles">From this screen, you can add a new vehicle, or select an existing vehicle to edit. Note that you can long-press on
-	a vehicle in the list to bring up a context menu to perform some common operations.</string>
-	
-	<string name="help_title_vehicle_edit">Editing Vehicle Help</string>
-	<string name="help_vehicle_edit">From here, you can change attributes about an existing vehicle. If you decide
-	to not save your changes, simply press the back button to undo the changes. Note that there must always be at least one vehicle, so you
-	can not delete the last vehicle. If you have multiple vehicles, you can choose to set this vehicle as default, so that it is always first
-	in the list.</string>
-	
-	<string name="help_title_vehicle_add">Adding Vehicle Help</string>
-	<string name="help_vehicle_add">This allows you to add new vehicles to your database. This may be helpful if you drive two vehicles, or
-	multiple vehicles share a database. You can optionally set this vehicle to be the default vehicle.</string>
-	
-	<string name="help_title_fillup_new">Recording Fill-Up Help</string>
-	<string name="help_fillup_new">You can add incremental fill-ups (since the previous one) by prefixing your odometer with a '+'.
-	For example, if you have gone 300 miles since your last fillup, enter '+300'. In portait mode, an on-screen keyboard will appear for making
-	quick edits. Note that this keyboard is numeric only.</string>
-	
-	<string name="help_title_history">History Help</string>
-	<string name="help_history">The history browser lets you view a list of past fill-ups, of all vehicles. Once a fill-up is selected, you can edit or
-	delete individual entries. If the economy is in red, then it is below your average economy value. Green indicates a value above your average 
-	economy value. Blue means that it is the same as your average fuel economy.</string>
-	
-	<string name="help_title_fillup_edit">Editing Fill-Up Help</string>
-	<string name="help_fillup_edit">From here, you can edit a previously-recorded fill-up, or delete it altogether. Press the back button to undo
-	any changes you have made and return to the history browser. You can fill in an optional comment, if you want to.</string>
-	
-	<string name="help_title_settings">Settings Help</string>
-	<string name="help_settings">From this screen, you can set preferences to fit your usage. The Orientation setting determines when the UI should rotate.
-	A setting of 'device' means that it will rotate when you rotate the device, whereas 'keyboard' will rotate when you open the keyboard tray.</string>
-	
-	<string name="help_title_statistics">Statistics Help</string>
-	<string name="help_statistics">This screen shows a wide range of calculated statistics on a per-vehicle basis. If you have multiple vehicles,
-	a drop-down will show, and you can switch between vehicles. Note that statistics can not be calculated on vehicles that do not have enough
-	data stored, so you'll get a warning about that.</string>
-	
-	<string name="help_title_charts">Charts Help</string>
-	<string name="help_charts">The charting buttons display graphs of various statistics, usually over time. The divider between the sections
-	marks the average value. The red section shows which values are below average and the green, above average.</string>
-	
-	<string name="help_title_service_intervals">Service Intervals Help</string>
-	<string name="help_service_intervals">Here you can add a new Service Interval, or edit an existing one by selecting it from the list.
-	You can also delete one directly by long-pressing on the item in the list and choosing the "delete" option.</string>
-	
-	<string name="help_title_add_service_interval">Add Service Interval Help</string>
-	<string name="help_add_service_interval">This screen allows you to create a new Service Interval. For your convenience, there are several
-	preset intervals with generic distances and durations. When creating your Service Interval, you specify the mileage when you last had this
-	service done, and the date which it was done. You then enter how long it should be before the next one, and how far you have to go. You will
-	then be reminded when you either pass the date or the mileage; whichever comes first.</string>
-	
-	<string name="help_title_edit_service_interval">Edit Service Interval Help</string>
-	<string name="help_edit_service_interval">Here you can edit an exisiting Service Interval, as well as delete the Interval by pressing Menu
-	and choosing the "Delete" option.</string>
 </resources>

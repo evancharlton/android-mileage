@@ -29,14 +29,6 @@
 		android:title="Fuel Economy"
 		android:summary="@string/settings_economy_summary"
 	/>
-	<ListPreference
-		android:key="date_pref"
-		android:defaultValue="0"
-		android:entries="@array/date_formats"
-		android:entryValues="@array/date_patterns"
-		android:title="Date format"
-		android:summary="@string/settings_date_summary"
-	/>
 	<EditTextPreference
 		android:key="currency_pref"
 		android:defaultValue="$"

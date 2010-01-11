@@ -32,17 +32,19 @@ import com.evancharlton.mileage.models.Vehicle;
  */
 public class FillUpsProvider extends ContentProvider {
 	public static final String DATABASE_NAME = "mileage.db";
-	public static final int DATABASE_VERSION = 4;
+	public static final int DATABASE_VERSION = 5;
 	public static final String FILLUPS_TABLE_NAME = "fillups";
 	public static final String VEHICLES_TABLE_NAME = "vehicles";
 	public static final String MAINTENANCE_TABLE_NAME = "maintenance_intervals";
 	public static final String VERSION_TABLE_NAME = "version";
+	public static final String CACHE_TABLE_NAME = "cache";
 
 	public static final String VERSION = "version";
 
 	private static HashMap<String, String> s_fillUpsProjectionMap;
 	private static HashMap<String, String> s_vehiclesProjectionMap;
 	private static HashMap<String, String> s_maintenanceIntervalsProjectionMap;
+	private static HashMap<String, String> s_cacheProjectionMap;
 
 	private static final int FILLUPS = 1;
 	private static final int FILLUP_ID = 2;
@@ -67,6 +69,7 @@ public class FillUpsProvider extends ContentProvider {
 		s_fillUpsProjectionMap.put(FillUp.PRICE, FillUp.PRICE);
 		s_fillUpsProjectionMap.put(FillUp.AMOUNT, FillUp.AMOUNT);
 		s_fillUpsProjectionMap.put(FillUp.ODOMETER, FillUp.ODOMETER);
+		s_fillUpsProjectionMap.put(FillUp.ECONOMY, FillUp.ECONOMY);
 		s_fillUpsProjectionMap.put(FillUp.VEHICLE_ID, FillUp.VEHICLE_ID);
 		s_fillUpsProjectionMap.put(FillUp.DATE, FillUp.DATE);
 		s_fillUpsProjectionMap.put(FillUp.LATITUDE, FillUp.LATITUDE);
@@ -123,7 +126,7 @@ public class FillUpsProvider extends ContentProvider {
 		sql.append("', 'Default Vehicle', '").append(System.currentTimeMillis()).append("');");
 		db.execSQL(sql.toString());
 
-		sql = new StringBuilder();
+		sql.setLength(0);
 		sql.append("INSERT INTO ").append(VERSION_TABLE_NAME).append(" (").append(VERSION).append(") VALUES (?)");
 		db.execSQL(sql.toString(), new String[] {
 			String.valueOf(DATABASE_VERSION)
@@ -379,24 +382,28 @@ public class FillUpsProvider extends ContentProvider {
 
 	private static void upgradeDatabase(SQLiteDatabase db, final int oldVersion, final int newVersion) {
 		try {
-			if (oldVersion == 3) {
-				StringBuilder sb = new StringBuilder();
+			StringBuilder sb = new StringBuilder();
+			if (oldVersion == 4) {
+				sb.append("ALTER TABLE ").append(FILLUPS_TABLE_NAME).append(" ADD COLUMN ").append(FillUp.ECONOMY).append(" DOUBLE;");
+				db.execSQL(sb.toString());
+				return;
+			} else if (oldVersion == 3) {
 				sb.append("ALTER TABLE ").append(FILLUPS_TABLE_NAME).append(" ADD COLUMN ").append(FillUp.PARTIAL).append(" INTEGER;");
 				db.execSQL(sb.toString());
 
-				sb = new StringBuilder();
+				sb.setLength(0);
 				sb.append("ALTER TABLE ").append(FILLUPS_TABLE_NAME).append(" ADD COLUMN ").append(FillUp.RESTART).append(" INTEGER;");
 				db.execSQL(sb.toString());
 
-				sb = new StringBuilder();
+				sb.setLength(0);
 				sb.append("ALTER TABLE ").append(VEHICLES_TABLE_NAME).append(" ADD COLUMN ").append(Vehicle.DISTANCE_UNITS).append(" INTEGER DEFAULT -1;");
 				db.execSQL(sb.toString());
 
-				sb = new StringBuilder();
+				sb.setLength(0);
 				sb.append("ALTER TABLE ").append(VEHICLES_TABLE_NAME).append(" ADD COLUMN ").append(Vehicle.VOLUME_UNITS).append(" INTEGER DEFAULT -1;");
 				db.execSQL(sb.toString());
 
-				sb = new StringBuilder();
+				sb.setLength(0);
 				sb.append("CREATE TABLE ").append(MAINTENANCE_TABLE_NAME).append(" (");
 				sb.append(ServiceInterval._ID).append(" INTEGER PRIMARY KEY AUTOINCREMENT,");
 				sb.append(ServiceInterval.CREATE_DATE).append(" INTEGER,");
@@ -409,31 +416,30 @@ public class FillUpsProvider extends ContentProvider {
 				sb.append(");");
 				db.execSQL(sb.toString());
 
-				sb = new StringBuilder();
+				sb.setLength(0);
 				sb.append("CREATE TABLE ").append(VERSION_TABLE_NAME).append(" (");
 				sb.append(VERSION).append(" INTEGER");
 				sb.append(");");
 				db.execSQL(sb.toString());
 				return;
 			} else if (oldVersion == 2) {
-				StringBuilder sb = new StringBuilder();
 				sb.append("ALTER TABLE ").append(FILLUPS_TABLE_NAME).append(" ADD COLUMN ").append(FillUp.COMMENT).append(" TEXT;");
 				db.execSQL(sb.toString());
 
-				sb = new StringBuilder();
+				sb.setLength(0);
 				sb.append("ALTER TABLE ").append(VEHICLES_TABLE_NAME).append(" ADD COLUMN ").append(Vehicle.DEFAULT).append(" INTEGER;");
 				db.execSQL(sb.toString());
 				return;
 			}
-			StringBuilder sb = new StringBuilder();
+			sb.setLength(0);
 			sb.append("DROP TABLE IF EXISTS ").append(FILLUPS_TABLE_NAME).append(";");
 			db.execSQL(sb.toString());
 
-			sb = new StringBuilder();
+			sb.setLength(0);
 			sb.append("DROP TABLE IF EXISTS ").append(VEHICLES_TABLE_NAME).append(";");
 			db.execSQL(sb.toString());
 
-			sb = new StringBuilder();
+			sb.setLength(0);
 			sb.append("DROP TABLE IF EXISTS ").append(MAINTENANCE_TABLE_NAME).append(";");
 			db.execSQL(sb.toString());
 
@@ -450,6 +456,7 @@ public class FillUpsProvider extends ContentProvider {
 		sql.append(FillUp.PRICE).append(" DOUBLE,");
 		sql.append(FillUp.AMOUNT).append(" DOUBLE,");
 		sql.append(FillUp.ODOMETER).append(" DOUBLE,");
+		sql.append(FillUp.ECONOMY).append(" DOUBLE,");
 		sql.append(FillUp.VEHICLE_ID).append(" INTEGER,");
 		sql.append(FillUp.DATE).append(" INTEGER,");
 		sql.append(FillUp.LATITUDE).append(" DOUBLE,");

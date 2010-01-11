@@ -19,6 +19,13 @@ import com.evancharlton.mileage.R;
 import com.evancharlton.mileage.models.FillUp;
 
 public class SQLView extends ImportView {
+
+	@Override
+	protected String getTag() {
+		return "SQLImport";
+	}
+
+	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState, "sql");
 
@@ -88,15 +95,5 @@ public class SQLView extends ImportView {
 				}
 			}
 		};
-	}
-
-	@Override
-	protected String getHelp() {
-		return getString(R.string.help_import_sql);
-	}
-
-	@Override
-	protected String getHelpTitle() {
-		return getString(R.string.help_import_sql_title);
 	}
 }

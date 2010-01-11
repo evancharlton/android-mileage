@@ -2,7 +2,7 @@ package com.evancharlton.mileage;
 
 import android.widget.Spinner;
 
-public class TabChildActivity extends DeleteActivity {
+public abstract class TabChildActivity extends DeleteActivity {
 
 	protected void setVehicleSelection(Spinner spinner) {
 		Mileage parent = (Mileage) getParent();

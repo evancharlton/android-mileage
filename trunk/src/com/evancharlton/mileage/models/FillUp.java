@@ -39,6 +39,7 @@ public class FillUp extends Model {
 	public static final String LONGITUDE = "longitude";
 	public static final String COMMENT = "comment";
 	public static final String RESTART = "restart";
+	public static final String ECONOMY = "economy";
 
 	public static final String AUTHORITY = "com.evancharlton.provider.Mileage";
 	public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/fillups");
@@ -60,11 +61,13 @@ public class FillUp extends Model {
 		PLAINTEXT.put(COMMENT, "Fill-Up Comment");
 		PLAINTEXT.put(PARTIAL, "Partial Fill-up?");
 		PLAINTEXT.put(RESTART, "Restart calculations?");
+		PLAINTEXT.put(ECONOMY, "Fuel Economy");
 
 		PROJECTION.add(_ID);
 		PROJECTION.add(PRICE);
 		PROJECTION.add(AMOUNT);
 		PROJECTION.add(ODOMETER);
+		PROJECTION.add(ECONOMY);
 		PROJECTION.add(DATE);
 		PROJECTION.add(VEHICLE_ID);
 		PROJECTION.add(LATITUDE);
@@ -255,6 +258,11 @@ public class FillUp extends Model {
 		if (index >= 0) {
 			m_partial = c.getInt(index) == 1;
 		}
+
+		index = c.getColumnIndex(ECONOMY);
+		if (index >= 0) {
+			m_economy = c.getDouble(index);
+		}
 	}
 
 	/**
@@ -275,29 +283,32 @@ public class FillUp extends Model {
 	 * 
 	 * @return the fuel economy since the previous fill-up.
 	 */
-	public double calcEconomy() {
-		if (m_partial) {
-			return -1D;
-		}
-		if (m_economy == 0D) {
-			FillUp previous = getPrevious();
-			if (previous == null) {
-				return -1D;
-			}
-			double distance = calcDistance();
-			double fuel = getAmount();
-			while (previous != null) {
-				if (previous.isPartial() == false) {
-					break;
-				}
-				// partial; we need to keep iterating
-				distance += previous.calcDistance();
-				fuel += previous.getAmount();
-				previous = previous.getPrevious();
-			}
-			m_economy = m_calculator.calculateEconomy(distance, fuel);
-		}
+	public double getEconomy() {
+		calcEconomy();
 		return m_economy;
+	}
+
+	private void calcEconomy() {
+		if (!m_partial) {
+			if (m_economy == 0D) {
+				FillUp previous = getPrevious();
+				if (previous != null) {
+					double distance = calcDistance();
+					double fuel = getAmount();
+					while (previous != null) {
+						if (previous.isPartial() == false) {
+							break;
+						}
+						// partial; we need to keep iterating
+						distance += previous.calcDistance();
+						fuel += previous.getAmount();
+						previous = previous.getPrevious();
+					}
+					m_economy = m_calculator.calculateEconomy(distance, fuel);
+					save();
+				}
+			}
+		}
 	}
 
 	public double calcCostPerDistance() {
@@ -417,6 +428,7 @@ public class FillUp extends Model {
 	@Override
 	public long save() {
 		openDatabase();
+		calcEconomy();
 		ContentValues values = new ContentValues();
 		values.put(AMOUNT, m_amount);
 		values.put(COMMENT, m_comment);
@@ -427,6 +439,7 @@ public class FillUp extends Model {
 		values.put(ODOMETER, m_odometer);
 		values.put(VEHICLE_ID, m_vehicleId);
 		values.put(PARTIAL, m_partial);
+		values.put(ECONOMY, m_economy);
 		if (m_id == -1) {
 			// save a new record
 			m_id = m_db.insert(FillUpsProvider.FILLUPS_TABLE_NAME, null, values);
@@ -526,6 +539,7 @@ public class FillUp extends Model {
 		} else {
 			m_odometer = Double.parseDouble(odometer);
 		}
+		m_economy = 0;
 	}
 
 	/**
@@ -585,6 +599,7 @@ public class FillUp extends Model {
 	 */
 	public void setAmount(double amount) {
 		m_amount = amount;
+		m_economy = 0;
 	}
 
 	/**

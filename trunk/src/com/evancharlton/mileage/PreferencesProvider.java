@@ -1,8 +1,6 @@
 package com.evancharlton.mileage;
 
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -212,9 +210,5 @@ public class PreferencesProvider {
 	public String shortFormat(double number) {
 		DecimalFormat formatter = new DecimalFormat("#,##0.##");
 		return formatter.format(number);
-	}
-
-	public String format(Date d) {
-		return new SimpleDateFormat(getString(PreferencesProvider.DATE, "MM/dd/yyyy")).format(d);
 	}
 }

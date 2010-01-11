@@ -32,6 +32,12 @@ public class CSVView extends ImportView {
 
 	private static final int DIALOG_CSV_IMPORT = 3;
 
+	@Override
+	protected String getTag() {
+		return "CSVImport";
+	}
+
+	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState, "csv");
 
@@ -176,15 +182,5 @@ public class CSVView extends ImportView {
 
 	public Map<String, Integer> getVehicleMapping() {
 		return m_vehicleMapping;
-	}
-
-	@Override
-	protected String getHelp() {
-		return getString(R.string.help_import_csv);
-	}
-
-	@Override
-	protected String getHelpTitle() {
-		return getString(R.string.help_import_csv_title);
 	}
 }

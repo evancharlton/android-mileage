@@ -15,6 +15,12 @@ import com.evancharlton.mileage.Mileage;
 import com.evancharlton.mileage.R;
 
 public class DBView extends ExportView {
+	@Override
+	protected String getTag() {
+		return "DBExport";
+	}
+
+	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState, "db");
 		m_title = (TextView) findViewById(R.id.title);
@@ -77,15 +83,5 @@ public class DBView extends ExportView {
 				});
 			}
 		};
-	}
-
-	@Override
-	protected String getHelp() {
-		return getString(R.string.help_export_db);
-	}
-
-	@Override
-	protected String getHelpTitle() {
-		return getString(R.string.help_export_db_title);
 	}
 }

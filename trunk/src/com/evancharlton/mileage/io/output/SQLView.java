@@ -20,6 +20,13 @@ import com.evancharlton.mileage.models.FillUp;
 import com.evancharlton.mileage.models.Vehicle;
 
 public class SQLView extends ExportView {
+
+	@Override
+	protected String getTag() {
+		return "SQLExport";
+	}
+
+	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState, "sql");
 		m_title = (TextView) findViewById(R.id.title);
@@ -130,15 +137,5 @@ public class SQLView extends ExportView {
 				sb.append(");\n");
 			}
 		};
-	}
-
-	@Override
-	protected String getHelp() {
-		return getString(R.string.help_export_sql);
-	}
-
-	@Override
-	protected String getHelpTitle() {
-		return getString(R.string.help_export_sql_title);
 	}
 }

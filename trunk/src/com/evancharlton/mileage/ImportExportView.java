@@ -8,7 +8,6 @@ import java.nio.channels.FileChannel;
 import java.util.HashMap;
 import java.util.Map;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -23,7 +22,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 
-public class ImportExportView extends Activity {
+public class ImportExportView extends MileageActivity {
 	private static final int MENU_ERASE = Menu.FIRST;
 	private static final int ERASE_DIALOG_ID = 0;
 	private static final int DIALOG_RESTORED = 1;
@@ -34,6 +33,12 @@ public class ImportExportView extends Activity {
 
 	private AlertDialog m_eraseDialog;
 
+	@Override
+	protected String getTag() {
+		return "ImportExport";
+	}
+
+	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
@@ -103,9 +108,6 @@ public class ImportExportView extends Activity {
 
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-			case HelpDialog.MENU_HELP:
-				HelpDialog.create(this, R.string.help_title_import_export, R.string.help_import_export);
-				break;
 			case MENU_ERASE:
 				showDialog(ERASE_DIALOG_ID);
 				break;
@@ -115,7 +117,6 @@ public class ImportExportView extends Activity {
 
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(Menu.NONE, MENU_ERASE, Menu.NONE, R.string.erase).setShortcut('0', 'e').setIcon(R.drawable.ic_menu_delete);
-		HelpDialog.injectHelp(menu, 'h');
 		return super.onCreateOptionsMenu(menu);
 	}
 

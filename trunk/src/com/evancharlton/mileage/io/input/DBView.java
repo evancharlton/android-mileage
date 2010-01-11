@@ -15,6 +15,11 @@ import com.evancharlton.mileage.Mileage;
 import com.evancharlton.mileage.R;
 
 public class DBView extends ImportView {
+	@Override
+	protected String getTag() {
+		return "DBImport";
+	}
+
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState, "db");
 		m_title = (TextView) findViewById(R.id.title);
@@ -70,15 +75,5 @@ public class DBView extends ImportView {
 				});
 			}
 		};
-	}
-
-	@Override
-	protected String getHelp() {
-		return getString(R.string.help_import_db);
-	}
-
-	@Override
-	protected String getHelpTitle() {
-		return getString(R.string.help_import_db_title);
 	}
 }

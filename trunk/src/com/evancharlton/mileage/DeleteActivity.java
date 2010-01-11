@@ -1,6 +1,5 @@
 package com.evancharlton.mileage;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -9,7 +8,7 @@ import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
-public class DeleteActivity extends Activity implements AdapterView.OnItemClickListener {
+public abstract class DeleteActivity extends MileageActivity implements AdapterView.OnItemClickListener {
 	protected static final int DELETE_DIALOG_ID = 100;
 	private ListView mListView;
 

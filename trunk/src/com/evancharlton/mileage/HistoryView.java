@@ -1,5 +1,6 @@
 package com.evancharlton.mileage;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -42,7 +43,7 @@ public class HistoryView extends TabChildActivity implements View.OnCreateContex
 	public static final int MENU_DELETE = Menu.FIRST;
 	public static final int MENU_EDIT = Menu.FIRST + 1;
 
-	public static final String TAG = "HistoryList"; //$NON-NLS-1$
+	public static final String TAG = "HistoryList";
 
 	private Map<Long, String> m_vehicleTitles = new HashMap<Long, String>();
 	private double m_avgMpg;
@@ -52,12 +53,18 @@ public class HistoryView extends TabChildActivity implements View.OnCreateContex
 	private ListView m_listView;
 	private Spinner m_vehicles;
 	private Map<Long, FillUp> m_fillupMap;
+	private DateFormat m_dateFormatter = null;
 
 	private int COL_AMOUNT;
 	private int COL_PRICE;
-	private int COL_ODOMETER;
 	private int COL_VEHICLEID;
 	private int COL_TIMESTAMP;
+	private int COL_ECONOMY;
+
+	@Override
+	protected String getTag() {
+		return TAG;
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -140,7 +147,7 @@ public class HistoryView extends TabChildActivity implements View.OnCreateContex
 				FillUp.PRICE,
 				FillUp.DATE,
 				FillUp.COMMENT,
-				FillUp.ODOMETER
+				FillUp.ECONOMY
 		};
 		int[] to = new int[] {
 				R.id.history_amount,
@@ -154,7 +161,7 @@ public class HistoryView extends TabChildActivity implements View.OnCreateContex
 		String[] selectionArgs;
 		long vehicle_id;
 		if (m_vehicles.getVisibility() != View.GONE) {
-			selection = FillUp.VEHICLE_ID + " = ?"; //$NON-NLS-1$
+			selection = FillUp.VEHICLE_ID + " = ?";
 			vehicle_id = m_vehicles.getSelectedItemId();
 			selectionArgs = new String[] {
 				String.valueOf(vehicle_id)
@@ -162,11 +169,12 @@ public class HistoryView extends TabChildActivity implements View.OnCreateContex
 		} else {
 			Cursor vehicleCursor = managedQuery(Vehicle.CONTENT_URI, new String[] {
 				Vehicle._ID
-			}, null, null, Vehicle.DEFAULT + " desc"); //$NON-NLS-1$
+			}, null, null, Vehicle.DEFAULT + " desc");
 			vehicleCursor.moveToFirst();
 			vehicle_id = vehicleCursor.getLong(0);
 
-			selection = FillUp.VEHICLE_ID + " = (select " + Vehicle._ID + " from " + FillUpsProvider.VEHICLES_TABLE_NAME + " order by " + Vehicle.DEFAULT + " desc limit 1)"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+			// FIXME: Why am I not using selectionArgs?
+			selection = FillUp.VEHICLE_ID + " = (select " + Vehicle._ID + " from " + FillUpsProvider.VEHICLES_TABLE_NAME + " order by " + Vehicle.DEFAULT + " desc limit 1)";
 			selectionArgs = null;
 		}
 
@@ -179,9 +187,9 @@ public class HistoryView extends TabChildActivity implements View.OnCreateContex
 
 			COL_AMOUNT = historyCursor.getColumnIndex(FillUp.AMOUNT);
 			COL_PRICE = historyCursor.getColumnIndex(FillUp.PRICE);
-			COL_ODOMETER = historyCursor.getColumnIndex(FillUp.ODOMETER);
 			COL_VEHICLEID = historyCursor.getColumnIndex(FillUp.VEHICLE_ID);
 			COL_TIMESTAMP = historyCursor.getColumnIndex(FillUp.DATE);
+			COL_ECONOMY = historyCursor.getColumnIndex(FillUp.ECONOMY);
 
 			List<FillUp> fillups = new ArrayList<FillUp>();
 			m_fillupMap = new HashMap<Long, FillUp>();
@@ -250,23 +258,12 @@ public class HistoryView extends TabChildActivity implements View.OnCreateContex
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {
-		super.onCreateOptionsMenu(menu);
 		Mileage.createMenu(menu);
-		HelpDialog.injectHelp(menu, 'h');
-		return true;
+		return super.onCreateOptionsMenu(menu);
 	}
 
 	public boolean onOptionsItemSelected(MenuItem item) {
-		boolean ret = Mileage.parseMenuItem(item, this);
-		if (ret) {
-			return true;
-		}
-		switch (item.getItemId()) {
-			case HelpDialog.MENU_HELP:
-				HelpDialog.create(this, R.string.help_title_history, R.string.help_history);
-				return true;
-		}
-		return super.onOptionsItemSelected(item);
+		return Mileage.parseMenuItem(item, this) || super.onOptionsItemSelected(item);
 	}
 
 	@Override
@@ -281,17 +278,23 @@ public class HistoryView extends TabChildActivity implements View.OnCreateContex
 			String text = null;
 			FillUp fillup;
 			TextView textview = (TextView) view;
+			if (textview == null) {
+				return false;
+			}
 			if (columnIndex == COL_AMOUNT) {
 				double gallons = cursor.getDouble(columnIndex);
 				text = m_prefs.format(gallons) + m_calcEngine.getVolumeUnitsAbbr();
 			} else if (columnIndex == COL_PRICE) {
 				double price = cursor.getDouble(columnIndex);
-				text = m_prefs.getCurrency() + m_prefs.format(price) + "/" + m_calcEngine.getVolumeUnitsAbbr().trim(); //$NON-NLS-1$
+				text = m_prefs.getCurrency() + m_prefs.format(price) + "/" + m_calcEngine.getVolumeUnitsAbbr().trim();
 			} else if (columnIndex == COL_TIMESTAMP) {
 				long time = cursor.getLong(columnIndex);
 				Date date = new Date(time);
-				text = m_prefs.format(date);
-			} else if (columnIndex == COL_ODOMETER) {
+				if (m_dateFormatter == null) {
+					m_dateFormatter = android.text.format.DateFormat.getMediumDateFormat(HistoryView.this);
+				}
+				text = m_dateFormatter.format(date);
+			} else if (columnIndex == COL_ECONOMY) {
 				if (!cursor.isLast()) {
 					fillup = m_fillupMap.get(cursor.getLong(FillUp.PROJECTION.indexOf(FillUp._ID)));
 					if (fillup == null) {
@@ -301,7 +304,7 @@ public class HistoryView extends TabChildActivity implements View.OnCreateContex
 						text = getString(R.string.partial_fillup_economy);
 						textview.setTextColor(0xFF666666);
 					} else {
-						double mpg = fillup.calcEconomy();
+						double mpg = fillup.getEconomy();
 						int color = 0xFF666666;
 						if (m_calcEngine.better(mpg, m_avgMpg)) {
 							color = 0xFF0AB807;
@@ -314,14 +317,11 @@ public class HistoryView extends TabChildActivity implements View.OnCreateContex
 						text = m_prefs.format(mpg) + m_calcEngine.getEconomyUnits();
 					}
 				} else {
-					text = ""; //$NON-NLS-1$
+					text = "";
 				}
 			}
-			if (text != null) {
-				textview.setText(text);
-				return true;
-			}
-			return false;
+			textview.setText(text);
+			return true;
 		}
 	};
 }

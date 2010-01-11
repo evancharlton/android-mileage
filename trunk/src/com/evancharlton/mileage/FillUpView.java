@@ -4,7 +4,6 @@ import java.util.Calendar;
 
 import android.content.Intent;
 import android.database.Cursor;
-import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,8 +15,9 @@ public class FillUpView extends AddFillUpView {
 
 	public static final int MENU_DELETE = Menu.FIRST;
 
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	@Override
+	protected String getTag() {
+		return "EditFillUp";
 	}
 
 	protected void initHandlers() {
@@ -92,7 +92,6 @@ public class FillUpView extends AddFillUpView {
 
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(Menu.NONE, MENU_DELETE, Menu.NONE, R.string.delete).setShortcut('1', 'd').setIcon(R.drawable.ic_menu_delete);
-		HelpDialog.injectHelp(menu, 'h');
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -100,9 +99,6 @@ public class FillUpView extends AddFillUpView {
 		switch (item.getItemId()) {
 			case MENU_DELETE:
 				showDialog(DELETE_DIALOG_ID);
-				return true;
-			case HelpDialog.MENU_HELP:
-				HelpDialog.create(this, R.string.help_title_fillup_edit, R.string.help_fillup_edit);
 				return true;
 		}
 		return super.onOptionsItemSelected(item);

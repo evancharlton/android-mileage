@@ -38,6 +38,12 @@ public class StatisticsView extends TabChildActivity {
 
 	private CalculationTask m_calculationTask;
 
+	@Override
+	protected String getTag() {
+		return "StatisticsView";
+	}
+
+	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
@@ -66,23 +72,12 @@ public class StatisticsView extends TabChildActivity {
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {
-		super.onCreateOptionsMenu(menu);
 		Mileage.createMenu(menu);
-		HelpDialog.injectHelp(menu, 'h');
-		return true;
+		return super.onCreateOptionsMenu(menu);
 	}
 
 	public boolean onOptionsItemSelected(MenuItem item) {
-		boolean ret = Mileage.parseMenuItem(item, this);
-		if (ret) {
-			return true;
-		}
-		switch (item.getItemId()) {
-			case HelpDialog.MENU_HELP:
-				HelpDialog.create(this, R.string.help_title_statistics, R.string.help_statistics);
-				break;
-		}
-		return super.onOptionsItemSelected(item);
+		return Mileage.parseMenuItem(item, this) || super.onOptionsItemSelected(item);
 	}
 
 	private void initUI() {
@@ -197,7 +192,7 @@ public class StatisticsView extends TabChildActivity {
 		}
 		for (FillUp fillup : fillups) {
 			if (!fillup.isPartial()) {
-				double economy = fillup.calcEconomy();
+				double economy = fillup.getEconomy();
 				if (economy < 0) {
 					continue;
 				}
@@ -215,7 +210,7 @@ public class StatisticsView extends TabChildActivity {
 		group.add(new Statistic(getString(R.string.average), m_calcEngine.calculateEconomy(total_distance, total_fuel), m_calcEngine.getEconomyUnits()));
 		group.add(new Statistic("Best", max_economy, m_calcEngine.getEconomyUnits()));
 		group.add(new Statistic("Worst", min_economy, m_calcEngine.getEconomyUnits()));
-		group.add(new Statistic(getString(R.string.last), fillups.get(fillups.size() - 1).calcEconomy(), m_calcEngine.getEconomyUnits()));
+		group.add(new Statistic(getString(R.string.last), fillups.get(fillups.size() - 1).getEconomy(), m_calcEngine.getEconomyUnits()));
 
 		return group;
 	}
@@ -331,7 +326,7 @@ public class StatisticsView extends TabChildActivity {
 		group.add(new Statistic(getString(R.string.maximum), max_amount, m_calcEngine.getVolumeUnitsAbbr()));
 		group.add(new Statistic(getString(R.string.minimum), min_amount, m_calcEngine.getVolumeUnitsAbbr()));
 		group.add(new Statistic(getString(R.string.last), fillups.get(fillups.size() - 1).getAmount(), m_calcEngine.getVolumeUnitsAbbr()));
-		group.add(new Statistic(String.format(getString(R.string.fuel_per), ten_thousand_miles, m_calcEngine.getDistanceUnitsAbbr()), fuel_per_10k, m_calcEngine.getVolumeUnitsAbbr()));
+		group.add(new Statistic(getString(R.string.fuel_per, ten_thousand_miles, m_calcEngine.getDistanceUnitsAbbr()), fuel_per_10k, m_calcEngine.getVolumeUnitsAbbr()));
 
 		return group;
 	}
@@ -398,7 +393,7 @@ public class StatisticsView extends TabChildActivity {
 				}
 			}
 
-			final String DEG = "°";
+			final String DEG = "";
 			final DecimalFormat fmt = new DecimalFormat("0.0000");
 			group.add(new Statistic(getString(R.string.location_north), north, DEG, fmt));
 			group.add(new Statistic(getString(R.string.location_south), south, DEG, fmt));

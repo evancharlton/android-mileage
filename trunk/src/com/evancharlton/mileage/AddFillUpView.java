@@ -14,6 +14,7 @@ import android.database.Cursor;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,6 +35,7 @@ import com.evancharlton.mileage.models.Vehicle;
 
 public class AddFillUpView extends DeleteActivity implements Persistent {
 	public static final String PACKAGE = "com.evancharlton.mileage";
+	protected static final String TAG = "AddFillUpView";
 	public static final int DATE_DIALOG_ID = 0;
 	public static final int MENU_VEHICLES = Menu.FIRST;
 	public static final int MENU_SETTINGS = Menu.FIRST + 1;
@@ -70,6 +72,11 @@ public class AddFillUpView extends DeleteActivity implements Persistent {
 	protected EditText m_commentEdit;
 	protected SimpleCursorAdapter m_vehicleAdapter;
 	protected CheckBox m_partialCheckbox;
+
+	@Override
+	protected String getTag() {
+		return "AddFillUp";
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -309,7 +316,7 @@ public class AddFillUpView extends DeleteActivity implements Persistent {
 		GregorianCalendar gc = new GregorianCalendar(m_year, m_month, m_day);
 		Date d = new Date(gc.getTimeInMillis());
 
-		m_customDateButton.setText(PreferencesProvider.getInstance(AddFillUpView.this).format(d));
+		m_customDateButton.setText(DateFormat.getDateFormat(this).format(d));
 		if (m_dateDlg != null) {
 			m_dateDlg.updateDate(m_year, m_month, m_day);
 		}
@@ -430,25 +437,13 @@ public class AddFillUpView extends DeleteActivity implements Persistent {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		super.onCreateOptionsMenu(menu);
 		Mileage.createMenu(menu);
-		HelpDialog.injectHelp(menu, 'h');
-
-		return true;
+		return super.onCreateOptionsMenu(menu);
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		boolean ret = Mileage.parseMenuItem(item, this);
-		if (ret) {
-			return true;
-		}
-		switch (item.getItemId()) {
-			case HelpDialog.MENU_HELP:
-				HelpDialog.create(this, R.string.help_title_fillup_new, R.string.help_fillup_new);
-				break;
-		}
-		return super.onOptionsItemSelected(item);
+		return Mileage.parseMenuItem(item, this) || super.onOptionsItemSelected(item);
 	}
 
 	@Override

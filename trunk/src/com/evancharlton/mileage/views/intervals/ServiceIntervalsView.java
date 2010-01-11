@@ -16,6 +16,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,7 +28,6 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
-import com.evancharlton.mileage.HelpDialog;
 import com.evancharlton.mileage.PreferencesProvider;
 import com.evancharlton.mileage.R;
 import com.evancharlton.mileage.models.ServiceInterval;
@@ -132,12 +132,8 @@ public class ServiceIntervalsView extends ListActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		super.onCreateOptionsMenu(menu);
-
 		menu.add(Menu.NONE, MENU_ADD, 0, R.string.add_service_interval).setShortcut('1', 'a').setIcon(R.drawable.ic_menu_add);
-		HelpDialog.injectHelp(menu, 'h');
-
-		return true;
+		return super.onCreateOptionsMenu(menu);
 	}
 
 	@Override
@@ -147,9 +143,6 @@ public class ServiceIntervalsView extends ListActivity {
 				Intent i = new Intent();
 				i.setClass(ServiceIntervalsView.this, AddServiceIntervalView.class);
 				startActivity(i);
-				break;
-			case HelpDialog.MENU_HELP:
-				HelpDialog.create(this, R.string.help_title_service_intervals, R.string.help_service_intervals);
 				break;
 		}
 		return super.onOptionsItemSelected(item);
@@ -241,7 +234,7 @@ public class ServiceIntervalsView extends ListActivity {
 				long time = cursor.getLong(cursor.getColumnIndex(ServiceInterval.CREATE_DATE));
 				time += cursor.getLong(index);
 				Date d = new Date(time);
-				text = String.format("%s", m_prefs.format(d));
+				text = String.format("%s", DateFormat.getDateFormat(ServiceIntervalsView.this).format(d));
 			} else if (colName.equals(ServiceInterval.DISTANCE)) {
 				double odometer = cursor.getDouble(cursor.getColumnIndex(ServiceInterval.CREATE_ODOMETER));
 				odometer += cursor.getDouble(index);;

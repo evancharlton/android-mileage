@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.util.Arrays;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -13,18 +12,16 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.evancharlton.mileage.HelpDialog;
+import com.evancharlton.mileage.MileageActivity;
 import com.evancharlton.mileage.R;
 
-public abstract class ImportView extends Activity {
+public abstract class ImportView extends MileageActivity {
 	protected final static String MESSAGE = "msg";
 	protected final static String TITLE = "title";
 	protected final static String SUCCESS = "success";
@@ -51,29 +48,6 @@ public abstract class ImportView extends Activity {
 		super.onResume();
 		initUI();
 	}
-
-	public boolean onCreateOptionsMenu(Menu menu) {
-		super.onCreateOptionsMenu(menu);
-		HelpDialog.injectHelp(menu, 'h');
-		return true;
-	}
-
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-			case HelpDialog.MENU_HELP:
-				createHelp();
-				return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
-
-	protected void createHelp() {
-		HelpDialog.create(this, getHelpTitle(), getHelp());
-	}
-
-	protected abstract String getHelpTitle();
-
-	protected abstract String getHelp();
 
 	protected void initUI() {
 		m_title = (TextView) findViewById(R.id.title);

@@ -5,14 +5,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -24,15 +22,14 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.evancharlton.mileage.HelpDialog;
-import com.evancharlton.mileage.PreferencesProvider;
+import com.evancharlton.mileage.MileageActivity;
 import com.evancharlton.mileage.R;
 import com.evancharlton.mileage.binders.VehicleBinder;
 import com.evancharlton.mileage.models.ServiceInterval;
 import com.evancharlton.mileage.models.Vehicle;
 import com.evancharlton.mileage.models.defaults.PresetServiceInterval;
 
-public class AddServiceIntervalView extends Activity {
+public class AddServiceIntervalView extends MileageActivity {
 	protected Button m_saveBtn;
 	protected Button m_dateBtn;
 	protected Spinner m_presetSpinner;
@@ -69,6 +66,11 @@ public class AddServiceIntervalView extends Activity {
 		cal.add(Calendar.MONTH, 1);
 		MONTH = cal.getTimeInMillis();
 		cal = null;
+	}
+
+	@Override
+	protected String getTag() {
+		return "AddServiceInterval";
 	}
 
 	@Override
@@ -128,25 +130,6 @@ public class AddServiceIntervalView extends Activity {
 		data.putString(DESCRIPTION, m_descriptionEdit.getText().toString());
 
 		return data;
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		super.onCreateOptionsMenu(menu);
-
-		HelpDialog.injectHelp(menu, 'h');
-
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-			case HelpDialog.MENU_HELP:
-				HelpDialog.create(this, R.string.help_title_add_service_interval, R.string.help_add_service_interval);
-				break;
-		}
-		return super.onOptionsItemSelected(item);
 	}
 
 	protected void initUI() {
@@ -271,7 +254,7 @@ public class AddServiceIntervalView extends Activity {
 		m_startDate = new GregorianCalendar(m_year, m_month, m_day);
 		Date d = new Date(m_startDate.getTimeInMillis());
 
-		m_dateBtn.setText(PreferencesProvider.getInstance(AddServiceIntervalView.this).format(d));
+		m_dateBtn.setText(DateFormat.getDateFormat(this).format(d));
 		if (m_dateDlg != null) {
 			m_dateDlg.updateDate(m_year, m_month, m_day);
 		}

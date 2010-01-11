@@ -2,8 +2,6 @@ package com.evancharlton.mileage;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -20,6 +18,12 @@ public class AddVehicleView extends DeleteActivity {
 	protected Button m_save;
 	protected CheckBox m_default;
 
+	@Override
+	protected String getTag() {
+		return "AddVehicleView";
+	}
+
+	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
@@ -89,19 +93,5 @@ public class AddVehicleView extends DeleteActivity {
 		}
 
 		return v;
-	}
-
-	public boolean onCreateOptionsMenu(Menu menu) {
-		HelpDialog.injectHelp(menu, 'h');
-		return super.onCreateOptionsMenu(menu);
-	}
-
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-			case HelpDialog.MENU_HELP:
-				HelpDialog.create(this, R.string.help_title_vehicle_add, R.string.help_vehicle_add);
-				break;
-		}
-		return super.onOptionsItemSelected(item);
 	}
 }

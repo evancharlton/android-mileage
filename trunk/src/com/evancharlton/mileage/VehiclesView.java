@@ -20,13 +20,18 @@ import com.evancharlton.mileage.binders.VehicleBinder;
 import com.evancharlton.mileage.models.Vehicle;
 
 public class VehiclesView extends DeleteActivity implements View.OnCreateContextMenuListener {
-	public static final String TAG = "VehiclesList";
+	protected static final String TAG = "VehiclesList";
 	public static final int MENU_ADD = Menu.FIRST;
 	public static final int MENU_DEFAULT = Menu.FIRST;
 	public static final int MENU_EDIT = Menu.FIRST + 1;
 	public static final int MENU_DELETE = Menu.FIRST + 2;
 
 	private long m_deleteId;
+
+	@Override
+	protected String getTag() {
+		return TAG;
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -55,12 +60,8 @@ public class VehiclesView extends DeleteActivity implements View.OnCreateContext
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		super.onCreateOptionsMenu(menu);
-
 		menu.add(Menu.NONE, MENU_ADD, 0, R.string.vehicle_add).setShortcut('1', 'v').setIcon(R.drawable.ic_menu_add);
-		HelpDialog.injectHelp(menu, 'h');
-
-		return true;
+		return super.onCreateOptionsMenu(menu);
 	}
 
 	@Override
@@ -70,9 +71,6 @@ public class VehiclesView extends DeleteActivity implements View.OnCreateContext
 				Intent i = new Intent();
 				i.setClass(VehiclesView.this, AddVehicleView.class);
 				startActivity(i);
-				break;
-			case HelpDialog.MENU_HELP:
-				HelpDialog.create(this, R.string.help_title_vehicles, R.string.help_vehicles);
 				break;
 		}
 		return super.onOptionsItemSelected(item);

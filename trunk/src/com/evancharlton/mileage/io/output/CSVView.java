@@ -18,6 +18,13 @@ import com.evancharlton.mileage.calculators.CalculationEngine;
 import com.evancharlton.mileage.models.FillUp;
 
 public class CSVView extends ExportView {
+
+	@Override
+	protected String getTag() {
+		return "CSVExport";
+	}
+
+	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState, "csv");
 		m_title = (TextView) findViewById(R.id.title);
@@ -77,15 +84,5 @@ public class CSVView extends ExportView {
 				}
 			}
 		};
-	}
-
-	@Override
-	protected String getHelp() {
-		return getString(R.string.help_export_csv);
-	}
-
-	@Override
-	protected String getHelpTitle() {
-		return getString(R.string.help_export_csv_title);
 	}
 }

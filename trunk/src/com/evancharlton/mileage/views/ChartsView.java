@@ -18,7 +18,6 @@ import android.widget.Button;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 
-import com.evancharlton.mileage.HelpDialog;
 import com.evancharlton.mileage.Mileage;
 import com.evancharlton.mileage.PreferencesProvider;
 import com.evancharlton.mileage.R;
@@ -36,6 +35,12 @@ public class ChartsView extends TabChildActivity {
 	private Button m_odometerBtn;
 	private Spinner m_vehicles;
 
+	@Override
+	protected String getTag() {
+		return "ChartsView";
+	}
+
+	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
@@ -48,23 +53,12 @@ public class ChartsView extends TabChildActivity {
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {
-		super.onCreateOptionsMenu(menu);
 		Mileage.createMenu(menu);
-		HelpDialog.injectHelp(menu, 'h');
-		return true;
+		return super.onCreateOptionsMenu(menu);
 	}
 
 	public boolean onOptionsItemSelected(MenuItem item) {
-		boolean ret = Mileage.parseMenuItem(item, this);
-		if (ret) {
-			return true;
-		}
-		switch (item.getItemId()) {
-			case HelpDialog.MENU_HELP:
-				HelpDialog.create(this, R.string.help_title_charts, R.string.help_charts);
-				break;
-		}
-		return super.onOptionsItemSelected(item);
+		return Mileage.parseMenuItem(item, this) || super.onOptionsItemSelected(item);
 	}
 
 	private int calculateSkip(int size, int max) {
@@ -167,7 +161,9 @@ public class ChartsView extends TabChildActivity {
 				int skip = calculateSkip(size, 50);
 				for (int i = 1; i < size; i += skip) {
 					FillUp fillup = fillups.get(i);
-					series.add(fillup.getDate().getTimeInMillis(), fillup.calcEconomy());
+					if (!fillup.isPartial()) {
+						series.add(fillup.getDate().getTimeInMillis(), fillup.getEconomy());
+					}
 				}
 				showChart(series);
 			}
