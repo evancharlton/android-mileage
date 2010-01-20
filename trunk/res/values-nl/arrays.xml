@@ -3,7 +3,7 @@
 	<string-array name="units_volume">
 		<item>Gallons</item>
 		<item>Liters</item>
-		<item>Imperial Gallons</item>
+		<item>Imperial gallons</item>
 	</string-array>
 	<string-array name="values_volume">
 		<item>0</item>
@@ -11,8 +11,8 @@
 		<item>2</item>
 	</string-array>
 	<string-array name="units_distance">
-		<item>Mijlen</item>
-		<item>Kilometers</item>
+		<item>Mijl</item>
+		<item>Kilometer</item>
 	</string-array>
 	<string-array name="values_distance">
 		<item>0</item>
@@ -23,12 +23,12 @@
 		<item>Km</item>
 	</string-array>
 	<string-array name="units_economy">
-		<item>Mi per Gallon</item>
-		<item>Km per Gallon</item>
-		<item>Mi per Imp. Gallon</item>
-		<item>Km per Imp. Gallon</item>
-		<item>Mi per Liter</item>
-		<item>Km per Liter</item>
+		<item>Mi per gallon</item>
+		<item>Km per gallon</item>
+		<item>Mi per imp. gallon</item>
+		<item>Km per imp. gallon</item>
+		<item>Mi per liter</item>
+		<item>Km per liter</item>
 		<item>Gallons per 100 km</item>
 		<item>Litres per 100 km</item>
 		<item>Imp. Gal. per 100 km</item>
@@ -51,7 +51,7 @@
     </string-array>
     <string-array name="unit_amount_hints">
     	<item>Gallons brandstof</item>
-    	<item>Litres brandstof</item>
+    	<item>Liters brandstof</item>
     	<item>Gallons brandstof</item>
     </string-array>
     <string-array name="date_formats">
@@ -86,11 +86,20 @@
     	<item>###0,00</item>
     	<item>#.##0,00</item>
     </string-array>
-    
     <string-array name="duration_units">
     	<item>Dagen</item>
     	<item>Weken</item>
     	<item>Maanden</item>
     	<item>Jaren</item>
+    </string-array>
+    <string-array name="fillup_data_options">
+        <item>@string/total_volume_unit_price</item>
+        <item>@string/total_volume_total_cost</item>
+        <item>@string/total_cost_unit_price</item>
+    </string-array>
+    <string-array name="fillup_data_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
     </string-array>
 </resources>
