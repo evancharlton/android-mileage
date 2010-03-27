@@ -12,6 +12,7 @@ import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -99,6 +100,7 @@ public class StatisticsView extends TabChildActivity {
 		setVehicleSelection(m_vehicles);
 		m_vehicles.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			public void onItemSelected(AdapterView<?> adapter, View view, int position, long id) {
+				Log.d(getTag(), String.valueOf(position));
 				updateVehicleSelection(position);
 				calculateStatistics(m_vehicles.getSelectedItemId());
 			}
