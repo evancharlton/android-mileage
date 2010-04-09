@@ -1,16 +1,15 @@
 package com.evancharlton.mileage;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 
 import android.content.ContentProvider;
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.UriMatcher;
 import android.database.Cursor;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -21,6 +20,8 @@ import android.text.TextUtils;
 import com.evancharlton.mileage.models.FillUp;
 import com.evancharlton.mileage.models.ServiceInterval;
 import com.evancharlton.mileage.models.Vehicle;
+import com.evancharlton.mileage.provider.tables.ContentTable;
+import com.evancharlton.mileage.provider.tables.FillupsTable;
 
 /**
  * Note that this app does not currently (as of version > 1.8.4) use a
@@ -32,7 +33,12 @@ import com.evancharlton.mileage.models.Vehicle;
  */
 public class FillUpsProvider extends ContentProvider {
 	public static final String DATABASE_NAME = "mileage.db";
-	public static final int DATABASE_VERSION = 5;
+	public static final int DATABASE_VERSION = 50;
+	private static final String AUTHORITY = "com.evancharlton.mileage";
+
+	// database tables
+	public static final ArrayList<ContentTable> TABLES = new ArrayList<ContentTable>();
+
 	public static final String FILLUPS_TABLE_NAME = "fillups";
 	public static final String VEHICLES_TABLE_NAME = "vehicles";
 	public static final String MAINTENANCE_TABLE_NAME = "maintenance_intervals";
@@ -53,30 +59,21 @@ public class FillUpsProvider extends ContentProvider {
 	private static final int MAINTENANCE_INTERVALS = 5;
 	private static final int MAINTENANCE_INTERVAL_ID = 6;
 
-	private static final UriMatcher s_uriMatcher;
+	private static final UriMatcher s_uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
 	static {
-		s_uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+		TABLES.add(new FillupsTable());
+
+		for (ContentTable table : TABLES) {
+			table.registerUris(AUTHORITY, s_uriMatcher);
+		}
+
 		s_uriMatcher.addURI(FillUp.AUTHORITY, "fillups", FILLUPS);
 		s_uriMatcher.addURI(FillUp.AUTHORITY, "fillups/#", FILLUP_ID);
 		s_uriMatcher.addURI(Vehicle.AUTHORITY, "vehicles", VEHICLES);
 		s_uriMatcher.addURI(Vehicle.AUTHORITY, "vehicles/#", VEHICLE_ID);
 		s_uriMatcher.addURI(ServiceInterval.AUTHORITY, "intervals", MAINTENANCE_INTERVALS);
 		s_uriMatcher.addURI(ServiceInterval.AUTHORITY, "intervals/#", MAINTENANCE_INTERVAL_ID);
-
-		s_fillUpsProjectionMap = new HashMap<String, String>();
-		s_fillUpsProjectionMap.put(FillUp._ID, FillUp._ID);
-		s_fillUpsProjectionMap.put(FillUp.PRICE, FillUp.PRICE);
-		s_fillUpsProjectionMap.put(FillUp.AMOUNT, FillUp.AMOUNT);
-		s_fillUpsProjectionMap.put(FillUp.ODOMETER, FillUp.ODOMETER);
-		s_fillUpsProjectionMap.put(FillUp.ECONOMY, FillUp.ECONOMY);
-		s_fillUpsProjectionMap.put(FillUp.VEHICLE_ID, FillUp.VEHICLE_ID);
-		s_fillUpsProjectionMap.put(FillUp.DATE, FillUp.DATE);
-		s_fillUpsProjectionMap.put(FillUp.LATITUDE, FillUp.LATITUDE);
-		s_fillUpsProjectionMap.put(FillUp.LONGITUDE, FillUp.LONGITUDE);
-		s_fillUpsProjectionMap.put(FillUp.COMMENT, FillUp.COMMENT);
-		s_fillUpsProjectionMap.put(FillUp.PARTIAL, FillUp.PARTIAL);
-		s_fillUpsProjectionMap.put(FillUp.RESTART, FillUp.RESTART);
 
 		s_vehiclesProjectionMap = new HashMap<String, String>();
 		s_vehiclesProjectionMap.put(Vehicle._ID, Vehicle._ID);
@@ -144,37 +141,17 @@ public class FillUpsProvider extends ContentProvider {
 	@Override
 	public int delete(Uri uri, String selection, String[] selectionArgs) {
 		SQLiteDatabase db = m_helper.getWritableDatabase();
-		int count;
-		switch (s_uriMatcher.match(uri)) {
-			case FILLUPS:
-				count = db.delete(FILLUPS_TABLE_NAME, selection, selectionArgs);
-				break;
 
-			case FILLUP_ID:
-				String fillUpId = uri.getPathSegments().get(1);
-				count = db.delete(FILLUPS_TABLE_NAME, FillUp._ID + " = " + fillUpId + (!TextUtils.isEmpty(selection) ? " AND (" + selection + ")" : ""), selectionArgs);
+		int count = -1;
+		for (ContentTable table : TABLES) {
+			count = table.delete(db, uri, selection, selectionArgs);
+			if (count > 0) {
 				break;
+			}
+		}
 
-			case VEHICLES:
-				count = db.delete(VEHICLES_TABLE_NAME, selection, selectionArgs);
-				break;
-
-			case VEHICLE_ID:
-				String vehicleId = uri.getPathSegments().get(1);
-				count = db.delete(VEHICLES_TABLE_NAME, Vehicle._ID + " = " + vehicleId + (!TextUtils.isEmpty(selection) ? " AND (" + selection + ")" : ""), selectionArgs);
-				break;
-
-			case MAINTENANCE_INTERVALS:
-				count = db.delete(MAINTENANCE_TABLE_NAME, selection, selectionArgs);
-				break;
-
-			case MAINTENANCE_INTERVAL_ID:
-				String intervalId = uri.getPathSegments().get(1);
-				count = db.delete(MAINTENANCE_TABLE_NAME, ServiceInterval._ID + " = " + intervalId + (!TextUtils.isEmpty(selection) ? " AND (" + selection + ")" : ""), selectionArgs);
-				break;
-
-			default:
-				throw new IllegalArgumentException("Unknown URI: " + uri);
+		if (count < 0) {
+			throw new IllegalArgumentException("Unknown URI: " + uri);
 		}
 
 		getContext().getContentResolver().notifyChange(uri, null);
@@ -183,124 +160,54 @@ public class FillUpsProvider extends ContentProvider {
 
 	@Override
 	public String getType(Uri uri) {
-		switch (s_uriMatcher.match(uri)) {
-			case FILLUPS:
-				return FillUp.CONTENT_TYPE;
-			case FILLUP_ID:
-				return FillUp.CONTENT_ITEM_TYPE;
-			case VEHICLES:
-				return Vehicle.CONTENT_TYPE;
-			case VEHICLE_ID:
-				return Vehicle.CONTENT_ITEM_TYPE;
-			case MAINTENANCE_INTERVALS:
-				return ServiceInterval.CONTENT_TYPE;
-			case MAINTENANCE_INTERVAL_ID:
-				return ServiceInterval.CONTENT_ITEM_TYPE;
-			default:
-				throw new IllegalArgumentException("Unknown URI: " + uri);
+		final int type = s_uriMatcher.match(uri);
+		String result = null;
+		for (ContentTable table : TABLES) {
+			result = table.getType(type);
+			if (result != null) {
+				return result;
+			}
 		}
+		throw new IllegalArgumentException("Unknown URI: " + uri);
 	}
 
 	@Override
 	public Uri insert(Uri uri, ContentValues initialValues) {
-		int match = s_uriMatcher.match(uri);
-
-		switch (match) {
-			case FILLUPS:
-				return insertFillup(uri, initialValues);
-			case VEHICLES:
-				return insertVehicle(uri, initialValues);
-			case MAINTENANCE_INTERVALS:
-				return insertInterval(uri, initialValues);
-			default:
-				throw new IllegalArgumentException("Unknown URI: " + uri);
+		final int match = s_uriMatcher.match(uri);
+		Uri result = null;
+		for (ContentTable table : TABLES) {
+			result = table.insert(match, uri, initialValues);
+			if (result != null) {
+				getContext().getContentResolver().notifyChange(result, null);
+				return result;
+			}
 		}
-	}
-
-	private Uri insertInterval(Uri uri, ContentValues initialValues) {
-		ServiceInterval interval = new ServiceInterval(initialValues);
-		if (interval.validate() <= 0) {
-			long id = interval.save();
-			Uri contentUri = ContentUris.withAppendedId(ServiceInterval.CONTENT_URI, id);
-			getContext().getContentResolver().notifyChange(contentUri, null);
-			return contentUri;
-		}
-		throw new SQLException("Failed to insert row into " + uri);
-	}
-
-	private Uri insertFillup(Uri uri, ContentValues initialValues) {
-		FillUp fillup = new FillUp(initialValues);
-		if (fillup.validate() <= 0) {
-			long id = fillup.save();
-			Uri contentUri = ContentUris.withAppendedId(FillUp.CONTENT_URI, id);
-			getContext().getContentResolver().notifyChange(contentUri, null);
-			return contentUri;
-		}
-		throw new SQLException("Failed to insert row into " + uri);
-	}
-
-	private Uri insertVehicle(Uri uri, ContentValues initialValues) {
-		Vehicle vehicle = new Vehicle(initialValues);
-		if (vehicle.validate() <= 0) {
-			long id = vehicle.save();
-			Uri contentUri = ContentUris.withAppendedId(Vehicle.CONTENT_URI, id);
-			getContext().getContentResolver().notifyChange(contentUri, null);
-			return contentUri;
-		}
-		throw new SQLException("Failed to insert row into " + uri);
+		throw new IllegalArgumentException("Unknown URI: " + uri);
 	}
 
 	@Override
 	public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
 		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-
-		switch (s_uriMatcher.match(uri)) {
-			case FILLUPS:
-				qb.setTables(FILLUPS_TABLE_NAME);
-				qb.setProjectionMap(s_fillUpsProjectionMap);
+		final int match = s_uriMatcher.match(uri);
+		boolean changed = false;
+		ContentTable queryTable = null;
+		for (ContentTable table : TABLES) {
+			changed = table.query(match, uri, qb);
+			if (changed) {
+				queryTable = table;
 				break;
-			case FILLUP_ID:
-				qb.setTables(FILLUPS_TABLE_NAME);
-				qb.setProjectionMap(s_fillUpsProjectionMap);
-				qb.appendWhere(FillUp._ID + " = " + uri.getPathSegments().get(1));
-				break;
-			case VEHICLES:
-				qb.setTables(VEHICLES_TABLE_NAME);
-				qb.setProjectionMap(s_vehiclesProjectionMap);
-				break;
-			case VEHICLE_ID:
-				qb.setTables(VEHICLES_TABLE_NAME);
-				qb.setProjectionMap(s_vehiclesProjectionMap);
-				qb.appendWhere(Vehicle._ID + " = " + uri.getPathSegments().get(1));
-				break;
-			case MAINTENANCE_INTERVALS:
-				qb.setTables(MAINTENANCE_TABLE_NAME);
-				qb.setProjectionMap(s_maintenanceIntervalsProjectionMap);
-				break;
-			case MAINTENANCE_INTERVAL_ID:
-				qb.setTables(MAINTENANCE_TABLE_NAME);
-				qb.setProjectionMap(s_maintenanceIntervalsProjectionMap);
-				qb.appendWhere(ServiceInterval._ID + " = " + uri.getPathSegments().get(1));
-			default:
-				throw new IllegalArgumentException("Unknown URI: " + uri);
-		}
-
-		String orderBy = null;
-		if (TextUtils.isEmpty(sortOrder)) {
-			if (qb.getTables() == FILLUPS_TABLE_NAME) {
-				orderBy = FillUp.DEFAULT_SORT_ORDER;
-			} else {
-				orderBy = Vehicle.DEFAULT_SORT_ORDER;
 			}
-		} else {
-			orderBy = sortOrder;
 		}
+		if (!changed) {
+			throw new IllegalArgumentException("Unknown URI: " + uri);
+		}
+
+		String orderBy = TextUtils.isEmpty(sortOrder) ? queryTable.getDefaultSortOrder() : sortOrder;
 
 		SQLiteDatabase db;
 		try {
 			db = m_helper.getReadableDatabase();
 		} catch (SQLiteException e) {
-			e.printStackTrace();
 			db = m_helper.getWritableDatabase();
 		}
 		Cursor c = qb.query(db, projection, selection, selectionArgs, null, null, orderBy);
@@ -311,32 +218,19 @@ public class FillUpsProvider extends ContentProvider {
 
 	@Override
 	public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-		SQLiteDatabase db = m_helper.getWritableDatabase();
-		int count;
-		String clause;
-		switch (s_uriMatcher.match(uri)) {
-			case FILLUPS:
-				count = db.update(FILLUPS_TABLE_NAME, values, selection, selectionArgs);
-				break;
-			case FILLUP_ID:
-				String fillUpId = uri.getPathSegments().get(1);
-				clause = FillUp._ID + " = " + fillUpId + (!TextUtils.isEmpty(selection) ? " AND (" + selection + ")" : "");
-				count = db.update(FILLUPS_TABLE_NAME, values, clause, selectionArgs);
-				break;
-			case VEHICLES:
-				count = db.update(VEHICLES_TABLE_NAME, values, selection, selectionArgs);
-				break;
-			case VEHICLE_ID:
-				String vehicleId = uri.getPathSegments().get(1);
-				clause = Vehicle._ID + " = " + vehicleId + (!TextUtils.isEmpty(selection) ? " AND (" + selection + ")" : "");
-				count = db.update(VEHICLES_TABLE_NAME, values, clause, selectionArgs);
-				break;
-			default:
-				throw new IllegalArgumentException("Unknown URI: " + uri);
+		final int match = s_uriMatcher.match(uri);
+		if (match >= 0) {
+			SQLiteDatabase db = m_helper.getWritableDatabase();
+			int count = -1;
+			for (ContentTable table : TABLES) {
+				count = table.update(match, db, uri, values, selection, selectionArgs);
+				if (count >= 0) {
+					getContext().getContentResolver().notifyChange(uri, null);
+					return count;
+				}
+			}
 		}
-
-		getContext().getContentResolver().notifyChange(uri, null);
-		return count;
+		throw new IllegalArgumentException("Unknown URI: " + uri);
 	}
 
 	public static HashMap<String, String> getFillUpsProjection() {

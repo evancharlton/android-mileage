@@ -1,0 +1,8 @@
+syntax: glob
+
+keys.*
+bin/*
+*.class
+*.dex
+*.jar
+gen/*
