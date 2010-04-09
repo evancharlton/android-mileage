@@ -97,4 +97,34 @@ public class FillupsTable extends ContentTable {
 		}
 		return -1;
 	}
+
+	@Override
+	public String init() {
+		return null;
+	}
+
+	@Override
+	public String create() {
+		StringBuilder sql = new StringBuilder();
+		sql.append("CREATE TABLE ").append(getTableName()).append(" (");
+		sql.append(FillUp._ID).append(" INTEGER PRIMARY KEY AUTOINCREMENT,");
+		sql.append(FillUp.PRICE).append(" DOUBLE,");
+		sql.append(FillUp.AMOUNT).append(" DOUBLE,");
+		sql.append(FillUp.ODOMETER).append(" DOUBLE,");
+		sql.append(FillUp.ECONOMY).append(" DOUBLE,");
+		sql.append(FillUp.VEHICLE_ID).append(" INTEGER,");
+		sql.append(FillUp.DATE).append(" INTEGER,");
+		sql.append(FillUp.LATITUDE).append(" DOUBLE,");
+		sql.append(FillUp.LONGITUDE).append(" DOUBLE,");
+		sql.append(FillUp.COMMENT).append(" TEXT,");
+		sql.append(FillUp.PARTIAL).append(" INTEGER,");
+		sql.append(FillUp.RESTART).append(" INTEGER");
+		sql.append(");");
+		return sql.toString();
+	}
+
+	@Override
+	public String upgrade(final int currentVersion) {
+		return null;
+	}
 }

@@ -36,4 +36,10 @@ public abstract class ContentTable {
 	abstract public boolean query(int type, Uri uri, SQLiteQueryBuilder queryBuilder);
 
 	abstract public int update(int match, SQLiteDatabase db, Uri uri, ContentValues values, String selection, String[] selectionArgs);
+
+	abstract public String init();
+
+	abstract public String create();
+
+	abstract public String upgrade(final int currentVersion);
 }
