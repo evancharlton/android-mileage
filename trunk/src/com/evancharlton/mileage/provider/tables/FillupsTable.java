@@ -1,6 +1,5 @@
 package com.evancharlton.mileage.provider.tables;
 
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.sqlite.SQLiteDatabase;
@@ -8,38 +7,45 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
 
-import com.evancharlton.mileage.models.FillUp;
+import com.evancharlton.mileage.dao.Dao;
+import com.evancharlton.mileage.dao.Fillup;
+import com.evancharlton.mileage.provider.FillUpsProvider;
 
 public class FillupsTable extends ContentTable {
-	protected static final String TABLE_NAME = "fillups";
-	protected static final String DEFAULT_SORT_ORDER = FillUp._ID + " desc";
-
-	// needs to be globally unique
-	private static final int FILLUPS = 1;
-	private static final int FILLUP_ID = 2;
+	// make sure it's globally unique
+	private static final int FILLUPS = 10;
+	private static final int FILLUP_ID = 11;
 
 	private static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.evancharlton.fillup";
 	private static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.evancharlton.fillup";
 
-	static {
-		PROJECTION_MAP.put(FillUp._ID, FillUp._ID);
-		PROJECTION_MAP.put(FillUp.PRICE, FillUp.PRICE);
-		PROJECTION_MAP.put(FillUp.AMOUNT, FillUp.AMOUNT);
-		PROJECTION_MAP.put(FillUp.ODOMETER, FillUp.ODOMETER);
-		PROJECTION_MAP.put(FillUp.ECONOMY, FillUp.ECONOMY);
-		PROJECTION_MAP.put(FillUp.VEHICLE_ID, FillUp.VEHICLE_ID);
-		PROJECTION_MAP.put(FillUp.DATE, FillUp.DATE);
-		PROJECTION_MAP.put(FillUp.LATITUDE, FillUp.LATITUDE);
-		PROJECTION_MAP.put(FillUp.LONGITUDE, FillUp.LONGITUDE);
-		PROJECTION_MAP.put(FillUp.COMMENT, FillUp.COMMENT);
-		PROJECTION_MAP.put(FillUp.PARTIAL, FillUp.PARTIAL);
-		PROJECTION_MAP.put(FillUp.RESTART, FillUp.RESTART);
+	public static final String FILLUPS_URI = "fillups";
+
+	public static final String[] getFullProjectionArray() {
+		return new String[] {
+				Dao._ID,
+				Fillup.PRICE,
+				Fillup.VOLUME,
+				Fillup.ODOMETER,
+				Fillup.ECONOMY,
+				Fillup.VEHICLE_ID,
+				Fillup.DATE,
+				Fillup.LATITUDE,
+				Fillup.LONGITUDE,
+				Fillup.PARTIAL,
+				Fillup.RESTART
+		};
 	}
 
 	@Override
-	public void registerUris(String authority, UriMatcher uriMatcher) {
-		uriMatcher.addURI(authority, "fillups", FILLUPS);
-		uriMatcher.addURI(authority, "fillups/#", FILLUP_ID);
+	public String getTableName() {
+		return "fillups";
+	}
+
+	@Override
+	public void registerUris(UriMatcher uriMatcher) {
+		uriMatcher.addURI(FillUpsProvider.AUTHORITY, FILLUPS_URI, FILLUPS);
+		uriMatcher.addURI(FillUpsProvider.AUTHORITY, FILLUPS_URI + "/#", FILLUP_ID);
 	}
 
 	@Override
@@ -60,13 +66,9 @@ public class FillupsTable extends ContentTable {
 	}
 
 	@Override
-	public Uri insert(int type, Uri uri, ContentValues initialValues) {
-		if (type == FILLUPS) {
-			// save new fillup
-			// FIXME
-			return ContentUris.withAppendedId(uri, 10);
-		}
-		return null;
+	public long insert(int type, SQLiteDatabase db, ContentValues initialValues) {
+		// TODO Auto-generated method stub
+		return -1L;
 	}
 
 	@Override
@@ -74,12 +76,12 @@ public class FillupsTable extends ContentTable {
 		switch (type) {
 			case FILLUPS:
 				queryBuilder.setTables(getTableName());
-				queryBuilder.setProjectionMap(getFullProjectionMap());
+				queryBuilder.setProjectionMap(buildProjectionMap(getFullProjectionArray()));
 				return true;
 			case FILLUP_ID:
 				queryBuilder.setTables(getTableName());
-				queryBuilder.setProjectionMap(getFullProjectionMap());
-				queryBuilder.appendWhere(FillUp._ID + " = " + uri.getPathSegments().get(1));
+				queryBuilder.setProjectionMap(buildProjectionMap(getFullProjectionArray()));
+				queryBuilder.appendWhere(Fillup._ID + " = " + uri.getPathSegments().get(1));
 				return true;
 		}
 		return false;
@@ -92,7 +94,7 @@ public class FillupsTable extends ContentTable {
 				return db.update(getTableName(), values, selection, selectionArgs);
 			case FILLUP_ID:
 				String fillUpId = uri.getPathSegments().get(1);
-				String clause = FillUp._ID + " = " + fillUpId + (!TextUtils.isEmpty(selection) ? " AND (" + selection + ")" : "");
+				String clause = Fillup._ID + " = " + fillUpId + (!TextUtils.isEmpty(selection) ? " AND (" + selection + ")" : "");
 				return db.update(getTableName(), values, clause, selectionArgs);
 		}
 		return -1;
@@ -105,26 +107,17 @@ public class FillupsTable extends ContentTable {
 
 	@Override
 	public String create() {
-		StringBuilder sql = new StringBuilder();
-		sql.append("CREATE TABLE ").append(getTableName()).append(" (");
-		sql.append(FillUp._ID).append(" INTEGER PRIMARY KEY AUTOINCREMENT,");
-		sql.append(FillUp.PRICE).append(" DOUBLE,");
-		sql.append(FillUp.AMOUNT).append(" DOUBLE,");
-		sql.append(FillUp.ODOMETER).append(" DOUBLE,");
-		sql.append(FillUp.ECONOMY).append(" DOUBLE,");
-		sql.append(FillUp.VEHICLE_ID).append(" INTEGER,");
-		sql.append(FillUp.DATE).append(" INTEGER,");
-		sql.append(FillUp.LATITUDE).append(" DOUBLE,");
-		sql.append(FillUp.LONGITUDE).append(" DOUBLE,");
-		sql.append(FillUp.COMMENT).append(" TEXT,");
-		sql.append(FillUp.PARTIAL).append(" INTEGER,");
-		sql.append(FillUp.RESTART).append(" INTEGER");
-		sql.append(");");
-		return sql.toString();
+		return new TableBuilder().addDouble(Fillup.PRICE).addDouble(Fillup.VOLUME).addDouble(Fillup.ODOMETER).addDouble(Fillup.ECONOMY).addInteger(
+				Fillup.VEHICLE_ID).addInteger(Fillup.DATE).addDouble(Fillup.LATITUDE).addDouble(Fillup.LONGITUDE).addText(Fillup.COMMENT).toString();
 	}
 
 	@Override
 	public String upgrade(final int currentVersion) {
 		return null;
+	}
+
+	@Override
+	public String getDefaultSortOrder() {
+		return Fillup.ODOMETER + " desc";
 	}
 }

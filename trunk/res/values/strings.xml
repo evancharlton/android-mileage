@@ -215,4 +215,10 @@
 	<string name="input_label_fillup">Fill-Up Input</string>
 	
 	<string name="help">Help</string>
+	
+	<!-- new strings -->
+	<string name="add_field">Add new field</string>
+	<string name="field_title">Title</string>
+	<string name="field_description">Description</string>
+	<string name="edit_fields">Edit fields</string>
 </resources>

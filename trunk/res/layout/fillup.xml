@@ -22,14 +22,14 @@
 		    	android:gravity="center"
 		    >
 				<EditText
-					android:id="@+id/price_edit"
+					android:id="@+id/price"
 				    android:layout_width="0dip"
 			   		android:layout_weight="1"
 				    android:layout_height="wrap_content" 
 				    android:numeric="decimal"
 				/>
 				<EditText
-					android:id="@+id/amount_edit"
+					android:id="@+id/volume"
 					android:layout_width="0dip"
 			   		android:layout_weight="1"
 					android:layout_height="wrap_content"
@@ -43,7 +43,7 @@
 		    	android:gravity="center"
 			>
 				<EditText
-					android:id="@+id/odometer_edit"
+					android:id="@+id/odometer"
 					android:layout_width="0dip"
 			   		android:layout_weight="1"
 					android:layout_height="wrap_content"
@@ -52,7 +52,7 @@
 					android:digits="+0123456789."
 				/>
 				<Button
-					android:id="@+id/change_date_btn"
+					android:id="@+id/date"
 					android:layout_width="0dip"
 			   		android:layout_weight="1"
 					android:layout_height="wrap_content"
@@ -63,18 +63,17 @@
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
 			/>
-			<EditText
-				android:id="@+id/comment_edit"
-				android:layout_width="fill_parent"
-				android:layout_height="wrap_content"
-				android:hint="@string/comment"
-				android:capitalize="sentences"
-			/>
 			<CheckBox
-				android:id="@+id/partial_checkbox"
+				android:id="@+id/partial"
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
 				android:text="@string/partial_fillup"
+			/>
+			<LinearLayout
+				android:id="@+id/container"
+				android:orientation="vertical"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
 			/>
 		</LinearLayout>
 	</ScrollView>
