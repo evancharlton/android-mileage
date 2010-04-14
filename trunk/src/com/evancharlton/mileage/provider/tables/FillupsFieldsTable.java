@@ -12,6 +12,7 @@ import com.evancharlton.mileage.provider.FillUpsProvider;
 
 public class FillupsFieldsTable extends ContentTable {
 	// make sure it's globally unique
+	// TODO: rename these because it's confusing as fuck
 	private static final int FILLUP_FIELDS = 20;
 	private static final int FILLUP_FIELD = 21;
 	private static final int FILLUPS_FIELDS = 22;
@@ -20,12 +21,12 @@ public class FillupsFieldsTable extends ContentTable {
 	 * Given a fillup ID, return all of the fields that were saved on that
 	 * fillup
 	 */
-	public static final String FILLUPS_FIELDS_URI = "fillups/fields/";
+	public static final String FILLUPS_FIELDS_URI = "fillups/fields";
 
 	/**
 	 * Given a field ID, return the field
 	 */
-	public static final String FILLUPS_FIELD_URI = "fillups/field/";
+	public static final String FILLUPS_FIELD_URI = "fillups/field";
 
 	private static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.evancharlton.fillup_fields";
 	private static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.evancharlton.fillup_field_id";
@@ -82,29 +83,49 @@ public class FillupsFieldsTable extends ContentTable {
 	@Override
 	public long insert(int type, SQLiteDatabase db, ContentValues initialValues) {
 		switch (type) {
+			case FILLUP_FIELDS:
 			case FILLUPS_FIELDS:
 				return db.insert(getTableName(), null, initialValues);
 		}
-		// TODO Auto-generated method stub
 		return -1L;
 	}
 
 	@Override
 	public boolean query(int type, Uri uri, SQLiteQueryBuilder queryBuilder) {
-		// TODO Auto-generated method stub
+		switch (type) {
+			case FILLUPS_FIELDS:
+				queryBuilder.setTables(getTableName());
+				queryBuilder.setProjectionMap(buildProjectionMap(getFullProjectionArray()));
+				return true;
+			case FILLUP_FIELDS:
+				queryBuilder.setTables(getTableName());
+				queryBuilder.setProjectionMap(buildProjectionMap(getFullProjectionArray()));
+				queryBuilder.appendWhere(FillupField.FILLUP_ID + " = " + uri.getPathSegments().get(2));
+			case FILLUP_FIELD:
+				queryBuilder.setTables(getTableName());
+				queryBuilder.setProjectionMap(buildProjectionMap(getFullProjectionArray()));
+				queryBuilder.appendWhere(FillupField._ID + " = " + uri.getPathSegments().get(2));
+				return true;
+		}
 		return false;
 	}
 
 	@Override
 	public void registerUris(UriMatcher uriMatcher) {
 		uriMatcher.addURI(FillUpsProvider.AUTHORITY, FILLUPS_FIELDS_URI, FILLUPS_FIELDS);
-		uriMatcher.addURI(FillUpsProvider.AUTHORITY, FILLUPS_FIELDS_URI + "#", FILLUP_FIELDS);
-		uriMatcher.addURI(FillUpsProvider.AUTHORITY, FILLUPS_FIELD_URI + "#", FILLUP_FIELD);
+		uriMatcher.addURI(FillUpsProvider.AUTHORITY, FILLUPS_FIELDS_URI + "/#", FILLUP_FIELDS);
+		uriMatcher.addURI(FillUpsProvider.AUTHORITY, FILLUPS_FIELD_URI + "/#", FILLUP_FIELD);
 	}
 
 	@Override
 	public int update(int match, SQLiteDatabase db, Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-		// TODO Auto-generated method stub
+		switch (match) {
+			case FILLUP_FIELD:
+				return db.update(getTableName(), values, FillupField._ID + " = ?", new String[] {
+					values.getAsString(FillupField._ID)
+				});
+
+		}
 		return -1;
 	}
 

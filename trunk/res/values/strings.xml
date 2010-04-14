@@ -222,13 +222,20 @@
 	<string name="field_description">Description</string>
 	<string name="edit_fields">Edit fields</string>
 	
-	<string name="error_no_vehicle_specified">No vehicle was specified!</string>
-	<string name="error_no_odometer_specified">Invalid value for odometer!</string>
-	<string name="error_no_volume_specified">Invalid value for volume!</string>
-	<string name="error_no_price_specified">Invalid value for price!</string>
+	<string name="error_no_vehicle_specified">No vehicle was specified</string>
+	<string name="error_no_odometer_specified">Invalid value for odometer</string>
+	<string name="error_no_volume_specified">Invalid value for volume</string>
+	<string name="error_no_price_specified">Invalid value for price</string>
 	<string name="error_invalid_field_title">Invalid field title</string>
 	<string name="error_invalid_field_description">Invalid field description</string>
 	<string name="error_invalid_field_type">Invalid field type</string>
 	<string name="error_invalid_template_id">Invalid field template ID</string>
 	<string name="error_invalid_fillup_id">Invalid fillup ID</string>
+	<string name="error_invalid_vehicle_title">Invalid vehicle title</string>
+	<string name="error_invalid_vehicle_year">Invalid vehicle year</string>
+	<string name="error_invalid_vehicle_make">Invalid vehicle make</string>
+	<string name="error_invalid_vehicle_model">Invalid vehicle model</string>
+	<string name="error_invalid_vehicle_type">Vehicle type not set</string>
+	<string name="error_invalid_vehicle_type_title">Invalid vehicle type title</string>
+	<string name="error_invalid_vehicle_type_description">Invalid vehicle type description</string>
 </resources>

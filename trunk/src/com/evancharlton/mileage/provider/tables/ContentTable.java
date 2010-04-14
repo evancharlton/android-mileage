@@ -97,6 +97,10 @@ public abstract class ContentTable {
 			return this;
 		}
 
+		public InsertBuilder add(String field, long value) {
+			return add(field, String.valueOf(value));
+		}
+
 		public String build() {
 			Set<String> keySet = mData.keySet();
 			final int length = keySet.size();
