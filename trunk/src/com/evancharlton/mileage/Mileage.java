@@ -1,19 +1,39 @@
 package com.evancharlton.mileage;
 
 import android.app.Activity;
+import android.app.TabActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TabHost;
+import android.widget.TabHost.TabSpec;
 
-public class Mileage extends Activity {
+public class Mileage extends TabActivity {
 	private static final int MENU_FIELDS = 1;
+
+	private static final String TAG_FILLUP = "fillups";
+	private static final String TAG_HISTORY = "history";
+	private static final String TAG_STATISTICS = "statistics";
+	private static final String TAG_CHARTS = "charts";
+
+	private TabHost mTabHost;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.tabs);
 
-		startActivity(new Intent(this, FillupActivity.class));
+		mTabHost = getTabHost();
+		mTabHost.addTab(createTabSpec(TAG_FILLUP, FillupActivity.class, R.string.fillup));
+		mTabHost.addTab(createTabSpec(TAG_HISTORY, FillupListActivity.class, R.string.history));
+	}
+
+	private TabSpec createTabSpec(String tag, Class<? extends Activity> cls, int string) {
+		TabSpec spec = mTabHost.newTabSpec(tag);
+		spec.setContent(new Intent(this, cls));
+		spec.setIndicator(getString(string));
+		return spec;
 	}
 
 	@Override

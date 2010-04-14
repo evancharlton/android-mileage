@@ -19,7 +19,15 @@ public class FillupsTable extends ContentTable {
 	private static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.evancharlton.fillup";
 	private static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.evancharlton.fillup";
 
+	/**
+	 * Gets all fillups
+	 */
 	public static final String FILLUPS_URI = "fillups";
+
+	/**
+	 * Gets a specific fillup
+	 */
+	public static final String FILLUP_URI = "fillup/";
 
 	public static final String[] getFullProjectionArray() {
 		return new String[] {
@@ -45,7 +53,7 @@ public class FillupsTable extends ContentTable {
 	@Override
 	public void registerUris(UriMatcher uriMatcher) {
 		uriMatcher.addURI(FillUpsProvider.AUTHORITY, FILLUPS_URI, FILLUPS);
-		uriMatcher.addURI(FillUpsProvider.AUTHORITY, FILLUPS_URI + "/#", FILLUP_ID);
+		uriMatcher.addURI(FillUpsProvider.AUTHORITY, FILLUP_URI + "/#", FILLUP_ID);
 	}
 
 	@Override
@@ -108,7 +116,8 @@ public class FillupsTable extends ContentTable {
 	@Override
 	public String create() {
 		return new TableBuilder().addDouble(Fillup.PRICE).addDouble(Fillup.VOLUME).addDouble(Fillup.ODOMETER).addDouble(Fillup.ECONOMY).addInteger(
-				Fillup.VEHICLE_ID).addInteger(Fillup.DATE).addDouble(Fillup.LATITUDE).addDouble(Fillup.LONGITUDE).addText(Fillup.COMMENT).toString();
+				Fillup.VEHICLE_ID).addInteger(Fillup.DATE).addDouble(Fillup.LATITUDE).addDouble(Fillup.LONGITUDE).addText(Fillup.COMMENT).addInteger(
+				Fillup.PARTIAL).addInteger(Fillup.RESTART).toString();
 	}
 
 	@Override

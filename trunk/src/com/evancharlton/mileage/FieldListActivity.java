@@ -3,6 +3,7 @@ package com.evancharlton.mileage;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,8 +12,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
-import com.evancharlton.mileage.dao.Dao;
 import com.evancharlton.mileage.dao.Field;
+import com.evancharlton.mileage.provider.FillUpsProvider;
 import com.evancharlton.mileage.provider.tables.FieldsTable;
 
 public class FieldListActivity extends ListActivity {
@@ -30,7 +31,8 @@ public class FieldListActivity extends ListActivity {
 		super.onResume();
 
 		ListView lv = getListView();
-		Cursor c = getContentResolver().query(Dao.createUri(FieldsTable.FIELDS_URI), FieldsTable.getFullProjectionArray(), null, null, null);
+		Cursor c = getContentResolver().query(Uri.withAppendedPath(FillUpsProvider.BASE_URI, FieldsTable.FIELDS_URI),
+				FieldsTable.getFullProjectionArray(), null, null, null);
 		String[] from = new String[] {
 				Field.TITLE,
 				Field.DESCRIPTION

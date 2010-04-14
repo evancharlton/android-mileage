@@ -21,6 +21,7 @@
 			</intent-filter>
 		</activity>
 		<activity android:name=".FillupActivity" android:theme="@android:style/Theme.NoTitleBar" />
+		<activity android:name=".FillupListActivity" android:theme="@android:style/Theme.NoTitleBar" />
 		<activity android:name=".FieldListActivity" android:theme="@android:style/Theme.NoTitleBar" />
 		<activity android:name=".FieldActivity" android:title="@string/add_field" />
 	</application>

@@ -3,7 +3,6 @@ package com.evancharlton.mileage;
 import java.util.ArrayList;
 
 import android.app.Activity;
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
@@ -14,14 +13,14 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.evancharlton.mileage.dao.Field;
 import com.evancharlton.mileage.dao.Fillup;
 import com.evancharlton.mileage.dao.FillupField;
+import com.evancharlton.mileage.dao.Dao.InvalidFieldException;
 import com.evancharlton.mileage.provider.FillUpsProvider;
 import com.evancharlton.mileage.provider.tables.FieldsTable;
-import com.evancharlton.mileage.provider.tables.FillupsFieldsTable;
-import com.evancharlton.mileage.provider.tables.FillupsTable;
 import com.evancharlton.mileage.views.FieldView;
 
 public class FillupActivity extends Activity {
@@ -33,7 +32,7 @@ public class FillupActivity extends Activity {
 	private CheckBox mPartial;
 	private LinearLayout mFieldsContainer;
 	private final ArrayList<FieldView> mFields = new ArrayList<FieldView>();
-	private ContentValues mData;
+	private final Fillup mFillup = new Fillup(new ContentValues());
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -53,6 +52,7 @@ public class FillupActivity extends Activity {
 		while (fields.moveToNext()) {
 			String hint = fields.getString(fields.getColumnIndex(Field.TITLE));
 			long id = fields.getLong(fields.getColumnIndex(Field._ID));
+			mFillup.setId(id);
 			View container = inflater.inflate(R.layout.fillup_field, null);
 			FieldView field = (FieldView) container.findViewById(R.id.field);
 			field.setFieldId(id);
@@ -75,37 +75,7 @@ public class FillupActivity extends Activity {
 		mSave.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				mData.put(Fillup.VOLUME, mVolume.getText().toString());
-				mData.put(Fillup.PRICE, mPrice.getText().toString());
-				mData.put(Fillup.ODOMETER, mOdometer.getText().toString());
-				mData.put(Fillup.DATE, System.currentTimeMillis());
-				mData.put(Fillup.PARTIAL, mPartial.isChecked());
-
-				// save the fillup
-				Long id = mData.getAsLong(Fillup._ID);
-				Uri uri = Uri.withAppendedPath(FillUpsProvider.BASE_URI, FillupsTable.FILLUPS_URI);
-				if (id == null) {
-					uri = getContentResolver().insert(uri, mData);
-					id = Long.parseLong(uri.getPathSegments().get(1));
-				} else {
-					uri = ContentUris.withAppendedId(uri, id);
-					getContentResolver().update(uri, mData, Fillup._ID + " = ?", new String[] {
-						String.valueOf(id)
-					});
-				}
-
-				// save the meta data
-				ContentValues[] values = new ContentValues[mFields.size()];
-				int i = 0;
-				for (FieldView fieldView : mFields) {
-					ContentValues fieldValues = new ContentValues();
-					fieldValues.put(FillupField.FILLUP_ID, id);
-					fieldValues.put(FillupField.TEMPLATE_ID, fieldView.getFieldId());
-					fieldValues.put(FillupField.VALUE, fieldView.getText().toString());
-					values[i++] = fieldValues;
-				}
-				Uri fieldsUri = Uri.withAppendedPath(FillUpsProvider.BASE_URI, FillupsFieldsTable.FILLUPS_FIELDS_URI);
-				getContentResolver().bulkInsert(fieldsUri, values);
+				save();
 			}
 		});
 	}
@@ -122,5 +92,28 @@ public class FillupActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
+	}
+
+	private void save() {
+		// TODO: add error catching
+		mFillup.setVolume(Double.parseDouble(mVolume.getText().toString()));
+		mFillup.setPrice(Double.parseDouble(mPrice.getText().toString()));
+		mFillup.setOdometer(Double.parseDouble(mOdometer.getText().toString()));
+		mFillup.setPartial(mPartial.isChecked());
+
+		try {
+			if (mFillup.save(this)) {
+				// save the meta data
+				for (FieldView fieldView : mFields) {
+					FillupField field = new FillupField(new ContentValues());
+					field.setFillupId(mFillup.getId());
+					field.setTemplateId(fieldView.getFieldId());
+					field.setValue(fieldView.getText().toString());
+					field.save(this);
+				}
+			}
+		} catch (InvalidFieldException exception) {
+			Toast.makeText(this, getString(exception.getErrorMessage()), Toast.LENGTH_LONG).show();
+		}
 	}
 }

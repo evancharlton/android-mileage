@@ -10,8 +10,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.evancharlton.mileage.dao.Field;
+import com.evancharlton.mileage.dao.Dao.InvalidFieldException;
 import com.evancharlton.mileage.provider.FillUpsProvider;
 import com.evancharlton.mileage.provider.tables.FieldsTable;
 
@@ -21,7 +23,7 @@ public class FieldActivity extends Activity {
 	private EditText mTitle;
 	private EditText mDescription;
 	private Button mSubmit;
-	private ContentValues mData = new ContentValues();
+	private final Field mField = new Field(new ContentValues());
 	private Uri mUri = null;
 
 	@Override
@@ -47,7 +49,7 @@ public class FieldActivity extends Activity {
 				c.moveToFirst();
 				mTitle.setText(c.getString(c.getColumnIndex(Field.TITLE)));
 				mDescription.setText(c.getString(c.getColumnIndex(Field.DESCRIPTION)));
-				mData.put(Field._ID, id);
+				mField.setId(id);
 				mSubmit.setText(R.string.save_changes);
 			}
 		}
@@ -55,20 +57,20 @@ public class FieldActivity extends Activity {
 		mSubmit.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				mData.put(Field.TITLE, mTitle.getText().toString());
-				mData.put(Field.DESCRIPTION, mDescription.getText().toString());
-				Uri result = null;
-				if (mUri != null) {
-					if (getContentResolver().update(mUri, mData, null, null) == 1) {
-						result = mUri;
-					}
-				} else {
-					result = getContentResolver().insert(Uri.withAppendedPath(FillUpsProvider.BASE_URI, FieldsTable.FIELDS_URI), mData);
-				}
-				if (result != null) {
-					finish();
-				}
+				save();
 			}
 		});
+	}
+
+	private void save() {
+		mField.setTitle(mTitle.getText().toString());
+		mField.setDescription(mDescription.getText().toString());
+		try {
+			if (mField.save(this)) {
+				finish();
+			}
+		} catch (InvalidFieldException e) {
+			Toast.makeText(this, getString(e.getErrorMessage()), Toast.LENGTH_LONG).show();
+		}
 	}
 }

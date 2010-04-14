@@ -2,9 +2,9 @@
 <resources>
 	<string name="app_name">Mileage</string>
 	<string name="odometer">Odometer</string>
-	<string name="add_fillup">Save Fill-up</string>
-	<string name="fillup">Fill-Up</string>
-	<string name="fillup_history">History</string>
+	<string name="add_fillup">Save Fillup</string>
+	<string name="fillup">Fillup</string>
+	<string name="history">History</string>
 	<string name="graphs">Graphs</string>
 	<string name="save_changes">Save Changes</string>
 	<string name="delete">Delete</string>
@@ -221,4 +221,14 @@
 	<string name="field_title">Title</string>
 	<string name="field_description">Description</string>
 	<string name="edit_fields">Edit fields</string>
+	
+	<string name="error_no_vehicle_specified">No vehicle was specified!</string>
+	<string name="error_no_odometer_specified">Invalid value for odometer!</string>
+	<string name="error_no_volume_specified">Invalid value for volume!</string>
+	<string name="error_no_price_specified">Invalid value for price!</string>
+	<string name="error_invalid_field_title">Invalid field title</string>
+	<string name="error_invalid_field_description">Invalid field description</string>
+	<string name="error_invalid_field_type">Invalid field type</string>
+	<string name="error_invalid_template_id">Invalid field template ID</string>
+	<string name="error_invalid_fillup_id">Invalid fillup ID</string>
 </resources>

@@ -1,65 +1,86 @@
 package com.evancharlton.mileage.dao;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 
-import com.evancharlton.mileage.provider.FillUpsProvider;
-import com.evancharlton.mileage.provider.tables.FillupsTable;
-
+/**
+ * A base data access object (DAO). Exposes/provides the common functionality
+ * such as persisting objects.
+ * 
+ * @author evan
+ * 
+ */
 public abstract class Dao {
-	private Context mContext;
+	/**
+	 * Unique record ID
+	 */
 	public static final String _ID = "_id";
 
-	public static Uri createUri(String path, long id) {
-		return ContentUris.withAppendedId(createUri(path), id);
+	private long mId = 0L;
+
+	/**
+	 * Construct a dao based on a cursor. Only loads common information;
+	 * implementing classes are responsible for loading their specific info.
+	 * 
+	 * @param cursor The database cursor to use to load the information.
+	 */
+	protected Dao(final Cursor cursor) {
+		mId = cursor.getLong(cursor.getColumnIndex(_ID));
 	}
 
-	public static Uri createUri(String path) {
-		return Uri.withAppendedPath(Uri.parse("content://" + FillUpsProvider.AUTHORITY), path);
-	}
-
-	public static final Dao create(Context context, ContentValues values) {
-		return null;
-	}
-
-	public static final Dao load(Class<? extends Dao> type, Context context, long id) {
-		Cursor c = context.getContentResolver().query(createUri("fillups/", id), FillupsTable.getFullProjectionArray(), null, null, null);
-		if (c.getCount() == 1) {
-			c.moveToFirst();
-			try {
-				Constructor<? extends Dao> constructor = type.getConstructor(Cursor.class);
-				Dao instance = constructor.newInstance(c);
-				instance.setContext(context);
-				return instance;
-			} catch (SecurityException e) {
-				e.printStackTrace();
-			} catch (NoSuchMethodException e) {
-				e.printStackTrace();
-			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
-			} catch (InstantiationException e) {
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				e.printStackTrace();
-			}
+	protected Dao(final ContentValues values) {
+		Long id = values.getAsLong(_ID);
+		if (id != null) {
+			mId = id;
 		}
-		throw new IllegalArgumentException("Unknown fillup ID: " + id);
 	}
 
-	protected void setContext(Context context) {
-		mContext = context;
+	/**
+	 * Get the URI for this instance of a DAO.
+	 * 
+	 * @return the URI for the DAO instance.
+	 */
+	abstract protected Uri getUri();
+
+	/**
+	 * Validate the data object (intended to be done before saving). If there is
+	 * an invalid field value, throw an InvalidFieldException
+	 * 
+	 * @return the ContentValues to be passed to persistent storage.
+	 */
+	abstract protected void validate(ContentValues values);
+
+	public final boolean save(Context context) {
+		ContentValues values = new ContentValues();
+		validate(values);
+		if (isExistingObject()) {
+			// update
+			values.put(_ID, mId);
+			context.getContentResolver().update(getUri(), values, null, null);
+		} else {
+			// insert
+			Uri uri = context.getContentResolver().insert(getUri(), values);
+			List<String> segments = uri.getPathSegments();
+			String id = segments.get(segments.size() - 1);
+			mId = Long.parseLong(id);
+		}
+		return true;
 	}
 
-	protected Context getContext() {
-		return mContext;
+	protected final boolean isExistingObject() {
+		return mId > 0;
+	}
+
+	public final long getId() {
+		return mId;
+	}
+
+	public final void setId(long id) {
+		mId = id;
 	}
 
 	protected long getLong(Cursor cursor, String columnName) {
@@ -68,5 +89,19 @@ public abstract class Dao {
 
 	protected double getDouble(Cursor cursor, String columnName) {
 		return cursor.getDouble(cursor.getColumnIndex(columnName));
+	}
+
+	public class InvalidFieldException extends RuntimeException {
+		private static final long serialVersionUID = 3415877365632636406L;
+
+		private int mErrorMessage = 0;
+
+		public InvalidFieldException(int errorMessage) {
+			mErrorMessage = errorMessage;
+		}
+
+		public int getErrorMessage() {
+			return mErrorMessage;
+		}
 	}
 }
