@@ -16,6 +16,11 @@ public class FillupListActivity extends ListActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.list);
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
 
 		ListView lv = getListView();
 		String[] projection = FillupsTable.getFullProjectionArray();

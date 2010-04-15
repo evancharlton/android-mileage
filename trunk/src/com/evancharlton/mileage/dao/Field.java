@@ -19,12 +19,15 @@ public class Field extends Dao {
 	private String mDescription = null;
 	private String mType = null;
 
-	public Field(Cursor cursor) {
-		super(cursor);
-	}
-
 	public Field(ContentValues values) {
 		super(values);
+	}
+
+	@Override
+	public void load(Cursor cursor) {
+		super.load(cursor);
+		mTitle = getString(cursor, TITLE);
+		mDescription = getString(cursor, DESCRIPTION);
 	}
 
 	@Override
@@ -67,5 +70,13 @@ public class Field extends Dao {
 
 	public void setType(String type) {
 		mType = type;
+	}
+
+	public String getTitle() {
+		return mTitle;
+	}
+
+	public String getDescription() {
+		return mDescription;
 	}
 }

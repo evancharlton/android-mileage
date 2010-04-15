@@ -24,8 +24,9 @@ public class FillupField extends Dao {
 		// TODO Auto-generated constructor stub
 	}
 
-	public FillupField(Cursor cursor) {
-		super(cursor);
+	@Override
+	public void load(Cursor cursor) {
+		super.load(cursor);
 		// TODO Auto-generated constructor stub
 	}
 

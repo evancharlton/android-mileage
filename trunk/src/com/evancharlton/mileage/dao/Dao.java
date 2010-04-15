@@ -22,21 +22,15 @@ public abstract class Dao {
 
 	private long mId = 0L;
 
-	/**
-	 * Construct a dao based on a cursor. Only loads common information;
-	 * implementing classes are responsible for loading their specific info.
-	 * 
-	 * @param cursor The database cursor to use to load the information.
-	 */
-	protected Dao(final Cursor cursor) {
-		mId = cursor.getLong(cursor.getColumnIndex(_ID));
-	}
-
 	protected Dao(final ContentValues values) {
 		Long id = values.getAsLong(_ID);
 		if (id != null) {
 			mId = id;
 		}
+	}
+
+	public void load(Cursor cursor) {
+		mId = cursor.getLong(cursor.getColumnIndex(_ID));
 	}
 
 	/**
@@ -89,6 +83,10 @@ public abstract class Dao {
 
 	protected double getDouble(Cursor cursor, String columnName) {
 		return cursor.getDouble(cursor.getColumnIndex(columnName));
+	}
+
+	protected String getString(Cursor cursor, String columnName) {
+		return cursor.getString(cursor.getColumnIndex(columnName));
 	}
 
 	public class InvalidFieldException extends RuntimeException {

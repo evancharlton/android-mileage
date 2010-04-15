@@ -33,8 +33,8 @@ public class Fillup extends Dao {
 	private List<FillupField> mFields = null;
 	private boolean mIsPartial = false;
 
-	public Fillup(Cursor cursor) {
-		super(cursor);
+	public void load(Cursor cursor) {
+		super.load(cursor);
 		mVehicleId = getLong(cursor, Fillup.VEHICLE_ID);
 		mOdometer = getLong(cursor, Fillup.ODOMETER);
 		mTimestamp = getLong(cursor, Fillup.DATE);
@@ -109,5 +109,9 @@ public class Fillup extends Dao {
 
 	public void setPartial(boolean partial) {
 		mIsPartial = partial;
+	}
+
+	public void setVehicleId(long id) {
+		mVehicleId = id;
 	}
 }

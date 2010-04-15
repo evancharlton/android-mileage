@@ -15,63 +15,51 @@
 		    android:layout_width="fill_parent"
 		    android:layout_height="fill_parent"
 		>
-		    <LinearLayout
-		    	android:orientation="horizontal"
-		    	android:layout_width="fill_parent"
-		    	android:layout_height="wrap_content"
-		    	android:gravity="center"
-		    >
+			<LinearLayout
+				android:orientation="horizontal"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:gravity="center"
+			>
 				<EditText
-					android:id="@+id/price"
-				    android:layout_width="0dip"
-			   		android:layout_weight="1"
-				    android:layout_height="wrap_content" 
-				    android:numeric="decimal"
+					android:id="@+id/title"
+					android:layout_width="0dip"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
 				/>
 				<EditText
-					android:id="@+id/volume"
+					android:id="@+id/year"
 					android:layout_width="0dip"
-			   		android:layout_weight="1"
 					android:layout_height="wrap_content"
-				    android:numeric="decimal"
+					android:layout_weight="1"
 				/>
 			</LinearLayout>
 			<LinearLayout
 				android:orientation="horizontal"
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
-		    	android:gravity="center"
+				android:gravity="center"
 			>
 				<EditText
-					android:id="@+id/odometer"
+					android:id="@+id/make"
 					android:layout_width="0dip"
-			   		android:layout_weight="1"
 					android:layout_height="wrap_content"
-					android:hint="@string/odometer"
-					android:inputType="number"
-					android:digits="+0123456789."
+					android:layout_weight="1"
 				/>
-				<Button
-					android:id="@+id/date"
+				<EditText
+					android:id="@+id/model"
 					android:layout_width="0dip"
-			   		android:layout_weight="1"
 					android:layout_height="wrap_content"
+					android:layout_weight="1"
 				/>
 			</LinearLayout>
+			<EditText
+				android:id="@+id/description"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+			/>
 			<Spinner
-				android:id="@+id/vehicle"
-				android:layout_width="fill_parent"
-				android:layout_height="wrap_content"
-			/>
-			<CheckBox
-				android:id="@+id/partial"
-				android:layout_width="fill_parent"
-				android:layout_height="wrap_content"
-				android:text="@string/partial_fillup"
-			/>
-			<LinearLayout
-				android:id="@+id/container"
-				android:orientation="vertical"
+				android:id="@+id/type"
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
 			/>
@@ -81,6 +69,6 @@
 		android:id="@+id/save_btn"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:text="@string/add_fillup"
+		android:text="@string/add_vehicle"
 	/>
 </LinearLayout>

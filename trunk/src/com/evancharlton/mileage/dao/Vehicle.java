@@ -26,14 +26,20 @@ public class Vehicle extends Dao {
 	private long mVehicleType = 0L;
 	private long mDefaultTime = System.currentTimeMillis();
 
-	public Vehicle(Cursor cursor) {
-		super(cursor);
-		// TODO
-	}
-
 	public Vehicle(ContentValues values) {
 		super(values);
 		// TODO
+	}
+
+	@Override
+	public void load(Cursor cursor) {
+		super.load(cursor);
+		mTitle = getString(cursor, TITLE);
+		mDescription = getString(cursor, DESCRIPTION);
+		mYear = getString(cursor, YEAR);
+		mMake = getString(cursor, MAKE);
+		mModel = getString(cursor, MODEL);
+		// TODO: finish
 	}
 
 	@Override
@@ -109,5 +115,33 @@ public class Vehicle extends Dao {
 
 	public void setDefaultTime(long defaultTime) {
 		mDefaultTime = defaultTime;
+	}
+
+	public String getTitle() {
+		return mTitle;
+	}
+
+	public String getDescription() {
+		return mDescription;
+	}
+
+	public String getYear() {
+		return mYear;
+	}
+
+	public String getMake() {
+		return mMake;
+	}
+
+	public String getModel() {
+		return mModel;
+	}
+
+	public long getVehicleType() {
+		return mVehicleType;
+	}
+
+	public long getDefaultTime() {
+		return mDefaultTime;
 	}
 }

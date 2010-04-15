@@ -24,5 +24,9 @@
 		<activity android:name=".FillupListActivity" android:theme="@android:style/Theme.NoTitleBar" />
 		<activity android:name=".FieldListActivity" android:theme="@android:style/Theme.NoTitleBar" />
 		<activity android:name=".FieldActivity" android:title="@string/add_field" />
+		<activity android:name=".VehicleListActivity" android:theme="@android:style/Theme.NoTitleBar" />
+		<activity android:name=".VehicleActivity" android:theme="@android:style/Theme.NoTitleBar" />
+		<activity android:name=".VehicleTypeListActivity" android:theme="@android:style/Theme.NoTitleBar" />
+		<activity android:name=".VehicleTypeActivity" android:theme="@android:style/Theme.NoTitleBar" />
 	</application>
 </manifest> 

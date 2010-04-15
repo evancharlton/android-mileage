@@ -75,7 +75,10 @@ public class FillupsTable extends ContentTable {
 
 	@Override
 	public long insert(int type, SQLiteDatabase db, ContentValues initialValues) {
-		// TODO Auto-generated method stub
+		switch (type) {
+			case FILLUPS:
+				return db.insert(getTableName(), null, initialValues);
+		}
 		return -1L;
 	}
 

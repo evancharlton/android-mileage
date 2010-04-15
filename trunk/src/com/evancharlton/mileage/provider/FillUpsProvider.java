@@ -20,6 +20,8 @@ import com.evancharlton.mileage.provider.tables.ContentTable;
 import com.evancharlton.mileage.provider.tables.FieldsTable;
 import com.evancharlton.mileage.provider.tables.FillupsFieldsTable;
 import com.evancharlton.mileage.provider.tables.FillupsTable;
+import com.evancharlton.mileage.provider.tables.VehicleTypesTable;
+import com.evancharlton.mileage.provider.tables.VehiclesTable;
 
 /**
  * Note that this app does not currently (as of version > 1.8.4) use a
@@ -31,7 +33,7 @@ import com.evancharlton.mileage.provider.tables.FillupsTable;
  */
 public class FillUpsProvider extends ContentProvider {
 	public static final String DATABASE_NAME = "mileage.db";
-	public static final int DATABASE_VERSION = 51;
+	public static final int DATABASE_VERSION = 50;
 	public static final String AUTHORITY = "com.evancharlton.mileage";
 	public static final ArrayList<ContentTable> TABLES = new ArrayList<ContentTable>();
 	private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
@@ -43,6 +45,8 @@ public class FillUpsProvider extends ContentProvider {
 		TABLES.add(new FillupsTable());
 		TABLES.add(new FillupsFieldsTable());
 		TABLES.add(new FieldsTable());
+		TABLES.add(new VehiclesTable());
+		TABLES.add(new VehicleTypesTable());
 
 		for (ContentTable table : TABLES) {
 			table.registerUris(URI_MATCHER);

@@ -16,12 +16,15 @@ public class VehicleType extends Dao {
 	private String mTitle = null;
 	private String mDescription = null;
 
-	public VehicleType(Cursor cursor) {
-		super(cursor);
-	}
-
 	public VehicleType(ContentValues values) {
 		super(values);
+	}
+
+	@Override
+	public void load(Cursor cursor) {
+		super.load(cursor);
+		mTitle = getString(cursor, TITLE);
+		mDescription = getString(cursor, DESCRIPTION);
 	}
 
 	@Override
@@ -55,5 +58,13 @@ public class VehicleType extends Dao {
 
 	public void setDescription(String description) {
 		mDescription = description;
+	}
+
+	public String getTitle() {
+		return mTitle;
+	}
+
+	public String getDescription() {
+		return mDescription;
 	}
 }

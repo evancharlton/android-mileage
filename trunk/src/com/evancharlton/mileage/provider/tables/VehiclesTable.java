@@ -37,7 +37,7 @@ public class VehiclesTable extends ContentTable {
 	@Override
 	public String create() {
 		return new TableBuilder().addText(Vehicle.TITLE).addText(Vehicle.DESCRIPTION).addText(Vehicle.YEAR).addText(Vehicle.MAKE).addText(
-				Vehicle.MODEL).addInteger(Vehicle.DEFAULT_TIME).build();
+				Vehicle.MODEL).addInteger(Vehicle.DEFAULT_TIME).addInteger(Vehicle.VEHICLE_TYPE).build();
 	}
 
 	@Override

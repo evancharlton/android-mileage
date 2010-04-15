@@ -7,25 +7,24 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 
-import com.evancharlton.mileage.dao.Field;
+import com.evancharlton.mileage.dao.VehicleType;
 import com.evancharlton.mileage.provider.FillUpsProvider;
-import com.evancharlton.mileage.provider.tables.FieldsTable;
+import com.evancharlton.mileage.provider.tables.VehicleTypesTable;
 
-public class FieldListActivity extends BaseListActivity {
-	private static final int MENU_ADD_FIELD = 0;
+public class VehicleTypeListActivity extends BaseListActivity {
+	private static final int MENU_CREATE = 1;
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.add(Menu.NONE, MENU_ADD_FIELD, Menu.FIRST, R.string.add_field);
+		menu.add(Menu.NONE, MENU_CREATE, Menu.NONE, R.string.add_vehicle_type);
 		return super.onCreateOptionsMenu(menu);
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-			case MENU_ADD_FIELD:
-				Intent intent = new Intent(this, FieldActivity.class);
-				startActivity(intent);
+			case MENU_CREATE:
+				startActivity(new Intent(this, VehicleTypeActivity.class));
 				return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -34,23 +33,23 @@ public class FieldListActivity extends BaseListActivity {
 	@Override
 	protected String[] getFrom() {
 		return new String[] {
-				Field.TITLE,
-				Field.DESCRIPTION
+				VehicleType.TITLE,
+				VehicleType.DESCRIPTION
 		};
 	}
 
 	@Override
 	protected String[] getProjectionArray() {
-		return FieldsTable.getFullProjectionArray();
+		return VehicleTypesTable.getFullProjectionArray();
 	}
 
 	@Override
 	protected Uri getUri() {
-		return Uri.withAppendedPath(FillUpsProvider.BASE_URI, FieldsTable.FIELDS_URI);
+		return Uri.withAppendedPath(FillUpsProvider.BASE_URI, VehicleTypesTable.TYPES_URI);
 	}
 
 	@Override
 	public void onItemClick(AdapterView<?> list, View row, int position, long id) {
-		loadItem(id, FieldActivity.class);
+		loadItem(id, VehicleTypeActivity.class);
 	}
 }

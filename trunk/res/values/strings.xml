@@ -221,6 +221,9 @@
 	<string name="field_title">Title</string>
 	<string name="field_description">Description</string>
 	<string name="edit_fields">Edit fields</string>
+	<string name="add_vehicle_type">Add new vehicle type</string>
+	<string name="add_vehicle">Add new vehicle</string>
+	<string name="edit_vehicle_types">Edit vehicle types</string>
 	
 	<string name="error_no_vehicle_specified">No vehicle was specified</string>
 	<string name="error_no_odometer_specified">Invalid value for odometer</string>
