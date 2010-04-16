@@ -114,4 +114,40 @@ public class Fillup extends Dao {
 	public void setVehicleId(long id) {
 		mVehicleId = id;
 	}
+
+	public long getTimestamp() {
+		return mTimestamp;
+	}
+
+	public void setTimestamp(long timestamp) {
+		mTimestamp = timestamp;
+	}
+
+	public List<FillupField> getFields() {
+		return mFields;
+	}
+
+	public void setFields(List<FillupField> fields) {
+		mFields = fields;
+	}
+
+	public long getVehicleId() {
+		return mVehicleId;
+	}
+
+	public double getOdometer() {
+		return mOdometer;
+	}
+
+	public double getVolume() {
+		return mVolume;
+	}
+
+	public double getPrice() {
+		return mPrice;
+	}
+
+	public boolean isPartial() {
+		return mIsPartial;
+	}
 }

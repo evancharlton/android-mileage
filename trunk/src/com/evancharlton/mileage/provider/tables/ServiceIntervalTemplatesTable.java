@@ -63,8 +63,9 @@ public class ServiceIntervalTemplatesTable extends ContentTable {
 
 	@Override
 	public String init() {
-		// TODO Auto-generated method stub
-		return null;
+		return new InsertBuilder().add(ServiceIntervalTemplate.TITLE, "Oil change").add(ServiceIntervalTemplate.DESCRIPTION, "Standard oil change")
+				.add(ServiceIntervalTemplate.DISTANCE, 3000).add(ServiceIntervalTemplate.DURATION, 1000 * 60 * 60 * 24 * 30 * 3).add(
+						ServiceIntervalTemplate.VEHICLE_TYPE, 1).build();
 	}
 
 	@Override

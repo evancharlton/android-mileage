@@ -27,7 +27,7 @@ public class FillupsTable extends ContentTable {
 	/**
 	 * Gets a specific fillup
 	 */
-	public static final String FILLUP_URI = "fillup/";
+	public static final String FILLUP_URI = "fillup";
 
 	public static final String[] getFullProjectionArray() {
 		return new String[] {

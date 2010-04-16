@@ -43,7 +43,7 @@ public class FillupActivity extends BaseFormActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState, R.layout.fillup);
-		// TODO: this seems shady
+		// save the icicle so that we can restore the meta fields later on.
 		mIcicle = savedInstanceState;
 	}
 
@@ -137,7 +137,11 @@ public class FillupActivity extends BaseFormActivity {
 
 	@Override
 	protected void populateUI() {
-		// TODO
+		mOdometer.setText(String.valueOf(mFillup.getOdometer()));
+		mVolume.setText(String.valueOf(mFillup.getVolume()));
+		mPrice.setText(String.valueOf(mFillup.getPrice()));
+		mDate.setText(String.valueOf(mFillup.getTimestamp()));
+		mPartial.setChecked(mFillup.isPartial());
 	}
 
 	@Override
