@@ -4,23 +4,29 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 
 import com.evancharlton.mileage.dao.Dao;
 import com.evancharlton.mileage.dao.ServiceInterval;
+import com.evancharlton.mileage.dao.ServiceIntervalTemplate;
+import com.evancharlton.mileage.dao.Vehicle;
 import com.evancharlton.mileage.provider.FillUpsProvider;
 import com.evancharlton.mileage.provider.tables.ServiceIntervalsTable;
 import com.evancharlton.mileage.views.CursorSpinner;
+import com.evancharlton.mileage.views.DateDelta;
+import com.evancharlton.mileage.views.DistanceDelta;
 
 public class ServiceIntervalActivity extends BaseFormActivity {
 
 	private final ServiceInterval mInterval = new ServiceInterval(new ContentValues());
 	private CursorSpinner mVehicles;
-	private CursorSpinner mVehicleTypes;
+	private CursorSpinner mIntervalTemplates;
 	private EditText mTitle;
 	private EditText mDescription;
-	private EditText mDistance;
-	private EditText mDuration;
+	private DistanceDelta mDistance;
+	private DateDelta mDuration;
 	private EditText mOdometer;
 	private EditText mDate;
 
@@ -47,21 +53,42 @@ public class ServiceIntervalActivity extends BaseFormActivity {
 	@Override
 	protected void initUI() {
 		mVehicles = (CursorSpinner) findViewById(R.id.vehicles);
-		mVehicleTypes = (CursorSpinner) findViewById(R.id.types);
+		mIntervalTemplates = (CursorSpinner) findViewById(R.id.types);
 		mTitle = (EditText) findViewById(R.id.title);
 		mDescription = (EditText) findViewById(R.id.description);
-		mDistance = (EditText) findViewById(R.id.distance);
-		mDuration = (EditText) findViewById(R.id.duration);
+		mDistance = (DistanceDelta) findViewById(R.id.distance);
+		mDuration = (DateDelta) findViewById(R.id.duration);
 		mOdometer = (EditText) findViewById(R.id.odometer);
 		mDate = (EditText) findViewById(R.id.date);
+
+		mVehicles.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> list, View row, int position, long id) {
+				filterTemplates(id);
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+			}
+		});
+	}
+
+	private void filterTemplates(long id) {
+		StringBuilder selection = new StringBuilder();
+		selection.append(ServiceIntervalTemplate.VEHICLE_TYPE).append(" = ( select ").append(Vehicle.VEHICLE_TYPE).append(" from vehicles where ")
+				.append(Vehicle._ID).append(" =  ?)");
+		String[] selectionArgs = new String[] {
+			String.valueOf(id)
+		};
+		mIntervalTemplates.filter(selection.toString(), selectionArgs);
 	}
 
 	@Override
 	protected void populateUI() {
 		mTitle.setText(mInterval.getTitle());
 		mDescription.setText(mInterval.getDescription());
-		mDistance.setText(String.valueOf(mInterval.getDistance()));
-		mDuration.setText(String.valueOf(mInterval.getDuration()));
+		mDistance.setDelta((long) mInterval.getDistance());
+		mDuration.setDelta(mInterval.getDuration());
 		mOdometer.setText(String.valueOf(mInterval.getStartOdometer()));
 		mDate.setText(String.valueOf(mInterval.getStartDate()));
 	}
@@ -71,6 +98,10 @@ public class ServiceIntervalActivity extends BaseFormActivity {
 		// TODO: Error checking
 		mInterval.setTitle(mTitle.getText().toString());
 		mInterval.setDescription(mDescription.getText().toString());
+		mInterval.setDuration(mDuration.getDelta());
+		mInterval.setStartOdometer(Double.parseDouble(mOdometer.getText().toString()));
+		mInterval.setStartDate(System.currentTimeMillis());
+		mInterval.setDistance(mDistance.getDelta());
+		mInterval.setVehicleId(mVehicles.getSelectedItemId());
 	}
-
 }

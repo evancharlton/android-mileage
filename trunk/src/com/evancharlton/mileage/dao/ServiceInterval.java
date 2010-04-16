@@ -35,6 +35,15 @@ public class ServiceInterval extends Dao {
 	@Override
 	public void load(Cursor cursor) {
 		super.load(cursor);
+
+		mTitle = getString(cursor, TITLE);
+		mDescription = getString(cursor, DESCRIPTION);
+		mStartDate = getLong(cursor, START_DATE);
+		mStartOdometer = getDouble(cursor, START_ODOMETER);
+		mVehicleId = getLong(cursor, VEHICLE_ID);
+		mTemplateId = getLong(cursor, TEMPLATE_ID);
+		mDuration = getLong(cursor, DURATION);
+		mDistance = getDouble(cursor, DISTANCE);
 	}
 
 	@Override

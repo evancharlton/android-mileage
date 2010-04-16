@@ -43,13 +43,13 @@
 				android:layout_height="wrap_content"
 				android:inputType="textCapSentences|textAutoCorrect|textAutoComplete"
 			/>
-			<EditText
+			<com.evancharlton.mileage.views.DistanceDelta
 				android:id="@+id/distance"
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
 				android:inputType="number"
 			/>
-			<EditText
+			<com.evancharlton.mileage.views.DateDelta
 				android:id="@+id/duration"
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"

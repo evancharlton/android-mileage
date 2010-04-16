@@ -227,6 +227,13 @@
 	<string name="add_service_interval_template">Add service interval template</string>
 	<string name="service_interval_templates">Templates</string>
 	
+	<string name="delta_days">Days</string>
+	<string name="delta_weeks">Weeks</string>
+	<string name="delta_months">Months</string>
+	<string name="delta_years">Years</string>
+	<string name="miles">Miles</string>
+	<string name="kilometers">Kilometers</string>
+	
 	<string name="error_no_vehicle_specified">No vehicle was specified</string>
 	<string name="error_no_odometer_specified">Invalid value for odometer</string>
 	<string name="error_no_volume_specified">Invalid value for volume</string>

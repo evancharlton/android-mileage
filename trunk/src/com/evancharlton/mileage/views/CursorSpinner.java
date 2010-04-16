@@ -5,7 +5,6 @@ import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.net.Uri;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.Spinner;
 
@@ -15,27 +14,38 @@ import com.evancharlton.mileage.dao.Dao;
 import com.evancharlton.mileage.provider.FillUpsProvider;
 
 public class CursorSpinner extends Spinner {
-	private final Cursor mCursor;
-	private final SpinnerCursorAdapter mAdapter;
+	private Cursor mCursor;
+	private SpinnerCursorAdapter mAdapter;
+	private final String mUriPath;
+	private final String mDisplayField;
+	private final boolean mAutoHide;
 
 	public CursorSpinner(Context context, AttributeSet attrs) {
 		super(context, attrs);
 
 		final TypedArray arr = context.obtainStyledAttributes(attrs, R.styleable.CursorSpinner);
-		final String displayField = arr.getString(R.styleable.CursorSpinner_display_field);
-		final String uriPath = arr.getString(R.styleable.CursorSpinner_uri);
+		mDisplayField = arr.getString(R.styleable.CursorSpinner_display_field);
+		mUriPath = arr.getString(R.styleable.CursorSpinner_uri);
+		mAutoHide = arr.getBoolean(R.styleable.CursorSpinner_auto_hide, true);
 
-		Uri uri = Uri.withAppendedPath(FillUpsProvider.BASE_URI, uriPath);
-		Log.d("CursorSpinner", uri.toString());
+		filter(null, null);
+	}
+
+	public void filter(String selection, String[] selectionArgs) {
+		Uri uri = Uri.withAppendedPath(FillUpsProvider.BASE_URI, mUriPath);
 		mCursor = getContext().getContentResolver().query(uri, new String[] {
 				Dao._ID,
-				displayField
-		}, null, null, null);
-		mAdapter = new SpinnerCursorAdapter(getContext(), mCursor, displayField);
+				mDisplayField
+		}, selection, selectionArgs, null);
+		if (mAdapter == null) {
+			mAdapter = new SpinnerCursorAdapter(getContext(), mCursor, mDisplayField);
+		} else {
+			mAdapter.changeCursor(mCursor);
+			mAdapter.notifyDataSetChanged();
+		}
 		setAdapter(mAdapter);
 
-		final boolean autoHide = arr.getBoolean(R.styleable.CursorSpinner_auto_hide, true);
-		if (autoHide && mCursor.getCount() == 1) {
+		if (mAutoHide && mCursor.getCount() == 1) {
 			setVisibility(View.GONE);
 		}
 	}

@@ -177,6 +177,7 @@ public class FillUpsProvider extends ContentProvider {
 			db = mDatabaseHelper.getWritableDatabase();
 		}
 		Cursor c = qb.query(db, projection, selection, selectionArgs, null, null, orderBy);
+		String query = qb.buildQuery(projection, selection, selectionArgs, null, null, sortOrder, null);
 		c.setNotificationUri(getContext().getContentResolver(), uri);
 
 		return c;

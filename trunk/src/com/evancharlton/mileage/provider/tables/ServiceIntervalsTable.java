@@ -28,14 +28,17 @@ public class ServiceIntervalsTable extends ContentTable {
 				ServiceInterval.START_DATE,
 				ServiceInterval.START_ODOMETER,
 				ServiceInterval.TEMPLATE_ID,
-				ServiceInterval.VEHICLE_ID
+				ServiceInterval.VEHICLE_ID,
+				ServiceInterval.DURATION,
+				ServiceInterval.DISTANCE
 		};
 	}
 
 	@Override
 	public String create() {
 		return new TableBuilder().addText(ServiceInterval.TITLE).addText(ServiceInterval.DESCRIPTION).addInteger(ServiceInterval.VEHICLE_ID)
-				.addInteger(ServiceInterval.TEMPLATE_ID).addDouble(ServiceInterval.START_ODOMETER).addInteger(ServiceInterval.START_DATE).build();
+				.addInteger(ServiceInterval.TEMPLATE_ID).addDouble(ServiceInterval.START_ODOMETER).addInteger(ServiceInterval.START_DATE).addDouble(
+						ServiceInterval.DURATION).addDouble(ServiceInterval.DISTANCE).build();
 	}
 
 	@Override
