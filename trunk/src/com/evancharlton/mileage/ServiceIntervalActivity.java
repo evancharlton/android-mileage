@@ -3,25 +3,31 @@ package com.evancharlton.mileage;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.net.Uri;
+import android.os.Bundle;
 import android.widget.EditText;
-import android.widget.Spinner;
 
 import com.evancharlton.mileage.dao.Dao;
 import com.evancharlton.mileage.dao.ServiceInterval;
 import com.evancharlton.mileage.provider.FillUpsProvider;
 import com.evancharlton.mileage.provider.tables.ServiceIntervalsTable;
+import com.evancharlton.mileage.views.CursorSpinner;
 
 public class ServiceIntervalActivity extends BaseFormActivity {
 
 	private final ServiceInterval mInterval = new ServiceInterval(new ContentValues());
-	private Spinner mVehicles;
-	private Spinner mVehicleTypes;
+	private CursorSpinner mVehicles;
+	private CursorSpinner mVehicleTypes;
 	private EditText mTitle;
 	private EditText mDescription;
 	private EditText mDistance;
 	private EditText mDuration;
 	private EditText mOdometer;
 	private EditText mDate;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState, R.layout.service_interval);
+	}
 
 	@Override
 	protected Dao getDao() {
@@ -40,8 +46,8 @@ public class ServiceIntervalActivity extends BaseFormActivity {
 
 	@Override
 	protected void initUI() {
-		mVehicles = (Spinner) findViewById(R.id.vehicles);
-		mVehicleTypes = (Spinner) findViewById(R.id.types);
+		mVehicles = (CursorSpinner) findViewById(R.id.vehicles);
+		mVehicleTypes = (CursorSpinner) findViewById(R.id.types);
 		mTitle = (EditText) findViewById(R.id.title);
 		mDescription = (EditText) findViewById(R.id.description);
 		mDistance = (EditText) findViewById(R.id.distance);

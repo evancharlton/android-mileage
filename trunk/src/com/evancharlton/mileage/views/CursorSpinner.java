@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.widget.Adapter;
+import android.view.View;
 import android.widget.Spinner;
 
 import com.evancharlton.mileage.R;
@@ -15,6 +15,9 @@ import com.evancharlton.mileage.dao.Dao;
 import com.evancharlton.mileage.provider.FillUpsProvider;
 
 public class CursorSpinner extends Spinner {
+	private final Cursor mCursor;
+	private final SpinnerCursorAdapter mAdapter;
+
 	public CursorSpinner(Context context, AttributeSet attrs) {
 		super(context, attrs);
 
@@ -24,20 +27,27 @@ public class CursorSpinner extends Spinner {
 
 		Uri uri = Uri.withAppendedPath(FillUpsProvider.BASE_URI, uriPath);
 		Log.d("CursorSpinner", uri.toString());
-		Cursor cursor = getContext().getContentResolver().query(uri, new String[] {
+		mCursor = getContext().getContentResolver().query(uri, new String[] {
 				Dao._ID,
 				displayField
 		}, null, null, null);
-		SpinnerCursorAdapter adapter = new SpinnerCursorAdapter(getContext(), cursor, displayField);
-		setAdapter(adapter);
+		mAdapter = new SpinnerCursorAdapter(getContext(), mCursor, displayField);
+		setAdapter(mAdapter);
 
-		if (cursor.getCount() == 1) {
-			// setVisibility(View.GONE);
+		final boolean autoHide = arr.getBoolean(R.styleable.CursorSpinner_auto_hide, true);
+		if (autoHide && mCursor.getCount() == 1) {
+			setVisibility(View.GONE);
 		}
 	}
 
+	@Override
+	protected void onDetachedFromWindow() {
+		super.onDetachedFromWindow();
+		mCursor.close();
+	}
+
 	public void setSelectedId(long id) {
-		Adapter adapter = getAdapter();
+		final SpinnerCursorAdapter adapter = mAdapter;
 		final int count = adapter.getCount();
 		for (int i = 0; i < count; i++) {
 			if (adapter.getItemId(i) == id) {

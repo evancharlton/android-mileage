@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:mileage="http://schemas.android.com/apk/res/com.evancharlton.mileage"
 	android:orientation="vertical"
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
@@ -39,10 +40,12 @@
 				android:layout_height="wrap_content"
 				android:inputType="number"
 			/>
-			<Spinner
+			<com.evancharlton.mileage.views.CursorSpinner
 				android:id="@+id/types"
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
+				mileage:uri="vehicles/types"
+				mileage:display_field="title"
 			/>
 		</LinearLayout>
 	</ScrollView>

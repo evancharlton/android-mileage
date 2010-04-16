@@ -2,5 +2,6 @@
      <declare-styleable name="CursorSpinner">
         <attr name="uri" format="string" />
         <attr name="display_field" format="string" />
+        <attr name="auto_hide" format="boolean" />
     </declare-styleable>
 </resources>

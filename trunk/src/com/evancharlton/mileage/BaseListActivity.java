@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -25,7 +26,9 @@ public abstract class BaseListActivity extends ListActivity implements AdapterVi
 		super.onResume();
 
 		ListView lv = getListView();
-		Cursor c = managedQuery(getUri(), getProjectionArray(), null, null, null);
+		Uri uri = getUri();
+		Log.d("BaseListActivity", uri.toString());
+		Cursor c = managedQuery(uri, getProjectionArray(), null, null, null);
 		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, getListLayout(), c, getFrom(), getTo());
 		lv.setAdapter(adapter);
 		lv.setOnItemClickListener(this);

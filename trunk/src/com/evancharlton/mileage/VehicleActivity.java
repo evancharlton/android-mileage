@@ -2,20 +2,16 @@ package com.evancharlton.mileage;
 
 import android.content.ContentUris;
 import android.content.ContentValues;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.Spinner;
 
-import com.evancharlton.mileage.adapters.SpinnerCursorAdapter;
 import com.evancharlton.mileage.dao.Dao;
 import com.evancharlton.mileage.dao.Vehicle;
-import com.evancharlton.mileage.dao.VehicleType;
 import com.evancharlton.mileage.provider.FillUpsProvider;
-import com.evancharlton.mileage.provider.tables.VehicleTypesTable;
 import com.evancharlton.mileage.provider.tables.VehiclesTable;
+import com.evancharlton.mileage.views.CursorSpinner;
 
 public class VehicleActivity extends BaseFormActivity {
 	private EditText mTitle;
@@ -24,7 +20,7 @@ public class VehicleActivity extends BaseFormActivity {
 	private EditText mModel;
 	private EditText mYear;
 	private CheckBox mSetDefault;
-	private Spinner mVehicleTypes;
+	private CursorSpinner mVehicleTypes;
 	private Vehicle mVehicle = new Vehicle(new ContentValues());
 
 	@Override
@@ -54,13 +50,7 @@ public class VehicleActivity extends BaseFormActivity {
 		mMake = (EditText) findViewById(R.id.make);
 		mModel = (EditText) findViewById(R.id.model);
 		mYear = (EditText) findViewById(R.id.year);
-		mVehicleTypes = (Spinner) findViewById(R.id.type);
-
-		// populate the spinner
-		Uri uri = Uri.withAppendedPath(FillUpsProvider.BASE_URI, VehicleTypesTable.TYPES_URI);
-		Cursor typesCursor = managedQuery(uri, VehicleTypesTable.getFullProjectionArray(), null, null, null);
-		SpinnerCursorAdapter adapter = new SpinnerCursorAdapter(this, typesCursor, VehicleType.TITLE);
-		mVehicleTypes.setAdapter(adapter);
+		mVehicleTypes = (CursorSpinner) findViewById(R.id.type);
 	}
 
 	@Override

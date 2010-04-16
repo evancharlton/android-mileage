@@ -11,8 +11,8 @@ import com.evancharlton.mileage.provider.FillUpsProvider;
 
 public class ServiceIntervalsTable extends ContentTable {
 
-	private static final int SERVICE_INTERVALS = 50;
-	private static final int SERVICE_INTERVAL_ID = 51;
+	private static final int SERVICE_INTERVALS = 70;
+	private static final int SERVICE_INTERVAL_ID = 71;
 
 	public static final String SERVICE_INTERVALS_URI = "intervals";
 	public static final String SERVICE_INTERVAL_URI = "interval";

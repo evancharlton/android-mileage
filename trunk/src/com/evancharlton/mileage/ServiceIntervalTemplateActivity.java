@@ -2,19 +2,15 @@ package com.evancharlton.mileage;
 
 import android.content.ContentUris;
 import android.content.ContentValues;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.EditText;
-import android.widget.Spinner;
 
-import com.evancharlton.mileage.adapters.SpinnerCursorAdapter;
 import com.evancharlton.mileage.dao.Dao;
 import com.evancharlton.mileage.dao.ServiceIntervalTemplate;
-import com.evancharlton.mileage.dao.VehicleType;
 import com.evancharlton.mileage.provider.FillUpsProvider;
 import com.evancharlton.mileage.provider.tables.ServiceIntervalTemplatesTable;
-import com.evancharlton.mileage.provider.tables.VehicleTypesTable;
+import com.evancharlton.mileage.views.CursorSpinner;
 
 public class ServiceIntervalTemplateActivity extends BaseFormActivity {
 
@@ -23,7 +19,7 @@ public class ServiceIntervalTemplateActivity extends BaseFormActivity {
 	protected EditText mDescription;
 	protected EditText mDistance;
 	protected EditText mDuration;
-	protected Spinner mVehicleTypes;
+	protected CursorSpinner mVehicleTypes;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -51,12 +47,7 @@ public class ServiceIntervalTemplateActivity extends BaseFormActivity {
 		mDescription = (EditText) findViewById(R.id.description);
 		mDistance = (EditText) findViewById(R.id.distance);
 		mDuration = (EditText) findViewById(R.id.duration);
-		mVehicleTypes = (Spinner) findViewById(R.id.types);
-
-		Cursor c = managedQuery(Uri.withAppendedPath(FillUpsProvider.BASE_URI, VehicleTypesTable.TYPES_URI), VehicleTypesTable
-				.getFullProjectionArray(), null, null, null);
-		SpinnerCursorAdapter adapter = new SpinnerCursorAdapter(this, c, VehicleType.TITLE);
-		mVehicleTypes.setAdapter(adapter);
+		mVehicleTypes = (CursorSpinner) findViewById(R.id.types);
 	}
 
 	@Override
