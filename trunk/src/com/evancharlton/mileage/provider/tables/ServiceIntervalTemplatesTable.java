@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 
+import com.evancharlton.mileage.dao.Dao;
 import com.evancharlton.mileage.dao.ServiceIntervalTemplate;
 import com.evancharlton.mileage.provider.FillUpsProvider;
 
@@ -22,6 +23,7 @@ public class ServiceIntervalTemplatesTable extends ContentTable {
 
 	public static final String[] getFullProjectionArray() {
 		return new String[] {
+				ServiceIntervalTemplate._ID,
 				ServiceIntervalTemplate.TITLE,
 				ServiceIntervalTemplate.DESCRIPTION,
 				ServiceIntervalTemplate.DISTANCE,
@@ -76,7 +78,17 @@ public class ServiceIntervalTemplatesTable extends ContentTable {
 
 	@Override
 	public boolean query(int type, Uri uri, SQLiteQueryBuilder queryBuilder) {
-		// TODO Auto-generated method stub
+		switch (type) {
+			case SERVICE_TEMPLATES:
+				queryBuilder.setTables(getTableName());
+				queryBuilder.setProjectionMap(buildProjectionMap(getFullProjectionArray()));
+				return true;
+			case SERVICE_TEMPLATE_ID:
+				queryBuilder.setTables(getTableName());
+				queryBuilder.setProjectionMap(buildProjectionMap(getFullProjectionArray()));
+				queryBuilder.appendWhere(Dao._ID + " = " + uri.getPathSegments().get(2));
+				return true;
+		}
 		return false;
 	}
 

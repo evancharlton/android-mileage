@@ -22,6 +22,7 @@ public class ServiceIntervalsTable extends ContentTable {
 
 	public static String[] getFullProjectionArray() {
 		return new String[] {
+				ServiceInterval._ID,
 				ServiceInterval.TITLE,
 				ServiceInterval.DESCRIPTION,
 				ServiceInterval.START_DATE,

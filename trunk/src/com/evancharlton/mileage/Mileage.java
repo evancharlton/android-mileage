@@ -12,6 +12,7 @@ import android.widget.TabHost.TabSpec;
 public class Mileage extends TabActivity {
 	private static final int MENU_FIELDS = 1;
 	private static final int MENU_VEHICLES = 2;
+	private static final int MENU_INTERVALS = 3;
 
 	private static final String TAG_FILLUP = "fillups";
 	private static final String TAG_HISTORY = "history";
@@ -41,6 +42,7 @@ public class Mileage extends TabActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(Menu.NONE, MENU_FIELDS, Menu.NONE, R.string.edit_fields);
 		menu.add(Menu.NONE, MENU_VEHICLES, Menu.NONE, R.string.vehicles);
+		menu.add(Menu.NONE, MENU_INTERVALS, Menu.NONE, R.string.service_intervals);
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -52,6 +54,9 @@ public class Mileage extends TabActivity {
 				return true;
 			case MENU_VEHICLES:
 				startActivity(new Intent(this, VehicleListActivity.class));
+				return true;
+			case MENU_INTERVALS:
+				startActivity(new Intent(this, ServiceIntervalsListActivity.class));
 				return true;
 		}
 		return super.onOptionsItemSelected(item);

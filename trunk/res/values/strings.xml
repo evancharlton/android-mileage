@@ -224,6 +224,8 @@
 	<string name="add_vehicle_type">Add new vehicle type</string>
 	<string name="add_vehicle">Add new vehicle</string>
 	<string name="edit_vehicle_types">Edit vehicle types</string>
+	<string name="add_service_interval_template">Add service interval template</string>
+	<string name="service_interval_templates">Templates</string>
 	
 	<string name="error_no_vehicle_specified">No vehicle was specified</string>
 	<string name="error_no_odometer_specified">Invalid value for odometer</string>
@@ -241,4 +243,15 @@
 	<string name="error_invalid_vehicle_type">Vehicle type not set</string>
 	<string name="error_invalid_vehicle_type_title">Invalid vehicle type title</string>
 	<string name="error_invalid_vehicle_type_description">Invalid vehicle type description</string>
+	<string name="error_invalid_template_title">Invalid template title</string>
+	<string name="error_invalid_template_description">Invalid template description</string>
+	<string name="error_invalid_template_distance">Invalid template distance</string>
+	<string name="error_invalid_template_duration">Invalid template duration</string>
+	<string name="error_invalid_template_vehicle_type">Vehicle type not specified</string>
+	<string name="error_invalid_interval_title">Invalid service interval title</string>
+	<string name="error_invalid_interval_description">Invalid service interval description</string>
+	<string name="error_invalid_interval_odometer">Invalid service interval odometer</string>
+	<string name="error_invalid_interval_vehicle">Vehicle not specified</string>
+	<string name="error_invalid_interval_duration">Invalid service interval duration</string>
+	<string name="error_invalid_interval_distance">Invalid service interval distance</string>
 </resources>

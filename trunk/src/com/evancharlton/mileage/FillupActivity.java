@@ -14,20 +14,17 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.evancharlton.mileage.adapters.SpinnerCursorAdapter;
 import com.evancharlton.mileage.dao.Dao;
 import com.evancharlton.mileage.dao.Field;
 import com.evancharlton.mileage.dao.Fillup;
 import com.evancharlton.mileage.dao.FillupField;
-import com.evancharlton.mileage.dao.Vehicle;
 import com.evancharlton.mileage.dao.Dao.InvalidFieldException;
 import com.evancharlton.mileage.provider.FillUpsProvider;
 import com.evancharlton.mileage.provider.tables.FieldsTable;
 import com.evancharlton.mileage.provider.tables.FillupsTable;
-import com.evancharlton.mileage.provider.tables.VehiclesTable;
+import com.evancharlton.mileage.views.CursorSpinner;
 import com.evancharlton.mileage.views.FieldView;
 
 public class FillupActivity extends BaseFormActivity {
@@ -35,7 +32,7 @@ public class FillupActivity extends BaseFormActivity {
 	private EditText mVolume;
 	private EditText mPrice;
 	private Button mDate;
-	private Spinner mVehicles;
+	private CursorSpinner mVehicles;
 	private CheckBox mPartial;
 	private LinearLayout mFieldsContainer;
 	private final ArrayList<FieldView> mFields = new ArrayList<FieldView>();
@@ -135,16 +132,7 @@ public class FillupActivity extends BaseFormActivity {
 		mDate = (Button) findViewById(R.id.date);
 		mPartial = (CheckBox) findViewById(R.id.partial);
 		mFieldsContainer = (LinearLayout) findViewById(R.id.container);
-		mVehicles = (Spinner) findViewById(R.id.vehicle);
-
-		Uri uri = Uri.withAppendedPath(FillUpsProvider.BASE_URI, VehiclesTable.VEHICLES_URI);
-		Cursor cursor = managedQuery(uri, VehiclesTable.getFullProjectionArray(), null, null, null);
-		SpinnerCursorAdapter adapter = new SpinnerCursorAdapter(this, cursor, Vehicle.TITLE);
-		mVehicles.setAdapter(adapter);
-
-		if (cursor.getCount() == 1) {
-			// mVehicles.setVisibility(View.GONE);
-		}
+		mVehicles = (CursorSpinner) findViewById(R.id.vehicle);
 	}
 
 	@Override

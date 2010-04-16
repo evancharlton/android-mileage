@@ -34,7 +34,7 @@ public abstract class BaseListActivity extends ListActivity implements AdapterVi
 	protected String[] getProjectionArray() {
 		final String[] from = getFrom();
 		final int length = from.length;
-		final String[] projection = new String[length];
+		final String[] projection = new String[length + 1];
 		projection[0] = Dao._ID;
 		for (int i = 0; i < length; i++) {
 			projection[1 + i] = from[i];

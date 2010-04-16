@@ -28,5 +28,9 @@
 		<activity android:name=".VehicleActivity" android:theme="@android:style/Theme.NoTitleBar" />
 		<activity android:name=".VehicleTypeListActivity" android:theme="@android:style/Theme.NoTitleBar" />
 		<activity android:name=".VehicleTypeActivity" android:theme="@android:style/Theme.NoTitleBar" />
+		<activity android:name=".ServiceIntervalsListActivity" />
+		<activity android:name=".ServiceIntervalActivity" />
+		<activity android:name=".ServiceIntervalTemplateListActivity" />
+		<activity android:name=".ServiceIntervalTemplateActivity" />
 	</application>
 </manifest> 
