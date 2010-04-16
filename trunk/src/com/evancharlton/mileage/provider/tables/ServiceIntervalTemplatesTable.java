@@ -1,0 +1,105 @@
+package com.evancharlton.mileage.provider.tables;
+
+import android.content.ContentValues;
+import android.content.UriMatcher;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteQueryBuilder;
+import android.net.Uri;
+
+import com.evancharlton.mileage.dao.ServiceIntervalTemplate;
+import com.evancharlton.mileage.provider.FillUpsProvider;
+
+public class ServiceIntervalTemplatesTable extends ContentTable {
+
+	private static final int SERVICE_TEMPLATES = 60;
+	private static final int SERVICE_TEMPLATE_ID = 61;
+
+	public static final String SERVICE_TEMPLATES_URI = "intervals/templates";
+	public static final String SERVICE_TEMPLATE_URI = "intervals/template";
+
+	private static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.evancharlton.interval_template";
+	private static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.evancharlton.interval_template";
+
+	public static final String[] getFullProjectionArray() {
+		return new String[] {
+				ServiceIntervalTemplate.TITLE,
+				ServiceIntervalTemplate.DESCRIPTION,
+				ServiceIntervalTemplate.DISTANCE,
+				ServiceIntervalTemplate.DURATION,
+				ServiceIntervalTemplate.VEHICLE_TYPE
+		};
+	}
+
+	@Override
+	public String create() {
+		return new TableBuilder().addText(ServiceIntervalTemplate.TITLE).addText(ServiceIntervalTemplate.DESCRIPTION).addDouble(
+				ServiceIntervalTemplate.DISTANCE).addDouble(ServiceIntervalTemplate.DURATION).addInteger(ServiceIntervalTemplate.VEHICLE_TYPE)
+				.build();
+	}
+
+	@Override
+	public int delete(SQLiteDatabase db, Uri uri, String selection, String[] selectionArgs) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public String getTableName() {
+		return "service_interval_templates";
+	}
+
+	@Override
+	public String getType(int type) {
+		switch (type) {
+			case SERVICE_TEMPLATES:
+				return CONTENT_TYPE;
+			case SERVICE_TEMPLATE_ID:
+				return CONTENT_ITEM_TYPE;
+		}
+		return null;
+	}
+
+	@Override
+	public String init() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public long insert(int type, SQLiteDatabase db, ContentValues initialValues) {
+		switch (type) {
+			case SERVICE_TEMPLATES:
+				return db.insert(getTableName(), null, initialValues);
+		}
+		return -1L;
+	}
+
+	@Override
+	public boolean query(int type, Uri uri, SQLiteQueryBuilder queryBuilder) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void registerUris(UriMatcher uriMatcher) {
+		uriMatcher.addURI(FillUpsProvider.AUTHORITY, SERVICE_TEMPLATES_URI, SERVICE_TEMPLATES);
+		uriMatcher.addURI(FillUpsProvider.AUTHORITY, SERVICE_TEMPLATE_URI + "/#", SERVICE_TEMPLATE_ID);
+	}
+
+	@Override
+	public int update(int match, SQLiteDatabase db, Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+		switch (match) {
+			case SERVICE_TEMPLATE_ID:
+				return db.update(getTableName(), values, ServiceIntervalTemplate._ID + " = ?", new String[] {
+					values.getAsString(ServiceIntervalTemplate._ID)
+				});
+		}
+		return -1;
+	}
+
+	@Override
+	public String upgrade(int currentVersion) {
+		return null;
+	}
+
+}

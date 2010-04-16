@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 
 import com.evancharlton.mileage.dao.Vehicle;
 import com.evancharlton.mileage.provider.FillUpsProvider;
@@ -44,17 +42,12 @@ public class VehicleListActivity extends BaseListActivity {
 	}
 
 	@Override
-	protected String[] getProjectionArray() {
-		return VehiclesTable.getFullProjectionArray();
-	}
-
-	@Override
 	protected Uri getUri() {
 		return Uri.withAppendedPath(FillUpsProvider.BASE_URI, VehiclesTable.VEHICLES_URI);
 	}
 
 	@Override
-	public void onItemClick(AdapterView<?> list, View row, int position, long id) {
+	public void onItemClick(long id) {
 		loadItem(id, VehicleActivity.class);
 	}
 }

@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 
 import com.evancharlton.mileage.dao.Field;
 import com.evancharlton.mileage.provider.FillUpsProvider;
@@ -40,17 +38,12 @@ public class FieldListActivity extends BaseListActivity {
 	}
 
 	@Override
-	protected String[] getProjectionArray() {
-		return FieldsTable.getFullProjectionArray();
-	}
-
-	@Override
 	protected Uri getUri() {
 		return Uri.withAppendedPath(FillUpsProvider.BASE_URI, FieldsTable.FIELDS_URI);
 	}
 
 	@Override
-	public void onItemClick(AdapterView<?> list, View row, int position, long id) {
+	public void onItemClick(long id) {
 		loadItem(id, FieldActivity.class);
 	}
 }

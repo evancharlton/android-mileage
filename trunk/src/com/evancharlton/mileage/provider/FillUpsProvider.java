@@ -20,24 +20,19 @@ import com.evancharlton.mileage.provider.tables.ContentTable;
 import com.evancharlton.mileage.provider.tables.FieldsTable;
 import com.evancharlton.mileage.provider.tables.FillupsFieldsTable;
 import com.evancharlton.mileage.provider.tables.FillupsTable;
+import com.evancharlton.mileage.provider.tables.ServiceIntervalTemplatesTable;
+import com.evancharlton.mileage.provider.tables.ServiceIntervalsTable;
 import com.evancharlton.mileage.provider.tables.VehicleTypesTable;
 import com.evancharlton.mileage.provider.tables.VehiclesTable;
 
-/**
- * Note that this app does not currently (as of version > 1.8.4) use a
- * ContentProvider for data access (this should all be done through the
- * appropriate data Model subclasses). As a result, this class might be updated,
- * but its use is highly discouraged (at least until this class is officially
- * supported).
- * 
- */
 public class FillUpsProvider extends ContentProvider {
-	public static final String DATABASE_NAME = "mileage.db";
-	public static final int DATABASE_VERSION = 50;
 	public static final String AUTHORITY = "com.evancharlton.mileage";
-	public static final ArrayList<ContentTable> TABLES = new ArrayList<ContentTable>();
-	private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 	public static final Uri BASE_URI = Uri.parse("content://" + AUTHORITY);
+
+	private static final String DATABASE_NAME = "mileage.db";
+	private static final int DATABASE_VERSION = 50;
+	private static final ArrayList<ContentTable> TABLES = new ArrayList<ContentTable>();
+	private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 
 	private DatabaseHelper mDatabaseHelper;
 
@@ -47,6 +42,8 @@ public class FillUpsProvider extends ContentProvider {
 		TABLES.add(new FieldsTable());
 		TABLES.add(new VehiclesTable());
 		TABLES.add(new VehicleTypesTable());
+		TABLES.add(new ServiceIntervalsTable());
+		TABLES.add(new ServiceIntervalTemplatesTable());
 
 		for (ContentTable table : TABLES) {
 			table.registerUris(URI_MATCHER);
