@@ -17,7 +17,9 @@ public class Field extends Dao {
 
 	private String mTitle = null;
 	private String mDescription = null;
-	private String mType = null;
+
+	// TODO: Implement this in a future release.
+	// private String mType = null;
 
 	public Field(ContentValues values) {
 		super(values);
@@ -66,10 +68,6 @@ public class Field extends Dao {
 
 	public void setDescription(String description) {
 		mDescription = description;
-	}
-
-	public void setType(String type) {
-		mType = type;
 	}
 
 	public String getTitle() {

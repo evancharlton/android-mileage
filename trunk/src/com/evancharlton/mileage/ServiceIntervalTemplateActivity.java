@@ -11,14 +11,15 @@ import com.evancharlton.mileage.dao.ServiceIntervalTemplate;
 import com.evancharlton.mileage.provider.FillUpsProvider;
 import com.evancharlton.mileage.provider.tables.ServiceIntervalTemplatesTable;
 import com.evancharlton.mileage.views.CursorSpinner;
+import com.evancharlton.mileage.views.DistanceDelta;
 
 public class ServiceIntervalTemplateActivity extends BaseFormActivity {
 
 	protected final ServiceIntervalTemplate mTemplate = new ServiceIntervalTemplate(new ContentValues());
 	protected EditText mTitle;
 	protected EditText mDescription;
-	protected EditText mDistance;
-	protected EditText mDuration;
+	protected DistanceDelta mDistance;
+	protected DistanceDelta mDuration;
 	protected CursorSpinner mVehicleTypes;
 
 	@Override
@@ -45,8 +46,8 @@ public class ServiceIntervalTemplateActivity extends BaseFormActivity {
 	protected void initUI() {
 		mTitle = (EditText) findViewById(R.id.title);
 		mDescription = (EditText) findViewById(R.id.description);
-		mDistance = (EditText) findViewById(R.id.distance);
-		mDuration = (EditText) findViewById(R.id.duration);
+		mDistance = (DistanceDelta) findViewById(R.id.distance);
+		mDuration = (DistanceDelta) findViewById(R.id.duration);
 		mVehicleTypes = (CursorSpinner) findViewById(R.id.types);
 	}
 
@@ -54,8 +55,8 @@ public class ServiceIntervalTemplateActivity extends BaseFormActivity {
 	protected void populateUI() {
 		mTitle.setText(mTemplate.getTitle());
 		mDescription.setText(mTemplate.getDescription());
-		mDistance.setText(String.valueOf(mTemplate.getDistance()));
-		mDuration.setText(String.valueOf(mTemplate.getDuration()));
+		mDistance.setDelta(mTemplate.getDistance());
+		mDuration.setDelta(mTemplate.getDuration());
 	}
 
 	@Override
@@ -63,8 +64,13 @@ public class ServiceIntervalTemplateActivity extends BaseFormActivity {
 		// TODO: Error checking
 		mTemplate.setTitle(mTitle.getText().toString());
 		mTemplate.setDescription(mDescription.getText().toString());
-		mTemplate.setDistance(Long.parseLong(mDistance.getText().toString()));
-		mTemplate.setDuration(Long.parseLong(mDuration.getText().toString()));
+		mTemplate.setDistance(mDistance.getDelta());
+		mTemplate.setDuration(mDuration.getDelta());
 		mTemplate.setVehicleTypeId(mVehicleTypes.getSelectedItemId());
+	}
+
+	@Override
+	protected int getCreateString() {
+		return R.string.add_service_interval_template;
 	}
 }

@@ -32,7 +32,8 @@ public class FillupsTable extends ContentTable {
 	public static final String[] getFullProjectionArray() {
 		return new String[] {
 				Dao._ID,
-				Fillup.PRICE,
+				Fillup.TOTAL_COST,
+				Fillup.UNIT_PRICE,
 				Fillup.VOLUME,
 				Fillup.ODOMETER,
 				Fillup.ECONOMY,
@@ -118,9 +119,9 @@ public class FillupsTable extends ContentTable {
 
 	@Override
 	public String create() {
-		return new TableBuilder().addDouble(Fillup.PRICE).addDouble(Fillup.VOLUME).addDouble(Fillup.ODOMETER).addDouble(Fillup.ECONOMY).addInteger(
-				Fillup.VEHICLE_ID).addInteger(Fillup.DATE).addDouble(Fillup.LATITUDE).addDouble(Fillup.LONGITUDE).addText(Fillup.COMMENT).addInteger(
-				Fillup.PARTIAL).addInteger(Fillup.RESTART).toString();
+		return new TableBuilder().addDouble(Fillup.TOTAL_COST).addDouble(Fillup.UNIT_PRICE).addDouble(Fillup.VOLUME).addDouble(Fillup.ODOMETER)
+				.addDouble(Fillup.ECONOMY).addInteger(Fillup.VEHICLE_ID).addInteger(Fillup.DATE).addDouble(Fillup.LATITUDE).addDouble(
+						Fillup.LONGITUDE).addText(Fillup.COMMENT).addInteger(Fillup.PARTIAL).addInteger(Fillup.RESTART).toString();
 	}
 
 	@Override

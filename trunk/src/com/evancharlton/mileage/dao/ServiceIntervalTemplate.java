@@ -18,7 +18,7 @@ public class ServiceIntervalTemplate extends Dao {
 
 	private String mTitle = null;
 	private String mDescription = null;
-	private double mDistance = 0L;
+	private long mDistance = 0L;
 	private long mDuration = 0L;
 	private long mVehicleTypeId = 0L;
 
@@ -31,7 +31,7 @@ public class ServiceIntervalTemplate extends Dao {
 		super.load(cursor);
 		mTitle = getString(cursor, TITLE);
 		mDescription = getString(cursor, DESCRIPTION);
-		mDistance = getDouble(cursor, DISTANCE);
+		mDistance = getLong(cursor, DISTANCE);
 		mDuration = getLong(cursor, DURATION);
 		mVehicleTypeId = getLong(cursor, VEHICLE_TYPE);
 	}
@@ -92,11 +92,11 @@ public class ServiceIntervalTemplate extends Dao {
 		mDescription = description;
 	}
 
-	public double getDistance() {
+	public long getDistance() {
 		return mDistance;
 	}
 
-	public void setDistance(double distance) {
+	public void setDistance(long distance) {
 		mDistance = distance;
 	}
 

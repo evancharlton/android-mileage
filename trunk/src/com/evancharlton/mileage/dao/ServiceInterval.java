@@ -26,7 +26,7 @@ public class ServiceInterval extends Dao {
 	private long mVehicleId = 0L;
 	private long mTemplateId = 0L;
 	private long mDuration = 0L;
-	private double mDistance = 0L;
+	private long mDistance = 0L;
 
 	public ServiceInterval(ContentValues values) {
 		super(values);
@@ -43,7 +43,7 @@ public class ServiceInterval extends Dao {
 		mVehicleId = getLong(cursor, VEHICLE_ID);
 		mTemplateId = getLong(cursor, TEMPLATE_ID);
 		mDuration = getLong(cursor, DURATION);
-		mDistance = getDouble(cursor, DISTANCE);
+		mDistance = getLong(cursor, DISTANCE);
 	}
 
 	@Override
@@ -154,11 +154,11 @@ public class ServiceInterval extends Dao {
 		mDuration = duration;
 	}
 
-	public double getDistance() {
+	public long getDistance() {
 		return mDistance;
 	}
 
-	public void setDistance(double distance) {
+	public void setDistance(long distance) {
 		mDistance = distance;
 	}
 }

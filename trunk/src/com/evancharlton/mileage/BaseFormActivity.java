@@ -5,8 +5,10 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.evancharlton.mileage.dao.Dao;
@@ -19,7 +21,9 @@ public abstract class BaseFormActivity extends Activity {
 
 	protected void onCreate(Bundle savedInstanceState, int layoutResId) {
 		super.onCreate(savedInstanceState);
-		setContentView(layoutResId);
+		setContentView(R.layout.base_form);
+		LinearLayout stub = (LinearLayout) findViewById(R.id.contents);
+		LayoutInflater.from(this).inflate(layoutResId, stub);
 	}
 
 	@Override
@@ -29,6 +33,7 @@ public abstract class BaseFormActivity extends Activity {
 		initUI();
 
 		mSaveBtn = (Button) findViewById(R.id.save_btn);
+		mSaveBtn.setText(getString(getCreateString()));
 		mSaveBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -66,6 +71,8 @@ public abstract class BaseFormActivity extends Activity {
 	protected void saved() {
 		finish();
 	}
+
+	abstract protected int getCreateString();
 
 	abstract protected Dao getDao();
 

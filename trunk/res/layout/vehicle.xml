@@ -1,77 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<merge
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:mileage="http://schemas.android.com/apk/res/com.evancharlton.mileage"
-	android:orientation="vertical"
-	android:layout_width="fill_parent"
-	android:layout_height="fill_parent"
 >
-	<ScrollView
+	<TableLayout
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:layout_weight="1"
 	>
-		<LinearLayout
-		    android:orientation="vertical"
-		    android:layout_width="fill_parent"
-		    android:layout_height="fill_parent"
-		>
-			<LinearLayout
-				android:orientation="horizontal"
-				android:layout_width="fill_parent"
-				android:layout_height="wrap_content"
-				android:gravity="center"
-			>
-				<EditText
-					android:id="@+id/title"
-					android:layout_width="0dip"
-					android:layout_height="wrap_content"
-					android:layout_weight="1"
-				/>
-				<EditText
-					android:id="@+id/year"
-					android:layout_width="0dip"
-					android:layout_height="wrap_content"
-					android:layout_weight="1"
-				/>
-			</LinearLayout>
-			<LinearLayout
-				android:orientation="horizontal"
-				android:layout_width="fill_parent"
-				android:layout_height="wrap_content"
-				android:gravity="center"
-			>
-				<EditText
-					android:id="@+id/make"
-					android:layout_width="0dip"
-					android:layout_height="wrap_content"
-					android:layout_weight="1"
-				/>
-				<EditText
-					android:id="@+id/model"
-					android:layout_width="0dip"
-					android:layout_height="wrap_content"
-					android:layout_weight="1"
-				/>
-			</LinearLayout>
+		<TableRow>
 			<EditText
-				android:id="@+id/description"
-				android:layout_width="fill_parent"
+				android:id="@+id/title"
+				android:layout_width="0dip"
 				android:layout_height="wrap_content"
+				android:layout_weight="1"
+				android:hint="@string/title"
+				android:inputType="textCapWords|textEmailSubject"
 			/>
-			<com.evancharlton.mileage.views.CursorSpinner
-				android:id="@+id/type"
-				android:layout_width="fill_parent"
+			<EditText
+				android:id="@+id/year"
+				android:layout_width="0dip"
 				android:layout_height="wrap_content"
-				mileage:uri="vehicles/types"
-				mileage:display_field="title"
+				android:layout_weight="1"
+				android:hint="@string/year"
+				android:inputType="number"
+				android:digits="1234567890"
 			/>
-		</LinearLayout>
-	</ScrollView>
-	<Button
-		android:id="@+id/save_btn"
+		</TableRow>
+		<TableRow>
+			<EditText
+				android:id="@+id/make"
+				android:layout_width="0dip"
+				android:layout_height="wrap_content"
+				android:layout_weight="1"
+				android:hint="@string/make"
+				android:inputType="textCapWords|textEmailSubject"
+			/>
+			<EditText
+				android:id="@+id/model"
+				android:layout_width="0dip"
+				android:layout_height="wrap_content"
+				android:layout_weight="1"
+				android:hint="@string/model"
+				android:inputType="textCapWords|textEmailSubject"
+			/>
+		</TableRow>
+	</TableLayout>
+	<EditText
+		android:id="@+id/description"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:text="@string/add_vehicle"
+		android:hint="@string/description"
+		android:inputType="textCapSentences|textShortMessage|textAutoCorrect"
 	/>
-</LinearLayout>
+	<com.evancharlton.mileage.views.CursorSpinner
+		android:id="@+id/type"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		mileage:uri="vehicles/types"
+		mileage:display_field="title"
+	/>
+</merge>

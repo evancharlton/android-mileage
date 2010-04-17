@@ -3,32 +3,19 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:mileage="http://schemas.android.com/apk/res/com.evancharlton.mileage"
 >
-	<com.evancharlton.mileage.views.CursorSpinner
-		android:id="@+id/vehicles"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		mileage:uri="vehicles"
-		mileage:display_field="title"
-	/>
-	<com.evancharlton.mileage.views.CursorSpinner
-		android:id="@+id/types"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		mileage:uri="intervals/templates"
-		mileage:display_field="title"
-		mileage:auto_hide="false"
-	/>
 	<EditText
 		android:id="@+id/title"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:inputType="textCapWords|textAutoCorrect|textAutoComplete"
+		android:hint="@string/title"
 	/>
 	<EditText
 		android:id="@+id/description"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:inputType="textCapSentences|textAutoCorrect|textAutoComplete"
+		android:hint="@string/description"
 	/>
 	<com.evancharlton.mileage.views.DistanceDelta
 		android:id="@+id/distance"
@@ -43,17 +30,5 @@
 		android:layout_height="wrap_content"
 		android:inputType="number"
 		mileage:hint="@string/duration"
-	/>
-	<EditText
-		android:id="@+id/odometer"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:inputType="number"
-	/>
-	<EditText
-		android:id="@+id/date"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:inputType="number"
 	/>
 </merge>

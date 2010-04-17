@@ -29,6 +29,10 @@ public abstract class Dao {
 		}
 	}
 
+	protected Dao(final Cursor cursor) {
+		load(cursor);
+	}
+
 	public void load(Cursor cursor) {
 		mId = cursor.getLong(cursor.getColumnIndex(_ID));
 	}
@@ -89,7 +93,12 @@ public abstract class Dao {
 		return cursor.getString(cursor.getColumnIndex(columnName));
 	}
 
-	public class InvalidFieldException extends RuntimeException {
+	protected boolean getBoolean(Cursor cursor, String columnName) {
+		return cursor.getInt(cursor.getColumnIndex(columnName)) == 1;
+	}
+
+	// TODO: break this out into its own class. Make it checked?
+	public static class InvalidFieldException extends RuntimeException {
 		private static final long serialVersionUID = 3415877365632636406L;
 
 		private int mErrorMessage = 0;

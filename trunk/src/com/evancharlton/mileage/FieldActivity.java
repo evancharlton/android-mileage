@@ -55,4 +55,9 @@ public class FieldActivity extends BaseFormActivity {
 		mField.setTitle(mTitle.getText().toString());
 		mField.setDescription(mDescription.getText().toString());
 	}
+
+	@Override
+	protected int getCreateString() {
+		return R.string.add_field;
+	}
 }

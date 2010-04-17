@@ -104,4 +104,9 @@ public class ServiceIntervalActivity extends BaseFormActivity {
 		mInterval.setDistance(mDistance.getDelta());
 		mInterval.setVehicleId(mVehicles.getSelectedItemId());
 	}
+
+	@Override
+	protected int getCreateString() {
+		return R.string.add_service_interval;
+	}
 }

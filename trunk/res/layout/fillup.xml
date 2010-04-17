@@ -1,89 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<merge
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:mileage="http://schemas.android.com/apk/res/com.evancharlton.mileage"
-	android:orientation="vertical"
-	android:layout_width="fill_parent"
-	android:layout_height="fill_parent"
 >
-	<ScrollView
+	<TableLayout
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:layout_weight="1"
 	>
-		<LinearLayout
-		    android:orientation="vertical"
-		    android:layout_width="fill_parent"
-		    android:layout_height="fill_parent"
-		>
-		    <LinearLayout
-		    	android:orientation="horizontal"
-		    	android:layout_width="fill_parent"
-		    	android:layout_height="wrap_content"
-		    	android:gravity="center"
-		    >
-				<EditText
-					android:id="@+id/price"
-				    android:layout_width="0dip"
-			   		android:layout_weight="1"
-				    android:layout_height="wrap_content" 
-				    android:numeric="decimal"
-				/>
-				<EditText
-					android:id="@+id/volume"
-					android:layout_width="0dip"
-			   		android:layout_weight="1"
-					android:layout_height="wrap_content"
-				    android:numeric="decimal"
-				/>
-			</LinearLayout>
-			<LinearLayout
-				android:orientation="horizontal"
-				android:layout_width="fill_parent"
-				android:layout_height="wrap_content"
-		    	android:gravity="center"
-			>
-				<EditText
-					android:id="@+id/odometer"
-					android:layout_width="0dip"
-			   		android:layout_weight="1"
-					android:layout_height="wrap_content"
-					android:hint="@string/odometer"
-					android:inputType="number"
-					android:digits="+0123456789."
-				/>
-				<Button
-					android:id="@+id/date"
-					android:layout_width="0dip"
-			   		android:layout_weight="1"
-					android:layout_height="wrap_content"
-				/>
-			</LinearLayout>
-			<com.evancharlton.mileage.views.CursorSpinner
-				android:id="@+id/vehicle"
-				android:layout_width="fill_parent"
-				android:layout_height="wrap_content"
-				mileage:uri="vehicles"
-				mileage:display_field="title"
+	    <TableRow>
+			<EditText
+				android:id="@+id/price"
+			    android:layout_width="0dip"
+		   		android:layout_weight="1"
+			    android:layout_height="wrap_content" 
+			    android:numeric="decimal"
 			/>
-			<CheckBox
-				android:id="@+id/partial"
-				android:layout_width="fill_parent"
+			<EditText
+				android:id="@+id/volume"
+				android:layout_width="0dip"
+		   		android:layout_weight="1"
 				android:layout_height="wrap_content"
-				android:text="@string/partial_fillup"
+			    android:numeric="decimal"
 			/>
-			<LinearLayout
-				android:id="@+id/container"
-				android:orientation="vertical"
-				android:layout_width="fill_parent"
+		</TableRow>
+		<TableRow>
+			<EditText
+				android:id="@+id/odometer"
+				android:layout_width="0dip"
+		   		android:layout_weight="1"
+				android:layout_height="wrap_content"
+				android:hint="@string/odometer"
+				android:inputType="number"
+				android:digits="+0123456789."
+			/>
+			<com.evancharlton.mileage.views.DateButton
+				android:id="@+id/date"
+				android:layout_width="0dip"
+		   		android:layout_weight="1"
 				android:layout_height="wrap_content"
 			/>
-		</LinearLayout>
-	</ScrollView>
-	<Button
-		android:id="@+id/save_btn"
+		</TableRow>
+	</TableLayout>
+	<com.evancharlton.mileage.views.CursorSpinner
+		android:id="@+id/vehicle"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:text="@string/add_fillup"
+		mileage:uri="vehicles"
+		mileage:display_field="title"
 	/>
-</LinearLayout>
+	<CheckBox
+		android:id="@+id/partial"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/partial_fillup"
+	/>
+	<LinearLayout
+		android:id="@+id/container"
+		android:orientation="vertical"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+	/>
+</merge>

@@ -70,5 +70,13 @@ public class VehicleActivity extends BaseFormActivity {
 		mVehicle.setModel(mModel.getText().toString());
 		mVehicle.setYear(mYear.getText().toString());
 		mVehicle.setVehicleType(mVehicleTypes.getSelectedItemId());
+		if (mSetDefault.isChecked()) {
+			mVehicle.setDefaultTime(System.currentTimeMillis());
+		}
+	}
+
+	@Override
+	protected int getCreateString() {
+		return R.string.add_vehicle;
 	}
 }

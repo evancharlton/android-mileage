@@ -1,6 +1,7 @@
 package com.evancharlton.mileage.views;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.AttributeSet;
@@ -26,6 +27,9 @@ public abstract class DeltaView extends LinearLayout {
 
 		mValue = (EditText) findViewById(R.id.value);
 		mUnits = (Spinner) findViewById(R.id.units);
+
+		TypedArray arr = context.obtainStyledAttributes(attrs, R.styleable.DeltaView);
+		mValue.setHint(arr.getString(R.styleable.DeltaView_hint));
 
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, android.R.id.text1, getTexts());
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

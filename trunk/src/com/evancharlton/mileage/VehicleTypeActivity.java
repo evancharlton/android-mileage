@@ -53,4 +53,9 @@ public class VehicleTypeActivity extends BaseFormActivity {
 	protected Uri getUri(long id) {
 		return ContentUris.withAppendedId(Uri.withAppendedPath(FillUpsProvider.BASE_URI, VehicleTypesTable.TYPE_URI), id);
 	}
+
+	@Override
+	protected int getCreateString() {
+		return R.string.add_vehicle_type;
+	}
 }

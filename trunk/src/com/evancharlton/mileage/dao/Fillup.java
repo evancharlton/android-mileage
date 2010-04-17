@@ -13,7 +13,8 @@ import com.evancharlton.mileage.provider.FillUpsProvider;
 import com.evancharlton.mileage.provider.tables.FillupsTable;
 
 public class Fillup extends Dao {
-	public static final String PRICE = "price";
+	public static final String TOTAL_COST = "total_cost";
+	public static final String UNIT_PRICE = "price";
 	public static final String VOLUME = "volume";
 	public static final String ODOMETER = "odometer";
 	public static final String DATE = "timestamp"; // ms since epoch
@@ -29,21 +30,22 @@ public class Fillup extends Dao {
 	private double mOdometer = 0L;
 	private long mTimestamp = 0L;
 	private double mVolume = 0D;
-	private double mPrice = 0D;
+	private double mUnitPrice = 0D;
+	private double mTotalCost = 0D;
 	private List<FillupField> mFields = null;
 	private boolean mIsPartial = false;
-
-	public void load(Cursor cursor) {
-		super.load(cursor);
-		mVehicleId = getLong(cursor, Fillup.VEHICLE_ID);
-		mOdometer = getLong(cursor, Fillup.ODOMETER);
-		mTimestamp = getLong(cursor, Fillup.DATE);
-		mVolume = getDouble(cursor, Fillup.VOLUME);
-		mPrice = getDouble(cursor, Fillup.PRICE);
-	}
+	private Fillup mNext = null;
+	private Fillup mPrevious = null;
+	private boolean mIsRestart = false;
+	private double mEconomy = 0D;
 
 	public Fillup(ContentValues contentValues) {
 		super(contentValues);
+	}
+
+	public Fillup(Cursor cursor) {
+		this(new ContentValues());
+		load(cursor);
 	}
 
 	public List<FillupField> getFields(Context context) {
@@ -51,6 +53,25 @@ public class Fillup extends Dao {
 			// load the fields from the database
 		}
 		return mFields;
+	}
+
+	@Override
+	public void load(Cursor cursor) {
+		super.load(cursor);
+		mVehicleId = getLong(cursor, VEHICLE_ID);
+		mOdometer = getLong(cursor, ODOMETER);
+		mTimestamp = getLong(cursor, DATE);
+		mVolume = getDouble(cursor, VOLUME);
+		mUnitPrice = getDouble(cursor, UNIT_PRICE);
+		mIsPartial = getBoolean(cursor, PARTIAL);
+		mIsRestart = getBoolean(cursor, RESTART);
+		// should the economy be stored in the cache table? I say no because the
+		// added performance benefit of being able to load this oft-used field
+		// from the same table will outweigh the ugliness of putting calculated
+		// fields in here. Things to watch out for:
+		// - when changing a vehicle's unit preferences, invalidate the field
+		// - when editing a field before it, invalidate the field (partials)
+		mEconomy = getDouble(cursor, ECONOMY);
 	}
 
 	@Override
@@ -82,17 +103,23 @@ public class Fillup extends Dao {
 		}
 		values.put(DATE, mTimestamp);
 
-		if (mVolume <= 0) {
+		if (getVolume() <= 0) {
 			throw new InvalidFieldException(R.string.error_no_volume_specified);
 		}
-		values.put(VOLUME, mVolume);
+		values.put(VOLUME, getVolume());
 
-		if (mPrice <= 0) {
+		if (getUnitPrice() <= 0) {
 			throw new InvalidFieldException(R.string.error_no_price_specified);
 		}
-		values.put(PRICE, mPrice);
+		values.put(UNIT_PRICE, getUnitPrice());
+
+		if (getTotalCost() <= 0) {
+			throw new InvalidFieldException(R.string.error_no_total_cost_specified);
+		}
+		values.put(TOTAL_COST, getTotalCost());
 
 		values.put(PARTIAL, mIsPartial);
+		values.put(RESTART, mIsRestart);
 	}
 
 	public void setVolume(double volume) {
@@ -103,12 +130,20 @@ public class Fillup extends Dao {
 		mOdometer = odometer;
 	}
 
-	public void setPrice(double price) {
-		mPrice = price;
+	public void setUnitPrice(double unitPrice) {
+		mUnitPrice = unitPrice;
+	}
+
+	public void setTotalCost(double totalCost) {
+		mTotalCost = totalCost;
 	}
 
 	public void setPartial(boolean partial) {
 		mIsPartial = partial;
+	}
+
+	public void setRestart(boolean restart) {
+		mIsRestart = restart;
 	}
 
 	public void setVehicleId(long id) {
@@ -131,6 +166,10 @@ public class Fillup extends Dao {
 		mFields = fields;
 	}
 
+	public void setEconomy(double economy) {
+		mEconomy = economy;
+	}
+
 	public long getVehicleId() {
 		return mVehicleId;
 	}
@@ -139,15 +178,60 @@ public class Fillup extends Dao {
 		return mOdometer;
 	}
 
+	public boolean isPartial() {
+		return mIsPartial;
+	}
+
 	public double getVolume() {
+		if (mVolume == 0 && (mTotalCost > 0 && mUnitPrice > 0)) {
+			mVolume = mTotalCost / mUnitPrice;
+		}
 		return mVolume;
 	}
 
-	public double getPrice() {
-		return mPrice;
+	public double getUnitPrice() {
+		if (mUnitPrice == 0 && (mVolume > 0 && mTotalCost > 0)) {
+			mUnitPrice = mTotalCost / mVolume;
+		}
+		return mUnitPrice;
 	}
 
-	public boolean isPartial() {
-		return mIsPartial;
+	public double getTotalCost() {
+		if (mTotalCost == 0 && (mVolume > 0 && mUnitPrice > 0)) {
+			mTotalCost = mVolume * mUnitPrice;
+		}
+		return mTotalCost;
+	}
+
+	public void setPrevious(Fillup previous) {
+		mPrevious = previous;
+	}
+
+	public void setNext(Fillup next) {
+		mNext = next;
+	}
+
+	public Fillup getPrevious() {
+		return mPrevious;
+	}
+
+	public Fillup getNext() {
+		return mNext;
+	}
+
+	public boolean hasPrevious() {
+		return mPrevious != null;
+	}
+
+	public boolean hasNext() {
+		return mNext != null;
+	}
+
+	public boolean isRestart() {
+		return mIsRestart;
+	}
+
+	public double getEconomy() {
+		return mEconomy;
 	}
 }

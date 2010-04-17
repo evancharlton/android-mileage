@@ -139,18 +139,39 @@ public class FillupActivity extends BaseFormActivity {
 	protected void populateUI() {
 		mOdometer.setText(String.valueOf(mFillup.getOdometer()));
 		mVolume.setText(String.valueOf(mFillup.getVolume()));
-		mPrice.setText(String.valueOf(mFillup.getPrice()));
+		mPrice.setText(String.valueOf(mFillup.getUnitPrice()));
 		mDate.setText(String.valueOf(mFillup.getTimestamp()));
 		mPartial.setChecked(mFillup.isPartial());
 	}
 
 	@Override
 	protected void setFields() {
-		// TODO: add error catching
-		mFillup.setVolume(Double.parseDouble(mVolume.getText().toString()));
-		mFillup.setPrice(Double.parseDouble(mPrice.getText().toString()));
-		mFillup.setOdometer(Double.parseDouble(mOdometer.getText().toString()));
+		// TODO: handle the case for input preferences
+		try {
+			mFillup.setVolume(Double.parseDouble(mVolume.getText().toString()));
+		} catch (NumberFormatException e) {
+			throw new InvalidFieldException(R.string.error_no_volume_specified);
+		}
+
+		try {
+			mFillup.setUnitPrice(Double.parseDouble(mPrice.getText().toString()));
+		} catch (NumberFormatException e) {
+			throw new InvalidFieldException(R.string.error_no_price_specified);
+		}
+
+		try {
+			// TODO: handle the + prefix
+			mFillup.setOdometer(Double.parseDouble(mOdometer.getText().toString()));
+		} catch (NumberFormatException e) {
+			throw new InvalidFieldException(R.string.error_no_odometer_specified);
+		}
+
 		mFillup.setPartial(mPartial.isChecked());
 		mFillup.setVehicleId(mVehicles.getSelectedItemId());
+	}
+
+	@Override
+	protected int getCreateString() {
+		return R.string.add_fillup;
 	}
 }

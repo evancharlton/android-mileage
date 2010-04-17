@@ -4,4 +4,7 @@
         <attr name="display_field" format="string" />
         <attr name="auto_hide" format="boolean" />
     </declare-styleable>
+     <declare-styleable name="DeltaView">
+        <attr name="hint" format="string"/>
+    </declare-styleable>
 </resources>
