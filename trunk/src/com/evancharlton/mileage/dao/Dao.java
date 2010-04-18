@@ -69,7 +69,7 @@ public abstract class Dao {
 		return true;
 	}
 
-	protected final boolean isExistingObject() {
+	public final boolean isExistingObject() {
 		return mId > 0;
 	}
 
@@ -95,6 +95,10 @@ public abstract class Dao {
 
 	protected boolean getBoolean(Cursor cursor, String columnName) {
 		return cursor.getInt(cursor.getColumnIndex(columnName)) == 1;
+	}
+
+	protected int getInt(Cursor cursor, String columnName) {
+		return cursor.getInt(cursor.getColumnIndex(columnName));
 	}
 
 	// TODO: break this out into its own class. Make it checked?

@@ -2,11 +2,13 @@ package com.evancharlton.mileage.dao;
 
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 
 import com.evancharlton.mileage.R;
 import com.evancharlton.mileage.provider.FillUpsProvider;
+import com.evancharlton.mileage.provider.tables.FillupsTable;
 import com.evancharlton.mileage.provider.tables.VehiclesTable;
 
 public class Vehicle extends Dao {
@@ -17,6 +19,10 @@ public class Vehicle extends Dao {
 	public static final String MODEL = "model";
 	public static final String VEHICLE_TYPE = "vehicle_type_id";
 	public static final String DEFAULT_TIME = "default_time";
+	public static final String PREF_DISTANCE_UNITS = "odometer_units";
+	public static final String PREF_VOLUME_UNITS = "volume_units";
+	public static final String PREF_ECONOMY_UNITS = "economy_units";
+	public static final String PREF_CURRENCY = "currency_units";
 
 	private String mTitle = null;
 	private String mDescription = null;
@@ -34,6 +40,11 @@ public class Vehicle extends Dao {
 		// TODO
 	}
 
+	public Vehicle(Cursor cursor) {
+		super(cursor);
+		load(cursor);
+	}
+
 	@Override
 	public void load(Cursor cursor) {
 		super.load(cursor);
@@ -46,6 +57,9 @@ public class Vehicle extends Dao {
 		mDefaultTime = getLong(cursor, DEFAULT_TIME);
 
 		// build the preferences
+		mPrefDistanceUnits = getInt(cursor, PREF_DISTANCE_UNITS);
+		mPrefVolumeUnits = getInt(cursor, PREF_VOLUME_UNITS);
+		mPrefEconomyUnits = getInt(cursor, PREF_ECONOMY_UNITS);
 	}
 
 	@Override
@@ -93,6 +107,23 @@ public class Vehicle extends Dao {
 		values.put(VEHICLE_TYPE, mVehicleType);
 
 		values.put(DEFAULT_TIME, mDefaultTime);
+		// values.put(PREF_CURRENCY, mCurrency);
+		values.put(PREF_DISTANCE_UNITS, mPrefDistanceUnits);
+		values.put(PREF_ECONOMY_UNITS, mPrefEconomyUnits);
+		values.put(PREF_VOLUME_UNITS, mPrefVolumeUnits);
+	}
+
+	public Fillup loadLatestFillup(Context context) {
+		Uri uri = Uri.withAppendedPath(FillUpsProvider.BASE_URI, FillupsTable.FILLUPS_URI);
+		String[] projection = FillupsTable.getFullProjectionArray();
+		Cursor c = context.getContentResolver().query(uri, projection, Fillup.VEHICLE_ID + " = ?", new String[] {
+			String.valueOf(getId())
+		}, Fillup.ODOMETER + " desc");
+		if (c.getCount() >= 1) {
+			c.moveToFirst();
+			return new Fillup(c);
+		}
+		return null;
 	}
 
 	public void setTitle(String title) {
@@ -163,31 +194,29 @@ public class Vehicle extends Dao {
 		return mPrefEconomyUnits;
 	}
 
+	// TODO: split this out into a separate class? there's no reason for this to
+	// be an inner class.
+	// TODO: This should probably be renamed too.
 	public static final class Preferences {
-		public static final String PREF_DISTANCE_UNITS = "odometer_units";
-		public static final String PREF_VOLUME_UNITS = "volume_units";
-		public static final String PREF_ECONOMY_UNITS = "economy_units";
-		public static final String PREF_CURRENCY = "currency_units";
-
 		// distance
-		private static final int UNITS_KM = 1;
-		private static final int UNITS_MI = 2;
+		public static final int UNITS_KM = 1;
+		public static final int UNITS_MI = 2;
 
 		// volume
-		private static final int UNITS_GALLONS = 3;
-		private static final int UNITS_LITRES = 4;
-		private static final int UNITS_IMPERIAL_GALLONS = 5;
+		public static final int UNITS_GALLONS = 3;
+		public static final int UNITS_LITRES = 4;
+		public static final int UNITS_IMPERIAL_GALLONS = 5;
 
 		// economy
-		private static final int ECONOMY_MI_PER_GALLON = 6;
-		private static final int ECONOMY_KM_PER_GALLON = 7;
-		private static final int ECONOMY_MI_PER_IMP_GALLON = 8;
-		private static final int ECONOMY_KM_PER_IMP_GALLON = 9;
-		private static final int ECONOMY_MI_PER_LITRE = 10;
-		private static final int ECONOMY_KM_PER_LITRE = 11;
-		private static final int ECONOMY_GALLONS_PER_100KM = 12;
-		private static final int ECONOMY_LITRES_PER_100KM = 13;
-		private static final int ECONOMY_IMP_GAL_PER_100KM = 14;
+		public static final int ECONOMY_MI_PER_GALLON = 6;
+		public static final int ECONOMY_KM_PER_GALLON = 7;
+		public static final int ECONOMY_MI_PER_IMP_GALLON = 8;
+		public static final int ECONOMY_KM_PER_IMP_GALLON = 9;
+		public static final int ECONOMY_MI_PER_LITRE = 10;
+		public static final int ECONOMY_KM_PER_LITRE = 11;
+		public static final int ECONOMY_GALLONS_PER_100KM = 12;
+		public static final int ECONOMY_LITRES_PER_100KM = 13;
+		public static final int ECONOMY_IMP_GAL_PER_100KM = 14;
 
 		public static double averageEconomy(Vehicle vehicle, FillupSeries series) {
 			// ALL CALCULATIONS ARE DONE IN MPG AND CONVERTED LATER
@@ -195,8 +224,6 @@ public class Vehicle extends Dao {
 			double gallons = convert(series.getTotalVolume(), vehicle.getVolumeUnits(), UNITS_GALLONS);
 
 			switch (vehicle.getEconomyUnits()) {
-				case ECONOMY_MI_PER_GALLON:
-					return miles / gallons;
 				case ECONOMY_KM_PER_GALLON:
 					return convert(miles, UNITS_KM) / gallons;
 				case ECONOMY_MI_PER_IMP_GALLON:
@@ -213,9 +240,10 @@ public class Vehicle extends Dao {
 					return convert(gallons, UNITS_LITRES) / (100 * convert(miles, UNITS_KM));
 				case ECONOMY_IMP_GAL_PER_100KM:
 					return convert(gallons, UNITS_IMPERIAL_GALLONS) / (100 * convert(miles, UNITS_KM));
+				case ECONOMY_MI_PER_GALLON:
+				default:
+					return miles / gallons;
 			}
-
-			return 0D;
 		}
 
 		// yes, this method makes it possible to convert from miles to litres.
@@ -234,6 +262,7 @@ public class Vehicle extends Dao {
 				case UNITS_IMPERIAL_GALLONS:
 					value *= 1.20095042;
 			}
+			// at this point, "value" is either miles or gallons
 			return convert(value, to);
 		}
 

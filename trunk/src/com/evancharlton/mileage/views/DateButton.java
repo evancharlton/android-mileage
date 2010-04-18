@@ -56,6 +56,7 @@ public class DateButton extends Button {
 	public Parcelable onSaveInstanceState() {
 		Bundle icicle = new Bundle();
 		icicle.putParcelable("super", super.onSaveInstanceState());
+		icicle.putLong("timestamp", getTimestamp());
 		if (mDialog != null) {
 			mDialog.dismiss();
 		}
@@ -66,9 +67,10 @@ public class DateButton extends Button {
 	public void onRestoreInstanceState(Parcelable state) {
 		Bundle icicle = (Bundle) state;
 		super.onRestoreInstanceState(icicle.getParcelable("super"));
+		setDate(icicle.getLong("timestamp", System.currentTimeMillis()));
 		if (mDialog != null) {
 			mDialog.setCallback(mDateSetCallback);
-			// mDialog.restore();
+			mDialog.show();
 		}
 	}
 
@@ -96,22 +98,6 @@ public class DateButton extends Button {
 		public StaticDatePickerDialog(Context context, OnDateSetListener callback, Calendar calendar) {
 			super(context, callback, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
 			mCallback = callback;
-		}
-
-		@Override
-		public Bundle onSaveInstanceState() {
-			Bundle data = new Bundle();
-			data.putBundle("super", super.onSaveInstanceState());
-			data.putBoolean("showing", isShowing());
-			return data;
-		}
-
-		@Override
-		public void onRestoreInstanceState(Bundle data) {
-			super.onRestoreInstanceState(data.getBundle("super"));
-			if (data.getBoolean("super", false)) {
-				show();
-			}
 		}
 
 		public void setCallback(OnDateSetListener callback) {

@@ -24,20 +24,25 @@ public class VehiclesTable extends ContentTable {
 	public static String[] getFullProjectionArray() {
 		return new String[] {
 				Dao._ID,
-				Vehicle.DEFAULT_TIME,
+				Vehicle.TITLE,
 				Vehicle.DESCRIPTION,
+				Vehicle.YEAR,
 				Vehicle.MAKE,
 				Vehicle.MODEL,
-				Vehicle.TITLE,
 				Vehicle.VEHICLE_TYPE,
-				Vehicle.YEAR
+				Vehicle.DEFAULT_TIME,
+				Vehicle.PREF_DISTANCE_UNITS,
+				Vehicle.PREF_VOLUME_UNITS,
+				Vehicle.PREF_ECONOMY_UNITS,
+				Vehicle.PREF_CURRENCY
 		};
 	}
 
 	@Override
 	public String create() {
 		return new TableBuilder().addText(Vehicle.TITLE).addText(Vehicle.DESCRIPTION).addText(Vehicle.YEAR).addText(Vehicle.MAKE).addText(
-				Vehicle.MODEL).addInteger(Vehicle.DEFAULT_TIME).addInteger(Vehicle.VEHICLE_TYPE).build();
+				Vehicle.MODEL).addInteger(Vehicle.VEHICLE_TYPE).addInteger(Vehicle.DEFAULT_TIME).addInteger(Vehicle.PREF_DISTANCE_UNITS).addInteger(
+				Vehicle.PREF_VOLUME_UNITS).addInteger(Vehicle.PREF_ECONOMY_UNITS).addText(Vehicle.PREF_CURRENCY).build();
 	}
 
 	@Override

@@ -48,11 +48,16 @@ public class Fillup extends Dao {
 		load(cursor);
 	}
 
-	public List<FillupField> getFields(Context context) {
-		if (mFields == null) {
-			// load the fields from the database
+	@Override
+	protected Uri getUri() {
+		Uri base = FillUpsProvider.BASE_URI;
+		if (isExistingObject()) {
+			base = Uri.withAppendedPath(base, FillupsTable.FILLUP_URI);
+			base = ContentUris.withAppendedId(base, getId());
+		} else {
+			base = Uri.withAppendedPath(base, FillupsTable.FILLUPS_URI);
 		}
-		return mFields;
+		return base;
 	}
 
 	@Override
@@ -75,18 +80,6 @@ public class Fillup extends Dao {
 	}
 
 	@Override
-	protected Uri getUri() {
-		Uri base = FillUpsProvider.BASE_URI;
-		if (isExistingObject()) {
-			base = Uri.withAppendedPath(base, FillupsTable.FILLUP_URI);
-			base = ContentUris.withAppendedId(base, getId());
-		} else {
-			base = Uri.withAppendedPath(base, FillupsTable.FILLUPS_URI);
-		}
-		return base;
-	}
-
-	@Override
 	protected void validate(ContentValues values) {
 		if (mVehicleId <= 0) {
 			throw new InvalidFieldException(R.string.error_no_vehicle_specified);
@@ -96,7 +89,7 @@ public class Fillup extends Dao {
 		if (mOdometer <= 0) {
 			throw new InvalidFieldException(R.string.error_no_odometer_specified);
 		}
-		values.put(ODOMETER, mVehicleId);
+		values.put(ODOMETER, mOdometer);
 
 		if (mTimestamp <= 0) {
 			mTimestamp = System.currentTimeMillis();
@@ -120,80 +113,54 @@ public class Fillup extends Dao {
 
 		values.put(PARTIAL, mIsPartial);
 		values.put(RESTART, mIsRestart);
+		values.put(ECONOMY, mEconomy);
 	}
 
-	public void setVolume(double volume) {
-		mVolume = volume;
+	public Fillup loadPrevious(Context context) {
+		if (!mIsRestart) {
+			Uri uri = Uri.withAppendedPath(FillUpsProvider.BASE_URI, FillupsTable.FILLUPS_URI);
+			String[] projection = FillupsTable.getFullProjectionArray();
+			Cursor c = context.getContentResolver().query(uri, projection, Fillup.VEHICLE_ID + " = ? AND " + ODOMETER + " < ?", new String[] {
+					String.valueOf(getVehicleId()),
+					String.valueOf(getOdometer())
+			}, Fillup.ODOMETER + " desc");
+			if (c.getCount() >= 1) {
+				c.moveToFirst();
+				return new Fillup(c);
+			}
+		}
+		return null;
 	}
 
-	public void setOdometer(double odometer) {
-		mOdometer = odometer;
-	}
-
-	public void setUnitPrice(double unitPrice) {
-		mUnitPrice = unitPrice;
-	}
-
-	public void setTotalCost(double totalCost) {
-		mTotalCost = totalCost;
-	}
-
-	public void setPartial(boolean partial) {
-		mIsPartial = partial;
-	}
-
-	public void setRestart(boolean restart) {
-		mIsRestart = restart;
-	}
-
-	public void setVehicleId(long id) {
-		mVehicleId = id;
-	}
-
-	public long getTimestamp() {
-		return mTimestamp;
-	}
-
-	public void setTimestamp(long timestamp) {
-		mTimestamp = timestamp;
+	public double getEconomy() {
+		return mEconomy;
 	}
 
 	public List<FillupField> getFields() {
 		return mFields;
 	}
 
-	public void setFields(List<FillupField> fields) {
-		mFields = fields;
+	public List<FillupField> getFields(Context context) {
+		if (mFields == null) {
+			// load the fields from the database
+		}
+		return mFields;
 	}
 
-	public void setEconomy(double economy) {
-		mEconomy = economy;
-	}
-
-	public long getVehicleId() {
-		return mVehicleId;
+	public Fillup getNext() {
+		return mNext;
 	}
 
 	public double getOdometer() {
 		return mOdometer;
 	}
 
-	public boolean isPartial() {
-		return mIsPartial;
+	public Fillup getPrevious() {
+		return mPrevious;
 	}
 
-	public double getVolume() {
-		if (mVolume == 0 && (mTotalCost > 0 && mUnitPrice > 0)) {
-			mVolume = mTotalCost / mUnitPrice;
-		}
-		return mVolume;
-	}
-
-	public double getUnitPrice() {
-		if (mUnitPrice == 0 && (mVolume > 0 && mTotalCost > 0)) {
-			mUnitPrice = mTotalCost / mVolume;
-		}
-		return mUnitPrice;
+	public long getTimestamp() {
+		return mTimestamp;
 	}
 
 	public double getTotalCost() {
@@ -203,35 +170,85 @@ public class Fillup extends Dao {
 		return mTotalCost;
 	}
 
-	public void setPrevious(Fillup previous) {
-		mPrevious = previous;
+	public double getUnitPrice() {
+		if (mUnitPrice == 0 && (mVolume > 0 && mTotalCost > 0)) {
+			mUnitPrice = mTotalCost / mVolume;
+		}
+		return mUnitPrice;
 	}
 
-	public void setNext(Fillup next) {
-		mNext = next;
+	public long getVehicleId() {
+		return mVehicleId;
 	}
 
-	public Fillup getPrevious() {
-		return mPrevious;
-	}
-
-	public Fillup getNext() {
-		return mNext;
-	}
-
-	public boolean hasPrevious() {
-		return mPrevious != null;
+	public double getVolume() {
+		if (mVolume == 0 && (mTotalCost > 0 && mUnitPrice > 0)) {
+			mVolume = mTotalCost / mUnitPrice;
+		}
+		return mVolume;
 	}
 
 	public boolean hasNext() {
 		return mNext != null;
 	}
 
+	public boolean hasPrevious() {
+		return mPrevious != null;
+	}
+
+	public boolean isPartial() {
+		return mIsPartial;
+	}
+
 	public boolean isRestart() {
 		return mIsRestart;
 	}
 
-	public double getEconomy() {
-		return mEconomy;
+	public void setEconomy(double economy) {
+		mEconomy = economy;
+	}
+
+	public void setFields(List<FillupField> fields) {
+		mFields = fields;
+	}
+
+	public void setNext(Fillup next) {
+		mNext = next;
+	}
+
+	public void setOdometer(double odometer) {
+		mOdometer = odometer;
+	}
+
+	public void setPartial(boolean partial) {
+		mIsPartial = partial;
+	}
+
+	public void setPrevious(Fillup previous) {
+		mPrevious = previous;
+	}
+
+	public void setRestart(boolean restart) {
+		mIsRestart = restart;
+	}
+
+	public void setTimestamp(long timestamp) {
+		mTimestamp = timestamp;
+	}
+
+	public void setTotalCost(double totalCost) {
+		mTotalCost = totalCost;
+	}
+
+	public void setUnitPrice(double unitPrice) {
+		mUnitPrice = unitPrice;
+	}
+
+	public void setVehicleId(long id) {
+		mVehicleId = id;
+	}
+
+	public void setVolume(double volume) {
+		mVolume = volume;
 	}
 }

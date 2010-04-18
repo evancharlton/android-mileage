@@ -20,10 +20,14 @@ import com.evancharlton.mileage.dao.Dao;
 import com.evancharlton.mileage.dao.Field;
 import com.evancharlton.mileage.dao.Fillup;
 import com.evancharlton.mileage.dao.FillupField;
+import com.evancharlton.mileage.dao.FillupSeries;
+import com.evancharlton.mileage.dao.Vehicle;
 import com.evancharlton.mileage.dao.Dao.InvalidFieldException;
+import com.evancharlton.mileage.dao.Vehicle.Preferences;
 import com.evancharlton.mileage.provider.FillUpsProvider;
 import com.evancharlton.mileage.provider.tables.FieldsTable;
 import com.evancharlton.mileage.provider.tables.FillupsTable;
+import com.evancharlton.mileage.provider.tables.VehiclesTable;
 import com.evancharlton.mileage.views.CursorSpinner;
 import com.evancharlton.mileage.views.FieldView;
 
@@ -106,7 +110,16 @@ public class FillupActivity extends BaseFormActivity {
 
 	@Override
 	protected void saved() {
-		startActivity(new Intent(this, FillupListActivity.class));
+		if (getParent() == null) {
+			finish();
+		} else {
+			startActivity(new Intent(this, FillupListActivity.class));
+			// reset the UI
+			mOdometer.setText("");
+			mVolume.setText("");
+			mPrice.setText("");
+			mPartial.setChecked(false);
+		}
 	}
 
 	@Override
@@ -168,6 +181,29 @@ public class FillupActivity extends BaseFormActivity {
 
 		mFillup.setPartial(mPartial.isChecked());
 		mFillup.setVehicleId(mVehicles.getSelectedItemId());
+
+		// update the economy number
+		Uri vehicleUri = ContentUris.withAppendedId(Uri.withAppendedPath(FillUpsProvider.BASE_URI, VehiclesTable.VEHICLE_URI), mVehicles
+				.getSelectedItemId());
+
+		Vehicle v = null;
+		Cursor vehicleCursor = managedQuery(vehicleUri, VehiclesTable.getFullProjectionArray(), null, null, null);
+		if (vehicleCursor.getCount() == 1) {
+			vehicleCursor.moveToFirst();
+			v = new Vehicle(vehicleCursor);
+			Fillup previous = null;
+			if (mFillup.isExistingObject()) {
+				previous = mFillup.loadPrevious(this);
+			} else {
+				previous = v.loadLatestFillup(this);
+			}
+			if (previous == null) {
+				mFillup.setEconomy(0D);
+			} else {
+				double economy = Preferences.averageEconomy(v, new FillupSeries(previous, mFillup));
+				mFillup.setEconomy(economy);
+			}
+		}
 	}
 
 	@Override

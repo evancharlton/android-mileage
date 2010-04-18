@@ -17,7 +17,7 @@ public class FillupSeries extends ArrayList<Fillup> {
 				previous.setNext(current);
 			}
 			current.setPrevious(previous);
-			add(current);
+			super.add(current);
 			previous = current;
 		}
 	}

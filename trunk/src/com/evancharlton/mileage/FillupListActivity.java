@@ -10,8 +10,8 @@ public class FillupListActivity extends BaseListActivity {
 	@Override
 	protected String[] getFrom() {
 		return new String[] {
-				Fillup.ODOMETER,
-				Fillup.VOLUME,
+				Fillup.ECONOMY,
+				Fillup.VOLUME
 		};
 	}
 
