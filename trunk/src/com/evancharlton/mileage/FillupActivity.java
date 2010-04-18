@@ -10,7 +10,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -29,13 +28,14 @@ import com.evancharlton.mileage.provider.tables.FieldsTable;
 import com.evancharlton.mileage.provider.tables.FillupsTable;
 import com.evancharlton.mileage.provider.tables.VehiclesTable;
 import com.evancharlton.mileage.views.CursorSpinner;
+import com.evancharlton.mileage.views.DateButton;
 import com.evancharlton.mileage.views.FieldView;
 
 public class FillupActivity extends BaseFormActivity {
 	private EditText mOdometer;
 	private EditText mVolume;
 	private EditText mPrice;
-	private Button mDate;
+	private DateButton mDate;
 	private CursorSpinner mVehicles;
 	private CheckBox mPartial;
 	private LinearLayout mFieldsContainer;
@@ -142,7 +142,7 @@ public class FillupActivity extends BaseFormActivity {
 		mOdometer = (EditText) findViewById(R.id.odometer);
 		mVolume = (EditText) findViewById(R.id.volume);
 		mPrice = (EditText) findViewById(R.id.price);
-		mDate = (Button) findViewById(R.id.date);
+		mDate = (DateButton) findViewById(R.id.date);
 		mPartial = (CheckBox) findViewById(R.id.partial);
 		mFieldsContainer = (LinearLayout) findViewById(R.id.container);
 		mVehicles = (CursorSpinner) findViewById(R.id.vehicle);
@@ -153,7 +153,7 @@ public class FillupActivity extends BaseFormActivity {
 		mOdometer.setText(String.valueOf(mFillup.getOdometer()));
 		mVolume.setText(String.valueOf(mFillup.getVolume()));
 		mPrice.setText(String.valueOf(mFillup.getUnitPrice()));
-		mDate.setText(String.valueOf(mFillup.getTimestamp()));
+		mDate.setDate(mFillup.getTimestamp());
 		mPartial.setChecked(mFillup.isPartial());
 	}
 

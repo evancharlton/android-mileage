@@ -2,6 +2,7 @@ package com.evancharlton.mileage;
 
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.CheckBox;
@@ -51,6 +52,7 @@ public class VehicleActivity extends BaseFormActivity {
 		mModel = (EditText) findViewById(R.id.model);
 		mYear = (EditText) findViewById(R.id.year);
 		mVehicleTypes = (CursorSpinner) findViewById(R.id.type);
+		mSetDefault = (CheckBox) findViewById(R.id.make_default);
 	}
 
 	@Override
@@ -60,6 +62,16 @@ public class VehicleActivity extends BaseFormActivity {
 		mMake.setText(mVehicle.getMake());
 		mModel.setText(mVehicle.getModel());
 		mYear.setText(mVehicle.getYear());
+
+		Uri uri = Uri.withAppendedPath(FillUpsProvider.BASE_URI, VehiclesTable.VEHICLES_URI);
+		String[] projection = new String[] {
+			Vehicle._ID
+		};
+		Cursor c = managedQuery(uri, projection, null, null, Vehicle.DEFAULT_TIME + " desc");
+		if (c.getCount() > 0) {
+			c.moveToFirst();
+			mSetDefault.setChecked(c.getLong(0) == mVehicle.getId());
+		}
 	}
 
 	@Override

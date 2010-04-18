@@ -15,6 +15,9 @@ import android.widget.SimpleCursorAdapter;
 import com.evancharlton.mileage.dao.Dao;
 
 public abstract class BaseListActivity extends ListActivity implements AdapterView.OnItemClickListener {
+	protected ListView mListView;
+	protected SimpleCursorAdapter mAdapter;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -25,13 +28,13 @@ public abstract class BaseListActivity extends ListActivity implements AdapterVi
 	protected void onResume() {
 		super.onResume();
 
-		ListView lv = getListView();
+		mListView = getListView();
 		Uri uri = getUri();
 		Log.d("BaseListActivity", uri.toString());
 		Cursor c = managedQuery(uri, getProjectionArray(), null, null, null);
-		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, getListLayout(), c, getFrom(), getTo());
-		lv.setAdapter(adapter);
-		lv.setOnItemClickListener(this);
+		mAdapter = new SimpleCursorAdapter(this, getListLayout(), c, getFrom(), getTo());
+		mListView.setAdapter(mAdapter);
+		mListView.setOnItemClickListener(this);
 	}
 
 	protected String[] getProjectionArray() {

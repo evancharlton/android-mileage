@@ -30,7 +30,7 @@ public class Vehicle extends Dao {
 	private String mMake = null;
 	private String mModel = null;
 	private long mVehicleType = 0L;
-	private long mDefaultTime = System.currentTimeMillis();
+	private long mDefaultTime = 0L;
 	private int mPrefDistanceUnits = Preferences.UNITS_MI;
 	private int mPrefVolumeUnits = Preferences.UNITS_GALLONS;
 	private int mPrefEconomyUnits = Preferences.ECONOMY_MI_PER_GALLON;

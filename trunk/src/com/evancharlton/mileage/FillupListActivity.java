@@ -10,7 +10,8 @@ public class FillupListActivity extends BaseListActivity {
 	@Override
 	protected String[] getFrom() {
 		return new String[] {
-				Fillup.ECONOMY,
+				Fillup.DATE,
+				Fillup.VOLUME,
 				Fillup.VOLUME
 		};
 	}
@@ -23,5 +24,19 @@ public class FillupListActivity extends BaseListActivity {
 	@Override
 	public void onItemClick(long id) {
 		loadItem(id, FillupActivity.class);
+	}
+
+	@Override
+	protected int[] getTo() {
+		return new int[] {
+				android.R.id.text1,
+				android.R.id.text2,
+				R.id.price
+		};
+	}
+
+	@Override
+	protected int getListLayout() {
+		return R.layout.fillup_list_item;
 	}
 }

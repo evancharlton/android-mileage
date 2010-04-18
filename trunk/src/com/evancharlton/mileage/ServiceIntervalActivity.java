@@ -15,6 +15,7 @@ import com.evancharlton.mileage.dao.Vehicle;
 import com.evancharlton.mileage.provider.FillUpsProvider;
 import com.evancharlton.mileage.provider.tables.ServiceIntervalsTable;
 import com.evancharlton.mileage.views.CursorSpinner;
+import com.evancharlton.mileage.views.DateButton;
 import com.evancharlton.mileage.views.DateDelta;
 import com.evancharlton.mileage.views.DistanceDelta;
 
@@ -28,7 +29,7 @@ public class ServiceIntervalActivity extends BaseFormActivity {
 	private DistanceDelta mDistance;
 	private DateDelta mDuration;
 	private EditText mOdometer;
-	private EditText mDate;
+	private DateButton mDate;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +60,7 @@ public class ServiceIntervalActivity extends BaseFormActivity {
 		mDistance = (DistanceDelta) findViewById(R.id.distance);
 		mDuration = (DateDelta) findViewById(R.id.duration);
 		mOdometer = (EditText) findViewById(R.id.odometer);
-		mDate = (EditText) findViewById(R.id.date);
+		mDate = (DateButton) findViewById(R.id.date);
 
 		mVehicles.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			@Override
@@ -90,7 +91,7 @@ public class ServiceIntervalActivity extends BaseFormActivity {
 		mDistance.setDelta((long) mInterval.getDistance());
 		mDuration.setDelta(mInterval.getDuration());
 		mOdometer.setText(String.valueOf(mInterval.getStartOdometer()));
-		mDate.setText(String.valueOf(mInterval.getStartDate()));
+		mDate.setDate(mInterval.getStartDate());
 	}
 
 	@Override
@@ -100,7 +101,7 @@ public class ServiceIntervalActivity extends BaseFormActivity {
 		mInterval.setDescription(mDescription.getText().toString());
 		mInterval.setDuration(mDuration.getDelta());
 		mInterval.setStartOdometer(Double.parseDouble(mOdometer.getText().toString()));
-		mInterval.setStartDate(System.currentTimeMillis());
+		mInterval.setStartDate(mDate.getTimestamp());
 		mInterval.setDistance(mDistance.getDelta());
 		mInterval.setVehicleId(mVehicles.getSelectedItemId());
 	}

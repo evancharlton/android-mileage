@@ -59,4 +59,10 @@
 		mileage:uri="vehicles/types"
 		mileage:display_field="title"
 	/>
+	<CheckBox
+		android:id="@+id/make_default"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/set_vehicle_as_default"
+	/>
 </merge>

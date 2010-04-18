@@ -27,6 +27,7 @@
 	<string name="edit_vehicle_types">Edit vehicle types</string>
 	<string name="add_service_interval_template">Add service interval template</string>
 	<string name="service_interval_templates">Templates</string>
+	<string name="set_vehicle_as_default">This is the default vehicle</string>
 	
 	<string name="delta_days">Days</string>
 	<string name="delta_weeks">Weeks</string>

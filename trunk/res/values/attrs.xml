@@ -7,4 +7,7 @@
      <declare-styleable name="DeltaView">
         <attr name="hint" format="string"/>
     </declare-styleable>
+     <declare-styleable name="FormattedDateView">
+        <attr name="format" format="string"/>
+    </declare-styleable>
 </resources>

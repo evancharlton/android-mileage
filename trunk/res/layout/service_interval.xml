@@ -18,42 +18,26 @@
 		mileage:display_field="title"
 		mileage:auto_hide="false"
 	/>
-	<EditText
-		android:id="@+id/title"
+	<include layout="@layout/service_interval_base" />
+	<TableLayout
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:inputType="textCapWords|textAutoCorrect|textAutoComplete"
-	/>
-	<EditText
-		android:id="@+id/description"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:inputType="textCapSentences|textAutoCorrect|textAutoComplete"
-	/>
-	<com.evancharlton.mileage.views.DistanceDelta
-		android:id="@+id/distance"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:inputType="number"
-		mileage:hint="@string/distance"
-	/>
-	<com.evancharlton.mileage.views.DateDelta
-		android:id="@+id/duration"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:inputType="number"
-		mileage:hint="@string/duration"
-	/>
-	<EditText
-		android:id="@+id/odometer"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:inputType="number"
-	/>
-	<EditText
-		android:id="@+id/date"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:inputType="number"
-	/>
+	>
+		<TableRow>
+		`	<EditText
+				android:id="@+id/odometer"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:inputType="number"
+				android:hint="@string/odometer"
+				android:layout_weight="1"
+			/>
+			<com.evancharlton.mileage.views.DateButton
+				android:id="@+id/date"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:layout_weight="1"
+			/>
+		</TableRow>
+	</TableLayout>
 </merge>
