@@ -24,10 +24,12 @@ public class FillupSeries extends ArrayList<Fillup> {
 
 	@Override
 	public boolean add(Fillup fillup) {
-		Fillup last = get(size() - 1);
-		last.setNext(fillup);
-		fillup.setPrevious(last);
-		add(fillup);
+		if (size() > 0) {
+			Fillup last = get(size() - 1);
+			last.setNext(fillup);
+			fillup.setPrevious(last);
+		}
+		super.add(fillup);
 		return true;
 	}
 
@@ -41,6 +43,16 @@ public class FillupSeries extends ArrayList<Fillup> {
 	}
 
 	public double getTotalVolume() {
+		return getEconomyVolume() + get(0).getVolume();
+	}
+
+	/**
+	 * Gets the sum of all the volume values except for the first one, since
+	 * it's not used in the calculation of fuel economy.
+	 * 
+	 * @return
+	 */
+	public double getEconomyVolume() {
 		final int size = size();
 		double total = 0D;
 		for (int i = 1; i < size; i++) {
@@ -49,6 +61,13 @@ public class FillupSeries extends ArrayList<Fillup> {
 		return total;
 	}
 
+	/**
+	 * In order for this to work, it's expected that the fillups are sorted in
+	 * ascending order by odometer.
+	 * 
+	 * @param cursor
+	 * @return
+	 */
 	public static ArrayList<FillupSeries> load(Cursor cursor) {
 		ArrayList<FillupSeries> output = new ArrayList<FillupSeries>();
 

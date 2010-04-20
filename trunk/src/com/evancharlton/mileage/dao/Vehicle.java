@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.net.Uri;
 
 import com.evancharlton.mileage.R;
+import com.evancharlton.mileage.math.Calculator;
 import com.evancharlton.mileage.provider.FillUpsProvider;
 import com.evancharlton.mileage.provider.tables.FillupsTable;
 import com.evancharlton.mileage.provider.tables.VehiclesTable;
@@ -31,13 +32,16 @@ public class Vehicle extends Dao {
 	private String mModel = null;
 	private long mVehicleType = 0L;
 	private long mDefaultTime = 0L;
-	private int mPrefDistanceUnits = Preferences.UNITS_MI;
-	private int mPrefVolumeUnits = Preferences.UNITS_GALLONS;
-	private int mPrefEconomyUnits = Preferences.ECONOMY_MI_PER_GALLON;
+	private int mPrefDistanceUnits = Calculator.MI;
+	private int mPrefVolumeUnits = Calculator.GALLONS;
+	private int mPrefEconomyUnits = Calculator.MI_PER_GALLON;
 
 	public Vehicle(ContentValues values) {
 		super(values);
-		// TODO
+		// TODO: Finish loading
+		mPrefDistanceUnits = getInt(values, PREF_DISTANCE_UNITS, Calculator.MI);
+		mPrefVolumeUnits = getInt(values, PREF_VOLUME_UNITS, Calculator.GALLONS);
+		mPrefEconomyUnits = getInt(values, PREF_ECONOMY_UNITS, Calculator.MI_PER_GALLON);
 	}
 
 	public Vehicle(Cursor cursor) {
@@ -192,97 +196,5 @@ public class Vehicle extends Dao {
 
 	public int getEconomyUnits() {
 		return mPrefEconomyUnits;
-	}
-
-	// TODO: split this out into a separate class? there's no reason for this to
-	// be an inner class.
-	// TODO: This should probably be renamed too.
-	public static final class Preferences {
-		// distance
-		public static final int UNITS_KM = 1;
-		public static final int UNITS_MI = 2;
-
-		// volume
-		public static final int UNITS_GALLONS = 3;
-		public static final int UNITS_LITRES = 4;
-		public static final int UNITS_IMPERIAL_GALLONS = 5;
-
-		// economy
-		public static final int ECONOMY_MI_PER_GALLON = 6;
-		public static final int ECONOMY_KM_PER_GALLON = 7;
-		public static final int ECONOMY_MI_PER_IMP_GALLON = 8;
-		public static final int ECONOMY_KM_PER_IMP_GALLON = 9;
-		public static final int ECONOMY_MI_PER_LITRE = 10;
-		public static final int ECONOMY_KM_PER_LITRE = 11;
-		public static final int ECONOMY_GALLONS_PER_100KM = 12;
-		public static final int ECONOMY_LITRES_PER_100KM = 13;
-		public static final int ECONOMY_IMP_GAL_PER_100KM = 14;
-
-		public static double averageEconomy(Vehicle vehicle, FillupSeries series) {
-			// ALL CALCULATIONS ARE DONE IN MPG AND CONVERTED LATER
-			double miles = convert(series.getTotalDistance(), vehicle.getDistanceUnits(), UNITS_MI);
-			double gallons = convert(series.getTotalVolume(), vehicle.getVolumeUnits(), UNITS_GALLONS);
-
-			switch (vehicle.getEconomyUnits()) {
-				case ECONOMY_KM_PER_GALLON:
-					return convert(miles, UNITS_KM) / gallons;
-				case ECONOMY_MI_PER_IMP_GALLON:
-					return miles / convert(gallons, UNITS_IMPERIAL_GALLONS);
-				case ECONOMY_KM_PER_IMP_GALLON:
-					return convert(miles, UNITS_KM) / convert(gallons, UNITS_IMPERIAL_GALLONS);
-				case ECONOMY_MI_PER_LITRE:
-					return miles / convert(gallons, UNITS_LITRES);
-				case ECONOMY_KM_PER_LITRE:
-					return convert(miles, UNITS_KM) / convert(gallons, UNITS_LITRES);
-				case ECONOMY_GALLONS_PER_100KM:
-					return gallons / (100 * convert(miles, UNITS_KM));
-				case ECONOMY_LITRES_PER_100KM:
-					return convert(gallons, UNITS_LITRES) / (100 * convert(miles, UNITS_KM));
-				case ECONOMY_IMP_GAL_PER_100KM:
-					return convert(gallons, UNITS_IMPERIAL_GALLONS) / (100 * convert(miles, UNITS_KM));
-				case ECONOMY_MI_PER_GALLON:
-				default:
-					return miles / gallons;
-			}
-		}
-
-		// yes, this method makes it possible to convert from miles to litres.
-		// if you do this, I'll hunt you down and beat you with a rubber hose.
-		private static double convert(double value, int from, int to) {
-			// going from whatever to miles or gallons (depending on context)
-			switch (from) {
-				case UNITS_MI:
-					break;
-				case UNITS_KM:
-					value *= 0.621371192;
-				case UNITS_GALLONS:
-					break;
-				case UNITS_LITRES:
-					value *= 0.264172052;
-				case UNITS_IMPERIAL_GALLONS:
-					value *= 1.20095042;
-			}
-			// at this point, "value" is either miles or gallons
-			return convert(value, to);
-		}
-
-		// convert from (miles|gallons) to the other unit
-		private static double convert(double value, int to) {
-			// value is now converted to miles or gallons
-			switch (to) {
-				case UNITS_MI:
-					return value;
-				case UNITS_KM:
-					value /= 0.621371192;
-				case UNITS_GALLONS:
-					return value;
-				case UNITS_LITRES:
-					value /= 0.264172052;
-				case UNITS_IMPERIAL_GALLONS:
-					value /= 1.20095042;
-
-			}
-			return value;
-		}
 	}
 }

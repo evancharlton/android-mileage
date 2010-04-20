@@ -101,6 +101,14 @@ public abstract class Dao {
 		return cursor.getInt(cursor.getColumnIndex(columnName));
 	}
 
+	protected int getInt(ContentValues values, String key, int defaultValue) {
+		Integer value = values.getAsInteger(key);
+		if (value != null) {
+			return value.intValue();
+		}
+		return defaultValue;
+	}
+
 	// TODO: break this out into its own class. Make it checked?
 	public static class InvalidFieldException extends RuntimeException {
 		private static final long serialVersionUID = 3415877365632636406L;
