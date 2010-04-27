@@ -20,17 +20,19 @@
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
-		<activity android:name=".FillupActivity" android:theme="@android:style/Theme.NoTitleBar" />
-		<activity android:name=".FillupListActivity" android:theme="@android:style/Theme.NoTitleBar" />
-		<activity android:name=".FieldListActivity" android:theme="@android:style/Theme.NoTitleBar" />
-		<activity android:name=".FieldActivity" android:title="@string/add_field" />
-		<activity android:name=".VehicleListActivity" android:theme="@android:style/Theme.NoTitleBar" />
-		<activity android:name=".VehicleActivity" android:theme="@android:style/Theme.NoTitleBar" />
-		<activity android:name=".VehicleTypeListActivity" android:theme="@android:style/Theme.NoTitleBar" />
-		<activity android:name=".VehicleTypeActivity" android:theme="@android:style/Theme.NoTitleBar" />
+		<activity android:name=".FillupActivity" />
+		<activity android:name=".FillupListActivity" />
+		<activity android:name=".FieldListActivity" />
+		<activity android:name=".FieldActivity" />
+		<activity android:name=".VehicleListActivity" />
+		<activity android:name=".VehicleActivity" />
+		<activity android:name=".VehicleTypeListActivity" />
+		<activity android:name=".VehicleTypeActivity" />
 		<activity android:name=".ServiceIntervalsListActivity" />
 		<activity android:name=".ServiceIntervalActivity" />
 		<activity android:name=".ServiceIntervalTemplateListActivity" />
 		<activity android:name=".ServiceIntervalTemplateActivity" />
+		<activity android:name=".SettingsActivity" />
+		<activity android:name=".TransportSettingsActivity" />
 	</application>
 </manifest> 

@@ -1,11 +1,13 @@
 package com.evancharlton.mileage.provider;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -16,6 +18,7 @@ import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.evancharlton.mileage.SettingsActivity;
 import com.evancharlton.mileage.provider.tables.ContentTable;
 import com.evancharlton.mileage.provider.tables.FieldsTable;
 import com.evancharlton.mileage.provider.tables.FillupsFieldsTable;
@@ -24,6 +27,8 @@ import com.evancharlton.mileage.provider.tables.ServiceIntervalTemplatesTable;
 import com.evancharlton.mileage.provider.tables.ServiceIntervalsTable;
 import com.evancharlton.mileage.provider.tables.VehicleTypesTable;
 import com.evancharlton.mileage.provider.tables.VehiclesTable;
+import com.evancharlton.mileage.providers.backup.BackupTransport;
+import com.evancharlton.mileage.providers.backup.FileBackupTransport;
 
 public class FillUpsProvider extends ContentProvider {
 	public static final String AUTHORITY = "com.evancharlton.mileage";
@@ -32,7 +37,9 @@ public class FillUpsProvider extends ContentProvider {
 	private static final String DATABASE_NAME = "mileage.db";
 	private static final int DATABASE_VERSION = 50;
 	private static final ArrayList<ContentTable> TABLES = new ArrayList<ContentTable>();
+	private static final HashMap<String, BackupTransport> BACKUPS = new HashMap<String, BackupTransport>();
 	private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
+	private static final String TAG = "FillupsProvider";
 
 	private DatabaseHelper mDatabaseHelper;
 
@@ -48,6 +55,16 @@ public class FillUpsProvider extends ContentProvider {
 		for (ContentTable table : TABLES) {
 			table.registerUris(URI_MATCHER);
 		}
+
+		putBackup(new FileBackupTransport());
+	}
+
+	private static void putBackup(BackupTransport transport) {
+		BACKUPS.put(transport.getClass().getName(), transport);
+	}
+
+	public static BackupTransport getBackupTransport(String packageName) {
+		return BACKUPS.get(packageName);
 	}
 
 	private static class DatabaseHelper extends SQLiteOpenHelper {
@@ -57,11 +74,10 @@ public class FillUpsProvider extends ContentProvider {
 
 		@Override
 		public void onCreate(SQLiteDatabase db) {
-			Log.d("FillupsProvider", "Creating database");
+			Log.d(TAG, "Creating database");
 			for (ContentTable table : TABLES) {
 				String sql = table.create();
 				if (sql != null) {
-					Log.d(table.getClass().getCanonicalName(), sql);
 					db.execSQL(sql);
 				}
 			}
@@ -72,17 +88,21 @@ public class FillUpsProvider extends ContentProvider {
 		@Override
 		public void onUpgrade(SQLiteDatabase db, final int oldVersion, final int newVersion) {
 			if (oldVersion < newVersion) {
-				Log.d("FillupsProvider", "Upgrading from " + String.valueOf(oldVersion));
+				Log.d(TAG, "Upgrading from " + String.valueOf(oldVersion));
 				for (ContentTable table : TABLES) {
 					String sql = table.upgrade(oldVersion);
 					if (sql != null) {
-						Log.d(table.getClass().getCanonicalName(), "Upgrading ...");
 						db.execSQL(sql);
 					}
 				}
 				onUpgrade(db, oldVersion + 1, newVersion);
 			}
 		}
+	}
+
+	public static ArrayList<BackupTransport> getBackupTransports() {
+		// TODO: return a cloned list?
+		return new ArrayList<BackupTransport>(BACKUPS.values());
 	}
 
 	public static void initTables(SQLiteDatabase db) {
@@ -116,7 +136,7 @@ public class FillUpsProvider extends ContentProvider {
 			throw new IllegalArgumentException("Unknown URI: " + uri);
 		}
 
-		getContext().getContentResolver().notifyChange(uri, null);
+		notifyListeners(uri);
 		return count;
 	}
 
@@ -142,7 +162,7 @@ public class FillUpsProvider extends ContentProvider {
 			newId = table.insert(match, db, initialValues);
 			if (newId >= 0) {
 				uri = ContentUris.withAppendedId(uri, newId);
-				getContext().getContentResolver().notifyChange(uri, null);
+				notifyListeners(uri);
 				db.close();
 				return uri;
 			}
@@ -191,11 +211,23 @@ public class FillUpsProvider extends ContentProvider {
 			for (ContentTable table : TABLES) {
 				count = table.update(match, db, uri, values, selection, selectionArgs);
 				if (count >= 0) {
-					getContext().getContentResolver().notifyChange(uri, null);
+					notifyListeners(uri);
 					return count;
 				}
 			}
 		}
 		throw new IllegalArgumentException("Unknown URI: " + uri);
+	}
+
+	private void notifyListeners(Uri uri) {
+		Context context = getContext();
+		context.getContentResolver().notifyChange(uri, null);
+
+		SharedPreferences preferences = context.getSharedPreferences(SettingsActivity.NAME, Context.MODE_PRIVATE);
+		for (BackupTransport transport : BACKUPS.values()) {
+			if (transport.isEnabled(preferences)) {
+				transport.performIncrementalBackup(context);
+			}
+		}
 	}
 }

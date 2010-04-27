@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+	xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+>
+	<CheckBoxPreference
+		android:key="location_data"
+		android:defaultValue="true"
+		android:title="@string/settings_location"
+		android:summaryOn="@string/settings_location_on"
+		android:summaryOff="@string/settings_location_off"
+	/>
+	<PreferenceCategory
+		android:orderingFromXml="true"
+		android:title="@string/settings_backups_title"
+		android:key="backups"
+	>
+		<!-- TODO: make this auto-generated -->
+		<PreferenceScreen>
+	        <intent
+	            android:action="android.intent.ACTION_VIEW"
+	            android:targetPackage="com.evancharlton.mileage"
+	            android:targetClass="com.evancharlton.mileage.TransportSettingsActivity"
+	        />
+    	</PreferenceScreen>
+	</PreferenceCategory>
+</PreferenceScreen>

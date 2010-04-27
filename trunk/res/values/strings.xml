@@ -28,6 +28,7 @@
 	<string name="add_service_interval_template">Add service interval template</string>
 	<string name="service_interval_templates">Templates</string>
 	<string name="set_vehicle_as_default">This is the default vehicle</string>
+	<string name="perform_backup">Perform backup</string>
 	
 	<string name="delta_days">Days</string>
 	<string name="delta_weeks">Weeks</string>
@@ -43,6 +44,29 @@
 	<string name="year">Year</string>
 	<string name="make">Make</string>
 	<string name="model">Model</string>
+	
+	<string name="settings">Settings</string>
+	<string name="settings_location">Store location</string>
+	<string name="settings_location_on">Your location for fillups will be stored privately</string>
+	<string name="settings_location_off">No location information will be stored</string>
+	<string name="settings_backups_title">Automatic backup settings</string>
+	<string name="settings_backups">Enable backups</string>
+	<string name="settings_backups_enabled">Backups will be performed automatically</string>
+	<string name="settings_backups_disabled">Your data will not be backed up</string>
+	<string name="settings_backup_transports">Backup routines</string>
+	<string name="settings_backup_transports_summary">How would you like your data backed up?</string>
+
+	<string name="transport_enable">Enable</string>
+	<string name="transport_enabled">Data will be backed up</string>
+	<string name="transport_disabled">Data will not be backed up</string>	
+	<string name="transport_file_name">SD card backup</string>
+	<string name="transport_file_description_on">Database will be backed up on your SD card</string>
+	<string name="transport_file_description_off">Nothing will be saved to your SD card</string>
+	<string name="transport_file_filename_title">Filename</string>
+	<string name="transport_file_filename_summary">The base name for your backup.</string>
+	<string name="transport_web_name">Online backup</string>
+	<string name="transport_web_description_on">Database will be backed up to the web</string>
+	<string name="transport_web_description_ff">Nothing will be saved to the web</string>
 	
 	<string name="error_no_vehicle_specified">No vehicle was specified</string>
 	<string name="error_no_odometer_specified">Invalid value for odometer</string>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+	xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+>
+	<CheckBoxPreference
+		android:key="transport_file_enabled"
+		android:title="@string/transport_enable"
+		android:summaryOn="@string/transport_enabled"
+		android:summaryOff="@string/transport_disabled"
+		android:defaultValue="true"
+	/>
+	<EditTextPreference
+		android:key="transport_file_filename"
+		android:title="@string/transport_file_filename_title"
+		android:summary="@string/transport_file_filename_summary"
+		android:defaultValue="mileage"
+		android:dependency="transport_file_enabled"
+	/>
+</PreferenceScreen>
