@@ -2,6 +2,7 @@ package com.evancharlton.mileage;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,10 +14,12 @@ import android.widget.Toast;
 
 import com.evancharlton.mileage.dao.Dao;
 import com.evancharlton.mileage.dao.Dao.InvalidFieldException;
+import com.evancharlton.mileage.provider.Settings;
 
 public abstract class BaseFormActivity extends Activity {
 	public static final String EXTRA_ITEM_ID = "dao_item_id";
 
+	protected SharedPreferences mPreferences;
 	private Button mSaveBtn;
 
 	protected void onCreate(Bundle savedInstanceState, int layoutResId) {
@@ -24,6 +27,7 @@ public abstract class BaseFormActivity extends Activity {
 		setContentView(R.layout.base_form);
 		LinearLayout stub = (LinearLayout) findViewById(R.id.contents);
 		LayoutInflater.from(this).inflate(layoutResId, stub);
+		mPreferences = getSharedPreferences(Settings.NAME, MODE_PRIVATE);
 	}
 
 	@Override

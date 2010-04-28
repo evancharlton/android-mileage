@@ -4,9 +4,7 @@ import java.util.ArrayList;
 
 import android.content.ContentUris;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -163,9 +161,8 @@ public class FillupActivity extends BaseFormActivity {
 	}
 
 	private void setDataFormats() {
-		SharedPreferences preferences = getSharedPreferences(Settings.NAME, Context.MODE_PRIVATE);
 		// TODO: magic numbers
-		int dataFormat = Integer.parseInt(preferences.getString(Settings.DATA_FORMAT, "0"));
+		int dataFormat = Integer.parseInt(mPreferences.getString(Settings.DATA_FORMAT, "0"));
 		boolean existing = mFillup.isExistingObject();
 		switch (dataFormat) {
 			case 0:
@@ -200,22 +197,63 @@ public class FillupActivity extends BaseFormActivity {
 
 	@Override
 	protected void setFields() {
-		// TODO: handle the case for input preferences
-		try {
-			mFillup.setVolume(Double.parseDouble(mVolume.getText().toString()));
-		} catch (NumberFormatException e) {
-			throw new InvalidFieldException(R.string.error_no_volume_specified);
+		int dataFormat = Integer.parseInt(mPreferences.getString(Settings.DATA_FORMAT, "0"));
+		switch (dataFormat) {
+			case 1:
+				// total cost, volume
+				try {
+					mFillup.setVolume(Double.parseDouble(mVolume.getText().toString()));
+				} catch (NumberFormatException e) {
+					throw new InvalidFieldException(R.string.error_no_volume_specified);
+				}
+
+				try {
+					mFillup.setTotalCost(Double.parseDouble(mPrice.getText().toString()));
+				} catch (NumberFormatException e) {
+					throw new InvalidFieldException(R.string.error_no_total_cost_specified);
+				}
+				break;
+			case 2:
+				// total cost, unit price
+				try {
+					mFillup.setTotalCost(Double.parseDouble(mVolume.getText().toString()));
+				} catch (NumberFormatException e) {
+					throw new InvalidFieldException(R.string.error_no_total_cost_specified);
+				}
+
+				try {
+					mFillup.setUnitPrice(Double.parseDouble(mPrice.getText().toString()));
+				} catch (NumberFormatException e) {
+					throw new InvalidFieldException(R.string.error_no_price_specified);
+				}
+				break;
+			default:
+			case 0:
+				// unit price, volume
+				try {
+					mFillup.setVolume(Double.parseDouble(mVolume.getText().toString()));
+				} catch (NumberFormatException e) {
+					throw new InvalidFieldException(R.string.error_no_volume_specified);
+				}
+
+				try {
+					mFillup.setUnitPrice(Double.parseDouble(mPrice.getText().toString()));
+				} catch (NumberFormatException e) {
+					throw new InvalidFieldException(R.string.error_no_price_specified);
+				}
+				break;
 		}
 
 		try {
-			mFillup.setUnitPrice(Double.parseDouble(mPrice.getText().toString()));
-		} catch (NumberFormatException e) {
-			throw new InvalidFieldException(R.string.error_no_price_specified);
-		}
-
-		try {
-			// TODO: handle the + prefix
-			mFillup.setOdometer(Double.parseDouble(mOdometer.getText().toString()));
+			String odometerText = mOdometer.getText().toString();
+			double odometerValue = 0;
+			if (odometerText.startsWith("+")) {
+				Fillup previous = mFillup.loadPrevious(this);
+				odometerValue = previous.getOdometer() + Double.parseDouble(odometerText.substring(1));
+			} else {
+				odometerValue = Double.parseDouble(odometerText);
+			}
+			mFillup.setOdometer(odometerValue);
 		} catch (NumberFormatException e) {
 			throw new InvalidFieldException(R.string.error_no_odometer_specified);
 		}
