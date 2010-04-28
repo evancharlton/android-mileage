@@ -65,4 +65,22 @@
 		android:layout_height="wrap_content"
 		android:text="@string/set_vehicle_as_default"
 	/>
+	<Spinner
+		android:id="@+id/distance"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:entries="@array/distances"
+	/>
+	<Spinner
+		android:id="@+id/volume"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:entries="@array/volumes"
+	/>
+	<Spinner
+		android:id="@+id/economy"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:entries="@array/economies"
+	/>
 </merge>

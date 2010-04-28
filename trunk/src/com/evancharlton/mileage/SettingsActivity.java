@@ -9,6 +9,7 @@ import android.preference.PreferenceCategory;
 import android.preference.PreferenceScreen;
 
 import com.evancharlton.mileage.provider.FillUpsProvider;
+import com.evancharlton.mileage.provider.Settings;
 import com.evancharlton.mileage.providers.backup.BackupTransport;
 
 public class SettingsActivity extends PreferenceActivity {
@@ -32,12 +33,5 @@ public class SettingsActivity extends PreferenceActivity {
 			screen.setIntent(intent);
 			screen.setTitle(transport.getName());
 		}
-	}
-
-	private static final class Settings {
-		public static final String STORE_LOCATION = "location_data";
-		public static final String BACKUPS = "backups";
-		public static final String BACKUPS_ENABLED = "backups_enabled";
-		public static final String BACKUP_TRANSPORTS = "backup_transports";
 	}
 }

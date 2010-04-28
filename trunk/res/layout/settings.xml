@@ -12,6 +12,20 @@
 		android:summaryOn="@string/settings_location_on"
 		android:summaryOff="@string/settings_location_off"
 	/>
+	<EditTextPreference
+		android:key="currency_symbol"
+		android:defaultValue="$"
+		android:title="@string/settings_currency_title"
+		android:summary="@string/settings_currency_summary"
+	/>
+	<ListPreference
+		android:key="data_format"
+		android:title="@string/settings_data_format_title"
+		android:summary="@string/settings_data_format_summary"
+		android:entries="@array/data_formats"
+		android:entryValues="@array/data_formats"
+		android:defaultValue="0"
+	/>
 	<PreferenceCategory
 		android:orderingFromXml="true"
 		android:title="@string/settings_backups_title"

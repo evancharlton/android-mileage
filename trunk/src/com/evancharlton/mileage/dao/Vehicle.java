@@ -158,6 +158,18 @@ public class Vehicle extends Dao {
 		mDefaultTime = defaultTime;
 	}
 
+	public void setVolumeUnits(int volumeUnits) {
+		mPrefVolumeUnits = volumeUnits;
+	}
+
+	public void setDistanceUnits(int distanceUnits) {
+		mPrefDistanceUnits = distanceUnits;
+	}
+
+	public void setEconomyUnits(int economyUnits) {
+		mPrefEconomyUnits = economyUnits;
+	}
+
 	public String getTitle() {
 		return mTitle;
 	}

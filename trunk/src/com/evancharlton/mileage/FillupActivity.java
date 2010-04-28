@@ -4,7 +4,9 @@ import java.util.ArrayList;
 
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -24,6 +26,7 @@ import com.evancharlton.mileage.dao.Vehicle;
 import com.evancharlton.mileage.dao.Dao.InvalidFieldException;
 import com.evancharlton.mileage.math.Calculator;
 import com.evancharlton.mileage.provider.FillUpsProvider;
+import com.evancharlton.mileage.provider.Settings;
 import com.evancharlton.mileage.provider.tables.FieldsTable;
 import com.evancharlton.mileage.provider.tables.FillupsTable;
 import com.evancharlton.mileage.provider.tables.VehiclesTable;
@@ -155,6 +158,8 @@ public class FillupActivity extends BaseFormActivity {
 		mPrice.setText(String.valueOf(mFillup.getUnitPrice()));
 		mDate.setDate(mFillup.getTimestamp());
 		mPartial.setChecked(mFillup.isPartial());
+
+		SharedPreferences preferences = getSharedPreferences(Settings.NAME, Context.MODE_PRIVATE);
 	}
 
 	@Override

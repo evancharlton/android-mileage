@@ -7,9 +7,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import com.evancharlton.mileage.dao.Dao;
 import com.evancharlton.mileage.dao.Vehicle;
+import com.evancharlton.mileage.math.Calculator;
 import com.evancharlton.mileage.provider.FillUpsProvider;
 import com.evancharlton.mileage.provider.tables.VehiclesTable;
 import com.evancharlton.mileage.views.CursorSpinner;
@@ -22,6 +24,9 @@ public class VehicleActivity extends BaseFormActivity {
 	private EditText mYear;
 	private CheckBox mSetDefault;
 	private CursorSpinner mVehicleTypes;
+	private Spinner mDistances;
+	private Spinner mVolumes;
+	private Spinner mEconomies;
 	private Vehicle mVehicle = new Vehicle(new ContentValues());
 
 	@Override
@@ -53,6 +58,9 @@ public class VehicleActivity extends BaseFormActivity {
 		mYear = (EditText) findViewById(R.id.year);
 		mVehicleTypes = (CursorSpinner) findViewById(R.id.type);
 		mSetDefault = (CheckBox) findViewById(R.id.make_default);
+		mDistances = (Spinner) findViewById(R.id.distance);
+		mVolumes = (Spinner) findViewById(R.id.volume);
+		mEconomies = (Spinner) findViewById(R.id.economy);
 	}
 
 	@Override
@@ -72,6 +80,10 @@ public class VehicleActivity extends BaseFormActivity {
 			c.moveToFirst();
 			mSetDefault.setChecked(c.getLong(0) == mVehicle.getId());
 		}
+
+		mDistances.setSelection(getDistanceUnits());
+		mVolumes.setSelection(getVolumeUnits());
+		mEconomies.setSelection(getEconomyUnits());
 	}
 
 	@Override
@@ -85,6 +97,101 @@ public class VehicleActivity extends BaseFormActivity {
 		if (mSetDefault.isChecked()) {
 			mVehicle.setDefaultTime(System.currentTimeMillis());
 		}
+		mVehicle.setVolumeUnits(getVolume());
+		mVehicle.setDistanceUnits(getDistance());
+		mVehicle.setEconomyUnits(getEconomy());
+	}
+
+	private int getVolume() {
+		switch (mVolumes.getSelectedItemPosition()) {
+			case 0:
+				return Calculator.GALLONS;
+			case 1:
+				return Calculator.LITRES;
+			case 2:
+				return Calculator.IMPERIAL_GALLONS;
+		}
+		return Calculator.GALLONS;
+	}
+
+	private int getVolumeUnits() {
+		switch (mVehicle.getVolumeUnits()) {
+			case Calculator.GALLONS:
+				return 0;
+			case Calculator.LITRES:
+				return 1;
+			case Calculator.IMPERIAL_GALLONS:
+				return 2;
+		}
+		return 0;
+	}
+
+	private int getDistance() {
+		switch (mDistances.getSelectedItemPosition()) {
+			case 0:
+				return Calculator.MI;
+			case 1:
+				return Calculator.KM;
+		}
+		return Calculator.MI;
+	}
+
+	private int getDistanceUnits() {
+		switch (mVehicle.getDistanceUnits()) {
+			case Calculator.MI:
+				return 0;
+			case Calculator.KM:
+				return 1;
+		}
+		return 0;
+	}
+
+	private int getEconomy() {
+		switch (mEconomies.getSelectedItemPosition()) {
+			case 0:
+				return Calculator.MI_PER_GALLON;
+			case 1:
+				return Calculator.KM_PER_GALLON;
+			case 2:
+				return Calculator.MI_PER_IMP_GALLON;
+			case 3:
+				return Calculator.KM_PER_IMP_GALLON;
+			case 4:
+				return Calculator.MI_PER_LITRE;
+			case 5:
+				return Calculator.KM_PER_LITRE;
+			case 6:
+				return Calculator.GALLONS_PER_100KM;
+			case 7:
+				return Calculator.LITRES_PER_100KM;
+			case 8:
+				return Calculator.IMP_GAL_PER_100KM;
+		}
+		return Calculator.MI_PER_GALLON;
+	}
+
+	private int getEconomyUnits() {
+		switch (mVehicle.getEconomyUnits()) {
+			case Calculator.MI_PER_GALLON:
+				return 0;
+			case Calculator.KM_PER_GALLON:
+				return 1;
+			case Calculator.MI_PER_IMP_GALLON:
+				return 2;
+			case Calculator.KM_PER_IMP_GALLON:
+				return 3;
+			case Calculator.MI_PER_LITRE:
+				return 4;
+			case Calculator.KM_PER_LITRE:
+				return 5;
+			case Calculator.GALLONS_PER_100KM:
+				return 6;
+			case Calculator.LITRES_PER_100KM:
+				return 7;
+			case Calculator.IMP_GAL_PER_100KM:
+				return 8;
+		}
+		return 0;
 	}
 
 	@Override
