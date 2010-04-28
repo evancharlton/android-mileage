@@ -23,7 +23,7 @@
 		android:title="@string/settings_data_format_title"
 		android:summary="@string/settings_data_format_summary"
 		android:entries="@array/data_formats"
-		android:entryValues="@array/data_formats"
+		android:entryValues="@array/data_format_values"
 		android:defaultValue="0"
 	/>
 	<PreferenceCategory

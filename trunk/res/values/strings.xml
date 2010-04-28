@@ -68,6 +68,11 @@
 	<string name="make">Make</string>
 	<string name="model">Model</string>
 	
+	<!-- TODO: replace with actual unit names -->
+	<string name="price_per_unit">Price per unit</string>
+	<string name="total_cost">Total cost</string>
+	<string name="unit_count">Units</string>
+	
 	<string name="settings">Settings</string>
 	<string name="settings_location">Store location</string>
 	<string name="settings_location_on">Your location for fillups will be stored privately</string>

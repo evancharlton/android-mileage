@@ -24,4 +24,9 @@
 		<item>@string/cost_volume</item>
 		<item>@string/cost_unit_price</item>
 	</string-array>
+	<string-array name="data_format_values">
+		<item>0</item>
+		<item>1</item>
+		<item>2</item>
+	</string-array>
 </resources>

@@ -10,9 +10,11 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.evancharlton.mileage.dao.Dao;
+import com.evancharlton.mileage.dao.Fillup;
 import com.evancharlton.mileage.dao.Vehicle;
 import com.evancharlton.mileage.math.Calculator;
 import com.evancharlton.mileage.provider.FillUpsProvider;
+import com.evancharlton.mileage.provider.tables.FillupsTable;
 import com.evancharlton.mileage.provider.tables.VehiclesTable;
 import com.evancharlton.mileage.views.CursorSpinner;
 
@@ -28,6 +30,10 @@ public class VehicleActivity extends BaseFormActivity {
 	private Spinner mVolumes;
 	private Spinner mEconomies;
 	private Vehicle mVehicle = new Vehicle(new ContentValues());
+
+	private int mDistanceUnits = Calculator.MI;
+	private int mVolumeUnits = Calculator.GALLONS;
+	private int mEconomyUnits = Calculator.MI_PER_GALLON;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +106,22 @@ public class VehicleActivity extends BaseFormActivity {
 		mVehicle.setVolumeUnits(getVolume());
 		mVehicle.setDistanceUnits(getDistance());
 		mVehicle.setEconomyUnits(getEconomy());
+	}
+
+	@Override
+	protected void saved() {
+		// invalidate the fields if the economy units changed
+		if (mVehicle.getVolumeUnits() != mVolumeUnits || mVehicle.getDistanceUnits() != mDistanceUnits || mVehicle.getEconomyUnits() != mEconomyUnits) {
+			ContentValues values = new ContentValues();
+			values.put(Fillup.ECONOMY, 0D);
+			String where = Fillup.VEHICLE_ID + " = ?";
+			String[] selectionArgs = new String[] {
+				String.valueOf(mVehicle.getId())
+			};
+			Uri uri = Uri.withAppendedPath(FillUpsProvider.BASE_URI, FillupsTable.FILLUPS_URI);
+			getContentResolver().update(uri, values, where, selectionArgs);
+		}
+		super.saved();
 	}
 
 	private int getVolume() {

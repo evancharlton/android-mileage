@@ -149,17 +149,53 @@ public class FillupActivity extends BaseFormActivity {
 		mPartial = (CheckBox) findViewById(R.id.partial);
 		mFieldsContainer = (LinearLayout) findViewById(R.id.container);
 		mVehicles = (CursorSpinner) findViewById(R.id.vehicle);
+
+		setDataFormats();
 	}
 
 	@Override
 	protected void populateUI() {
 		mOdometer.setText(String.valueOf(mFillup.getOdometer()));
-		mVolume.setText(String.valueOf(mFillup.getVolume()));
-		mPrice.setText(String.valueOf(mFillup.getUnitPrice()));
 		mDate.setDate(mFillup.getTimestamp());
 		mPartial.setChecked(mFillup.isPartial());
 
+		setDataFormats();
+	}
+
+	private void setDataFormats() {
 		SharedPreferences preferences = getSharedPreferences(Settings.NAME, Context.MODE_PRIVATE);
+		// TODO: magic numbers
+		int dataFormat = Integer.parseInt(preferences.getString(Settings.DATA_FORMAT, "0"));
+		boolean existing = mFillup.isExistingObject();
+		switch (dataFormat) {
+			case 0:
+				// unit price, volume
+				mVolume.setHint(R.string.unit_count);
+				mPrice.setHint(R.string.price_per_unit);
+				if (existing) {
+					mVolume.setText(String.valueOf(mFillup.getVolume()));
+					mPrice.setText(String.valueOf(mFillup.getUnitPrice()));
+				}
+				break;
+			case 1:
+				// total cost, volume
+				mVolume.setHint(R.string.unit_count);
+				mPrice.setHint(R.string.total_cost);
+				if (existing) {
+					mVolume.setText(String.valueOf(mFillup.getVolume()));
+					mPrice.setText(String.valueOf(mFillup.getTotalCost()));
+				}
+				break;
+			case 2:
+				// total cost, unit price
+				mVolume.setHint(R.string.total_cost);
+				mPrice.setHint(R.string.price_per_unit);
+				if (existing) {
+					mVolume.setText(String.valueOf(mFillup.getTotalCost()));
+					mPrice.setText(String.valueOf(mFillup.getUnitPrice()));
+				}
+				break;
+		}
 	}
 
 	@Override
