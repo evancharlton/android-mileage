@@ -7,10 +7,10 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
-public class FormattedNumberView extends TextView {
-	private static final NumberFormat FORMAT = DecimalFormat.getNumberInstance();
+public class FormattedCurrencyView extends TextView {
+	private static final NumberFormat FORMAT = DecimalFormat.getCurrencyInstance();
 
-	public FormattedNumberView(Context context, AttributeSet attrs) {
+	public FormattedCurrencyView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 	}
 

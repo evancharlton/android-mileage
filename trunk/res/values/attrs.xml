@@ -10,7 +10,4 @@
 	<declare-styleable name="FormattedDateView">
 		<attr name="dateFormat" format="string"/>
 	</declare-styleable>
-	<declare-styleable name="FormattedNumberView">
-		<attr name="numberFormat" format="string"/>
-	</declare-styleable>
 </resources>

@@ -43,15 +43,13 @@
 			android:paddingRight="5dip"
 			android:layout_height="0dip"
 			android:layout_weight="1"
-			mileage:numberFormat="0.00"
 		/>
-		<com.evancharlton.mileage.views.FormattedNumberView
+		<com.evancharlton.mileage.views.FormattedCurrencyView
 			android:id="@+id/price"
 			android:layout_width="wrap_content"
 			android:paddingRight="5dip"
 			android:layout_height="0dip"
 			android:layout_weight="1"
-			mileage:numberFormat="0.00"
 		/>
 		<com.evancharlton.mileage.views.FormattedNumberView
 			android:id="@+id/economy"
@@ -59,7 +57,6 @@
 			android:layout_height="0dip"
 			android:layout_weight="1"
 			android:paddingRight="5dip"
-			mileage:numberFormat="0.00"
 		/>
 	</LinearLayout>
 </LinearLayout>
