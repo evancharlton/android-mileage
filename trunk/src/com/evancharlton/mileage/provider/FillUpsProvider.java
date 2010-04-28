@@ -19,6 +19,8 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.evancharlton.mileage.SettingsActivity;
+import com.evancharlton.mileage.provider.backup.BackupTransport;
+import com.evancharlton.mileage.provider.backup.FileBackupTransport;
 import com.evancharlton.mileage.provider.tables.ContentTable;
 import com.evancharlton.mileage.provider.tables.FieldsTable;
 import com.evancharlton.mileage.provider.tables.FillupsFieldsTable;
@@ -27,8 +29,6 @@ import com.evancharlton.mileage.provider.tables.ServiceIntervalTemplatesTable;
 import com.evancharlton.mileage.provider.tables.ServiceIntervalsTable;
 import com.evancharlton.mileage.provider.tables.VehicleTypesTable;
 import com.evancharlton.mileage.provider.tables.VehiclesTable;
-import com.evancharlton.mileage.providers.backup.BackupTransport;
-import com.evancharlton.mileage.providers.backup.FileBackupTransport;
 
 public class FillUpsProvider extends ContentProvider {
 	public static final String AUTHORITY = "com.evancharlton.mileage";

@@ -10,7 +10,7 @@ import android.preference.PreferenceScreen;
 
 import com.evancharlton.mileage.provider.FillUpsProvider;
 import com.evancharlton.mileage.provider.Settings;
-import com.evancharlton.mileage.providers.backup.BackupTransport;
+import com.evancharlton.mileage.provider.backup.BackupTransport;
 
 public class SettingsActivity extends PreferenceActivity {
 	public static final String NAME = "com.evancharlton.mileage_preferences";

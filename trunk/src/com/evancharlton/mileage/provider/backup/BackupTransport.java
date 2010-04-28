@@ -1,4 +1,4 @@
-package com.evancharlton.mileage.providers.backup;
+package com.evancharlton.mileage.provider.backup;
 
 import android.content.Context;
 import android.content.SharedPreferences;

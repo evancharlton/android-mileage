@@ -1,4 +1,4 @@
-package com.evancharlton.mileage.providers.backup;
+package com.evancharlton.mileage.provider.backup;
 
 import java.io.File;
 import java.io.FileInputStream;

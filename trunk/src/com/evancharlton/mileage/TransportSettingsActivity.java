@@ -6,7 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.evancharlton.mileage.provider.FillUpsProvider;
-import com.evancharlton.mileage.providers.backup.BackupTransport;
+import com.evancharlton.mileage.provider.backup.BackupTransport;
 
 public class TransportSettingsActivity extends PreferenceActivity {
 	public static final String PACKAGE_NAME = "package_name";
