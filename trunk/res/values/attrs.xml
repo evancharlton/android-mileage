@@ -1,13 +1,16 @@
 <resources>
-     <declare-styleable name="CursorSpinner">
-        <attr name="uri" format="string" />
-        <attr name="display_field" format="string" />
-        <attr name="auto_hide" format="boolean" />
-    </declare-styleable>
-     <declare-styleable name="DeltaView">
-        <attr name="hint" format="string"/>
-    </declare-styleable>
-     <declare-styleable name="FormattedDateView">
-        <attr name="format" format="string"/>
-    </declare-styleable>
+	<declare-styleable name="CursorSpinner">
+		<attr name="uri" format="string" />
+		<attr name="display_field" format="string" />
+		<attr name="auto_hide" format="boolean" />
+	</declare-styleable>
+	<declare-styleable name="DeltaView">
+		<attr name="hint" format="string"/>
+	</declare-styleable>
+	<declare-styleable name="FormattedDateView">
+		<attr name="dateFormat" format="string"/>
+	</declare-styleable>
+	<declare-styleable name="FormattedNumberView">
+		<attr name="numberFormat" format="string"/>
+	</declare-styleable>
 </resources>

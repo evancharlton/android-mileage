@@ -86,14 +86,11 @@ public class FillupsTable extends ContentTable {
 	@Override
 	public boolean query(final int type, Uri uri, SQLiteQueryBuilder queryBuilder) {
 		switch (type) {
+			case FILLUP_ID:
+				queryBuilder.appendWhere(Fillup._ID + " = " + uri.getPathSegments().get(1));
 			case FILLUPS:
 				queryBuilder.setTables(getTableName());
 				queryBuilder.setProjectionMap(buildProjectionMap(getFullProjectionArray()));
-				return true;
-			case FILLUP_ID:
-				queryBuilder.setTables(getTableName());
-				queryBuilder.setProjectionMap(buildProjectionMap(getFullProjectionArray()));
-				queryBuilder.appendWhere(Fillup._ID + " = " + uri.getPathSegments().get(1));
 				return true;
 		}
 		return false;

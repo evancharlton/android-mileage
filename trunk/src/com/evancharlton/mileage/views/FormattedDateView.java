@@ -29,7 +29,7 @@ public class FormattedDateView extends TextView {
 		super(context, attrs);
 
 		TypedArray arr = context.obtainStyledAttributes(attrs, R.styleable.FormattedDateView);
-		final String format = arr.getString(R.styleable.FormattedDateView_format);
+		final String format = arr.getString(R.styleable.FormattedDateView_dateFormat);
 		if (format != null) {
 			if (FMT_MEDIUM.equals(format)) {
 				mFormat = MEDIUM;

@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -20,21 +19,48 @@ public abstract class BaseListActivity extends ListActivity implements AdapterVi
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		this.onCreate(savedInstanceState, R.layout.list);
+	}
+
+	protected void onCreate(Bundle savedInstanceState, int layoutResId) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.list);
+		setContentView(layoutResId);
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
 
+		initUI();
+
 		mListView = getListView();
-		Uri uri = getUri();
-		Log.d("BaseListActivity", uri.toString());
-		Cursor c = managedQuery(uri, getProjectionArray(), null, null, null);
-		mAdapter = new SimpleCursorAdapter(this, getListLayout(), c, getFrom(), getTo());
+		mAdapter = new SimpleCursorAdapter(this, getListLayout(), getCursor(), getFrom(), getTo());
 		mListView.setAdapter(mAdapter);
 		mListView.setOnItemClickListener(this);
+
+		postUI();
+	}
+
+	protected void initUI() {
+	}
+
+	protected void postUI() {
+	}
+
+	protected Cursor getCursor() {
+		return managedQuery(getUri(), getProjectionArray(), getSelection(), getSelectionArgs(), getSortOrder());
+	}
+
+	protected String getSelection() {
+		return null;
+	}
+
+	protected String[] getSelectionArgs() {
+		return null;
+	}
+
+	protected String getSortOrder() {
+		return null;
 	}
 
 	protected String[] getProjectionArray() {

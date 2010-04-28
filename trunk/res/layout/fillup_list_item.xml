@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:mileage="http://schemas.android.com/apk/res/com.evancharlton.mileage"
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content"
 	android:gravity="center"
@@ -21,6 +22,7 @@
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
 		/>
+		<!-- TODO: Let the user set which meta field(s?) to show here -->
 		<TextView
 			android:id="@android:id/text2"
 			android:layout_width="wrap_content"
@@ -35,26 +37,29 @@
 		android:layout_height="wrap_content"
 		android:gravity="right"
 	>
-		<TextView
+		<com.evancharlton.mileage.views.FormattedNumberView
 			android:id="@+id/volume"
 			android:layout_width="wrap_content"
 			android:paddingRight="5dip"
 			android:layout_height="0dip"
 			android:layout_weight="1"
+			mileage:numberFormat="0.00"
 		/>
-		<TextView
+		<com.evancharlton.mileage.views.FormattedNumberView
 			android:id="@+id/price"
 			android:layout_width="wrap_content"
 			android:paddingRight="5dip"
 			android:layout_height="0dip"
 			android:layout_weight="1"
+			mileage:numberFormat="0.00"
 		/>
-		<TextView
+		<com.evancharlton.mileage.views.FormattedNumberView
 			android:id="@+id/economy"
 			android:layout_width="wrap_content"
 			android:layout_height="0dip"
 			android:layout_weight="1"
 			android:paddingRight="5dip"
+			mileage:numberFormat="0.00"
 		/>
 	</LinearLayout>
 </LinearLayout>
