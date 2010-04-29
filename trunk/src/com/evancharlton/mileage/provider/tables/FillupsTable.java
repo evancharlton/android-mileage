@@ -19,32 +19,23 @@ public class FillupsTable extends ContentTable {
 	private static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.evancharlton.fillup";
 	private static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.evancharlton.fillup";
 
-	/**
-	 * Gets all fillups
-	 */
-	public static final String FILLUPS_URI = "fillups";
+	private static final String FILLUPS_URI = "fillups/";
+	public static final Uri BASE_URI = Uri.withAppendedPath(FillUpsProvider.BASE_URI, FILLUPS_URI);
 
-	/**
-	 * Gets a specific fillup
-	 */
-	public static final String FILLUP_URI = "fillup";
-
-	public static final String[] getFullProjectionArray() {
-		return new String[] {
-				Dao._ID,
-				Fillup.TOTAL_COST,
-				Fillup.UNIT_PRICE,
-				Fillup.VOLUME,
-				Fillup.ODOMETER,
-				Fillup.ECONOMY,
-				Fillup.VEHICLE_ID,
-				Fillup.DATE,
-				Fillup.LATITUDE,
-				Fillup.LONGITUDE,
-				Fillup.PARTIAL,
-				Fillup.RESTART
-		};
-	}
+	public static final String[] PROJECTION = new String[] {
+			Dao._ID,
+			Fillup.TOTAL_COST,
+			Fillup.UNIT_PRICE,
+			Fillup.VOLUME,
+			Fillup.ODOMETER,
+			Fillup.ECONOMY,
+			Fillup.VEHICLE_ID,
+			Fillup.DATE,
+			Fillup.LATITUDE,
+			Fillup.LONGITUDE,
+			Fillup.PARTIAL,
+			Fillup.RESTART
+	};
 
 	@Override
 	public String getTableName() {
@@ -54,7 +45,7 @@ public class FillupsTable extends ContentTable {
 	@Override
 	public void registerUris(UriMatcher uriMatcher) {
 		uriMatcher.addURI(FillUpsProvider.AUTHORITY, FILLUPS_URI, FILLUPS);
-		uriMatcher.addURI(FillUpsProvider.AUTHORITY, FILLUP_URI + "/#", FILLUP_ID);
+		uriMatcher.addURI(FillUpsProvider.AUTHORITY, FILLUPS_URI + "#", FILLUP_ID);
 	}
 
 	@Override
@@ -90,7 +81,7 @@ public class FillupsTable extends ContentTable {
 				queryBuilder.appendWhere(Fillup._ID + " = " + uri.getPathSegments().get(1));
 			case FILLUPS:
 				queryBuilder.setTables(getTableName());
-				queryBuilder.setProjectionMap(buildProjectionMap(getFullProjectionArray()));
+				queryBuilder.setProjectionMap(buildProjectionMap(PROJECTION));
 				return true;
 		}
 		return false;

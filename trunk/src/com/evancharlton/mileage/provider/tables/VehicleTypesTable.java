@@ -19,7 +19,7 @@ public class VehicleTypesTable extends ContentTable {
 	public static final String TYPE_URI = "vehicles/type";
 
 	private static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.evancharlton.vehicle_types";
-	private static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.dir/vnd.evancharlton.vehicle_type";
+	private static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.evancharlton.vehicle_type";
 
 	@Override
 	public String create() {

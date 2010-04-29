@@ -9,7 +9,7 @@ import com.evancharlton.mileage.tests.TestCase;
 
 public class FillupSeriesTest extends TestCase {
 	private final FillupSeries mSeries = new FillupSeries();
-	private static final String[] PROJECTION = FillupsTable.getFullProjectionArray();
+	private static final String[] PROJECTION = FillupsTable.PROJECTION;
 	private static int ID = 1;
 
 	private static Object[] createFillup(int vehicleId, double odometer, double volume, double price, boolean partial, boolean restart) {
@@ -41,7 +41,7 @@ public class FillupSeriesTest extends TestCase {
 	}
 
 	public void testLoadSeries() {
-		MatrixCursor cursor = new MatrixCursor(FillupsTable.getFullProjectionArray());
+		MatrixCursor cursor = new MatrixCursor(FillupsTable.PROJECTION);
 		cursor.addRow(createFillup(1, 100, 10, 10, false, false));
 		cursor.addRow(createFillup(1, 200, 10, 10, false, false));
 
@@ -50,7 +50,7 @@ public class FillupSeriesTest extends TestCase {
 	}
 
 	public void testLoadSeriesWithRestart() {
-		MatrixCursor cursor = new MatrixCursor(FillupsTable.getFullProjectionArray());
+		MatrixCursor cursor = new MatrixCursor(FillupsTable.PROJECTION);
 		int odometer = 0;
 		odometer += 100;
 		cursor.addRow(createFillup(1, odometer, 10, 10, false, false));
@@ -66,7 +66,7 @@ public class FillupSeriesTest extends TestCase {
 	}
 
 	public void testGetTotalDistance() {
-		MatrixCursor cursor = new MatrixCursor(FillupsTable.getFullProjectionArray());
+		MatrixCursor cursor = new MatrixCursor(FillupsTable.PROJECTION);
 		int odometer = 0;
 		odometer += 100;
 		cursor.addRow(createFillup(1, odometer, 10, 10, false, false));
@@ -80,7 +80,7 @@ public class FillupSeriesTest extends TestCase {
 	}
 
 	public void testGetTotalVolume() {
-		MatrixCursor cursor = new MatrixCursor(FillupsTable.getFullProjectionArray());
+		MatrixCursor cursor = new MatrixCursor(FillupsTable.PROJECTION);
 		int odometer = 0;
 		odometer += 100;
 		cursor.addRow(createFillup(1, odometer, 10, 10, false, false));
@@ -94,7 +94,7 @@ public class FillupSeriesTest extends TestCase {
 	}
 
 	public void testGetEconomyVolume() {
-		MatrixCursor cursor = new MatrixCursor(FillupsTable.getFullProjectionArray());
+		MatrixCursor cursor = new MatrixCursor(FillupsTable.PROJECTION);
 		int odometer = 0;
 		odometer += 100;
 		cursor.addRow(createFillup(1, odometer, 10, 10, false, false));

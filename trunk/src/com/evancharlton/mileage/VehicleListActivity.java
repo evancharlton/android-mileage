@@ -6,7 +6,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.evancharlton.mileage.dao.Vehicle;
-import com.evancharlton.mileage.provider.FillUpsProvider;
 import com.evancharlton.mileage.provider.tables.VehiclesTable;
 
 public class VehicleListActivity extends BaseListActivity {
@@ -43,7 +42,7 @@ public class VehicleListActivity extends BaseListActivity {
 
 	@Override
 	protected Uri getUri() {
-		return Uri.withAppendedPath(FillUpsProvider.BASE_URI, VehiclesTable.VEHICLES_URI);
+		return VehiclesTable.BASE_URI;
 	}
 
 	@Override

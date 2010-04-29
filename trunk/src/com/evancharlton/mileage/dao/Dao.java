@@ -109,6 +109,30 @@ public abstract class Dao {
 		return defaultValue;
 	}
 
+	protected String getString(ContentValues values, String key, String defaultValue) {
+		String value = values.getAsString(key);
+		if (value != null) {
+			return value;
+		}
+		return defaultValue;
+	}
+
+	protected double getDouble(ContentValues values, String key, double defaultValue) {
+		Double value = values.getAsDouble(key);
+		if (value != null) {
+			return value.doubleValue();
+		}
+		return defaultValue;
+	}
+
+	protected boolean getBoolean(ContentValues values, String key, boolean defaultValue) {
+		Boolean value = values.getAsBoolean(key);
+		if (value != null) {
+			return value.booleanValue();
+		}
+		return defaultValue;
+	}
+
 	// TODO: break this out into its own class. Make it checked?
 	public static class InvalidFieldException extends RuntimeException {
 		private static final long serialVersionUID = 3415877365632636406L;

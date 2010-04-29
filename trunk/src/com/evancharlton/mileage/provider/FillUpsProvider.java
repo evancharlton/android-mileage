@@ -21,6 +21,7 @@ import android.util.Log;
 import com.evancharlton.mileage.SettingsActivity;
 import com.evancharlton.mileage.provider.backup.BackupTransport;
 import com.evancharlton.mileage.provider.backup.FileBackupTransport;
+import com.evancharlton.mileage.provider.tables.CacheTable;
 import com.evancharlton.mileage.provider.tables.ContentTable;
 import com.evancharlton.mileage.provider.tables.FieldsTable;
 import com.evancharlton.mileage.provider.tables.FillupsFieldsTable;
@@ -51,6 +52,7 @@ public class FillUpsProvider extends ContentProvider {
 		TABLES.add(new VehicleTypesTable());
 		TABLES.add(new ServiceIntervalsTable());
 		TABLES.add(new ServiceIntervalTemplatesTable());
+		TABLES.add(new CacheTable());
 
 		for (ContentTable table : TABLES) {
 			table.registerUris(URI_MATCHER);

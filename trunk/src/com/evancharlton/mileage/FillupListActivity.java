@@ -5,13 +5,14 @@ import java.text.DecimalFormat;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.View;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.SimpleCursorAdapter.ViewBinder;
 
 import com.evancharlton.mileage.dao.Fillup;
-import com.evancharlton.mileage.provider.FillUpsProvider;
 import com.evancharlton.mileage.provider.tables.FillupsTable;
 import com.evancharlton.mileage.views.CursorSpinner;
 
@@ -47,7 +48,7 @@ public class FillupListActivity extends BaseListActivity {
 
 	@Override
 	protected String[] getProjectionArray() {
-		return FillupsTable.getFullProjectionArray();
+		return FillupsTable.PROJECTION;
 	}
 
 	@Override
@@ -74,7 +75,7 @@ public class FillupListActivity extends BaseListActivity {
 
 	@Override
 	protected Uri getUri() {
-		return Uri.withAppendedPath(FillUpsProvider.BASE_URI, FillupsTable.FILLUPS_URI);
+		return FillupsTable.BASE_URI;
 	}
 
 	@Override
@@ -97,21 +98,23 @@ public class FillupListActivity extends BaseListActivity {
 		return R.layout.fillup_list_item;
 	}
 
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, view, menuInfo);
+	}
+
 	private final ViewBinder mViewBinder = new ViewBinder() {
 		@Override
 		public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
 			TextView tv = (TextView) view;
-			// switch (columnIndex) {
-			// case 2:
-			// // currency
-			// tv.setText("$" + tv.getText());
-			// return true;
-			// case 3:
-			// // economy
-			// double economy = cursor.getDouble(columnIndex);
-			// tv.setText(ECONOMY_FORMAT.format(economy));
-			// return true;
-			// }
+			switch (columnIndex) {
+				case 2:
+					// currency
+					return false;
+				case 3:
+					// economy
+					return false;
+			}
 			return false;
 		}
 	};

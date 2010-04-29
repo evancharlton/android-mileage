@@ -30,6 +30,7 @@ public class Mileage extends TabActivity {
 		mTabHost = getTabHost();
 		mTabHost.addTab(createTabSpec(TAG_FILLUP, FillupActivity.class, R.string.fillup));
 		mTabHost.addTab(createTabSpec(TAG_HISTORY, FillupListActivity.class, R.string.history));
+		mTabHost.addTab(createTabSpec(TAG_STATISTICS, VehicleStatisticsActivity.class, R.string.statistics));
 	}
 
 	private TabSpec createTabSpec(String tag, Class<? extends Activity> cls, int string) {

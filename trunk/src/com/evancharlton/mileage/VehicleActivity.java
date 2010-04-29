@@ -13,7 +13,6 @@ import com.evancharlton.mileage.dao.Dao;
 import com.evancharlton.mileage.dao.Fillup;
 import com.evancharlton.mileage.dao.Vehicle;
 import com.evancharlton.mileage.math.Calculator;
-import com.evancharlton.mileage.provider.FillUpsProvider;
 import com.evancharlton.mileage.provider.tables.FillupsTable;
 import com.evancharlton.mileage.provider.tables.VehiclesTable;
 import com.evancharlton.mileage.views.CursorSpinner;
@@ -47,12 +46,12 @@ public class VehicleActivity extends BaseFormActivity {
 
 	@Override
 	protected String[] getProjectionArray() {
-		return VehiclesTable.getFullProjectionArray();
+		return VehiclesTable.PROJECTION;
 	}
 
 	@Override
 	protected Uri getUri(long id) {
-		return ContentUris.withAppendedId(Uri.withAppendedPath(FillUpsProvider.BASE_URI, VehiclesTable.VEHICLE_URI), id);
+		return ContentUris.withAppendedId(VehiclesTable.BASE_URI, id);
 	}
 
 	@Override
@@ -77,7 +76,7 @@ public class VehicleActivity extends BaseFormActivity {
 		mModel.setText(mVehicle.getModel());
 		mYear.setText(mVehicle.getYear());
 
-		Uri uri = Uri.withAppendedPath(FillUpsProvider.BASE_URI, VehiclesTable.VEHICLES_URI);
+		Uri uri = VehiclesTable.BASE_URI;
 		String[] projection = new String[] {
 			Vehicle._ID
 		};
@@ -118,7 +117,7 @@ public class VehicleActivity extends BaseFormActivity {
 			String[] selectionArgs = new String[] {
 				String.valueOf(mVehicle.getId())
 			};
-			Uri uri = Uri.withAppendedPath(FillUpsProvider.BASE_URI, FillupsTable.FILLUPS_URI);
+			Uri uri = FillupsTable.BASE_URI;
 			getContentResolver().update(uri, values, where, selectionArgs);
 		}
 		super.saved();

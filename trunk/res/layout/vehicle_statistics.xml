@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:mileage="http://schemas.android.com/apk/res/com.evancharlton.mileage"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:orientation="vertical"
+	android:id="@+id/container"
+>
+	<com.evancharlton.mileage.views.CursorSpinner
+		android:id="@+id/vehicle"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		mileage:uri="vehicles"
+		mileage:display_field="title"
+	/>
+</LinearLayout>

@@ -34,5 +34,6 @@
 		<activity android:name=".ServiceIntervalTemplateActivity" />
 		<activity android:name=".SettingsActivity" />
 		<activity android:name=".TransportSettingsActivity" />
+		<activity android:name=".VehicleStatisticsActivity" />
 	</application>
 </manifest> 

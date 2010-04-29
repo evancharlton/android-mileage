@@ -121,7 +121,7 @@ public class CalculatorTest extends TestCase {
 
 	// test the calculation of the fuel economy
 
-	private static final String[] PROJECTION = FillupsTable.getFullProjectionArray();
+	private static final String[] PROJECTION = FillupsTable.PROJECTION;
 	private static int ID = 1;
 
 	private static Object[] createFillup(int vehicleId, double odometer, double volume, double price, boolean partial, boolean restart) {
@@ -148,7 +148,7 @@ public class CalculatorTest extends TestCase {
 	}
 
 	public void testAverageEconomyMPG() {
-		MatrixCursor cursor = new MatrixCursor(FillupsTable.getFullProjectionArray());
+		MatrixCursor cursor = new MatrixCursor(FillupsTable.PROJECTION);
 		int odometer = 0;
 		odometer += 100;
 		cursor.addRow(createFillup(1, odometer, 10, 10, false, false));
@@ -167,7 +167,7 @@ public class CalculatorTest extends TestCase {
 	}
 
 	public void testAverageEconomyLPCK() {
-		MatrixCursor cursor = new MatrixCursor(FillupsTable.getFullProjectionArray());
+		MatrixCursor cursor = new MatrixCursor(FillupsTable.PROJECTION);
 		int odometer = 0;
 		odometer += 100;
 		cursor.addRow(createFillup(1, odometer, 10, 10, false, false));

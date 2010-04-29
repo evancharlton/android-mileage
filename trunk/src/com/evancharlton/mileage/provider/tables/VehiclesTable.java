@@ -15,28 +15,26 @@ public class VehiclesTable extends ContentTable {
 	private static final int VEHICLES = 40;
 	private static final int VEHICLE_ID = 41;
 
-	public static final String VEHICLES_URI = "vehicles";
-	public static final String VEHICLE_URI = "vehicle";
+	private static final String VEHICLES_URI = "vehicles/";
+	public static final Uri BASE_URI = Uri.withAppendedPath(FillUpsProvider.BASE_URI, VEHICLES_URI);
 
 	private static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.evancharlton.vehicles";
-	private static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.dir/vnd.evancharlton.vehicle";
+	private static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.evancharlton.vehicle";
 
-	public static String[] getFullProjectionArray() {
-		return new String[] {
-				Dao._ID,
-				Vehicle.TITLE,
-				Vehicle.DESCRIPTION,
-				Vehicle.YEAR,
-				Vehicle.MAKE,
-				Vehicle.MODEL,
-				Vehicle.VEHICLE_TYPE,
-				Vehicle.DEFAULT_TIME,
-				Vehicle.PREF_DISTANCE_UNITS,
-				Vehicle.PREF_VOLUME_UNITS,
-				Vehicle.PREF_ECONOMY_UNITS,
-				Vehicle.PREF_CURRENCY
-		};
-	}
+	public static String[] PROJECTION = new String[] {
+			Dao._ID,
+			Vehicle.TITLE,
+			Vehicle.DESCRIPTION,
+			Vehicle.YEAR,
+			Vehicle.MAKE,
+			Vehicle.MODEL,
+			Vehicle.VEHICLE_TYPE,
+			Vehicle.DEFAULT_TIME,
+			Vehicle.PREF_DISTANCE_UNITS,
+			Vehicle.PREF_VOLUME_UNITS,
+			Vehicle.PREF_ECONOMY_UNITS,
+			Vehicle.PREF_CURRENCY
+	};
 
 	@Override
 	public String create() {
@@ -89,11 +87,11 @@ public class VehiclesTable extends ContentTable {
 		switch (type) {
 			case VEHICLES:
 				queryBuilder.setTables(getTableName());
-				queryBuilder.setProjectionMap(buildProjectionMap(getFullProjectionArray()));
+				queryBuilder.setProjectionMap(buildProjectionMap(PROJECTION));
 				return true;
 			case VEHICLE_ID:
 				queryBuilder.setTables(getTableName());
-				queryBuilder.setProjectionMap(buildProjectionMap(getFullProjectionArray()));
+				queryBuilder.setProjectionMap(buildProjectionMap(PROJECTION));
 				queryBuilder.appendWhere(Dao._ID + " = " + uri.getPathSegments().get(1));
 				return true;
 		}
@@ -103,7 +101,7 @@ public class VehiclesTable extends ContentTable {
 	@Override
 	public void registerUris(UriMatcher uriMatcher) {
 		uriMatcher.addURI(FillUpsProvider.AUTHORITY, VEHICLES_URI, VEHICLES);
-		uriMatcher.addURI(FillUpsProvider.AUTHORITY, VEHICLE_URI + "/#", VEHICLE_ID);
+		uriMatcher.addURI(FillUpsProvider.AUTHORITY, VEHICLES_URI + "#", VEHICLE_ID);
 	}
 
 	@Override

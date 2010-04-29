@@ -42,6 +42,7 @@
 	<string name="add_fillup">Save Fillup</string>
 	<string name="fillup">Fillup</string>
 	<string name="history">History</string>
+	<string name="statistics">Statistics</string>
 	<string name="add">Add</string>
 	<string name="add_field">Add new field</string>
 	<string name="field_title">Title</string>
@@ -100,6 +101,19 @@
 	<string name="transport_web_description_on">Database will be backed up to the web</string>
 	<string name="transport_web_description_ff">Nothing will be saved to the web</string>
 	
+	<string name="stat_fuel_economy">Fuel economy</string>
+	<string name="stat_avg_economy">Average fuel economy</string>
+	<string name="stat_min_economy">Worst fuel economy</string>
+	<string name="stat_max_economy">Best fuel economy</string>
+	<string name="stat_distance_between_fillups">Distance between fillups</string>
+	<string name="stat_avg_distance">Average distance</string>
+	<string name="stat_min_distance">Minimum distance</string>
+	<string name="stat_max_distance">Maximum distance</string>
+	<string name="stat_fillup_cost">Fillup costs</string>
+	<string name="stat_avg_cost">Average cost</string>
+	<string name="stat_min_cost">Minimum cost</string>
+	<string name="stat_max_cost">Maximum cost</string>
+	
 	<string name="error_no_vehicle_specified">No vehicle was specified</string>
 	<string name="error_no_odometer_specified">Invalid value for odometer</string>
 	<string name="error_no_volume_specified">Invalid value for volume</string>
@@ -128,4 +142,6 @@
 	<string name="error_invalid_interval_vehicle">Vehicle not specified</string>
 	<string name="error_invalid_interval_duration">Invalid service interval duration</string>
 	<string name="error_invalid_interval_distance">Invalid service interval distance</string>
+	<string name="error_invalid_statistic_item">Invalid item specified for the statistic</string>
+	<string name="error_invalid_statistic_key">Invalid key specified for the statistic</string>
 </resources>

@@ -130,12 +130,12 @@ public class FillupActivity extends BaseFormActivity {
 
 	@Override
 	protected String[] getProjectionArray() {
-		return FillupsTable.getFullProjectionArray();
+		return FillupsTable.PROJECTION;
 	}
 
 	@Override
 	protected Uri getUri(long id) {
-		return ContentUris.withAppendedId(Uri.withAppendedPath(FillUpsProvider.BASE_URI, FillupsTable.FILLUP_URI), id);
+		return ContentUris.withAppendedId(FillupsTable.BASE_URI, id);
 	}
 
 	@Override
@@ -262,11 +262,10 @@ public class FillupActivity extends BaseFormActivity {
 		mFillup.setVehicleId(mVehicles.getSelectedItemId());
 
 		// update the economy number
-		Uri vehicleUri = ContentUris.withAppendedId(Uri.withAppendedPath(FillUpsProvider.BASE_URI, VehiclesTable.VEHICLE_URI), mVehicles
-				.getSelectedItemId());
+		Uri vehicleUri = ContentUris.withAppendedId(VehiclesTable.BASE_URI, mVehicles.getSelectedItemId());
 
 		Vehicle v = null;
-		Cursor vehicleCursor = managedQuery(vehicleUri, VehiclesTable.getFullProjectionArray(), null, null, null);
+		Cursor vehicleCursor = managedQuery(vehicleUri, VehiclesTable.PROJECTION, null, null, null);
 		if (vehicleCursor.getCount() == 1) {
 			vehicleCursor.moveToFirst();
 			v = new Vehicle(vehicleCursor);

@@ -8,7 +8,6 @@ import android.net.Uri;
 
 import com.evancharlton.mileage.R;
 import com.evancharlton.mileage.math.Calculator;
-import com.evancharlton.mileage.provider.FillUpsProvider;
 import com.evancharlton.mileage.provider.tables.FillupsTable;
 import com.evancharlton.mileage.provider.tables.VehiclesTable;
 
@@ -67,13 +66,12 @@ public class Vehicle extends Dao {
 	}
 
 	@Override
-	protected Uri getUri() {
-		Uri base = FillUpsProvider.BASE_URI;
+	// getUri is public here because then we can use this as the "item" field in
+	// the statistics cache
+	public Uri getUri() {
+		Uri base = VehiclesTable.BASE_URI;
 		if (isExistingObject()) {
-			base = Uri.withAppendedPath(base, VehiclesTable.VEHICLE_URI);
-			base = ContentUris.withAppendedId(base, getId());
-		} else {
-			base = Uri.withAppendedPath(base, VehiclesTable.VEHICLES_URI);
+			return ContentUris.withAppendedId(base, getId());
 		}
 		return base;
 	}
@@ -118,8 +116,8 @@ public class Vehicle extends Dao {
 	}
 
 	public Fillup loadLatestFillup(Context context) {
-		Uri uri = Uri.withAppendedPath(FillUpsProvider.BASE_URI, FillupsTable.FILLUPS_URI);
-		String[] projection = FillupsTable.getFullProjectionArray();
+		Uri uri = FillupsTable.BASE_URI;
+		String[] projection = FillupsTable.PROJECTION;
 		Cursor c = context.getContentResolver().query(uri, projection, Fillup.VEHICLE_ID + " = ?", new String[] {
 			String.valueOf(getId())
 		}, Fillup.ODOMETER + " desc");

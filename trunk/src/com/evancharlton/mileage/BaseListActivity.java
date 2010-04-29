@@ -6,14 +6,16 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.View;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
 import com.evancharlton.mileage.dao.Dao;
 
-public abstract class BaseListActivity extends ListActivity implements AdapterView.OnItemClickListener {
+public abstract class BaseListActivity extends ListActivity implements AdapterView.OnItemClickListener, View.OnCreateContextMenuListener {
 	protected ListView mListView;
 	protected SimpleCursorAdapter mAdapter;
 
@@ -37,6 +39,7 @@ public abstract class BaseListActivity extends ListActivity implements AdapterVi
 		mAdapter = new SimpleCursorAdapter(this, getListLayout(), getCursor(), getFrom(), getTo());
 		mListView.setAdapter(mAdapter);
 		mListView.setOnItemClickListener(this);
+		mListView.setOnCreateContextMenuListener(this);
 
 		postUI();
 	}
@@ -94,6 +97,11 @@ public abstract class BaseListActivity extends ListActivity implements AdapterVi
 	@Override
 	public void onItemClick(AdapterView<?> list, View row, int position, long id) {
 		onItemClick(id);
+	}
+
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, view, menuInfo);
 	}
 
 	abstract protected String[] getFrom();
