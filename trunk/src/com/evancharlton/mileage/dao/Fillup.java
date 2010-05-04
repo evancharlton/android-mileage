@@ -151,6 +151,10 @@ public class Fillup extends Dao {
 		return mOdometer;
 	}
 
+	public double getDistance() {
+		return getOdometer() - mPrevious.getOdometer();
+	}
+
 	public Fillup getPrevious() {
 		return mPrevious;
 	}

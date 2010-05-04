@@ -35,6 +35,7 @@ public final class Statistics {
 	public static final Statistic AVG_COST = new Statistic(R.string.stat_avg_cost, "average_cost");
 	public static final Statistic MIN_COST = new Statistic(R.string.stat_min_cost, "minimum_cost");
 	public static final Statistic MAX_COST = new Statistic(R.string.stat_max_cost, "maximum_cost");
+	public static final Statistic TOTAL_COST = new Statistic(R.string.stat_total_cost, "total_cost");
 	public static final StatisticsGroup COSTS = new StatisticsGroup(R.string.stat_fillup_cost, AVG_COST, MIN_COST, MAX_COST);
 
 	// TODO: merge with the statistic dao?

@@ -37,7 +37,7 @@ public class FillupSeries extends ArrayList<Fillup> {
 		final int size = size();
 		if (size >= 2) {
 			// TODO: will this work for partials? check the edge case here
-			return get(size - 1).getOdometer() - get(0).getOdometer();
+			return Math.abs(get(size - 1).getOdometer() - get(0).getOdometer());
 		}
 		return 0D;
 	}

@@ -30,6 +30,7 @@ public class VehicleStatisticsActivity extends Activity {
 
 	private final ArrayList<Fillup> mFillups = new ArrayList<Fillup>();
 	private final HashMap<Statistics.Statistic, Double> mStatistics = new HashMap<Statistics.Statistic, Double>();
+	private final HashMap<Statistics.Statistic, StatisticView> mViews = new HashMap<Statistics.Statistic, StatisticView>();
 	private final Vehicle mVehicle = new Vehicle(new ContentValues());
 
 	private LinearLayout mContainer;
@@ -107,7 +108,7 @@ public class VehicleStatisticsActivity extends Activity {
 			String[] selectionArgs = new String[] {
 				String.valueOf(mVehicleSpinner.getSelectedItemId())
 			};
-			Cursor fillups = managedQuery(FillupsTable.BASE_URI, FillupsTable.PROJECTION, selection, selectionArgs, null);
+			Cursor fillups = managedQuery(FillupsTable.BASE_URI, FillupsTable.PROJECTION, selection, selectionArgs, Fillup.ODOMETER + " asc");
 			mCalculationTask = new CalculateTask();
 			mCalculationTask.activity = this;
 			mCalculationTask.execute(fillups);
@@ -120,13 +121,15 @@ public class VehicleStatisticsActivity extends Activity {
 	private void displayStatistics() {
 		LayoutInflater inflater = LayoutInflater.from(this);
 		for (Statistics.Statistic stat : Statistics.STATISTICS.values()) {
-			StatisticView view = (StatisticView) inflater.inflate(R.layout.statistic, mContainer);
+			LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.statistic, mContainer);
+			StatisticView view = new StatisticView(layout);
 			view.update(stat);
+			mViews.put(stat, view);
 		}
 	}
 
 	private void updateStatistic(Statistics.Statistic statistic) {
-		// TODO
+		mViews.get(statistic).update(statistic);
 	}
 
 	private static class CalculateTask extends AsyncTask<Cursor, Statistics.Statistic, Integer> {
@@ -139,10 +142,21 @@ public class VehicleStatisticsActivity extends Activity {
 			FillupSeries series = new FillupSeries();
 			double minOdometer = Double.MAX_VALUE;
 			double maxOdometer = Double.MIN_VALUE;
+
 			double totalVolume = 0D;
 			double firstVolume = -1D;
+			double minVolume = Double.MAX_VALUE;
+			double maxVolume = Double.MIN_VALUE;
+
+			double minDistance = Double.MAX_VALUE;
+			double maxDistance = Double.MIN_VALUE;
+
+			double totalCost = 0D;
+			double minCost = Double.MAX_VALUE;
+			double maxCost = Double.MIN_VALUE;
 			while (cursor.moveToNext()) {
 				Fillup fillup = new Fillup(cursor);
+				series.add(fillup);
 
 				double odometer = fillup.getOdometer();
 				if (odometer < minOdometer) {
@@ -152,19 +166,57 @@ public class VehicleStatisticsActivity extends Activity {
 					maxOdometer = odometer;
 				}
 
+				if (fillup.hasPrevious()) {
+					double distance = fillup.getDistance();
+					if (distance > maxDistance) {
+						maxDistance = distance;
+						update(Statistics.MAX_DISTANCE, maxDistance);
+					}
+					if (distance < minDistance) {
+						minDistance = distance;
+						update(Statistics.MIN_DISTANCE, minDistance);
+					}
+				}
+
 				double volume = fillup.getVolume();
 				if (firstVolume == -1D) {
 					firstVolume = volume;
 				}
+				if (volume > maxVolume) {
+					maxVolume = volume;
+				}
+				if (volume < minVolume) {
+					minVolume = volume;
+				}
 				totalVolume += volume;
 
-				series.add(fillup);
+				double cost = fillup.getTotalCost();
+				if (cost > maxCost) {
+					maxCost = cost;
+					update(Statistics.MAX_COST, maxCost);
+				}
+				if (cost < minCost) {
+					minCost = cost;
+					update(Statistics.MIN_COST, minCost);
+				}
+				totalCost += cost;
+				update(Statistics.TOTAL_COST, totalCost);
+
+				try {
+					Thread.sleep(500);
+				} catch (Exception e) {
+				}
 			}
 			double avgEconomy = Calculator.averageEconomy(activity.mVehicle, series);
 			Statistics.AVG_ECONOMY.setValue(avgEconomy);
 			publishProgress(Statistics.AVG_ECONOMY);
 
 			return 0;
+		}
+
+		private void update(Statistics.Statistic statistic, double value) {
+			statistic.setValue(value);
+			publishProgress(statistic);
 		}
 
 		@Override

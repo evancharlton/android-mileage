@@ -113,6 +113,7 @@
 	<string name="stat_avg_cost">Average cost</string>
 	<string name="stat_min_cost">Minimum cost</string>
 	<string name="stat_max_cost">Maximum cost</string>
+	<string name="stat_total_cost">Total cost</string>
 	
 	<string name="error_no_vehicle_specified">No vehicle was specified</string>
 	<string name="error_no_odometer_specified">Invalid value for odometer</string>
