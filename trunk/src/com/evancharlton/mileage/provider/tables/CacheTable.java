@@ -6,8 +6,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 
+import com.evancharlton.mileage.dao.CachedValue;
 import com.evancharlton.mileage.dao.Dao;
-import com.evancharlton.mileage.dao.Statistic;
 import com.evancharlton.mileage.provider.FillUpsProvider;
 
 public class CacheTable extends ContentTable {
@@ -22,15 +22,16 @@ public class CacheTable extends ContentTable {
 
 	public static final String[] PROJECTION = new String[] {
 			Dao._ID,
-			Statistic.ITEM,
-			Statistic.KEY,
-			Statistic.VALUE,
-			Statistic.VALID
+			CachedValue.ITEM,
+			CachedValue.KEY,
+			CachedValue.VALUE,
+			CachedValue.VALID
 	};
 
 	@Override
 	public String create() {
-		return new TableBuilder().addText(Statistic.ITEM).addText(Statistic.KEY).addDouble(Statistic.VALUE).addInteger(Statistic.VALID).build();
+		return new TableBuilder().addText(CachedValue.ITEM).addText(CachedValue.KEY).addDouble(CachedValue.VALUE).addInteger(CachedValue.VALID)
+				.build();
 	}
 
 	@Override
@@ -72,7 +73,7 @@ public class CacheTable extends ContentTable {
 	public boolean query(int type, Uri uri, SQLiteQueryBuilder queryBuilder) {
 		switch (type) {
 			case CACHE_ID:
-				queryBuilder.appendWhere(Statistic._ID + " = " + uri.getPathSegments().get(1));
+				queryBuilder.appendWhere(CachedValue._ID + " = " + uri.getPathSegments().get(1));
 			case CACHES:
 				queryBuilder.setTables(getTableName());
 				queryBuilder.setProjectionMap(buildProjectionMap(PROJECTION));
@@ -91,6 +92,8 @@ public class CacheTable extends ContentTable {
 	public int update(int match, SQLiteDatabase db, Uri uri, ContentValues values, String selection, String[] selectionArgs) {
 		switch (match) {
 			case CACHE_ID:
+				return db.update(getTableName(), values, selection, selectionArgs);
+			case CACHES:
 				return db.update(getTableName(), values, selection, selectionArgs);
 		}
 		return -1;

@@ -8,7 +8,7 @@ import android.net.Uri;
 import com.evancharlton.mileage.R;
 import com.evancharlton.mileage.provider.tables.CacheTable;
 
-public class Statistic extends Dao {
+public class CachedValue extends Dao {
 	public static final String ITEM = "item";
 	public static final String KEY = "key";
 	public static final String VALUE = "value";
@@ -19,7 +19,12 @@ public class Statistic extends Dao {
 	private double mValue = 0D;
 	private boolean mIsValid = false;
 
-	public Statistic(ContentValues values) {
+	public CachedValue(String key) {
+		this(new ContentValues());
+		mKey = key;
+	}
+
+	public CachedValue(ContentValues values) {
 		super(values);
 
 		mItem = getString(values, ITEM, null);
@@ -28,7 +33,7 @@ public class Statistic extends Dao {
 		mIsValid = getBoolean(values, VALID, false);
 	}
 
-	public Statistic(Cursor cursor) {
+	public CachedValue(Cursor cursor) {
 		super(cursor);
 
 		mItem = getString(cursor, ITEM);
@@ -60,5 +65,17 @@ public class Statistic extends Dao {
 
 		values.put(VALUE, mValue);
 		values.put(VALID, mIsValid);
+	}
+
+	public String getKey() {
+		return mKey;
+	}
+
+	public double getValue() {
+		return mValue;
+	}
+
+	public void setValue(double value) {
+		mValue = value;
 	}
 }

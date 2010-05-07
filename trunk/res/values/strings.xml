@@ -114,6 +114,14 @@
 	<string name="stat_min_cost">Minimum cost</string>
 	<string name="stat_max_cost">Maximum cost</string>
 	<string name="stat_total_cost">Total cost</string>
+	<string name="stat_cost_per_distance">Cost per distance</string>
+	<string name="stat_avg_cost_per_distance">Average cost per distance</string>
+	<string name="stat_min_cost_per_distance">Minimum cost per distance</string>
+	<string name="stat_max_cost_per_distance">Maximum cost per distance</string>
+	<string name="stat_price">Fuel price</string>
+	<string name="stat_avg_price">Average price</string>
+	<string name="stat_min_price">Minimum price</string>
+	<string name="stat_max_price">Maximum price</string>
 	
 	<string name="error_no_vehicle_specified">No vehicle was specified</string>
 	<string name="error_no_odometer_specified">Invalid value for odometer</string>

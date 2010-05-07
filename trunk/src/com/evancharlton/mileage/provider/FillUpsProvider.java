@@ -165,11 +165,9 @@ public class FillUpsProvider extends ContentProvider {
 			if (newId >= 0) {
 				uri = ContentUris.withAppendedId(uri, newId);
 				notifyListeners(uri);
-				db.close();
 				return uri;
 			}
 		}
-		db.close();
 		throw new IllegalArgumentException("Unknown URI: " + uri);
 	}
 

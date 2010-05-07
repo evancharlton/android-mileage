@@ -1,5 +1,6 @@
 package com.evancharlton.mileage.math;
 
+import com.evancharlton.mileage.dao.Fillup;
 import com.evancharlton.mileage.dao.FillupSeries;
 import com.evancharlton.mileage.dao.Vehicle;
 
@@ -66,6 +67,13 @@ public class Calculator {
 			double converted = convert(second, secondUnit, firstUnit);
 			return compareEconomies(first, firstUnit, converted, firstUnit);
 		}
+	}
+
+	public static double averageEconomy(Vehicle vehicle, Fillup fillup) {
+		if (!fillup.hasPrevious()) {
+			throw new IllegalArgumentException("You can't calculate economy on one fillup");
+		}
+		return averageEconomy(vehicle, new FillupSeries(fillup.getPrevious(), fillup));
 	}
 
 	public static double averageEconomy(Vehicle vehicle, FillupSeries series) {

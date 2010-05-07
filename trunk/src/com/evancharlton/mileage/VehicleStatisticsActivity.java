@@ -10,32 +10,37 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.widget.LinearLayout;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.SimpleCursorAdapter.ViewBinder;
 
+import com.evancharlton.mileage.dao.CachedValue;
 import com.evancharlton.mileage.dao.Fillup;
 import com.evancharlton.mileage.dao.FillupSeries;
-import com.evancharlton.mileage.dao.Statistic;
 import com.evancharlton.mileage.dao.Vehicle;
 import com.evancharlton.mileage.math.Calculator;
 import com.evancharlton.mileage.provider.Statistics;
+import com.evancharlton.mileage.provider.Statistics.Statistic;
 import com.evancharlton.mileage.provider.tables.CacheTable;
 import com.evancharlton.mileage.provider.tables.FillupsTable;
 import com.evancharlton.mileage.provider.tables.VehiclesTable;
-import com.evancharlton.mileage.views.StatisticView;
 
 public class VehicleStatisticsActivity extends Activity {
 	private static final String TAG = "VehicleStatisticsActivity";
 
-	private final ArrayList<Fillup> mFillups = new ArrayList<Fillup>();
-	private final HashMap<Statistics.Statistic, Double> mStatistics = new HashMap<Statistics.Statistic, Double>();
-	private final HashMap<Statistics.Statistic, StatisticView> mViews = new HashMap<Statistics.Statistic, StatisticView>();
 	private final Vehicle mVehicle = new Vehicle(new ContentValues());
 
-	private LinearLayout mContainer;
 	private Spinner mVehicleSpinner;
+	private ListView mListView;
 	private CalculateTask mCalculationTask = null;
+
+	private SimpleCursorAdapter mAdapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -47,19 +52,70 @@ public class VehicleStatisticsActivity extends Activity {
 			mCalculationTask.activity = this;
 		}
 
+		mListView = (ListView) findViewById(android.R.id.list);
 		mVehicleSpinner = (Spinner) findViewById(R.id.vehicle);
-		mContainer = (LinearLayout) findViewById(R.id.container);
 
 		loadVehicle();
-		preloadStatisticsCache();
-		loadStatisticsFromDatabase();
+		Cursor c = getCursor();
 
-		showStatistics();
+		final ArrayList<Statistics.Statistic> statistics = Statistics.STATISTICS;
+		final int numStats = statistics.size();
+		Log.d(TAG, "Checking statistics ... " + numStats);
+		if (c.getCount() < numStats) {
+			populateCache(Statistics.STATISTICS, false);
+			// kick off the task
+			calculate();
+		} else {
+			setAdapter(c);
+		}
+	}
+
+	private Cursor getCursor() {
+		return managedQuery(CacheTable.BASE_URI, CacheTable.PROJECTION, CachedValue.ITEM + " = ? and " + CachedValue.VALID + " = ?", new String[] {
+				String.valueOf(mVehicle.getId()),
+				"1"
+		}, null);
+	}
+
+	private void setAdapter(Cursor c) {
+		String[] from = new String[] {
+				CachedValue.KEY,
+				CachedValue.VALUE
+		};
+		int[] to = new int[] {
+				R.id.label,
+				R.id.value
+		};
+		mAdapter = new SimpleCursorAdapter(this, R.layout.statistic, c, from, to);
+		mAdapter.setViewBinder(mViewBinder);
+		mListView.setAdapter(mAdapter);
+	}
+
+	private void calculate() {
+		mCalculationTask = new CalculateTask();
+		mCalculationTask.activity = this;
+		mCalculationTask.execute();
 	}
 
 	@Override
 	public Object onRetainNonConfigurationInstance() {
 		return mCalculationTask;
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		menu.add(Menu.NONE, 1, Menu.NONE, "Recalculate");
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case 1:
+				calculate();
+				return true;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	private void loadVehicle() {
@@ -70,75 +126,45 @@ public class VehicleStatisticsActivity extends Activity {
 		mVehicle.load(vehicle);
 	}
 
-	private void preloadStatisticsCache() {
-		// preload the local statistics cache
-		for (Statistics.Statistic statistic : Statistics.STATISTICS.values()) {
-			mStatistics.put(statistic, null);
+	private void populateCache(ArrayList<Statistic> statistics, boolean valid) {
+		final int numStats = statistics.size();
+		ContentValues[] bulkValues = new ContentValues[numStats];
+		final long vehicleId = mVehicle.getId();
+		int position = 0;
+		for (int i = 0; i < numStats; i++) {
+			Statistics.Statistic statistic = statistics.get(i);
+			ContentValues values = new ContentValues();
+			values.put(CachedValue.ITEM, vehicleId);
+			values.put(CachedValue.KEY, statistic.getKey());
+			values.put(CachedValue.VALID, valid);
+			values.put(CachedValue.VALUE, statistic.getValue());
+			bulkValues[position++] = values;
 		}
-	}
-
-	private void loadStatisticsFromDatabase() {
-		String query = Statistic.ITEM + " = ? AND " + Statistic.VALID + " = 1";
-		String[] args = new String[] {
-			mVehicle.getUri().toString()
-		};
-		Cursor cached = managedQuery(CacheTable.BASE_URI, CacheTable.PROJECTION, query, args, null);
-		while (cached.moveToNext()) {
-			String key = cached.getString(2);
-			Double value = cached.getDouble(3);
-			Statistics.Statistic stat = Statistics.STATISTICS.get(key);
-			if (stat != null) {
-				mStatistics.put(stat, value);
-			}
-		}
-	}
-
-	private void showStatistics() {
-		// find all of the dirty statistics
-		ArrayList<Statistics.Statistic> dirtyStatistics = new ArrayList<Statistics.Statistic>();
-		for (Statistics.Statistic statistic : mStatistics.keySet()) {
-			if (mStatistics.get(statistic) == null) {
-				dirtyStatistics.add(statistic);
-			}
-		}
-
-		// if we have any dirty statistics, recalculate
-		if (dirtyStatistics.size() > 0) {
-			String selection = Fillup.VEHICLE_ID + " = ?";
-			String[] selectionArgs = new String[] {
-				String.valueOf(mVehicleSpinner.getSelectedItemId())
-			};
-			Cursor fillups = managedQuery(FillupsTable.BASE_URI, FillupsTable.PROJECTION, selection, selectionArgs, Fillup.ODOMETER + " asc");
-			mCalculationTask = new CalculateTask();
-			mCalculationTask.activity = this;
-			mCalculationTask.execute(fillups);
-		}
-
-		// add all of the statistics to the UI with placeholders (or data)
-		displayStatistics();
-	}
-
-	private void displayStatistics() {
-		LayoutInflater inflater = LayoutInflater.from(this);
-		for (Statistics.Statistic stat : Statistics.STATISTICS.values()) {
-			LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.statistic, mContainer);
-			StatisticView view = new StatisticView(layout);
-			view.update(stat);
-			mViews.put(stat, view);
-		}
-	}
-
-	private void updateStatistic(Statistics.Statistic statistic) {
-		mViews.get(statistic).update(statistic);
+		getContentResolver().bulkInsert(CacheTable.BASE_URI, bulkValues);
 	}
 
 	private static class CalculateTask extends AsyncTask<Cursor, Statistics.Statistic, Integer> {
 		public VehicleStatisticsActivity activity;
+		private final HashMap<String, Statistic> mStatistics = new HashMap<String, Statistic>();
+
+		@Override
+		protected void onPreExecute() {
+			String[] args = new String[] {
+				String.valueOf(activity.mVehicle.getId())
+			};
+			activity.getContentResolver().delete(CacheTable.BASE_URI, CachedValue.ITEM + " = ?", args);
+		}
 
 		@Override
 		protected Integer doInBackground(Cursor... cursors) {
+			String selection = Fillup.VEHICLE_ID + " = ?";
+			String[] args = new String[] {
+				String.valueOf(activity.mVehicle.getId())
+			};
+			Cursor cursor = activity.getContentResolver().query(FillupsTable.BASE_URI, FillupsTable.PROJECTION, selection, args,
+					Fillup.ODOMETER + " asc");
+			Log.d("CalculateTask", "Recalculating...");
 			// recalculate a whole bunch of shit
-			Cursor cursor = cursors[0];
 			FillupSeries series = new FillupSeries();
 			double minOdometer = Double.MAX_VALUE;
 			double maxOdometer = Double.MIN_VALUE;
@@ -154,6 +180,11 @@ public class VehicleStatisticsActivity extends Activity {
 			double totalCost = 0D;
 			double minCost = Double.MAX_VALUE;
 			double maxCost = Double.MIN_VALUE;
+
+			double minEconomy = Double.MAX_VALUE;
+			double maxEconomy = Double.MIN_VALUE;
+
+			final Vehicle vehicle = activity.mVehicle;
 			while (cursor.moveToNext()) {
 				Fillup fillup = new Fillup(cursor);
 				series.add(fillup);
@@ -202,15 +233,30 @@ public class VehicleStatisticsActivity extends Activity {
 				totalCost += cost;
 				update(Statistics.TOTAL_COST, totalCost);
 
-				try {
-					Thread.sleep(500);
-				} catch (Exception e) {
+				if (fillup.hasPrevious()) {
+					double economy = Calculator.averageEconomy(vehicle, fillup);
+					if (economy > maxEconomy) {
+						maxEconomy = economy;
+						update(Statistics.MAX_ECONOMY, maxEconomy);
+					}
+					if (economy < minEconomy) {
+						minEconomy = economy;
+						update(Statistics.MIN_ECONOMY, minEconomy);
+					}
 				}
 			}
-			double avgEconomy = Calculator.averageEconomy(activity.mVehicle, series);
-			Statistics.AVG_ECONOMY.setValue(avgEconomy);
-			publishProgress(Statistics.AVG_ECONOMY);
+			final int NUM_FILLUPS = series.size();
 
+			double avgEconomy = Calculator.averageEconomy(vehicle, series);
+			update(Statistics.AVG_ECONOMY, avgEconomy);
+
+			double avgDistance = series.getTotalDistance() / (NUM_FILLUPS - 1);
+			update(Statistics.AVG_DISTANCE, avgDistance);
+
+			double avgCost = totalCost / series.size();
+			update(Statistics.AVG_COST, avgCost);
+
+			cursor.close();
 			return 0;
 		}
 
@@ -221,9 +267,31 @@ public class VehicleStatisticsActivity extends Activity {
 
 		@Override
 		protected void onProgressUpdate(Statistics.Statistic... updates) {
-			for (int i = 0; i < updates.length; i++) {
-				activity.updateStatistic(updates[i]);
-			}
+			Statistic update = updates[0];
+			mStatistics.put(update.getKey(), update);
+		}
+
+		@Override
+		protected void onPostExecute(Integer done) {
+			Log.d("CalculateTask", "Done recalculating!");
+			ArrayList<Statistic> stats = new ArrayList<Statistic>(mStatistics.values());
+			activity.populateCache(stats, true);
+			activity.setAdapter(activity.getCursor());
 		}
 	}
+
+	private final ViewBinder mViewBinder = new ViewBinder() {
+		@Override
+		public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
+			TextView textView = (TextView) view;
+			switch (columnIndex) {
+				case 2:
+					// KEY
+					String key = cursor.getString(columnIndex);
+					textView.setText(Statistics.STRINGS.get(key).getLabel());
+					return true;
+			}
+			return false;
+		}
+	};
 }
