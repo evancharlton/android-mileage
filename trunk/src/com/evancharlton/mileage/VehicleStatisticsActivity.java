@@ -157,6 +157,8 @@ public class VehicleStatisticsActivity extends Activity {
 			values.put(CachedValue.KEY, statistic.getKey());
 			values.put(CachedValue.VALID, valid);
 			values.put(CachedValue.VALUE, statistic.getValue());
+			values.put(CachedValue.GROUP, statistic.getGroup());
+			values.put(CachedValue.ORDER, statistic.getOrder());
 			bulkValues[position++] = values;
 		}
 		resolver.bulkInsert(CacheTable.BASE_URI, bulkValues);
@@ -232,11 +234,11 @@ public class VehicleStatisticsActivity extends Activity {
 					}
 
 					double economy = Calculator.averageEconomy(vehicle, fillup);
-					if (economy > maxEconomy) {
+					if (Calculator.isBetterEconomy(vehicle, economy, maxEconomy)) {
 						maxEconomy = economy;
 						update(Statistics.MAX_ECONOMY, maxEconomy);
 					}
-					if (economy < minEconomy) {
+					if (!Calculator.isBetterEconomy(vehicle, economy, minEconomy)) {
 						minEconomy = economy;
 						update(Statistics.MIN_ECONOMY, minEconomy);
 					}

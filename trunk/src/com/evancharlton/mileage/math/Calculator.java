@@ -81,6 +81,22 @@ public class Calculator {
 		return averageEconomy(vehicle, new FillupSeries(fillup.getPrevious(), fillup));
 	}
 
+	/**
+	 * @param vehicle
+	 * @param first
+	 * @param second
+	 * @return true if first is BETTER than second
+	 */
+	public static boolean isBetterEconomy(Vehicle vehicle, double first, double second) {
+		switch (vehicle.getEconomyUnits()) {
+			case GALLONS_PER_100KM:
+			case LITRES_PER_100KM:
+			case IMP_GAL_PER_100KM:
+				return first < second;
+		}
+		return first > second;
+	}
+
 	public static double averageEconomy(Vehicle vehicle, FillupSeries series) {
 		// ALL CALCULATIONS ARE DONE IN MPG AND CONVERTED LATER
 		double miles = convert(series.getTotalDistance(), vehicle.getDistanceUnits(), MI);

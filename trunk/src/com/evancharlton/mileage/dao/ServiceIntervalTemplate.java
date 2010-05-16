@@ -16,15 +16,15 @@ public class ServiceIntervalTemplate extends Dao {
 	public static final String VEHICLE_TYPE = "vehicle_type";
 
 	@Column(type = Column.STRING, name = TITLE)
-	protected String mTitle = null;
+	protected String mTitle;
 	@Column(type = Column.STRING, name = DESCRIPTION)
-	protected String mDescription = null;
+	protected String mDescription;
 	@Column(type = Column.LONG, name = DISTANCE)
-	protected long mDistance = 0L;
+	protected long mDistance;
 	@Column(type = Column.LONG, name = DURATION)
-	protected long mDuration = 0L;
+	protected long mDuration;
 	@Column(type = Column.LONG, name = VEHICLE_TYPE)
-	protected long mVehicleTypeId = 0L;
+	protected long mVehicleTypeId;
 
 	public ServiceIntervalTemplate(ContentValues values) {
 		super(values);

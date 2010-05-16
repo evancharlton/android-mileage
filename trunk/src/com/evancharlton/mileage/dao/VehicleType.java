@@ -13,9 +13,9 @@ public class VehicleType extends Dao {
 	public static final String DESCRIPTION = "description";
 
 	@Column(type = Column.STRING, name = TITLE)
-	protected String mTitle = null;
+	protected String mTitle;
 	@Column(type = Column.STRING, name = DESCRIPTION)
-	protected String mDescription = null;
+	protected String mDescription;
 
 	public VehicleType(ContentValues values) {
 		super(values);

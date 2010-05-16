@@ -29,7 +29,7 @@ public abstract class Dao {
 	public static final String _ID = "_id";
 
 	@Column(type = Column.LONG, name = _ID)
-	private long mId = 0L;
+	private long mId;
 
 	private Uri mUriBase = null;
 

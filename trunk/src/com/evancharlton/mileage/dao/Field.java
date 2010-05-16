@@ -14,11 +14,11 @@ public class Field extends Dao {
 	public static final String TYPE = "type"; // only text for now
 
 	@Column(type = Column.STRING, name = TITLE)
-	protected String mTitle = null;
+	protected String mTitle;
 	@Column(type = Column.STRING, name = DESCRIPTION)
-	protected String mDescription = null;
+	protected String mDescription;
 	@Column(type = Column.STRING, name = TYPE)
-	protected String mType = null; // TODO: Implement this in a future release.
+	protected String mType; // TODO: Implement this in a future release.
 
 	public Field(ContentValues values) {
 		super(values);

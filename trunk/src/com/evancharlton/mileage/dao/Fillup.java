@@ -27,27 +27,27 @@ public class Fillup extends Dao {
 	public static final String ECONOMY = "economy";
 
 	@Column(type = Column.INTEGER, name = VEHICLE_ID)
-	protected long mVehicleId = 0L;
+	protected long mVehicleId;
 	@Column(type = Column.DOUBLE, name = ODOMETER)
-	protected double mOdometer = 0L;
+	protected double mOdometer;
 	@Column(type = Column.TIMESTAMP, name = DATE)
-	protected long mTimestamp = 0L;
+	protected long mTimestamp;
 	@Column(type = Column.DOUBLE, name = VOLUME)
-	protected double mVolume = 0D;
+	protected double mVolume;
 	@Column(type = Column.DOUBLE, name = UNIT_PRICE)
-	protected double mUnitPrice = 0D;
+	protected double mUnitPrice;
 	@Column(type = Column.DOUBLE, name = TOTAL_COST)
-	protected double mTotalCost = 0D;
+	protected double mTotalCost;
 	@Column(type = Column.BOOLEAN, name = PARTIAL)
-	protected boolean mIsPartial = false;
+	protected boolean mIsPartial;
 	@Column(type = Column.BOOLEAN, name = RESTART)
-	protected boolean mIsRestart = false;
+	protected boolean mIsRestart;
 	@Column(type = Column.DOUBLE, name = ECONOMY)
-	protected double mEconomy = 0D;
+	protected double mEconomy;
 	@Column(type = Column.DOUBLE, name = LATITUDE)
-	protected double mLatitude = 0D;
+	protected double mLatitude;
 	@Column(type = Column.DOUBLE, name = LONGITUDE)
-	protected double mLongitude = 0D;
+	protected double mLongitude;
 
 	private List<FillupField> mFields = null;
 	private Fillup mNext = null;

@@ -17,17 +17,17 @@ public class CachedValue extends Dao {
 	public static final String ORDER = "statistics_order";
 
 	@Column(type = Column.STRING, name = ITEM)
-	protected String mItem = null;
+	protected String mItem;
 	@Column(type = Column.STRING, name = KEY)
-	protected String mKey = null;
+	protected String mKey;
 	@Column(type = Column.DOUBLE, name = VALUE)
-	protected double mValue = 0D;
+	protected double mValue;
 	@Column(type = Column.BOOLEAN, name = VALID)
-	protected boolean mIsValid = false;
-	@Column(type = Column.LONG, name = GROUP)
-	protected long mGroup = 0;
-	@Column(type = Column.LONG, name = ORDER)
-	protected long mOrder = 0;
+	protected boolean mIsValid;
+	@Column(type = Column.LONG, name = GROUP, value = 0)
+	protected long mGroup;
+	@Column(type = Column.LONG, name = ORDER, value = 0)
+	protected long mOrder;
 
 	public CachedValue(String key) {
 		this(new ContentValues());

@@ -26,19 +26,19 @@ public class Vehicle extends Dao {
 	public static final String PREF_CURRENCY = "currency_units";
 
 	@Column(type = Column.STRING, name = TITLE)
-	protected String mTitle = null;
+	protected String mTitle;
 	@Column(type = Column.STRING, name = DESCRIPTION)
-	protected String mDescription = null;
+	protected String mDescription;
 	@Column(type = Column.STRING, name = YEAR)
-	protected String mYear = null;
+	protected String mYear;
 	@Column(type = Column.STRING, name = MAKE)
-	protected String mMake = null;
+	protected String mMake;
 	@Column(type = Column.STRING, name = MODEL)
-	protected String mModel = null;
+	protected String mModel;
 	@Column(type = Column.LONG, name = TITLE)
-	protected long mVehicleType = 0L;
+	protected long mVehicleType;
 	@Column(type = Column.LONG, name = TITLE)
-	protected long mDefaultTime = 0L;
+	protected long mDefaultTime;
 	@Column(type = Column.INTEGER, name = PREF_DISTANCE_UNITS, value = Calculator.MI)
 	protected int mPrefDistanceUnits;
 	@Column(type = Column.INTEGER, name = PREF_VOLUME_UNITS, value = Calculator.GALLONS)

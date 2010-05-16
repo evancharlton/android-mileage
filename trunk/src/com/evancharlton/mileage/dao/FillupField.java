@@ -16,11 +16,11 @@ public class FillupField extends Dao {
 	public static final String VALUE = "value";
 
 	@Column(type = Column.LONG, name = TEMPLATE_ID)
-	protected long mTemplateId = 0L;
+	protected long mTemplateId;
 	@Column(type = Column.LONG, name = FILLUP_ID)
-	protected long mFillupId = 0L;
+	protected long mFillupId;
 	@Column(type = Column.STRING, name = VALUE)
-	protected String mValue = null;
+	protected String mValue;
 
 	public FillupField(ContentValues values) {
 		super(values);

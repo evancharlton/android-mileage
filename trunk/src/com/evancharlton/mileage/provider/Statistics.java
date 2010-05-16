@@ -93,8 +93,16 @@ public final class Statistics {
 			mValue.setGroup(group);
 		}
 
+		public long getGroup() {
+			return mValue.getGroup();
+		}
+
 		public void setOrder(long order) {
 			mValue.setOrder(order);
+		}
+
+		public long getOrder() {
+			return mValue.getOrder();
 		}
 
 		@Override
