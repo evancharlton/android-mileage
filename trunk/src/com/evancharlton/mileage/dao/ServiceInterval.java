@@ -1,14 +1,13 @@
 package com.evancharlton.mileage.dao;
 
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.net.Uri;
 
 import com.evancharlton.mileage.R;
-import com.evancharlton.mileage.provider.FillUpsProvider;
+import com.evancharlton.mileage.dao.Dao.DataObject;
 import com.evancharlton.mileage.provider.tables.ServiceIntervalsTable;
 
+@DataObject(path = ServiceIntervalsTable.URI)
 public class ServiceInterval extends Dao {
 	public static final String TITLE = "title";
 	public static final String DESCRIPTION = "description";
@@ -32,30 +31,8 @@ public class ServiceInterval extends Dao {
 		super(values);
 	}
 
-	@Override
-	public void load(Cursor cursor) {
-		super.load(cursor);
-
-		mTitle = getString(cursor, TITLE);
-		mDescription = getString(cursor, DESCRIPTION);
-		mStartDate = getLong(cursor, START_DATE);
-		mStartOdometer = getDouble(cursor, START_ODOMETER);
-		mVehicleId = getLong(cursor, VEHICLE_ID);
-		mTemplateId = getLong(cursor, TEMPLATE_ID);
-		mDuration = getLong(cursor, DURATION);
-		mDistance = getLong(cursor, DISTANCE);
-	}
-
-	@Override
-	protected Uri getUri() {
-		Uri base = FillUpsProvider.BASE_URI;
-		if (isExistingObject()) {
-			base = Uri.withAppendedPath(base, ServiceIntervalsTable.SERVICE_INTERVAL_URI);
-			base = ContentUris.withAppendedId(base, getId());
-		} else {
-			base = Uri.withAppendedPath(base, ServiceIntervalsTable.SERVICE_INTERVALS_URI);
-		}
-		return base;
+	public ServiceInterval(Cursor cursor) {
+		super(cursor);
 	}
 
 	@Override

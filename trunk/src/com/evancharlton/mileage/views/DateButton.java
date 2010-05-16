@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.WindowManager.BadTokenException;
 import android.widget.Button;
 import android.widget.DatePicker;
 
@@ -70,7 +71,11 @@ public class DateButton extends Button {
 		setDate(icicle.getLong("timestamp", System.currentTimeMillis()));
 		if (mDialog != null) {
 			mDialog.setCallback(mDateSetCallback);
-			mDialog.show();
+			try {
+				mDialog.show();
+			} catch (BadTokenException e) {
+				// TODO silently fail?
+			}
 		}
 	}
 

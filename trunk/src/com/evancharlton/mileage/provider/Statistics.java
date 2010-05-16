@@ -8,10 +8,6 @@ import com.evancharlton.mileage.dao.CachedValue;
 
 public final class Statistics {
 	public enum Vehicle {
-		TOTAL_FUEL, MIN_FUEL, MAX_FUEL, FUEL_PER_YEAR,
-
-		TOTAL_COST, COST_LAST_MONTH, COST_LAST_YEAR,
-
 		FARTHEST_NORTH, FARTHEST_SOUTH, FARTHEST_EAST, FARTHEST_WEST
 	}
 
@@ -34,29 +30,37 @@ public final class Statistics {
 	public static final Statistic MIN_COST = new Statistic(R.string.stat_min_cost, new CachedValue("minimum_cost"));
 	public static final Statistic MAX_COST = new Statistic(R.string.stat_max_cost, new CachedValue("maximum_cost"));
 	public static final Statistic TOTAL_COST = new Statistic(R.string.stat_total_cost, new CachedValue("total_cost"));
-	public static final StatisticsGroup COSTS = new StatisticsGroup(R.string.stat_fillup_cost, AVG_COST, MIN_COST, MAX_COST);
+	public static final Statistic MONTHLY_COST = new Statistic(R.string.stat_month_cost, new CachedValue("monthly_cost"));
+	public static final Statistic YEARLY_COST = new Statistic(R.string.stat_year_cost, new CachedValue("yearly_cost"));
+	public static final StatisticsGroup COSTS = new StatisticsGroup(R.string.stat_fillup_cost, AVG_COST, MIN_COST, MAX_COST, TOTAL_COST,
+			MONTHLY_COST, YEARLY_COST);
 
-	// public static final Statistic AVG_COST_PER_DISTANCE = new
-	// Statistic(R.string.stat_avg_cost_per_distance, new CachedValue(
-	// "average_cost_per_distance"));
-	// public static final Statistic MIN_COST_PER_DISTANCE = new
-	// Statistic(R.string.stat_min_cost_per_distance, new CachedValue(
-	// "minimum_cost_per_distance"));
-	// public static final Statistic MAX_COST_PER_DISTANCE = new
-	// Statistic(R.string.stat_max_cost_per_distance, new CachedValue(
-	// "maximum_cost_per_distance"));
-	// public static final StatisticsGroup COSTS_PER_DISTANCE = new
-	// StatisticsGroup(R.string.stat_cost_per_distance, AVG_COST_PER_DISTANCE,
-	// MIN_COST_PER_DISTANCE, MAX_COST_PER_DISTANCE);
-	//
-	// public static final Statistic AVG_PRICE = new
-	// Statistic(R.string.stat_avg_price, new CachedValue("average_price"));
-	// public static final Statistic MIN_PRICE = new
-	// Statistic(R.string.stat_min_price, new CachedValue("minimum_price"));
-	// public static final Statistic MAX_PRICE = new
-	// Statistic(R.string.stat_max_price, new CachedValue("maximum_price"));
-	// public static final StatisticsGroup PRICES = new
-	// StatisticsGroup(R.string.stat_price, AVG_PRICE, MIN_PRICE, MAX_PRICE);
+	public static final Statistic AVG_COST_PER_DISTANCE = new Statistic(R.string.stat_avg_cost_per_distance, new CachedValue(
+			"average_cost_per_distance"));
+	public static final Statistic MIN_COST_PER_DISTANCE = new Statistic(R.string.stat_min_cost_per_distance, new CachedValue(
+			"minimum_cost_per_distance"));
+	public static final Statistic MAX_COST_PER_DISTANCE = new Statistic(R.string.stat_max_cost_per_distance, new CachedValue(
+			"maximum_cost_per_distance"));
+	public static final StatisticsGroup COSTS_PER_DISTANCE = new StatisticsGroup(R.string.stat_cost_per_distance, AVG_COST_PER_DISTANCE,
+			MIN_COST_PER_DISTANCE, MAX_COST_PER_DISTANCE);
+
+	public static final Statistic AVG_PRICE = new Statistic(R.string.stat_avg_price, new CachedValue("average_price"));
+	public static final Statistic MIN_PRICE = new Statistic(R.string.stat_min_price, new CachedValue("minimum_price"));
+	public static final Statistic MAX_PRICE = new Statistic(R.string.stat_max_price, new CachedValue("maximum_price"));
+	public static final StatisticsGroup PRICES = new StatisticsGroup(R.string.stat_price, AVG_PRICE, MIN_PRICE, MAX_PRICE);
+
+	public static final Statistic MIN_FUEL = new Statistic(R.string.stat_min_fuel, new CachedValue("minimum_fuel"));
+	public static final Statistic MAX_FUEL = new Statistic(R.string.stat_max_fuel, new CachedValue("maximum_fuel"));
+	public static final Statistic AVG_FUEL = new Statistic(R.string.stat_avg_fuel, new CachedValue("average_fuel"));
+	public static final Statistic TOTAL_FUEL = new Statistic(R.string.stat_total_fuel, new CachedValue("total_fuel"));
+	public static final Statistic FUEL_PER_YEAR = new Statistic(R.string.stat_fuel_per_year, new CachedValue("fuel_per_year"));
+	public static final StatisticsGroup VOLUMES = new StatisticsGroup(R.string.stat_fuel, MIN_FUEL, MAX_FUEL, AVG_FUEL, TOTAL_FUEL, FUEL_PER_YEAR);
+
+	public static final Statistic NORTH = new Statistic(R.string.stat_north, new CachedValue("north"));
+	public static final Statistic SOUTH = new Statistic(R.string.stat_south, new CachedValue("south"));
+	public static final Statistic EAST = new Statistic(R.string.stat_east, new CachedValue("east"));
+	public static final Statistic WEST = new Statistic(R.string.stat_west, new CachedValue("west"));
+	public static final StatisticsGroup LOCATION = new StatisticsGroup(R.string.stat_location, NORTH, SOUTH, EAST, WEST);
 
 	public static class Statistic {
 		private final int mLabel;
@@ -84,6 +88,19 @@ public final class Statistics {
 		public String getKey() {
 			return mValue.getKey();
 		}
+
+		public void setGroup(long group) {
+			mValue.setGroup(group);
+		}
+
+		public void setOrder(long order) {
+			mValue.setOrder(order);
+		}
+
+		@Override
+		public String toString() {
+			return mValue.getKey() + " - " + mValue.getValue();
+		}
 	}
 
 	public static class StatisticsGroup {
@@ -91,12 +108,15 @@ public final class Statistics {
 		private final int mLabel;
 
 		public StatisticsGroup(int label, Statistic... statistics) {
+			GROUPS.add(this);
 			final int length = statistics.length;
+			int group = GROUPS.size();
 			for (int i = 0; i < length; i++) {
+				statistics[i].setGroup(group);
+				statistics[i].setOrder(i + 1);
 				mStatistics.add(statistics[i]);
 			}
 			mLabel = label;
-			GROUPS.add(this);
 		}
 
 		public int getLabel() {

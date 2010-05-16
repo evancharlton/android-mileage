@@ -7,6 +7,8 @@ import android.database.Cursor;
 public class FillupSeries extends ArrayList<Fillup> {
 	private static final long serialVersionUID = 5304523564485608182L;
 
+	private double mTotalCost = 0D;
+
 	public FillupSeries(Fillup... fillups) {
 		final int length = fillups.length;
 		Fillup previous = null;
@@ -19,17 +21,20 @@ public class FillupSeries extends ArrayList<Fillup> {
 			current.setPrevious(previous);
 			super.add(current);
 			previous = current;
+
+			mTotalCost += current.getTotalCost();
 		}
 	}
 
 	@Override
 	public boolean add(Fillup fillup) {
 		if (size() > 0) {
-			Fillup last = get(size() - 1);
-			last.setNext(fillup);
-			fillup.setPrevious(last);
+			last().setNext(fillup);
+			fillup.setPrevious(last());
 		}
 		super.add(fillup);
+
+		mTotalCost += fillup.getTotalCost();
 		return true;
 	}
 
@@ -37,7 +42,7 @@ public class FillupSeries extends ArrayList<Fillup> {
 		final int size = size();
 		if (size >= 2) {
 			// TODO: will this work for partials? check the edge case here
-			return Math.abs(get(size - 1).getOdometer() - get(0).getOdometer());
+			return Math.abs(last().getOdometer() - first().getOdometer());
 		}
 		return 0D;
 	}
@@ -46,12 +51,17 @@ public class FillupSeries extends ArrayList<Fillup> {
 		return getEconomyVolume() + get(0).getVolume();
 	}
 
+	public long getTimeRange() {
+		return last().getTimestamp() - first().getTimestamp();
+	}
+
 	/**
 	 * Gets the sum of all the volume values except for the first one, since
 	 * it's not used in the calculation of fuel economy.
 	 * 
 	 * @return
 	 */
+	// TODO: cache
 	public double getEconomyVolume() {
 		final int size = size();
 		double total = 0D;
@@ -59,6 +69,18 @@ public class FillupSeries extends ArrayList<Fillup> {
 			total += get(i).getVolume();
 		}
 		return total;
+	}
+
+	public double getTotalCost() {
+		return mTotalCost;
+	}
+
+	private Fillup first() {
+		return get(0);
+	}
+
+	private Fillup last() {
+		return get(size() - 1);
 	}
 
 	/**

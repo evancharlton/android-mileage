@@ -38,7 +38,7 @@ public class VehicleTypeListActivity extends BaseListActivity {
 
 	@Override
 	protected Uri getUri() {
-		return Uri.withAppendedPath(FillUpsProvider.BASE_URI, VehicleTypesTable.TYPES_URI);
+		return Uri.withAppendedPath(FillUpsProvider.BASE_URI, VehicleTypesTable.URI);
 	}
 
 	@Override

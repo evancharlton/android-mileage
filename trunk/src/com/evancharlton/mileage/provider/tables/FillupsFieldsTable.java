@@ -52,11 +52,6 @@ public class FillupsFieldsTable extends ContentTable {
 	}
 
 	@Override
-	public String create() {
-		return new TableBuilder().addInteger(FillupField.FILLUP_ID).addInteger(FillupField.TEMPLATE_ID).addText(FillupField.VALUE).build();
-	}
-
-	@Override
 	public int delete(SQLiteDatabase db, Uri uri, String selection, String[] selectionArgs) {
 		// TODO Auto-generated method stub
 		return 0;

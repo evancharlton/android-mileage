@@ -2,15 +2,16 @@ package com.evancharlton.mileage.dao;
 
 import java.util.List;
 
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 
 import com.evancharlton.mileage.R;
+import com.evancharlton.mileage.dao.Dao.DataObject;
 import com.evancharlton.mileage.provider.tables.FillupsTable;
 
+@DataObject(path = FillupsTable.URI)
 public class Fillup extends Dao {
 	public static final String TOTAL_COST = "total_cost";
 	public static final String UNIT_PRICE = "price";
@@ -25,55 +26,59 @@ public class Fillup extends Dao {
 	public static final String RESTART = "restart";
 	public static final String ECONOMY = "economy";
 
-	private long mVehicleId = 0L;
-	private double mOdometer = 0L;
-	private long mTimestamp = 0L;
-	private double mVolume = 0D;
-	private double mUnitPrice = 0D;
-	private double mTotalCost = 0D;
+	@Column(type = Column.INTEGER, name = VEHICLE_ID)
+	protected long mVehicleId = 0L;
+	@Column(type = Column.DOUBLE, name = ODOMETER)
+	protected double mOdometer = 0L;
+	@Column(type = Column.TIMESTAMP, name = DATE)
+	protected long mTimestamp = 0L;
+	@Column(type = Column.DOUBLE, name = VOLUME)
+	protected double mVolume = 0D;
+	@Column(type = Column.DOUBLE, name = UNIT_PRICE)
+	protected double mUnitPrice = 0D;
+	@Column(type = Column.DOUBLE, name = TOTAL_COST)
+	protected double mTotalCost = 0D;
+	@Column(type = Column.BOOLEAN, name = PARTIAL)
+	protected boolean mIsPartial = false;
+	@Column(type = Column.BOOLEAN, name = RESTART)
+	protected boolean mIsRestart = false;
+	@Column(type = Column.DOUBLE, name = ECONOMY)
+	protected double mEconomy = 0D;
+	@Column(type = Column.DOUBLE, name = LATITUDE)
+	protected double mLatitude = 0D;
+	@Column(type = Column.DOUBLE, name = LONGITUDE)
+	protected double mLongitude = 0D;
+
 	private List<FillupField> mFields = null;
-	private boolean mIsPartial = false;
 	private Fillup mNext = null;
 	private Fillup mPrevious = null;
-	private boolean mIsRestart = false;
-	private double mEconomy = 0D;
 
 	public Fillup(ContentValues contentValues) {
 		super(contentValues);
 	}
 
 	public Fillup(Cursor cursor) {
-		this(new ContentValues());
-		load(cursor);
+		super(cursor);
 	}
 
-	@Override
-	protected Uri getUri() {
-		Uri base = FillupsTable.BASE_URI;
-		if (isExistingObject()) {
-			return ContentUris.withAppendedId(base, getId());
-		}
-		return base;
-	}
-
-	@Override
-	public void load(Cursor cursor) {
-		super.load(cursor);
-		mVehicleId = getLong(cursor, VEHICLE_ID);
-		mOdometer = getLong(cursor, ODOMETER);
-		mTimestamp = getLong(cursor, DATE);
-		mVolume = getDouble(cursor, VOLUME);
-		mUnitPrice = getDouble(cursor, UNIT_PRICE);
-		mIsPartial = getBoolean(cursor, PARTIAL);
-		mIsRestart = getBoolean(cursor, RESTART);
-		// should the economy be stored in the cache table? I say no because the
-		// added performance benefit of being able to load this oft-used field
-		// from the same table will outweigh the ugliness of putting calculated
-		// fields in here. Things to watch out for:
-		// - when changing a vehicle's unit preferences, invalidate the field
-		// - when editing a field before it, invalidate the field (partials)
-		mEconomy = getDouble(cursor, ECONOMY);
-	}
+	// @Override
+	// public void load(Cursor cursor) {
+	// super.load(cursor);
+	// mVehicleId = getLong(cursor, VEHICLE_ID);
+	// mOdometer = getLong(cursor, ODOMETER);
+	// mTimestamp = getLong(cursor, DATE);
+	// mVolume = getDouble(cursor, VOLUME);
+	// mUnitPrice = getDouble(cursor, UNIT_PRICE);
+	// mIsPartial = getBoolean(cursor, PARTIAL);
+	// mIsRestart = getBoolean(cursor, RESTART);
+	// // should the economy be stored in the cache table? I say no because the
+	// // added performance benefit of being able to load this oft-used field
+	// // from the same table will outweigh the ugliness of putting calculated
+	// // fields in here. Things to watch out for:
+	// // - when changing a vehicle's unit preferences, invalidate the field
+	// // - when editing a field before it, invalidate the field (partials)
+	// mEconomy = getDouble(cursor, ECONOMY);
+	// }
 
 	@Override
 	protected void validate(ContentValues values) {
@@ -188,6 +193,13 @@ public class Fillup extends Dao {
 		return mVolume;
 	}
 
+	public double getCostPerDistance() {
+		if (hasPrevious()) {
+			return getTotalCost() / getDistance();
+		}
+		return -1D;
+	}
+
 	public boolean hasNext() {
 		return mNext != null;
 	}
@@ -202,6 +214,14 @@ public class Fillup extends Dao {
 
 	public boolean isRestart() {
 		return mIsRestart;
+	}
+
+	public double getLongitude() {
+		return mLongitude;
+	}
+
+	public double getLatitude() {
+		return mLatitude;
 	}
 
 	public void setEconomy(double economy) {
@@ -250,5 +270,13 @@ public class Fillup extends Dao {
 
 	public void setVolume(double volume) {
 		mVolume = volume;
+	}
+
+	public void setLatitude(double latitude) {
+		mLatitude = latitude;
+	}
+
+	public void setLongitude(double longitude) {
+		mLongitude = longitude;
 	}
 }

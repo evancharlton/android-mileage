@@ -114,6 +114,8 @@
 	<string name="stat_min_cost">Minimum cost</string>
 	<string name="stat_max_cost">Maximum cost</string>
 	<string name="stat_total_cost">Total cost</string>
+	<string name="stat_month_cost">Cost last month</string>
+	<string name="stat_year_cost">Cost last year</string>
 	<string name="stat_cost_per_distance">Cost per distance</string>
 	<string name="stat_avg_cost_per_distance">Average cost per distance</string>
 	<string name="stat_min_cost_per_distance">Minimum cost per distance</string>
@@ -122,6 +124,17 @@
 	<string name="stat_avg_price">Average price</string>
 	<string name="stat_min_price">Minimum price</string>
 	<string name="stat_max_price">Maximum price</string>
+	<string name="stat_fuel">Fuel consumption</string>
+	<string name="stat_min_fuel">Smallest fillup</string>
+	<string name="stat_max_fuel">Largest fillup</string>
+	<string name="stat_avg_fuel">Average fillup</string>
+	<string name="stat_total_fuel">Total fuel</string>
+	<string name="stat_fuel_per_year">Fuel per year</string>
+	<string name="stat_location">Fillup locations</string>
+	<string name="stat_north">North</string>
+	<string name="stat_south">South</string>
+	<string name="stat_east">East</string>
+	<string name="stat_west">West</string>
 	
 	<string name="error_no_vehicle_specified">No vehicle was specified</string>
 	<string name="error_no_odometer_specified">Invalid value for odometer</string>

@@ -1,35 +1,31 @@
 package com.evancharlton.mileage.dao;
 
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.net.Uri;
 
 import com.evancharlton.mileage.R;
-import com.evancharlton.mileage.provider.FillUpsProvider;
+import com.evancharlton.mileage.dao.Dao.DataObject;
 import com.evancharlton.mileage.provider.tables.FieldsTable;
 
+@DataObject(path = FieldsTable.URI)
 public class Field extends Dao {
 	public static final String TITLE = "title";
 	public static final String DESCRIPTION = "description";
-	// for now, it's all text
-	public static final String TYPE = "type";
+	public static final String TYPE = "type"; // only text for now
 
-	private String mTitle = null;
-	private String mDescription = null;
-
-	// TODO: Implement this in a future release.
-	// private String mType = null;
+	@Column(type = Column.STRING, name = TITLE)
+	protected String mTitle = null;
+	@Column(type = Column.STRING, name = DESCRIPTION)
+	protected String mDescription = null;
+	@Column(type = Column.STRING, name = TYPE)
+	protected String mType = null; // TODO: Implement this in a future release.
 
 	public Field(ContentValues values) {
 		super(values);
 	}
 
-	@Override
-	public void load(Cursor cursor) {
-		super.load(cursor);
-		mTitle = getString(cursor, TITLE);
-		mDescription = getString(cursor, DESCRIPTION);
+	public Field(Cursor cursor) {
+		super(cursor);
 	}
 
 	@Override
@@ -50,18 +46,6 @@ public class Field extends Dao {
 		values.put(TYPE, "string");
 	}
 
-	@Override
-	protected Uri getUri() {
-		Uri base = FillUpsProvider.BASE_URI;
-		if (isExistingObject()) {
-			base = Uri.withAppendedPath(base, FieldsTable.FIELD_URI);
-			base = ContentUris.withAppendedId(base, getId());
-		} else {
-			base = Uri.withAppendedPath(base, FieldsTable.FIELDS_URI);
-		}
-		return base;
-	}
-
 	public void setTitle(String title) {
 		mTitle = title;
 	}
@@ -70,11 +54,19 @@ public class Field extends Dao {
 		mDescription = description;
 	}
 
+	public void setType(String type) {
+		mType = type;
+	}
+
 	public String getTitle() {
 		return mTitle;
 	}
 
 	public String getDescription() {
 		return mDescription;
+	}
+
+	public String getType() {
+		return mType;
 	}
 }

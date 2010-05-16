@@ -51,7 +51,7 @@ public class VehicleTypeActivity extends BaseFormActivity {
 
 	@Override
 	protected Uri getUri(long id) {
-		return ContentUris.withAppendedId(Uri.withAppendedPath(FillUpsProvider.BASE_URI, VehicleTypesTable.TYPE_URI), id);
+		return ContentUris.withAppendedId(Uri.withAppendedPath(FillUpsProvider.BASE_URI, VehicleTypesTable.URI), id);
 	}
 
 	@Override

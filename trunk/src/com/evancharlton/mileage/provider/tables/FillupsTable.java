@@ -19,8 +19,8 @@ public class FillupsTable extends ContentTable {
 	private static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.evancharlton.fillup";
 	private static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.evancharlton.fillup";
 
-	private static final String FILLUPS_URI = "fillups/";
-	public static final Uri BASE_URI = Uri.withAppendedPath(FillUpsProvider.BASE_URI, FILLUPS_URI);
+	public static final String URI = "fillups/";
+	public static final Uri BASE_URI = Uri.withAppendedPath(FillUpsProvider.BASE_URI, URI);
 
 	public static final String[] PROJECTION = new String[] {
 			Dao._ID,
@@ -44,8 +44,8 @@ public class FillupsTable extends ContentTable {
 
 	@Override
 	public void registerUris(UriMatcher uriMatcher) {
-		uriMatcher.addURI(FillUpsProvider.AUTHORITY, FILLUPS_URI, FILLUPS);
-		uriMatcher.addURI(FillUpsProvider.AUTHORITY, FILLUPS_URI + "#", FILLUP_ID);
+		uriMatcher.addURI(FillUpsProvider.AUTHORITY, URI, FILLUPS);
+		uriMatcher.addURI(FillUpsProvider.AUTHORITY, URI + "#", FILLUP_ID);
 	}
 
 	@Override
@@ -103,13 +103,6 @@ public class FillupsTable extends ContentTable {
 	@Override
 	public String init() {
 		return null;
-	}
-
-	@Override
-	public String create() {
-		return new TableBuilder().addDouble(Fillup.TOTAL_COST).addDouble(Fillup.UNIT_PRICE).addDouble(Fillup.VOLUME).addDouble(Fillup.ODOMETER)
-				.addDouble(Fillup.ECONOMY).addInteger(Fillup.VEHICLE_ID).addInteger(Fillup.DATE).addDouble(Fillup.LATITUDE).addDouble(
-						Fillup.LONGITUDE).addText(Fillup.COMMENT).addInteger(Fillup.PARTIAL).addInteger(Fillup.RESTART).toString();
 	}
 
 	@Override

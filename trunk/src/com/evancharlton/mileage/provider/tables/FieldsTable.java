@@ -21,12 +21,7 @@ public class FieldsTable extends ContentTable {
 	/**
 	 * All saved field templates
 	 */
-	public static final String FIELDS_URI = "fields";
-
-	/**
-	 * A specific field template
-	 */
-	public static final String FIELD_URI = "field/";
+	public static final String URI = "fields/";
 
 	public static String[] getFullProjectionArray() {
 		return new String[] {
@@ -45,11 +40,6 @@ public class FieldsTable extends ContentTable {
 	@Override
 	public String getTableName() {
 		return "fields";
-	}
-
-	@Override
-	public String create() {
-		return new TableBuilder().addText(Field.TITLE).addText(Field.DESCRIPTION).addText(Field.TYPE).toString();
 	}
 
 	@Override
@@ -101,8 +91,8 @@ public class FieldsTable extends ContentTable {
 
 	@Override
 	public void registerUris(UriMatcher uriMatcher) {
-		uriMatcher.addURI(FillUpsProvider.AUTHORITY, FIELDS_URI, FIELDS);
-		uriMatcher.addURI(FillUpsProvider.AUTHORITY, FIELD_URI + "#", FIELD_ID);
+		uriMatcher.addURI(FillUpsProvider.AUTHORITY, URI, FIELDS);
+		uriMatcher.addURI(FillUpsProvider.AUTHORITY, URI + "#", FIELD_ID);
 	}
 
 	@Override

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import android.content.ContentUris;
 import android.content.ContentValues;
-import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -56,8 +55,8 @@ public class FillupActivity extends BaseFormActivity {
 	protected void onResume() {
 		super.onResume();
 
-		Cursor fields = managedQuery(Uri.withAppendedPath(FillUpsProvider.BASE_URI, FieldsTable.FIELDS_URI), FieldsTable.getFullProjectionArray(),
-				null, null, null);
+		Cursor fields = managedQuery(Uri.withAppendedPath(FillUpsProvider.BASE_URI, FieldsTable.URI), FieldsTable.getFullProjectionArray(), null,
+				null, null);
 		LayoutInflater inflater = LayoutInflater.from(this);
 		mFieldsContainer.removeAllViews();
 		while (fields.moveToNext()) {
@@ -114,12 +113,7 @@ public class FillupActivity extends BaseFormActivity {
 		if (getParent() == null) {
 			finish();
 		} else {
-			startActivity(new Intent(this, FillupListActivity.class));
-			// reset the UI
-			mOdometer.setText("");
-			mVolume.setText("");
-			mPrice.setText("");
-			mPartial.setChecked(false);
+			onCreate(null);
 		}
 	}
 

@@ -1,16 +1,17 @@
 package com.evancharlton.mileage.dao;
 
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 
 import com.evancharlton.mileage.R;
+import com.evancharlton.mileage.dao.Dao.DataObject;
 import com.evancharlton.mileage.math.Calculator;
 import com.evancharlton.mileage.provider.tables.FillupsTable;
 import com.evancharlton.mileage.provider.tables.VehiclesTable;
 
+@DataObject(path = VehiclesTable.VEHICLES_URI)
 public class Vehicle extends Dao {
 	public static final String TITLE = "title";
 	public static final String DESCRIPTION = "description";
@@ -24,56 +25,33 @@ public class Vehicle extends Dao {
 	public static final String PREF_ECONOMY_UNITS = "economy_units";
 	public static final String PREF_CURRENCY = "currency_units";
 
-	private String mTitle = null;
-	private String mDescription = null;
-	private String mYear = null;
-	private String mMake = null;
-	private String mModel = null;
-	private long mVehicleType = 0L;
-	private long mDefaultTime = 0L;
-	private int mPrefDistanceUnits = Calculator.MI;
-	private int mPrefVolumeUnits = Calculator.GALLONS;
-	private int mPrefEconomyUnits = Calculator.MI_PER_GALLON;
+	@Column(type = Column.STRING, name = TITLE)
+	protected String mTitle = null;
+	@Column(type = Column.STRING, name = DESCRIPTION)
+	protected String mDescription = null;
+	@Column(type = Column.STRING, name = YEAR)
+	protected String mYear = null;
+	@Column(type = Column.STRING, name = MAKE)
+	protected String mMake = null;
+	@Column(type = Column.STRING, name = MODEL)
+	protected String mModel = null;
+	@Column(type = Column.LONG, name = TITLE)
+	protected long mVehicleType = 0L;
+	@Column(type = Column.LONG, name = TITLE)
+	protected long mDefaultTime = 0L;
+	@Column(type = Column.INTEGER, name = PREF_DISTANCE_UNITS, value = Calculator.MI)
+	protected int mPrefDistanceUnits;
+	@Column(type = Column.INTEGER, name = PREF_VOLUME_UNITS, value = Calculator.GALLONS)
+	protected int mPrefVolumeUnits;
+	@Column(type = Column.INTEGER, name = PREF_ECONOMY_UNITS, value = Calculator.MI_PER_GALLON)
+	protected int mPrefEconomyUnits;
 
 	public Vehicle(ContentValues values) {
 		super(values);
-		// TODO: Finish loading
-		mPrefDistanceUnits = getInt(values, PREF_DISTANCE_UNITS, Calculator.MI);
-		mPrefVolumeUnits = getInt(values, PREF_VOLUME_UNITS, Calculator.GALLONS);
-		mPrefEconomyUnits = getInt(values, PREF_ECONOMY_UNITS, Calculator.MI_PER_GALLON);
 	}
 
 	public Vehicle(Cursor cursor) {
 		super(cursor);
-		load(cursor);
-	}
-
-	@Override
-	public void load(Cursor cursor) {
-		super.load(cursor);
-		mTitle = getString(cursor, TITLE);
-		mDescription = getString(cursor, DESCRIPTION);
-		mYear = getString(cursor, YEAR);
-		mMake = getString(cursor, MAKE);
-		mModel = getString(cursor, MODEL);
-		mVehicleType = getLong(cursor, VEHICLE_TYPE);
-		mDefaultTime = getLong(cursor, DEFAULT_TIME);
-
-		// build the preferences
-		mPrefDistanceUnits = getInt(cursor, PREF_DISTANCE_UNITS);
-		mPrefVolumeUnits = getInt(cursor, PREF_VOLUME_UNITS);
-		mPrefEconomyUnits = getInt(cursor, PREF_ECONOMY_UNITS);
-	}
-
-	@Override
-	// getUri is public here because then we can use this as the "item" field in
-	// the statistics cache
-	public Uri getUri() {
-		Uri base = VehiclesTable.BASE_URI;
-		if (isExistingObject()) {
-			return ContentUris.withAppendedId(base, getId());
-		}
-		return base;
 	}
 
 	@Override

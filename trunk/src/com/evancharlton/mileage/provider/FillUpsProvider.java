@@ -78,9 +78,15 @@ public class FillUpsProvider extends ContentProvider {
 		public void onCreate(SQLiteDatabase db) {
 			Log.d(TAG, "Creating database");
 			for (ContentTable table : TABLES) {
-				String sql = table.create();
-				if (sql != null) {
-					db.execSQL(sql);
+				try {
+					String sql = table.create();
+					if (sql != null) {
+						db.execSQL(sql);
+					}
+				} catch (IllegalArgumentException e) {
+					Log.e("DatabaseHelper", "Could not create table", e);
+				} catch (IllegalAccessException e) {
+					Log.e("DatabaseHelper", "Could not create table", e);
 				}
 			}
 

@@ -14,8 +14,8 @@ public class CacheTable extends ContentTable {
 	private static final int CACHES = 80;
 	private static final int CACHE_ID = 81;
 
-	private static final String CACHE_PATH = "cache/";
-	public static final Uri BASE_URI = Uri.withAppendedPath(FillUpsProvider.BASE_URI, CACHE_PATH);
+	public static final String URI = "cache/";
+	public static final Uri BASE_URI = Uri.withAppendedPath(FillUpsProvider.BASE_URI, URI);
 
 	private static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.evancharlton.statistics";
 	private static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.evancharlton.statistic";
@@ -25,13 +25,14 @@ public class CacheTable extends ContentTable {
 			CachedValue.ITEM,
 			CachedValue.KEY,
 			CachedValue.VALUE,
-			CachedValue.VALID
+			CachedValue.VALID,
+			CachedValue.GROUP,
+			CachedValue.ORDER
 	};
 
 	@Override
-	public String create() {
-		return new TableBuilder().addText(CachedValue.ITEM).addText(CachedValue.KEY).addDouble(CachedValue.VALUE).addInteger(CachedValue.VALID)
-				.build();
+	protected Class<? extends Dao> getDao() {
+		return CachedValue.class;
 	}
 
 	@Override
@@ -84,8 +85,8 @@ public class CacheTable extends ContentTable {
 
 	@Override
 	public void registerUris(UriMatcher uriMatcher) {
-		uriMatcher.addURI(FillUpsProvider.AUTHORITY, CACHE_PATH, CACHES);
-		uriMatcher.addURI(FillUpsProvider.AUTHORITY, CACHE_PATH + "#", CACHE_ID);
+		uriMatcher.addURI(FillUpsProvider.AUTHORITY, URI, CACHES);
+		uriMatcher.addURI(FillUpsProvider.AUTHORITY, URI + "#", CACHE_ID);
 	}
 
 	@Override

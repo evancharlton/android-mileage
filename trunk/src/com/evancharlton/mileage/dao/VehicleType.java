@@ -1,42 +1,28 @@
 package com.evancharlton.mileage.dao;
 
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.net.Uri;
 
 import com.evancharlton.mileage.R;
-import com.evancharlton.mileage.provider.FillUpsProvider;
+import com.evancharlton.mileage.dao.Dao.DataObject;
 import com.evancharlton.mileage.provider.tables.VehicleTypesTable;
 
+@DataObject(path = VehicleTypesTable.URI)
 public class VehicleType extends Dao {
 	public static final String TITLE = "title";
 	public static final String DESCRIPTION = "description";
 
-	private String mTitle = null;
-	private String mDescription = null;
+	@Column(type = Column.STRING, name = TITLE)
+	protected String mTitle = null;
+	@Column(type = Column.STRING, name = DESCRIPTION)
+	protected String mDescription = null;
 
 	public VehicleType(ContentValues values) {
 		super(values);
 	}
 
-	@Override
-	public void load(Cursor cursor) {
-		super.load(cursor);
-		mTitle = getString(cursor, TITLE);
-		mDescription = getString(cursor, DESCRIPTION);
-	}
-
-	@Override
-	protected Uri getUri() {
-		Uri base = FillUpsProvider.BASE_URI;
-		if (isExistingObject()) {
-			base = Uri.withAppendedPath(base, VehicleTypesTable.TYPE_URI);
-			base = ContentUris.withAppendedId(base, getId());
-		} else {
-			base = Uri.withAppendedPath(base, VehicleTypesTable.TYPES_URI);
-		}
-		return base;
+	public VehicleType(Cursor cursor) {
+		super(cursor);
 	}
 
 	@Override

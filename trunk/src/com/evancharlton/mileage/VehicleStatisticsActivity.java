@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -47,7 +48,11 @@ public class VehicleStatisticsActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.vehicle_statistics);
 
-		mCalculationTask = (CalculateTask) getLastNonConfigurationInstance();
+		Object[] saved = (Object[]) getLastNonConfigurationInstance();
+		if (saved != null) {
+			mCalculationTask = (CalculateTask) saved[0];
+			mAdapter = (SimpleCursorAdapter) saved[1];
+		}
 		if (mCalculationTask != null) {
 			mCalculationTask.activity = this;
 		}
@@ -65,28 +70,29 @@ public class VehicleStatisticsActivity extends Activity {
 			populateCache(Statistics.STATISTICS, false);
 			// kick off the task
 			calculate();
-		} else {
-			setAdapter(c);
 		}
+		setAdapter(c);
 	}
 
 	private Cursor getCursor() {
 		return managedQuery(CacheTable.BASE_URI, CacheTable.PROJECTION, CachedValue.ITEM + " = ? and " + CachedValue.VALID + " = ?", new String[] {
 				String.valueOf(mVehicle.getId()),
 				"1"
-		}, null);
+		}, CachedValue.GROUP + " asc, " + CachedValue.ORDER + " asc");
 	}
 
 	private void setAdapter(Cursor c) {
-		String[] from = new String[] {
-				CachedValue.KEY,
-				CachedValue.VALUE
-		};
-		int[] to = new int[] {
-				R.id.label,
-				R.id.value
-		};
-		mAdapter = new SimpleCursorAdapter(this, R.layout.statistic, c, from, to);
+		if (mAdapter == null) {
+			String[] from = new String[] {
+					CachedValue.KEY,
+					CachedValue.VALUE
+			};
+			int[] to = new int[] {
+					R.id.label,
+					R.id.value
+			};
+			mAdapter = new SimpleCursorAdapter(this, R.layout.statistic, c, from, to);
+		}
 		mAdapter.setViewBinder(mViewBinder);
 		mListView.setAdapter(mAdapter);
 	}
@@ -99,7 +105,10 @@ public class VehicleStatisticsActivity extends Activity {
 
 	@Override
 	public Object onRetainNonConfigurationInstance() {
-		return mCalculationTask;
+		return new Object[] {
+				mCalculationTask,
+				mAdapter
+		};
 	}
 
 	@Override
@@ -127,9 +136,19 @@ public class VehicleStatisticsActivity extends Activity {
 	}
 
 	private void populateCache(ArrayList<Statistic> statistics, boolean valid) {
+		final long vehicleId = mVehicle.getId();
+		ContentResolver resolver = getContentResolver();
+
+		// clear the cache first
+		String where = CachedValue.ITEM + " = ?";
+		String[] selectionArgs = new String[] {
+			String.valueOf(vehicleId)
+		};
+		resolver.delete(CacheTable.BASE_URI, where, selectionArgs);
+
+		// fill with the new values
 		final int numStats = statistics.size();
 		ContentValues[] bulkValues = new ContentValues[numStats];
-		final long vehicleId = mVehicle.getId();
 		int position = 0;
 		for (int i = 0; i < numStats; i++) {
 			Statistics.Statistic statistic = statistics.get(i);
@@ -140,7 +159,7 @@ public class VehicleStatisticsActivity extends Activity {
 			values.put(CachedValue.VALUE, statistic.getValue());
 			bulkValues[position++] = values;
 		}
-		getContentResolver().bulkInsert(CacheTable.BASE_URI, bulkValues);
+		resolver.bulkInsert(CacheTable.BASE_URI, bulkValues);
 	}
 
 	private static class CalculateTask extends AsyncTask<Cursor, Statistics.Statistic, Integer> {
@@ -166,36 +185,40 @@ public class VehicleStatisticsActivity extends Activity {
 			Log.d("CalculateTask", "Recalculating...");
 			// recalculate a whole bunch of shit
 			FillupSeries series = new FillupSeries();
-			double minOdometer = Double.MAX_VALUE;
-			double maxOdometer = Double.MIN_VALUE;
+			// math gets understandably funky around Double.(MAX|MIN)_VALUE
+			final double MAX = 10000D;
+			final double MIN = -10000D;
 
 			double totalVolume = 0D;
 			double firstVolume = -1D;
-			double minVolume = Double.MAX_VALUE;
-			double maxVolume = Double.MIN_VALUE;
+			double minVolume = MAX;
+			double maxVolume = MIN;
 
-			double minDistance = Double.MAX_VALUE;
-			double maxDistance = Double.MIN_VALUE;
+			double minDistance = MAX;
+			double maxDistance = MIN;
 
 			double totalCost = 0D;
-			double minCost = Double.MAX_VALUE;
-			double maxCost = Double.MIN_VALUE;
+			double minCost = MAX;
+			double maxCost = MIN;
 
-			double minEconomy = Double.MAX_VALUE;
-			double maxEconomy = Double.MIN_VALUE;
+			double minEconomy = MAX;
+			double maxEconomy = MIN;
+
+			double minCostPerDistance = MAX;
+			double maxCostPerDistance = MIN;
+
+			double minPrice = MAX;
+			double maxPrice = MIN;
+
+			double minLatitude = MAX;
+			double maxLatitude = MIN;
+			double minLongitude = MAX;
+			double maxLongitude = MIN;
 
 			final Vehicle vehicle = activity.mVehicle;
 			while (cursor.moveToNext()) {
 				Fillup fillup = new Fillup(cursor);
 				series.add(fillup);
-
-				double odometer = fillup.getOdometer();
-				if (odometer < minOdometer) {
-					minOdometer = odometer;
-				}
-				if (odometer > maxOdometer) {
-					maxOdometer = odometer;
-				}
 
 				if (fillup.hasPrevious()) {
 					double distance = fillup.getDistance();
@@ -207,6 +230,26 @@ public class VehicleStatisticsActivity extends Activity {
 						minDistance = distance;
 						update(Statistics.MIN_DISTANCE, minDistance);
 					}
+
+					double economy = Calculator.averageEconomy(vehicle, fillup);
+					if (economy > maxEconomy) {
+						maxEconomy = economy;
+						update(Statistics.MAX_ECONOMY, maxEconomy);
+					}
+					if (economy < minEconomy) {
+						minEconomy = economy;
+						update(Statistics.MIN_ECONOMY, minEconomy);
+					}
+
+					double costPerDistance = fillup.getCostPerDistance();
+					if (costPerDistance > maxCostPerDistance) {
+						maxCostPerDistance = costPerDistance;
+						update(Statistics.MAX_COST_PER_DISTANCE, maxCostPerDistance);
+					}
+					if (costPerDistance < minCostPerDistance) {
+						minCostPerDistance = costPerDistance;
+						update(Statistics.MIN_COST_PER_DISTANCE, minCostPerDistance);
+					}
 				}
 
 				double volume = fillup.getVolume();
@@ -215,11 +258,14 @@ public class VehicleStatisticsActivity extends Activity {
 				}
 				if (volume > maxVolume) {
 					maxVolume = volume;
+					update(Statistics.MAX_FUEL, maxVolume);
 				}
 				if (volume < minVolume) {
 					minVolume = volume;
+					update(Statistics.MIN_FUEL, minVolume);
 				}
 				totalVolume += volume;
+				update(Statistics.TOTAL_FUEL, totalVolume);
 
 				double cost = fillup.getTotalCost();
 				if (cost > maxCost) {
@@ -233,28 +279,60 @@ public class VehicleStatisticsActivity extends Activity {
 				totalCost += cost;
 				update(Statistics.TOTAL_COST, totalCost);
 
-				if (fillup.hasPrevious()) {
-					double economy = Calculator.averageEconomy(vehicle, fillup);
-					if (economy > maxEconomy) {
-						maxEconomy = economy;
-						update(Statistics.MAX_ECONOMY, maxEconomy);
-					}
-					if (economy < minEconomy) {
-						minEconomy = economy;
-						update(Statistics.MIN_ECONOMY, minEconomy);
-					}
+				double price = fillup.getUnitPrice();
+				if (price > maxPrice) {
+					maxPrice = price;
+					update(Statistics.MAX_PRICE, maxPrice);
+				}
+				if (price < minPrice) {
+					minPrice = price;
+					update(Statistics.MIN_PRICE, minPrice);
+				}
+
+				double latitude = fillup.getLatitude();
+				if (latitude > maxLatitude) {
+					maxLatitude = latitude;
+					update(Statistics.NORTH, maxLatitude);
+				}
+				if (latitude < minLatitude) {
+					minLatitude = latitude;
+					update(Statistics.SOUTH, minLatitude);
+				}
+
+				double longitude = fillup.getLongitude();
+				if (longitude > maxLongitude) {
+					maxLongitude = longitude;
+					update(Statistics.EAST, maxLongitude);
+				}
+				if (longitude < minLongitude) {
+					minLongitude = longitude;
+					update(Statistics.WEST, minLongitude);
 				}
 			}
-			final int NUM_FILLUPS = series.size();
+			double avgFuel = totalVolume / series.size();
+			update(Statistics.AVG_FUEL, avgFuel);
 
 			double avgEconomy = Calculator.averageEconomy(vehicle, series);
 			update(Statistics.AVG_ECONOMY, avgEconomy);
 
-			double avgDistance = series.getTotalDistance() / (NUM_FILLUPS - 1);
+			double avgDistance = Calculator.averageDistanceBetweenFillups(series);
 			update(Statistics.AVG_DISTANCE, avgDistance);
 
-			double avgCost = totalCost / series.size();
+			double avgCost = Calculator.averageFillupCost(series);
 			update(Statistics.AVG_COST, avgCost);
+
+			double avgCostPerDistance = Calculator.averageCostPerDistance(series);
+			update(Statistics.AVG_COST_PER_DISTANCE, avgCostPerDistance);
+
+			double avgPrice = Calculator.averagePrice(series);
+			update(Statistics.AVG_PRICE, avgPrice);
+
+			double fuelPerDay = Calculator.averageFuelPerDay(series);
+			update(Statistics.FUEL_PER_YEAR, fuelPerDay * 365);
+
+			double costPerDay = Calculator.averageCostPerDay(series);
+			update(Statistics.MONTHLY_COST, costPerDay * 30);
+			update(Statistics.YEARLY_COST, costPerDay * 365);
 
 			cursor.close();
 			return 0;
@@ -262,7 +340,7 @@ public class VehicleStatisticsActivity extends Activity {
 
 		private void update(Statistics.Statistic statistic, double value) {
 			statistic.setValue(value);
-			publishProgress(statistic);
+			mStatistics.put(statistic.getKey(), statistic);
 		}
 
 		@Override
@@ -276,7 +354,11 @@ public class VehicleStatisticsActivity extends Activity {
 			Log.d("CalculateTask", "Done recalculating!");
 			ArrayList<Statistic> stats = new ArrayList<Statistic>(mStatistics.values());
 			activity.populateCache(stats, true);
-			activity.setAdapter(activity.getCursor());
+			if (activity.mAdapter == null) {
+				activity.setAdapter(activity.getCursor());
+			} else {
+				activity.mAdapter.notifyDataSetChanged();
+			}
 		}
 	}
 

@@ -15,7 +15,7 @@ public class VehiclesTable extends ContentTable {
 	private static final int VEHICLES = 40;
 	private static final int VEHICLE_ID = 41;
 
-	private static final String VEHICLES_URI = "vehicles/";
+	public static final String VEHICLES_URI = "vehicles/";
 	public static final Uri BASE_URI = Uri.withAppendedPath(FillUpsProvider.BASE_URI, VEHICLES_URI);
 
 	private static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.evancharlton.vehicles";
@@ -35,13 +35,6 @@ public class VehiclesTable extends ContentTable {
 			Vehicle.PREF_ECONOMY_UNITS,
 			Vehicle.PREF_CURRENCY
 	};
-
-	@Override
-	public String create() {
-		return new TableBuilder().addText(Vehicle.TITLE).addText(Vehicle.DESCRIPTION).addText(Vehicle.YEAR).addText(Vehicle.MAKE).addText(
-				Vehicle.MODEL).addInteger(Vehicle.VEHICLE_TYPE).addInteger(Vehicle.DEFAULT_TIME).addInteger(Vehicle.PREF_DISTANCE_UNITS).addInteger(
-				Vehicle.PREF_VOLUME_UNITS).addInteger(Vehicle.PREF_ECONOMY_UNITS).addText(Vehicle.PREF_CURRENCY).build();
-	}
 
 	@Override
 	public int delete(SQLiteDatabase db, Uri uri, String selection, String[] selectionArgs) {

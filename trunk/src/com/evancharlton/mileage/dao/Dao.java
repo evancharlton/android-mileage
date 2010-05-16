@@ -1,11 +1,21 @@
 package com.evancharlton.mileage.dao;
 
+import java.lang.annotation.Annotation;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+import java.lang.reflect.Field;
 import java.util.List;
 
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.util.Log;
+
+import com.evancharlton.mileage.provider.FillUpsProvider;
 
 /**
  * A base data access object (DAO). Exposes/provides the common functionality
@@ -15,12 +25,13 @@ import android.net.Uri;
  * 
  */
 public abstract class Dao {
-	/**
-	 * Unique record ID
-	 */
+	private static final String TAG = "Dao";
 	public static final String _ID = "_id";
 
+	@Column(type = Column.LONG, name = _ID)
 	private long mId = 0L;
+
+	private Uri mUriBase = null;
 
 	protected Dao(final ContentValues values) {
 		Long id = values.getAsLong(_ID);
@@ -29,12 +40,75 @@ public abstract class Dao {
 		}
 	}
 
-	protected Dao(final Cursor cursor) {
+	public Dao(final Cursor cursor) {
 		load(cursor);
 	}
 
 	public void load(Cursor cursor) {
 		mId = cursor.getLong(cursor.getColumnIndex(_ID));
+
+		// automagically populate based on @Column annotation definitions
+		Field[] fields = getClass().getDeclaredFields();
+		for (Field field : fields) {
+			Annotation[] annotations = field.getAnnotations();
+			for (Annotation annotation : annotations) {
+				if (annotation instanceof Column) {
+					Column column = (Column) annotation;
+					int columnIndex = cursor.getColumnIndex(column.name());
+					Object value = null;
+					switch (column.type()) {
+						case Column.BOOLEAN:
+							value = cursor.getInt(columnIndex);
+							if (value == null) {
+								value = new Boolean(column.value() == 1);
+							} else {
+								value = ((Integer) value).intValue() == 1;
+							}
+							break;
+						case Column.DOUBLE:
+							value = cursor.getDouble(columnIndex);
+							if (value == null) {
+								value = new Double(column.value());
+							}
+							break;
+						case Column.INTEGER:
+							value = cursor.getInt(columnIndex);
+							if (value == null) {
+								value = new Integer(column.value());
+							}
+							break;
+						case Column.LONG:
+							value = cursor.getLong(columnIndex);
+							if (value == null) {
+								value = new Long(column.value());
+							}
+							break;
+						case Column.STRING:
+							value = cursor.getString(columnIndex);
+							if (value == null) {
+								value = "";
+							}
+							break;
+						case Column.TIMESTAMP:
+							// TODO: set Date?
+							value = cursor.getLong(columnIndex);
+							if (value == null) {
+								value = System.currentTimeMillis();
+							}
+							break;
+					}
+					if (value != null) {
+						try {
+							field.set(this, value);
+						} catch (IllegalArgumentException e) {
+							Log.e(TAG, "Couldn't set value for " + field.getName(), e);
+						} catch (IllegalAccessException e) {
+							Log.e(TAG, "Couldn't access " + field.getName(), e);
+						}
+					}
+				}
+			}
+		}
 	}
 
 	/**
@@ -42,7 +116,16 @@ public abstract class Dao {
 	 * 
 	 * @return the URI for the DAO instance.
 	 */
-	abstract protected Uri getUri();
+	public Uri getUri() {
+		if (mUriBase == null) {
+			DataObject annotation = getClass().getAnnotation(DataObject.class);
+			mUriBase = Uri.withAppendedPath(FillUpsProvider.BASE_URI, annotation.path());
+		}
+		if (isExistingObject()) {
+			return ContentUris.withAppendedId(mUriBase, getId());
+		}
+		return mUriBase;
+	}
 
 	/**
 	 * Validate the data object (intended to be done before saving). If there is
@@ -50,6 +133,7 @@ public abstract class Dao {
 	 * 
 	 * @return the ContentValues to be passed to persistent storage.
 	 */
+	// TODO: use annotations for this?
 	abstract protected void validate(ContentValues values);
 
 	public final boolean save(Context context) {
@@ -133,6 +217,14 @@ public abstract class Dao {
 		return defaultValue;
 	}
 
+	protected long getLong(ContentValues values, String key, long defaultValue) {
+		Long value = values.getAsLong(key);
+		if (value != null) {
+			return value.longValue();
+		}
+		return defaultValue;
+	}
+
 	// TODO: break this out into its own class. Make it checked?
 	public static class InvalidFieldException extends RuntimeException {
 		private static final long serialVersionUID = 3415877365632636406L;
@@ -146,5 +238,29 @@ public abstract class Dao {
 		public int getErrorMessage() {
 			return mErrorMessage;
 		}
+	}
+
+	// TODO: make this a series of annotations instead?
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target(ElementType.FIELD)
+	public @interface Column {
+		public static final int STRING = 0;
+		public static final int INTEGER = 1;
+		public static final int DOUBLE = 2;
+		public static final int BOOLEAN = 3;
+		public static final int TIMESTAMP = 4;
+		public static final int LONG = 5;
+
+		int value() default 0;
+
+		int type();
+
+		String name() default "";
+	}
+
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target(ElementType.TYPE)
+	public @interface DataObject {
+		String path();
 	}
 }

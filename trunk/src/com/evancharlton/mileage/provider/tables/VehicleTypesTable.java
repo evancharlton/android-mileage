@@ -15,16 +15,10 @@ public class VehicleTypesTable extends ContentTable {
 	private static final int TYPES = 50;
 	private static final int TYPE_ID = 51;
 
-	public static final String TYPES_URI = "vehicles/types";
-	public static final String TYPE_URI = "vehicles/type";
+	public static final String URI = "vehicles/types/";
 
 	private static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.evancharlton.vehicle_types";
 	private static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.evancharlton.vehicle_type";
-
-	@Override
-	public String create() {
-		return new TableBuilder().addText(VehicleType.TITLE).addText(VehicleType.DESCRIPTION).build();
-	}
 
 	@Override
 	public int delete(SQLiteDatabase db, Uri uri, String selection, String[] selectionArgs) {
@@ -81,8 +75,8 @@ public class VehicleTypesTable extends ContentTable {
 
 	@Override
 	public void registerUris(UriMatcher uriMatcher) {
-		uriMatcher.addURI(FillUpsProvider.AUTHORITY, TYPES_URI, TYPES);
-		uriMatcher.addURI(FillUpsProvider.AUTHORITY, TYPE_URI + "/#", TYPE_ID);
+		uriMatcher.addURI(FillUpsProvider.AUTHORITY, URI, TYPES);
+		uriMatcher.addURI(FillUpsProvider.AUTHORITY, URI + "#", TYPE_ID);
 	}
 
 	@Override

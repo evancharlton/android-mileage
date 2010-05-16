@@ -15,7 +15,7 @@ public class ServiceIntervalTemplatesTable extends ContentTable {
 	private static final int SERVICE_TEMPLATES = 60;
 	private static final int SERVICE_TEMPLATE_ID = 61;
 
-	public static final String SERVICE_TEMPLATES_URI = "intervals/templates";
+	public static final String URI = "intervals/templates";
 	public static final String SERVICE_TEMPLATE_URI = "intervals/template";
 
 	private static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.evancharlton.interval_template";
@@ -30,13 +30,6 @@ public class ServiceIntervalTemplatesTable extends ContentTable {
 				ServiceIntervalTemplate.DURATION,
 				ServiceIntervalTemplate.VEHICLE_TYPE
 		};
-	}
-
-	@Override
-	public String create() {
-		return new TableBuilder().addText(ServiceIntervalTemplate.TITLE).addText(ServiceIntervalTemplate.DESCRIPTION).addDouble(
-				ServiceIntervalTemplate.DISTANCE).addDouble(ServiceIntervalTemplate.DURATION).addInteger(ServiceIntervalTemplate.VEHICLE_TYPE)
-				.build();
 	}
 
 	@Override
@@ -95,7 +88,7 @@ public class ServiceIntervalTemplatesTable extends ContentTable {
 
 	@Override
 	public void registerUris(UriMatcher uriMatcher) {
-		uriMatcher.addURI(FillUpsProvider.AUTHORITY, SERVICE_TEMPLATES_URI, SERVICE_TEMPLATES);
+		uriMatcher.addURI(FillUpsProvider.AUTHORITY, URI, SERVICE_TEMPLATES);
 		uriMatcher.addURI(FillUpsProvider.AUTHORITY, SERVICE_TEMPLATE_URI + "/#", SERVICE_TEMPLATE_ID);
 	}
 

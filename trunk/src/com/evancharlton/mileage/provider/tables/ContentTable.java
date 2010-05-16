@@ -1,5 +1,7 @@
 package com.evancharlton.mileage.provider.tables;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -10,6 +12,7 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 
 import com.evancharlton.mileage.dao.Dao;
+import com.evancharlton.mileage.dao.Dao.Column;
 
 public abstract class ContentTable {
 	protected static String TABLE_NAME = "content_table";
@@ -44,7 +47,40 @@ public abstract class ContentTable {
 
 	abstract public String init();
 
-	abstract public String create();
+	protected Class<? extends Dao> getDao() {
+		return null;
+	}
+
+	public final String create() throws IllegalArgumentException, IllegalAccessException {
+		TableBuilder builder = new TableBuilder();
+		Class<? extends Dao> cls = getDao();
+		Field[] fields = cls.getDeclaredFields();
+		for (Field field : fields) {
+			Annotation[] annotations = field.getAnnotations();
+			for (Annotation annotation : annotations) {
+				if (annotation instanceof Column) {
+					Column columnAnnotation = (Column) annotation;
+					String columnName = columnAnnotation.name();
+					switch (columnAnnotation.type()) {
+						case Column.INTEGER:
+						case Column.BOOLEAN:
+						case Column.LONG:
+						case Column.TIMESTAMP:
+							builder.addInteger(columnName);
+							break;
+						case Column.DOUBLE:
+							builder.addDouble(columnName);
+							break;
+						case Column.STRING:
+							builder.addText(columnName);
+							break;
+					}
+					break;
+				}
+			}
+		}
+		return builder.build();
+	}
 
 	abstract public String upgrade(final int currentVersion);
 

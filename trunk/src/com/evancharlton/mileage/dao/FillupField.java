@@ -15,23 +15,23 @@ public class FillupField extends Dao {
 	public static final String TEMPLATE_ID = "template_id";
 	public static final String VALUE = "value";
 
-	private long mTemplateId = 0L;
-	private long mFillupId = 0L;
-	private String mValue = null;
+	@Column(type = Column.LONG, name = TEMPLATE_ID)
+	protected long mTemplateId = 0L;
+	@Column(type = Column.LONG, name = FILLUP_ID)
+	protected long mFillupId = 0L;
+	@Column(type = Column.STRING, name = VALUE)
+	protected String mValue = null;
 
 	public FillupField(ContentValues values) {
 		super(values);
-		// TODO Auto-generated constructor stub
+	}
+
+	public FillupField(Cursor cursor) {
+		super(cursor);
 	}
 
 	@Override
-	public void load(Cursor cursor) {
-		super.load(cursor);
-		// TODO Auto-generated constructor stub
-	}
-
-	@Override
-	protected Uri getUri() {
+	public Uri getUri() {
 		Uri base = FillUpsProvider.BASE_URI;
 		if (isExistingObject()) {
 			base = Uri.withAppendedPath(base, FillupsFieldsTable.FILLUPS_FIELD_URI);

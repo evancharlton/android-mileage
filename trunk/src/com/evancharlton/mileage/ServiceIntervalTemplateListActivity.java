@@ -22,7 +22,7 @@ public class ServiceIntervalTemplateListActivity extends BaseListActivity {
 
 	@Override
 	protected Uri getUri() {
-		return Uri.withAppendedPath(FillUpsProvider.BASE_URI, ServiceIntervalTemplatesTable.SERVICE_TEMPLATES_URI);
+		return Uri.withAppendedPath(FillUpsProvider.BASE_URI, ServiceIntervalTemplatesTable.URI);
 	}
 
 	@Override

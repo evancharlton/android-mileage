@@ -14,8 +14,7 @@ public class ServiceIntervalsTable extends ContentTable {
 	private static final int SERVICE_INTERVALS = 70;
 	private static final int SERVICE_INTERVAL_ID = 71;
 
-	public static final String SERVICE_INTERVALS_URI = "intervals";
-	public static final String SERVICE_INTERVAL_URI = "interval";
+	public static final String URI = "intervals/";
 
 	private static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.evancharlton.interval";
 	private static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.evancharlton.interval";
@@ -32,13 +31,6 @@ public class ServiceIntervalsTable extends ContentTable {
 				ServiceInterval.DURATION,
 				ServiceInterval.DISTANCE
 		};
-	}
-
-	@Override
-	public String create() {
-		return new TableBuilder().addText(ServiceInterval.TITLE).addText(ServiceInterval.DESCRIPTION).addInteger(ServiceInterval.VEHICLE_ID)
-				.addInteger(ServiceInterval.TEMPLATE_ID).addDouble(ServiceInterval.START_ODOMETER).addInteger(ServiceInterval.START_DATE).addDouble(
-						ServiceInterval.DURATION).addDouble(ServiceInterval.DISTANCE).build();
 	}
 
 	@Override
@@ -95,8 +87,8 @@ public class ServiceIntervalsTable extends ContentTable {
 
 	@Override
 	public void registerUris(UriMatcher uriMatcher) {
-		uriMatcher.addURI(FillUpsProvider.AUTHORITY, SERVICE_INTERVALS_URI, SERVICE_INTERVALS);
-		uriMatcher.addURI(FillUpsProvider.AUTHORITY, SERVICE_INTERVAL_URI + "/#", SERVICE_INTERVAL_ID);
+		uriMatcher.addURI(FillUpsProvider.AUTHORITY, URI, SERVICE_INTERVALS);
+		uriMatcher.addURI(FillUpsProvider.AUTHORITY, URI + "#", SERVICE_INTERVAL_ID);
 	}
 
 	@Override

@@ -1,14 +1,13 @@
 package com.evancharlton.mileage.dao;
 
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.net.Uri;
 
 import com.evancharlton.mileage.R;
-import com.evancharlton.mileage.provider.FillUpsProvider;
+import com.evancharlton.mileage.dao.Dao.DataObject;
 import com.evancharlton.mileage.provider.tables.ServiceIntervalTemplatesTable;
 
+@DataObject(path = ServiceIntervalTemplatesTable.URI)
 public class ServiceIntervalTemplate extends Dao {
 	public static final String TITLE = "title";
 	public static final String DESCRIPTION = "description";
@@ -16,36 +15,23 @@ public class ServiceIntervalTemplate extends Dao {
 	public static final String DURATION = "duration";
 	public static final String VEHICLE_TYPE = "vehicle_type";
 
-	private String mTitle = null;
-	private String mDescription = null;
-	private long mDistance = 0L;
-	private long mDuration = 0L;
-	private long mVehicleTypeId = 0L;
+	@Column(type = Column.STRING, name = TITLE)
+	protected String mTitle = null;
+	@Column(type = Column.STRING, name = DESCRIPTION)
+	protected String mDescription = null;
+	@Column(type = Column.LONG, name = DISTANCE)
+	protected long mDistance = 0L;
+	@Column(type = Column.LONG, name = DURATION)
+	protected long mDuration = 0L;
+	@Column(type = Column.LONG, name = VEHICLE_TYPE)
+	protected long mVehicleTypeId = 0L;
 
 	public ServiceIntervalTemplate(ContentValues values) {
 		super(values);
 	}
 
-	@Override
-	public void load(Cursor cursor) {
-		super.load(cursor);
-		mTitle = getString(cursor, TITLE);
-		mDescription = getString(cursor, DESCRIPTION);
-		mDistance = getLong(cursor, DISTANCE);
-		mDuration = getLong(cursor, DURATION);
-		mVehicleTypeId = getLong(cursor, VEHICLE_TYPE);
-	}
-
-	@Override
-	protected Uri getUri() {
-		Uri base = FillUpsProvider.BASE_URI;
-		if (isExistingObject()) {
-			base = Uri.withAppendedPath(base, ServiceIntervalTemplatesTable.SERVICE_TEMPLATE_URI);
-			base = ContentUris.withAppendedId(base, getId());
-		} else {
-			base = Uri.withAppendedPath(base, ServiceIntervalTemplatesTable.SERVICE_TEMPLATES_URI);
-		}
-		return base;
+	public ServiceIntervalTemplate(Cursor cursor) {
+		super(cursor);
 	}
 
 	@Override

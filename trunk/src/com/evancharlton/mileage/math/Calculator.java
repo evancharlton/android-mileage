@@ -5,6 +5,11 @@ import com.evancharlton.mileage.dao.FillupSeries;
 import com.evancharlton.mileage.dao.Vehicle;
 
 public class Calculator {
+	// dates
+	public static final long DAY_MS = 1000L * 60L * 60L * 24L;
+	public static final long MONTH_MS = DAY_MS * 30L;
+	public static final long YEAR_MS = DAY_MS * 365L;
+
 	// distance
 	public static final int KM = 1;
 	public static final int MI = 2;
@@ -102,6 +107,44 @@ public class Calculator {
 			default:
 				return miles / gallons;
 		}
+	}
+
+	public static double averageDistanceBetweenFillups(FillupSeries series) {
+		return series.getTotalDistance() / (series.size() - 1);
+	}
+
+	public static double averageFillupVolume(FillupSeries series) {
+		return series.getTotalVolume() / series.size();
+	}
+
+	public static double averageFillupCost(FillupSeries series) {
+		return series.getTotalCost() / series.size();
+	}
+
+	public static double averageCostPerDistance(FillupSeries series) {
+		return series.getTotalCost() / series.getTotalDistance();
+	}
+
+	public static double averageFuelPerDay(FillupSeries series) {
+		long timeRange = series.getTimeRange();
+		double numDays = Math.ceil((double) timeRange / (double) DAY_MS);
+		return series.getTotalVolume() / numDays;
+	}
+
+	public static double averageCostPerDay(FillupSeries series) {
+		long timeRange = series.getTimeRange();
+		double numDays = Math.ceil((double) timeRange / (double) DAY_MS);
+		return series.getTotalCost() / numDays;
+	}
+
+	public static double averagePrice(FillupSeries series) {
+		double total = 0D;
+		final int SIZE = series.size();
+		for (int i = 0; i < SIZE; i++) {
+			Fillup fillup = series.get(i);
+			total += fillup.getUnitPrice();
+		}
+		return total / SIZE;
 	}
 
 	// yes, this method makes it possible to convert from miles to litres.

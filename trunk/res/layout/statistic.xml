@@ -4,6 +4,11 @@
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content"
 	android:orientation="horizontal"
+    android:textAppearance="?android:attr/textAppearanceLarge"
+    android:gravity="center_vertical"
+    android:paddingLeft="6dp"
+	android:paddingRight="6dp"
+    android:minHeight="?android:attr/listPreferredItemHeight"
 >
 	<TextView
 		android:layout_width="fill_parent"

@@ -1,23 +1,33 @@
 package com.evancharlton.mileage.dao;
 
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.net.Uri;
 
 import com.evancharlton.mileage.R;
+import com.evancharlton.mileage.dao.Dao.DataObject;
 import com.evancharlton.mileage.provider.tables.CacheTable;
 
+@DataObject(path = CacheTable.URI)
 public class CachedValue extends Dao {
 	public static final String ITEM = "item";
 	public static final String KEY = "key";
 	public static final String VALUE = "value";
 	public static final String VALID = "is_valid";
+	public static final String GROUP = "statistics_group";
+	public static final String ORDER = "statistics_order";
 
-	private String mItem = null;
-	private String mKey = null;
-	private double mValue = 0D;
-	private boolean mIsValid = false;
+	@Column(type = Column.STRING, name = ITEM)
+	protected String mItem = null;
+	@Column(type = Column.STRING, name = KEY)
+	protected String mKey = null;
+	@Column(type = Column.DOUBLE, name = VALUE)
+	protected double mValue = 0D;
+	@Column(type = Column.BOOLEAN, name = VALID)
+	protected boolean mIsValid = false;
+	@Column(type = Column.LONG, name = GROUP)
+	protected long mGroup = 0;
+	@Column(type = Column.LONG, name = ORDER)
+	protected long mOrder = 0;
 
 	public CachedValue(String key) {
 		this(new ContentValues());
@@ -31,24 +41,12 @@ public class CachedValue extends Dao {
 		mKey = getString(values, KEY, null);
 		mValue = getDouble(values, VALUE, 0D);
 		mIsValid = getBoolean(values, VALID, false);
+		mGroup = getLong(values, GROUP, 0);
+		mOrder = getLong(values, ORDER, 0);
 	}
 
 	public CachedValue(Cursor cursor) {
 		super(cursor);
-
-		mItem = getString(cursor, ITEM);
-		mKey = getString(cursor, KEY);
-		mValue = getDouble(cursor, VALUE);
-		mIsValid = getBoolean(cursor, VALID);
-	}
-
-	@Override
-	protected Uri getUri() {
-		Uri base = CacheTable.BASE_URI;
-		if (isExistingObject()) {
-			return ContentUris.withAppendedId(base, getId());
-		}
-		return base;
 	}
 
 	@Override
@@ -65,6 +63,8 @@ public class CachedValue extends Dao {
 
 		values.put(VALUE, mValue);
 		values.put(VALID, mIsValid);
+		values.put(GROUP, mGroup);
+		values.put(ORDER, mOrder);
 	}
 
 	public String getKey() {
@@ -77,5 +77,21 @@ public class CachedValue extends Dao {
 
 	public void setValue(double value) {
 		mValue = value;
+	}
+
+	public long getGroup() {
+		return mGroup;
+	}
+
+	public void setGroup(long group) {
+		mGroup = group;
+	}
+
+	public long getOrder() {
+		return mOrder;
+	}
+
+	public void setOrder(long order) {
+		mOrder = order;
 	}
 }

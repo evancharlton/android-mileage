@@ -35,7 +35,7 @@ public class FieldActivity extends BaseFormActivity {
 
 	@Override
 	protected Uri getUri(long id) {
-		return ContentUris.withAppendedId(Uri.withAppendedPath(FillUpsProvider.BASE_URI, FieldsTable.FIELD_URI), id);
+		return ContentUris.withAppendedId(Uri.withAppendedPath(FillUpsProvider.BASE_URI, FieldsTable.URI), id);
 	}
 
 	@Override
