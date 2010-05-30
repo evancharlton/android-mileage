@@ -17,7 +17,7 @@ public abstract class LineChart extends ChartActivity {
 
 	protected abstract ChartGenerator createChartGenerator();
 
-	protected abstract void processCursor(LineChartGenerator generator, ChartPointCollection points, Cursor fillups, Vehicle vehicle);
+	protected abstract void processCursor(LineChartGenerator generator, ChartPointCollection points, Cursor cursor, Vehicle vehicle);
 
 	protected final Vehicle getVehicle() {
 		Cursor cursor = managedQuery(VehiclesTable.BASE_URI, VehiclesTable.PROJECTION, Vehicle._ID + " = ?", new String[] {

@@ -79,9 +79,12 @@ public class VehicleStatisticsActivity extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> list, View row, int position, long id) {
 				Statistic statistic = Statistics.STATISTICS.get(position);
-				Intent intent = new Intent(VehicleStatisticsActivity.this, statistic.getChartClass());
-				intent.putExtra(ChartActivity.VEHICLE_ID, String.valueOf(mVehicle.getId()));
-				startActivity(intent);
+				Class<? extends ChartActivity> target = statistic.getChartClass();
+				if (target != null) {
+					Intent intent = new Intent(VehicleStatisticsActivity.this, target);
+					intent.putExtra(ChartActivity.VEHICLE_ID, String.valueOf(mVehicle.getId()));
+					startActivity(intent);
+				}
 			}
 		});
 	}

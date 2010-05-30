@@ -7,26 +7,25 @@ import com.artfulbits.aiCharts.Base.ChartPointCollection;
 import com.evancharlton.mileage.R;
 import com.evancharlton.mileage.dao.Vehicle;
 
-public class AverageDistanceChart extends DistanceChart {
-
+public class MaximumPriceChart extends PriceChart {
 	@Override
 	protected String getAxisTitle() {
-		return getString(R.string.stat_avg_distance);
+		return getString(R.string.stat_max_price);
 	}
 
 	@Override
 	protected void processCursor(LineChartGenerator generator, ChartPointCollection points, Cursor cursor, Vehicle vehicle) {
 		int num = 0;
-		double last_odometer = 0;
+		double maximum_price = -10000;
 		while (cursor.isAfterLast() == false) {
 			if (generator.isCancelled()) {
 				break;
 			}
-			double odometer = cursor.getDouble(0);
-			if (num > 0) {
-				points.add(new ChartPoint(num, odometer - last_odometer));
+			double price = cursor.getDouble(0);
+			if (price > maximum_price) {
+				maximum_price = price;
 			}
-			last_odometer = odometer;
+			points.add(new ChartPoint(num, maximum_price));
 			generator.update(num++);
 			cursor.moveToNext();
 		}

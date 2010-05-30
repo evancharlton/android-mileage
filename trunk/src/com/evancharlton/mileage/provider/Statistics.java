@@ -5,11 +5,26 @@ import java.util.HashMap;
 
 import com.evancharlton.mileage.ChartActivity;
 import com.evancharlton.mileage.R;
+import com.evancharlton.mileage.charts.AverageCostChart;
 import com.evancharlton.mileage.charts.AverageDistanceChart;
 import com.evancharlton.mileage.charts.AverageFuelEconomyChart;
+import com.evancharlton.mileage.charts.AveragePriceChart;
+import com.evancharlton.mileage.charts.AverageVolumeChart;
 import com.evancharlton.mileage.charts.BestFuelEconomyChart;
+import com.evancharlton.mileage.charts.EastChart;
+import com.evancharlton.mileage.charts.MaximumCostChart;
 import com.evancharlton.mileage.charts.MaximumDistanceChart;
+import com.evancharlton.mileage.charts.MaximumPriceChart;
+import com.evancharlton.mileage.charts.MaximumVolumeChart;
+import com.evancharlton.mileage.charts.MinimumCostChart;
 import com.evancharlton.mileage.charts.MinimumDistanceChart;
+import com.evancharlton.mileage.charts.MinimumPriceChart;
+import com.evancharlton.mileage.charts.MinimumVolumeChart;
+import com.evancharlton.mileage.charts.NorthChart;
+import com.evancharlton.mileage.charts.SouthChart;
+import com.evancharlton.mileage.charts.TotalCostChart;
+import com.evancharlton.mileage.charts.TotalVolumeChart;
+import com.evancharlton.mileage.charts.WestChart;
 import com.evancharlton.mileage.charts.WorstFuelEconomyChart;
 import com.evancharlton.mileage.dao.CachedValue;
 
@@ -35,10 +50,10 @@ public final class Statistics {
 	public static final StatisticsGroup DISTANCES = new StatisticsGroup(R.string.stat_distance_between_fillups, AVG_DISTANCE, MIN_DISTANCE,
 			MAX_DISTANCE);
 
-	public static final Statistic AVG_COST = new Statistic(R.string.stat_avg_cost, new CachedValue("average_cost"));
-	public static final Statistic MIN_COST = new Statistic(R.string.stat_min_cost, new CachedValue("minimum_cost"));
-	public static final Statistic MAX_COST = new Statistic(R.string.stat_max_cost, new CachedValue("maximum_cost"));
-	public static final Statistic TOTAL_COST = new Statistic(R.string.stat_total_cost, new CachedValue("total_cost"));
+	public static final Statistic AVG_COST = new Statistic(R.string.stat_avg_cost, new CachedValue("average_cost"), AverageCostChart.class);
+	public static final Statistic MIN_COST = new Statistic(R.string.stat_min_cost, new CachedValue("minimum_cost"), MinimumCostChart.class);
+	public static final Statistic MAX_COST = new Statistic(R.string.stat_max_cost, new CachedValue("maximum_cost"), MaximumCostChart.class);
+	public static final Statistic TOTAL_COST = new Statistic(R.string.stat_total_cost, new CachedValue("total_cost"), TotalCostChart.class);
 	public static final Statistic MONTHLY_COST = new Statistic(R.string.stat_month_cost, new CachedValue("monthly_cost"));
 	public static final Statistic YEARLY_COST = new Statistic(R.string.stat_year_cost, new CachedValue("yearly_cost"));
 	public static final StatisticsGroup COSTS = new StatisticsGroup(R.string.stat_fillup_cost, AVG_COST, MIN_COST, MAX_COST, TOTAL_COST,
@@ -53,22 +68,22 @@ public final class Statistics {
 	public static final StatisticsGroup COSTS_PER_DISTANCE = new StatisticsGroup(R.string.stat_cost_per_distance, AVG_COST_PER_DISTANCE,
 			MIN_COST_PER_DISTANCE, MAX_COST_PER_DISTANCE);
 
-	public static final Statistic AVG_PRICE = new Statistic(R.string.stat_avg_price, new CachedValue("average_price"));
-	public static final Statistic MIN_PRICE = new Statistic(R.string.stat_min_price, new CachedValue("minimum_price"));
-	public static final Statistic MAX_PRICE = new Statistic(R.string.stat_max_price, new CachedValue("maximum_price"));
+	public static final Statistic AVG_PRICE = new Statistic(R.string.stat_avg_price, new CachedValue("average_price"), AveragePriceChart.class);
+	public static final Statistic MIN_PRICE = new Statistic(R.string.stat_min_price, new CachedValue("minimum_price"), MinimumPriceChart.class);
+	public static final Statistic MAX_PRICE = new Statistic(R.string.stat_max_price, new CachedValue("maximum_price"), MaximumPriceChart.class);
 	public static final StatisticsGroup PRICES = new StatisticsGroup(R.string.stat_price, AVG_PRICE, MIN_PRICE, MAX_PRICE);
 
-	public static final Statistic MIN_FUEL = new Statistic(R.string.stat_min_fuel, new CachedValue("minimum_fuel"));
-	public static final Statistic MAX_FUEL = new Statistic(R.string.stat_max_fuel, new CachedValue("maximum_fuel"));
-	public static final Statistic AVG_FUEL = new Statistic(R.string.stat_avg_fuel, new CachedValue("average_fuel"));
-	public static final Statistic TOTAL_FUEL = new Statistic(R.string.stat_total_fuel, new CachedValue("total_fuel"));
+	public static final Statistic MIN_FUEL = new Statistic(R.string.stat_min_fuel, new CachedValue("minimum_fuel"), MinimumVolumeChart.class);
+	public static final Statistic MAX_FUEL = new Statistic(R.string.stat_max_fuel, new CachedValue("maximum_fuel"), MaximumVolumeChart.class);
+	public static final Statistic AVG_FUEL = new Statistic(R.string.stat_avg_fuel, new CachedValue("average_fuel"), AverageVolumeChart.class);
+	public static final Statistic TOTAL_FUEL = new Statistic(R.string.stat_total_fuel, new CachedValue("total_fuel"), TotalVolumeChart.class);
 	public static final Statistic FUEL_PER_YEAR = new Statistic(R.string.stat_fuel_per_year, new CachedValue("fuel_per_year"));
 	public static final StatisticsGroup VOLUMES = new StatisticsGroup(R.string.stat_fuel, MIN_FUEL, MAX_FUEL, AVG_FUEL, TOTAL_FUEL, FUEL_PER_YEAR);
 
-	public static final Statistic NORTH = new Statistic(R.string.stat_north, new CachedValue("north"));
-	public static final Statistic SOUTH = new Statistic(R.string.stat_south, new CachedValue("south"));
-	public static final Statistic EAST = new Statistic(R.string.stat_east, new CachedValue("east"));
-	public static final Statistic WEST = new Statistic(R.string.stat_west, new CachedValue("west"));
+	public static final Statistic NORTH = new Statistic(R.string.stat_north, new CachedValue("north"), NorthChart.class);
+	public static final Statistic SOUTH = new Statistic(R.string.stat_south, new CachedValue("south"), SouthChart.class);
+	public static final Statistic EAST = new Statistic(R.string.stat_east, new CachedValue("east"), EastChart.class);
+	public static final Statistic WEST = new Statistic(R.string.stat_west, new CachedValue("west"), WestChart.class);
 	public static final StatisticsGroup LOCATION = new StatisticsGroup(R.string.stat_location, NORTH, SOUTH, EAST, WEST);
 
 	public static class Statistic {
