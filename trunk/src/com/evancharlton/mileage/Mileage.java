@@ -18,7 +18,6 @@ public class Mileage extends TabActivity {
 	private static final String TAG_FILLUP = "fillups";
 	private static final String TAG_HISTORY = "history";
 	private static final String TAG_STATISTICS = "statistics";
-	private static final String TAG_CHARTS = "charts";
 
 	private TabHost mTabHost;
 

@@ -1,5 +1,6 @@
 package com.evancharlton.mileage.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import android.content.ContentValues;
@@ -26,26 +27,54 @@ public class Fillup extends Dao {
 	public static final String RESTART = "restart";
 	public static final String ECONOMY = "economy";
 
+	@Range.Positive
+	@Validate(R.string.error_no_vehicle_specified)
 	@Column(type = Column.INTEGER, name = VEHICLE_ID)
 	protected long mVehicleId;
+
+	@Range.Positive
+	@Validate(R.string.error_no_odometer_specified)
 	@Column(type = Column.DOUBLE, name = ODOMETER)
 	protected double mOdometer;
+
+	@Past
+	@Validate(R.string.error_date_in_past)
 	@Column(type = Column.TIMESTAMP, name = DATE)
-	protected long mTimestamp;
+	protected Date mDate;
+
+	@Range.Positive
+	@Validate(R.string.error_no_volume_specified)
 	@Column(type = Column.DOUBLE, name = VOLUME)
 	protected double mVolume;
+
+	@Range.Positive
+	@Validate(R.string.error_no_price_specified)
 	@Column(type = Column.DOUBLE, name = UNIT_PRICE)
 	protected double mUnitPrice;
+
+	@Range.Positive
+	@Validate(R.string.error_no_total_cost_specified)
 	@Column(type = Column.DOUBLE, name = TOTAL_COST)
 	protected double mTotalCost;
-	@Column(type = Column.BOOLEAN, name = PARTIAL)
+
+	@Validate
+	@Column(type = Column.BOOLEAN, name = PARTIAL, value = 0)
 	protected boolean mIsPartial;
+
+	@Validate
 	@Column(type = Column.BOOLEAN, name = RESTART)
 	protected boolean mIsRestart;
+
+	@Validate
+	@Range.Positive
 	@Column(type = Column.DOUBLE, name = ECONOMY)
 	protected double mEconomy;
+
+	@Validate
 	@Column(type = Column.DOUBLE, name = LATITUDE)
 	protected double mLatitude;
+
+	@Validate
 	@Column(type = Column.DOUBLE, name = LONGITUDE)
 	protected double mLongitude;
 
@@ -81,40 +110,13 @@ public class Fillup extends Dao {
 	// }
 
 	@Override
-	protected void validate(ContentValues values) {
-		if (mVehicleId <= 0) {
-			throw new InvalidFieldException(R.string.error_no_vehicle_specified);
+	protected void preValidate() {
+		getVolume();
+		getUnitPrice();
+		getTotalCost();
+		if (mDate == null) {
+			mDate = new Date(System.currentTimeMillis());
 		}
-		values.put(VEHICLE_ID, mVehicleId);
-
-		if (mOdometer <= 0) {
-			throw new InvalidFieldException(R.string.error_no_odometer_specified);
-		}
-		values.put(ODOMETER, mOdometer);
-
-		if (mTimestamp <= 0) {
-			mTimestamp = System.currentTimeMillis();
-		}
-		values.put(DATE, mTimestamp);
-
-		if (getVolume() <= 0) {
-			throw new InvalidFieldException(R.string.error_no_volume_specified);
-		}
-		values.put(VOLUME, getVolume());
-
-		if (getUnitPrice() <= 0) {
-			throw new InvalidFieldException(R.string.error_no_price_specified);
-		}
-		values.put(UNIT_PRICE, getUnitPrice());
-
-		if (getTotalCost() <= 0) {
-			throw new InvalidFieldException(R.string.error_no_total_cost_specified);
-		}
-		values.put(TOTAL_COST, getTotalCost());
-
-		values.put(PARTIAL, mIsPartial);
-		values.put(RESTART, mIsRestart);
-		values.put(ECONOMY, mEconomy);
 	}
 
 	public Fillup loadPrevious(Context context) {
@@ -143,7 +145,7 @@ public class Fillup extends Dao {
 
 	public List<FillupField> getFields(Context context) {
 		if (mFields == null) {
-			// load the fields from the database
+			// TODO: load the fields from the database
 		}
 		return mFields;
 	}
@@ -165,7 +167,7 @@ public class Fillup extends Dao {
 	}
 
 	public long getTimestamp() {
-		return mTimestamp;
+		return mDate.getTime();
 	}
 
 	public double getTotalCost() {
@@ -253,7 +255,11 @@ public class Fillup extends Dao {
 	}
 
 	public void setTimestamp(long timestamp) {
-		mTimestamp = timestamp;
+		if (mDate == null) {
+			mDate = new Date(timestamp);
+		} else {
+			mDate.setTime(timestamp);
+		}
 	}
 
 	public void setTotalCost(double totalCost) {

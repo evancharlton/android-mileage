@@ -40,6 +40,11 @@ public class FillupsFieldsTable extends ContentTable {
 				FillupField.VALUE
 		};
 	}
+	
+	@Override
+	protected Class<? extends Dao> getDaoType() {
+		return FillupField.class;
+	}
 
 	@Override
 	public String getTableName() {

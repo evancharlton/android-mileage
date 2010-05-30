@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -15,6 +16,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
@@ -72,6 +74,16 @@ public class VehicleStatisticsActivity extends Activity {
 			calculate();
 		}
 		setAdapter(c);
+
+		mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> list, View row, int position, long id) {
+				Statistic statistic = Statistics.STATISTICS.get(position);
+				Intent intent = new Intent(VehicleStatisticsActivity.this, statistic.getChartClass());
+				intent.putExtra(ChartActivity.VEHICLE_ID, String.valueOf(mVehicle.getId()));
+				startActivity(intent);
+			}
+		});
 	}
 
 	private Cursor getCursor() {
@@ -353,6 +365,7 @@ public class VehicleStatisticsActivity extends Activity {
 
 		@Override
 		protected void onPostExecute(Integer done) {
+			// FIXME: we can't do this on the UI thread
 			Log.d("CalculateTask", "Done recalculating!");
 			ArrayList<Statistic> stats = new ArrayList<Statistic>(mStatistics.values());
 			activity.populateCache(stats, true);

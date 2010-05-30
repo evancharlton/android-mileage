@@ -36,6 +36,11 @@ public class FillupsTable extends ContentTable {
 			Fillup.PARTIAL,
 			Fillup.RESTART
 	};
+	
+	@Override
+	protected Class<? extends Dao> getDaoType() {
+		return Fillup.class;
+	}
 
 	@Override
 	public String getTableName() {

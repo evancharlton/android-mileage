@@ -6,6 +6,8 @@
 	<string name="contact">mileage@evancharlton.com</string>
 	<string name="website">http://evancharlton.com/</string>
 	
+	<string name="creating_chart">Creating chart...</string>
+	
 	<string name="miles">Miles</string>
 	<string name="miles_abbr">mi</string>
 	<string name="kilometers">Kilometers</string>
@@ -141,6 +143,7 @@
 	<string name="error_no_volume_specified">Invalid value for volume</string>
 	<string name="error_no_price_specified">Invalid value for price</string>
 	<string name="error_no_total_cost_specified">Invalid value for total cost</string>
+	<string name="error_date_in_past">The date cannot be for the future</string>
 	<string name="error_invalid_field_title">Invalid field title</string>
 	<string name="error_invalid_field_description">Invalid field description</string>
 	<string name="error_invalid_field_type">Invalid field type</string>

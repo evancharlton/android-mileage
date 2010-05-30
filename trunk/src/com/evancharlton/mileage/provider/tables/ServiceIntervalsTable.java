@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 
 import com.evancharlton.mileage.dao.ServiceInterval;
+import com.evancharlton.mileage.dao.Dao;
 import com.evancharlton.mileage.provider.FillUpsProvider;
 
 public class ServiceIntervalsTable extends ContentTable {
@@ -31,6 +32,11 @@ public class ServiceIntervalsTable extends ContentTable {
 				ServiceInterval.DURATION,
 				ServiceInterval.DISTANCE
 		};
+	}
+	
+	@Override
+	protected Class<? extends Dao> getDaoType() {
+		return ServiceInterval.class;
 	}
 
 	@Override

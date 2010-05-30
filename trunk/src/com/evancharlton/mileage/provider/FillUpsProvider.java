@@ -109,7 +109,6 @@ public class FillUpsProvider extends ContentProvider {
 	}
 
 	public static ArrayList<BackupTransport> getBackupTransports() {
-		// TODO: return a cloned list?
 		return new ArrayList<BackupTransport>(BACKUPS.values());
 	}
 

@@ -15,10 +15,17 @@ public class FillupField extends Dao {
 	public static final String TEMPLATE_ID = "template_id";
 	public static final String VALUE = "value";
 
+	@Validate(R.string.error_invalid_template_id)
+	@Range.Positive
 	@Column(type = Column.LONG, name = TEMPLATE_ID)
 	protected long mTemplateId;
+
+	@Validate(R.string.error_invalid_fillup_id)
+	@Range.Positive
 	@Column(type = Column.LONG, name = FILLUP_ID)
 	protected long mFillupId;
+
+	@Validate
 	@Column(type = Column.STRING, name = VALUE)
 	protected String mValue;
 
@@ -40,21 +47,6 @@ public class FillupField extends Dao {
 			base = Uri.withAppendedPath(base, FillupsFieldsTable.FILLUPS_FIELDS_URI);
 		}
 		return base;
-	}
-
-	@Override
-	protected void validate(ContentValues values) {
-		if (mTemplateId <= 0) {
-			throw new InvalidFieldException(R.string.error_invalid_template_id);
-		}
-		values.put(TEMPLATE_ID, mTemplateId);
-
-		if (mFillupId <= 0) {
-			throw new InvalidFieldException(R.string.error_invalid_fillup_id);
-		}
-		values.put(FILLUP_ID, mFillupId);
-
-		values.put(VALUE, mValue);
 	}
 
 	public Fillup getFillup(Context context) {

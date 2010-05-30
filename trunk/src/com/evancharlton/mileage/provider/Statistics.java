@@ -3,26 +3,35 @@ package com.evancharlton.mileage.provider;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.evancharlton.mileage.ChartActivity;
 import com.evancharlton.mileage.R;
+import com.evancharlton.mileage.charts.AverageDistanceChart;
+import com.evancharlton.mileage.charts.AverageFuelEconomyChart;
+import com.evancharlton.mileage.charts.BestFuelEconomyChart;
+import com.evancharlton.mileage.charts.MaximumDistanceChart;
+import com.evancharlton.mileage.charts.MinimumDistanceChart;
+import com.evancharlton.mileage.charts.WorstFuelEconomyChart;
 import com.evancharlton.mileage.dao.CachedValue;
 
 public final class Statistics {
-	public enum Vehicle {
-		FARTHEST_NORTH, FARTHEST_SOUTH, FARTHEST_EAST, FARTHEST_WEST
-	}
-
 	public static final HashMap<String, Statistic> STRINGS = new HashMap<String, Statistic>();
 	public static final ArrayList<Statistic> STATISTICS = new ArrayList<Statistic>();
 	public static final ArrayList<StatisticsGroup> GROUPS = new ArrayList<StatisticsGroup>();
 
-	public static final Statistic AVG_ECONOMY = new Statistic(R.string.stat_avg_economy, new CachedValue("average_economy"));
-	public static final Statistic MIN_ECONOMY = new Statistic(R.string.stat_min_economy, new CachedValue("minimum_economy"));
-	public static final Statistic MAX_ECONOMY = new Statistic(R.string.stat_max_economy, new CachedValue("maximum_economy"));
+	public static final Statistic AVG_ECONOMY = new Statistic(R.string.stat_avg_economy, new CachedValue("average_economy"),
+			AverageFuelEconomyChart.class);
+	public static final Statistic MIN_ECONOMY = new Statistic(R.string.stat_min_economy, new CachedValue("minimum_economy"),
+			WorstFuelEconomyChart.class);
+	public static final Statistic MAX_ECONOMY = new Statistic(R.string.stat_max_economy, new CachedValue("maximum_economy"),
+			BestFuelEconomyChart.class);
 	public static final StatisticsGroup ECONOMIES = new StatisticsGroup(R.string.stat_fuel_economy, AVG_ECONOMY, MIN_ECONOMY, MAX_ECONOMY);
 
-	public static final Statistic AVG_DISTANCE = new Statistic(R.string.stat_avg_distance, new CachedValue("average_distance"));
-	public static final Statistic MIN_DISTANCE = new Statistic(R.string.stat_min_distance, new CachedValue("minimum_distance"));
-	public static final Statistic MAX_DISTANCE = new Statistic(R.string.stat_max_distance, new CachedValue("maximum_distance"));
+	public static final Statistic AVG_DISTANCE = new Statistic(R.string.stat_avg_distance, new CachedValue("average_distance"),
+			AverageDistanceChart.class);
+	public static final Statistic MIN_DISTANCE = new Statistic(R.string.stat_min_distance, new CachedValue("minimum_distance"),
+			MinimumDistanceChart.class);
+	public static final Statistic MAX_DISTANCE = new Statistic(R.string.stat_max_distance, new CachedValue("maximum_distance"),
+			MaximumDistanceChart.class);
 	public static final StatisticsGroup DISTANCES = new StatisticsGroup(R.string.stat_distance_between_fillups, AVG_DISTANCE, MIN_DISTANCE,
 			MAX_DISTANCE);
 
@@ -65,12 +74,19 @@ public final class Statistics {
 	public static class Statistic {
 		private final int mLabel;
 		private final CachedValue mValue;
+		private final Class<? extends ChartActivity> mChartClass;
 
+		// FIXME: Remove this
 		public Statistic(int label, CachedValue value) {
+			this(label, value, null);
+		}
+
+		public Statistic(int label, CachedValue value, Class<? extends ChartActivity> chartClass) {
 			STATISTICS.add(this);
 			STRINGS.put(value.getKey(), this);
 			mLabel = label;
 			mValue = value;
+			mChartClass = chartClass;
 		}
 
 		public int getLabel() {
@@ -103,6 +119,10 @@ public final class Statistics {
 
 		public long getOrder() {
 			return mValue.getOrder();
+		}
+
+		public Class<? extends ChartActivity> getChartClass() {
+			return mChartClass;
 		}
 
 		@Override

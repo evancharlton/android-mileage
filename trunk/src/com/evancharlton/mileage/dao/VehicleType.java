@@ -12,8 +12,12 @@ public class VehicleType extends Dao {
 	public static final String TITLE = "title";
 	public static final String DESCRIPTION = "description";
 
+	@Validate(R.string.error_invalid_vehicle_type_title)
 	@Column(type = Column.STRING, name = TITLE)
 	protected String mTitle;
+
+	@Validate(R.string.error_invalid_vehicle_type_description)
+	@Empty
 	@Column(type = Column.STRING, name = DESCRIPTION)
 	protected String mDescription;
 
@@ -23,19 +27,6 @@ public class VehicleType extends Dao {
 
 	public VehicleType(Cursor cursor) {
 		super(cursor);
-	}
-
-	@Override
-	protected void validate(ContentValues values) {
-		if (mTitle == null || mTitle.length() == 0) {
-			throw new InvalidFieldException(R.string.error_invalid_vehicle_type_title);
-		}
-		values.put(TITLE, mTitle);
-
-		if (mDescription == null) {
-			throw new InvalidFieldException(R.string.error_invalid_vehicle_type_description);
-		}
-		values.put(DESCRIPTION, mDescription);
 	}
 
 	public void setTitle(String title) {

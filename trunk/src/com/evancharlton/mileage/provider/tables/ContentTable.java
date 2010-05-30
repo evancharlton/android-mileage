@@ -17,7 +17,7 @@ import com.evancharlton.mileage.dao.Dao.Column;
 public abstract class ContentTable {
 	protected static String TABLE_NAME = "content_table";
 
-	abstract public String getTableName();
+	abstract protected String getTableName();
 
 	public static final HashMap<String, String> buildProjectionMap(String[] map) {
 		HashMap<String, String> projection = new HashMap<String, String>();
@@ -47,13 +47,11 @@ public abstract class ContentTable {
 
 	abstract public String init();
 
-	protected Class<? extends Dao> getDao() {
-		return null;
-	}
+	abstract protected Class<? extends Dao> getDaoType();
 
 	public final String create() throws IllegalArgumentException, IllegalAccessException {
 		TableBuilder builder = new TableBuilder();
-		Class<? extends Dao> cls = getDao();
+		Class<? extends Dao> cls = getDaoType();
 		Field[] fields = cls.getDeclaredFields();
 		for (Field field : fields) {
 			Annotation[] annotations = field.getAnnotations();

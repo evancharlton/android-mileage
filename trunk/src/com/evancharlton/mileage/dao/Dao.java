@@ -6,6 +6,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.lang.reflect.Field;
+import java.util.Date;
 import java.util.List;
 
 import android.content.ContentUris;
@@ -45,6 +46,9 @@ public abstract class Dao {
 	}
 
 	public void load(Cursor cursor) {
+		if (cursor.isBeforeFirst()) {
+			cursor.moveToFirst();
+		}
 		mId = cursor.getLong(cursor.getColumnIndex(_ID));
 
 		// automagically populate based on @Column annotation definitions
@@ -90,10 +94,11 @@ public abstract class Dao {
 							}
 							break;
 						case Column.TIMESTAMP:
-							// TODO: set Date?
-							value = cursor.getLong(columnIndex);
-							if (value == null) {
-								value = System.currentTimeMillis();
+							Long ms = cursor.getLong(columnIndex);
+							if (ms != null) {
+								value = new Date(ms);
+							} else {
+								value = new Date(System.currentTimeMillis());
 							}
 							break;
 					}
@@ -133,8 +138,76 @@ public abstract class Dao {
 	 * 
 	 * @return the ContentValues to be passed to persistent storage.
 	 */
-	// TODO: use annotations for this?
-	abstract protected void validate(ContentValues values);
+	protected final void validate(ContentValues values) {
+		preValidate();
+		Field[] fields = getClass().getDeclaredFields();
+		for (Field field : fields) {
+			Validate validate = field.getAnnotation(Validate.class);
+			if (validate == null) {
+				continue;
+			}
+			int errorMessage = validate.value();
+			try {
+				Object value = field.get(this);
+				if (validate != null) {
+					if (errorMessage > 0) {
+						// see if it's null when it shouldn't be
+						if (value == null && field.getAnnotation(Nullable.class) != null) {
+							throw new InvalidFieldException(errorMessage);
+						}
+
+						// check strings
+						if (value instanceof String && field.getAnnotation(Empty.class) != null) {
+							if (((String) value).length() == 0) {
+								throw new InvalidFieldException(errorMessage);
+							}
+						}
+
+						// check the numeric types
+						if (value instanceof Number) {
+							boolean checkPast = field.getAnnotation(Past.class) != null;
+							boolean checkPositive = field.getAnnotation(Range.Positive.class) != null;
+							if (value instanceof Double) {
+								if (checkPositive && ((Double) value) <= 0D) {
+									throw new InvalidFieldException(errorMessage);
+								}
+							}
+
+							if (value instanceof Long) {
+								if (checkPositive && ((Long) value) <= 0L) {
+									throw new InvalidFieldException(errorMessage);
+								}
+								if (checkPast && ((Long) value) >= System.currentTimeMillis()) {
+									throw new InvalidFieldException(errorMessage);
+								}
+							}
+
+							if (value instanceof Integer) {
+								if (checkPositive && ((Integer) value) <= 0) {
+									throw new InvalidFieldException(errorMessage);
+								}
+							}
+						}
+					}
+
+					// we made it without any errors (or no validation needed)
+					Column column = field.getAnnotation(Column.class);
+					if (column != null) {
+						values.put(column.name(), String.valueOf(value));
+					}
+				}
+			} catch (IllegalArgumentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
+	protected void preValidate() {
+	}
 
 	public final boolean save(Context context) {
 		ContentValues values = new ContentValues();
@@ -255,12 +328,40 @@ public abstract class Dao {
 
 		int type();
 
-		String name() default "";
+		String name();
 	}
 
 	@Retention(RetentionPolicy.RUNTIME)
 	@Target(ElementType.TYPE)
 	public @interface DataObject {
 		String path();
+	}
+
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target(ElementType.FIELD)
+	public @interface Validate {
+		int value() default 0;
+	}
+
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target(ElementType.FIELD)
+	public @interface Nullable {
+	}
+
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target(ElementType.FIELD)
+	public @interface Empty {
+	}
+
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target(ElementType.FIELD)
+	public @interface Past {
+	}
+
+	public static class Range {
+		@Retention(RetentionPolicy.RUNTIME)
+		@Target(ElementType.FIELD)
+		public @interface Positive {
+		}
 	}
 }

@@ -16,16 +16,27 @@ public class CachedValue extends Dao {
 	public static final String GROUP = "statistics_group";
 	public static final String ORDER = "statistics_order";
 
+	@Validate(R.string.error_invalid_statistic_item)
 	@Column(type = Column.STRING, name = ITEM)
 	protected String mItem;
+
+	@Validate(R.string.error_invalid_statistic_key)
 	@Column(type = Column.STRING, name = KEY)
 	protected String mKey;
+
+	@Validate
 	@Column(type = Column.DOUBLE, name = VALUE)
 	protected double mValue;
+
+	@Validate
 	@Column(type = Column.BOOLEAN, name = VALID)
 	protected boolean mIsValid;
+
+	@Validate
 	@Column(type = Column.LONG, name = GROUP, value = 0)
 	protected long mGroup;
+
+	@Validate
 	@Column(type = Column.LONG, name = ORDER, value = 0)
 	protected long mOrder;
 
@@ -47,24 +58,6 @@ public class CachedValue extends Dao {
 
 	public CachedValue(Cursor cursor) {
 		super(cursor);
-	}
-
-	@Override
-	protected void validate(ContentValues values) {
-		if (mItem == null) {
-			throw new InvalidFieldException(R.string.error_invalid_statistic_item);
-		}
-		values.put(ITEM, mItem);
-
-		if (mKey == null) {
-			throw new InvalidFieldException(R.string.error_invalid_statistic_key);
-		}
-		values.put(KEY, mKey);
-
-		values.put(VALUE, mValue);
-		values.put(VALID, mIsValid);
-		values.put(GROUP, mGroup);
-		values.put(ORDER, mOrder);
 	}
 
 	public String getKey() {

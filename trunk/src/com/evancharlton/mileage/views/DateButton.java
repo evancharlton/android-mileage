@@ -72,7 +72,9 @@ public class DateButton extends Button {
 		if (mDialog != null) {
 			mDialog.setCallback(mDateSetCallback);
 			try {
-				mDialog.show();
+				if (!mDialog.isShowing()) {
+					mDialog.show();
+				}
 			} catch (BadTokenException e) {
 				// TODO silently fail?
 			}

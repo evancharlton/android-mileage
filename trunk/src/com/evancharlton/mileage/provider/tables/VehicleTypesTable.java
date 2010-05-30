@@ -19,6 +19,11 @@ public class VehicleTypesTable extends ContentTable {
 
 	private static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.evancharlton.vehicle_types";
 	private static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.evancharlton.vehicle_type";
+	
+	@Override
+	protected Class<? extends Dao> getDaoType() {
+		return VehicleType.class;
+	}
 
 	@Override
 	public int delete(SQLiteDatabase db, Uri uri, String selection, String[] selectionArgs) {

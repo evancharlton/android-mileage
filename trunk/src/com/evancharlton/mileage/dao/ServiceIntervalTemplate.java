@@ -15,14 +15,27 @@ public class ServiceIntervalTemplate extends Dao {
 	public static final String DURATION = "duration";
 	public static final String VEHICLE_TYPE = "vehicle_type";
 
+	@Validate(R.string.error_invalid_template_title)
 	@Column(type = Column.STRING, name = TITLE)
 	protected String mTitle;
+
+	@Validate(R.string.error_invalid_template_description)
+	@Empty
 	@Column(type = Column.STRING, name = DESCRIPTION)
 	protected String mDescription;
+
+	@Validate(R.string.error_invalid_template_distance)
+	@Range.Positive
 	@Column(type = Column.LONG, name = DISTANCE)
 	protected long mDistance;
+
+	@Validate(R.string.error_invalid_template_duration)
+	@Range.Positive
 	@Column(type = Column.LONG, name = DURATION)
 	protected long mDuration;
+
+	@Validate(R.string.error_invalid_template_vehicle_type)
+	@Range.Positive
 	@Column(type = Column.LONG, name = VEHICLE_TYPE)
 	protected long mVehicleTypeId;
 
@@ -32,34 +45,6 @@ public class ServiceIntervalTemplate extends Dao {
 
 	public ServiceIntervalTemplate(Cursor cursor) {
 		super(cursor);
-	}
-
-	@Override
-	protected void validate(ContentValues values) {
-		if (mTitle == null || mTitle.length() == 0) {
-			throw new InvalidFieldException(R.string.error_invalid_template_title);
-		}
-		values.put(TITLE, mTitle);
-
-		if (mDescription == null) {
-			throw new InvalidFieldException(R.string.error_invalid_template_description);
-		}
-		values.put(DESCRIPTION, mDescription);
-
-		if (mDistance <= 0) {
-			throw new InvalidFieldException(R.string.error_invalid_template_distance);
-		}
-		values.put(DISTANCE, mDistance);
-
-		if (mDuration <= 0) {
-			throw new InvalidFieldException(R.string.error_invalid_template_duration);
-		}
-		values.put(DURATION, mDuration);
-
-		if (mVehicleTypeId <= 0) {
-			throw new InvalidFieldException(R.string.error_invalid_template_vehicle_type);
-		}
-		values.put(VEHICLE_TYPE, mVehicleTypeId);
 	}
 
 	public String getTitle() {

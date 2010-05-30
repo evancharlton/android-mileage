@@ -1,5 +1,7 @@
 package com.evancharlton.mileage.dao;
 
+import java.util.Date;
+
 import android.content.ContentValues;
 import android.database.Cursor;
 
@@ -18,14 +20,38 @@ public class ServiceInterval extends Dao {
 	public static final String DURATION = "duration";
 	public static final String DISTANCE = "distance";
 
-	private String mTitle = null;
-	private String mDescription = null;
-	private long mStartDate = 0L;
-	private double mStartOdometer = 0L;
-	private long mVehicleId = 0L;
-	private long mTemplateId = 0L;
-	private long mDuration = 0L;
-	private long mDistance = 0L;
+	@Validate(R.string.error_invalid_interval_title)
+	@Column(type = Column.STRING, name = TITLE)
+	protected String mTitle;
+
+	@Validate(R.string.error_invalid_interval_description)
+	@Column(type = Column.STRING, name = DESCRIPTION)
+	protected String mDescription;
+
+	@Validate
+	@Column(type = Column.TIMESTAMP, name = START_DATE)
+	protected Date mStartDate;
+
+	@Validate(R.string.error_invalid_interval_odometer)
+	@Column(type = Column.DOUBLE, name = START_ODOMETER)
+	protected double mStartOdometer;
+
+	@Validate(R.string.error_invalid_interval_vehicle)
+	@Range.Positive
+	@Column(type = Column.LONG, name = VEHICLE_ID)
+	protected long mVehicleId;
+
+	@Validate
+	@Column(type = Column.LONG, name = TEMPLATE_ID)
+	protected long mTemplateId;
+
+	@Validate(R.string.error_invalid_interval_duration)
+	@Column(type = Column.LONG, name = DURATION)
+	protected long mDuration;
+
+	@Validate(R.string.error_invalid_interval_distance)
+	@Column(type = Column.LONG, name = DISTANCE)
+	protected long mDistance;
 
 	public ServiceInterval(ContentValues values) {
 		super(values);
@@ -33,46 +59,6 @@ public class ServiceInterval extends Dao {
 
 	public ServiceInterval(Cursor cursor) {
 		super(cursor);
-	}
-
-	@Override
-	protected void validate(ContentValues values) {
-		if (mTitle == null || mTitle.length() == 0) {
-			throw new InvalidFieldException(R.string.error_invalid_interval_title);
-		}
-		values.put(TITLE, mTitle);
-
-		if (mDescription == null) {
-			throw new InvalidFieldException(R.string.error_invalid_interval_description);
-		}
-		values.put(DESCRIPTION, mDescription);
-
-		if (mStartDate == 0) {
-			mStartDate = System.currentTimeMillis();
-		}
-		values.put(START_DATE, mStartDate);
-
-		if (mStartOdometer == 0) {
-			throw new InvalidFieldException(R.string.error_invalid_interval_odometer);
-		}
-		values.put(START_ODOMETER, mStartOdometer);
-
-		if (mVehicleId == 0) {
-			throw new InvalidFieldException(R.string.error_invalid_interval_vehicle);
-		}
-		values.put(VEHICLE_ID, mVehicleId);
-
-		if (mDuration == 0) {
-			throw new InvalidFieldException(R.string.error_invalid_interval_duration);
-		}
-		values.put(DURATION, mDuration);
-
-		if (mDistance == 0) {
-			throw new InvalidFieldException(R.string.error_invalid_interval_distance);
-		}
-		values.put(DISTANCE, mDistance);
-
-		values.put(TEMPLATE_ID, mTemplateId);
 	}
 
 	public String getTitle() {
@@ -92,11 +78,15 @@ public class ServiceInterval extends Dao {
 	}
 
 	public long getStartDate() {
-		return mStartDate;
+		return mStartDate.getTime();
 	}
 
 	public void setStartDate(long startDate) {
-		mStartDate = startDate;
+		if (mStartDate == null) {
+			mStartDate = new Date(System.currentTimeMillis());
+		} else {
+			mStartDate.setTime(startDate);
+		}
 	}
 
 	public double getStartOdometer() {

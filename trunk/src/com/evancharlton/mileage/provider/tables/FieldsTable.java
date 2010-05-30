@@ -33,6 +33,11 @@ public class FieldsTable extends ContentTable {
 	}
 
 	@Override
+	protected Class<? extends Dao> getDaoType() {
+		return Field.class;
+	}
+
+	@Override
 	public String getDefaultSortOrder() {
 		return Field.TITLE + " asc";
 	}

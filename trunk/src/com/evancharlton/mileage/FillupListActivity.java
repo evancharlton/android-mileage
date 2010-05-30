@@ -18,6 +18,7 @@ import com.evancharlton.mileage.views.CursorSpinner;
 
 public class FillupListActivity extends BaseListActivity {
 	private static final DecimalFormat ECONOMY_FORMAT = new DecimalFormat("0.00");
+
 	private CursorSpinner mVehicles;
 
 	@Override
@@ -49,16 +50,6 @@ public class FillupListActivity extends BaseListActivity {
 	@Override
 	protected String[] getProjectionArray() {
 		return FillupsTable.PROJECTION;
-	}
-
-	@Override
-	protected String[] getFrom() {
-		return new String[] {
-				Fillup.DATE,
-				Fillup.VOLUME,
-				Fillup.UNIT_PRICE,
-				Fillup.ECONOMY
-		};
 	}
 
 	@Override
@@ -103,11 +94,22 @@ public class FillupListActivity extends BaseListActivity {
 		super.onCreateContextMenu(menu, view, menuInfo);
 	}
 
+	@Override
+	protected String[] getFrom() {
+		return new String[] {
+				Fillup.DATE,
+				Fillup.VOLUME,
+				Fillup.UNIT_PRICE,
+				Fillup.ECONOMY
+		};
+	}
+
 	private final ViewBinder mViewBinder = new ViewBinder() {
 		@Override
 		public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
 			TextView tv = (TextView) view;
 			switch (columnIndex) {
+				case 0: // Fillup.DATE
 				case 2:
 					// currency
 					return false;

@@ -25,26 +25,51 @@ public class Vehicle extends Dao {
 	public static final String PREF_ECONOMY_UNITS = "economy_units";
 	public static final String PREF_CURRENCY = "currency_units";
 
+	@Validate(R.string.error_invalid_vehicle_title)
 	@Column(type = Column.STRING, name = TITLE)
 	protected String mTitle;
+
+	@Validate
+	@Nullable
 	@Column(type = Column.STRING, name = DESCRIPTION)
 	protected String mDescription;
+
+	@Validate(R.string.error_invalid_vehicle_year)
 	@Column(type = Column.STRING, name = YEAR)
 	protected String mYear;
+
+	@Validate(R.string.error_invalid_vehicle_make)
 	@Column(type = Column.STRING, name = MAKE)
 	protected String mMake;
+
+	@Validate(R.string.error_invalid_vehicle_model)
 	@Column(type = Column.STRING, name = MODEL)
 	protected String mModel;
-	@Column(type = Column.LONG, name = TITLE)
+
+	@Validate(R.string.error_invalid_vehicle_type)
+	@Range.Positive
+	@Column(type = Column.LONG, name = VEHICLE_TYPE)
 	protected long mVehicleType;
-	@Column(type = Column.LONG, name = TITLE)
+
+	@Validate
+	@Column(type = Column.LONG, name = DEFAULT_TIME)
 	protected long mDefaultTime;
+
+	@Validate
 	@Column(type = Column.INTEGER, name = PREF_DISTANCE_UNITS, value = Calculator.MI)
 	protected int mPrefDistanceUnits;
+
+	@Validate
 	@Column(type = Column.INTEGER, name = PREF_VOLUME_UNITS, value = Calculator.GALLONS)
 	protected int mPrefVolumeUnits;
+
+	@Validate
 	@Column(type = Column.INTEGER, name = PREF_ECONOMY_UNITS, value = Calculator.MI_PER_GALLON)
 	protected int mPrefEconomyUnits;
+
+	@Validate
+	@Column(type = Column.STRING, name = PREF_CURRENCY)
+	protected String mPrefCurrency;
 
 	public Vehicle(ContentValues values) {
 		super(values);
@@ -54,56 +79,20 @@ public class Vehicle extends Dao {
 		super(cursor);
 	}
 
-	@Override
-	protected void validate(ContentValues values) {
-		if (mTitle == null || mTitle.length() == 0) {
-			throw new InvalidFieldException(R.string.error_invalid_vehicle_title);
-		}
-		values.put(TITLE, mTitle);
-
-		if (mDescription == null) {
-			mDescription = "";
-		}
-		values.put(DESCRIPTION, mDescription);
-
-		if (mYear == null || mYear.length() == 0) {
-			throw new InvalidFieldException(R.string.error_invalid_vehicle_year);
-		}
-		values.put(YEAR, mYear);
-
-		if (mMake == null || mMake.length() == 0) {
-			throw new InvalidFieldException(R.string.error_invalid_vehicle_make);
-		}
-		values.put(MAKE, mMake);
-
-		if (mModel == null || mModel.length() == 0) {
-			throw new InvalidFieldException(R.string.error_invalid_vehicle_model);
-		}
-		values.put(MODEL, mModel);
-
-		if (mVehicleType == 0) {
-			throw new InvalidFieldException(R.string.error_invalid_vehicle_type);
-		}
-		values.put(VEHICLE_TYPE, mVehicleType);
-
-		values.put(DEFAULT_TIME, mDefaultTime);
-		// values.put(PREF_CURRENCY, mCurrency);
-		values.put(PREF_DISTANCE_UNITS, mPrefDistanceUnits);
-		values.put(PREF_ECONOMY_UNITS, mPrefEconomyUnits);
-		values.put(PREF_VOLUME_UNITS, mPrefVolumeUnits);
-	}
-
 	public Fillup loadLatestFillup(Context context) {
 		Uri uri = FillupsTable.BASE_URI;
 		String[] projection = FillupsTable.PROJECTION;
 		Cursor c = context.getContentResolver().query(uri, projection, Fillup.VEHICLE_ID + " = ?", new String[] {
 			String.valueOf(getId())
 		}, Fillup.ODOMETER + " desc");
+
+		Fillup newest = null;
 		if (c.getCount() >= 1) {
 			c.moveToFirst();
-			return new Fillup(c);
+			newest = new Fillup(c);
 		}
-		return null;
+		c.close();
+		return newest;
 	}
 
 	public void setTitle(String title) {
@@ -146,6 +135,10 @@ public class Vehicle extends Dao {
 		mPrefEconomyUnits = economyUnits;
 	}
 
+	public void setCurrency(String currency) {
+		mPrefCurrency = currency;
+	}
+
 	public String getTitle() {
 		return mTitle;
 	}
@@ -184,5 +177,9 @@ public class Vehicle extends Dao {
 
 	public int getEconomyUnits() {
 		return mPrefEconomyUnits;
+	}
+
+	public String getCurrency() {
+		return mPrefCurrency;
 	}
 }

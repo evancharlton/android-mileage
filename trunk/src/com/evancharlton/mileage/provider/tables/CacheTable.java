@@ -31,7 +31,7 @@ public class CacheTable extends ContentTable {
 	};
 
 	@Override
-	protected Class<? extends Dao> getDao() {
+	protected Class<? extends Dao> getDaoType() {
 		return CachedValue.class;
 	}
 

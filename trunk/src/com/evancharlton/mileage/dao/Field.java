@@ -13,10 +13,16 @@ public class Field extends Dao {
 	public static final String DESCRIPTION = "description";
 	public static final String TYPE = "type"; // only text for now
 
+	@Validate(R.string.error_invalid_field_title)
 	@Column(type = Column.STRING, name = TITLE)
 	protected String mTitle;
+
+	@Validate(R.string.error_invalid_field_description)
 	@Column(type = Column.STRING, name = DESCRIPTION)
 	protected String mDescription;
+
+	@Validate
+	@Nullable
 	@Column(type = Column.STRING, name = TYPE)
 	protected String mType; // TODO: Implement this in a future release.
 
@@ -26,24 +32,6 @@ public class Field extends Dao {
 
 	public Field(Cursor cursor) {
 		super(cursor);
-	}
-
-	@Override
-	protected void validate(ContentValues values) {
-		if (mTitle == null || mTitle.length() == 0) {
-			throw new InvalidFieldException(R.string.error_invalid_field_title);
-		} else {
-			values.put(TITLE, mTitle);
-		}
-
-		if (mDescription == null) {
-			throw new InvalidFieldException(R.string.error_invalid_field_description);
-		} else {
-			values.put(DESCRIPTION, mDescription);
-		}
-
-		// TODO
-		values.put(TYPE, "string");
 	}
 
 	public void setTitle(String title) {

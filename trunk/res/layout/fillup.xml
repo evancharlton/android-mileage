@@ -3,6 +3,13 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:mileage="http://schemas.android.com/apk/res/com.evancharlton.mileage"
 >
+	<com.evancharlton.mileage.views.CursorSpinner
+		android:id="@+id/vehicle"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		mileage:uri="vehicles"
+		mileage:display_field="title"
+	/>
 	<TableLayout
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
@@ -41,13 +48,6 @@
 			/>
 		</TableRow>
 	</TableLayout>
-	<com.evancharlton.mileage.views.CursorSpinner
-		android:id="@+id/vehicle"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		mileage:uri="vehicles"
-		mileage:display_field="title"
-	/>
 	<CheckBox
 		android:id="@+id/partial"
 		android:layout_width="fill_parent"

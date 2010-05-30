@@ -37,6 +37,11 @@ public class VehiclesTable extends ContentTable {
 	};
 
 	@Override
+	protected Class<? extends Dao> getDaoType() {
+		return Vehicle.class;
+	}
+
+	@Override
 	public int delete(SQLiteDatabase db, Uri uri, String selection, String[] selectionArgs) {
 		// TODO Auto-generated method stub
 		return 0;

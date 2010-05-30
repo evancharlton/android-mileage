@@ -31,6 +31,11 @@ public class ServiceIntervalTemplatesTable extends ContentTable {
 				ServiceIntervalTemplate.VEHICLE_TYPE
 		};
 	}
+	
+	@Override
+	protected Class<? extends Dao> getDaoType() {
+		return ServiceIntervalTemplate.class;
+	}
 
 	@Override
 	public int delete(SQLiteDatabase db, Uri uri, String selection, String[] selectionArgs) {

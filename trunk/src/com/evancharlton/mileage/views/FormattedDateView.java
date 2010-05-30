@@ -37,35 +37,41 @@ public class FormattedDateView extends TextView {
 				mFormat = LONG;
 			} else if (FMT_TIME.equals(format)) {
 				mFormat = TIME;
-			} else {
+			} else if (FMT_DATE.equals(format)) {
 				mFormat = DATE;
+			} else {
+				throw new IllegalArgumentException("Unknown date format!");
 			}
 		}
 	}
 
 	@Override
 	public void setText(CharSequence text, BufferType type) {
+		DateFormat formatter;
+		switch (mFormat) {
+			case MEDIUM:
+				formatter = android.text.format.DateFormat.getMediumDateFormat(getContext());
+				break;
+			case LONG:
+				formatter = android.text.format.DateFormat.getLongDateFormat(getContext());
+				break;
+			case TIME:
+				formatter = android.text.format.DateFormat.getTimeFormat(getContext());
+				break;
+			case DATE:
+			default:
+				formatter = android.text.format.DateFormat.getDateFormat(getContext());
+				break;
+		}
 		try {
 			long timestamp = Long.parseLong(text.toString());
-			DateFormat formatter;
-			switch (mFormat) {
-				case MEDIUM:
-					formatter = android.text.format.DateFormat.getMediumDateFormat(getContext());
-					break;
-				case LONG:
-					formatter = android.text.format.DateFormat.getLongDateFormat(getContext());
-					break;
-				case TIME:
-					formatter = android.text.format.DateFormat.getTimeFormat(getContext());
-					break;
-				case DATE:
-				default:
-					formatter = android.text.format.DateFormat.getDateFormat(getContext());
-					break;
-			}
-			super.setText(formatter.format(new Date(timestamp)));
+			super.setText(formatter.format(new Date(timestamp)), type);
 		} catch (NumberFormatException e) {
-			super.setText(text, type);
+			try {
+				super.setText(formatter.format(new Date(text.toString())), type);
+			} catch (Exception ex) {
+				super.setText(text, type);
+			}
 		}
 	}
 }
