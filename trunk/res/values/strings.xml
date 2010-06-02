@@ -119,9 +119,9 @@
 	<string name="stat_month_cost">Cost last month</string>
 	<string name="stat_year_cost">Cost last year</string>
 	<string name="stat_cost_per_distance">Cost per distance</string>
-	<string name="stat_avg_cost_per_distance">Average cost per distance</string>
-	<string name="stat_min_cost_per_distance">Minimum cost per distance</string>
-	<string name="stat_max_cost_per_distance">Maximum cost per distance</string>
+	<string name="stat_avg_cost_per_distance">Average cost per %s</string>
+	<string name="stat_min_cost_per_distance">Minimum cost per %s</string>
+	<string name="stat_max_cost_per_distance">Maximum cost per %s</string>
 	<string name="stat_price">Fuel price</string>
 	<string name="stat_avg_price">Average price</string>
 	<string name="stat_min_price">Minimum price</string>
@@ -169,4 +169,24 @@
 	<string name="error_invalid_interval_distance">Invalid service interval distance</string>
 	<string name="error_invalid_statistic_item">Invalid item specified for the statistic</string>
 	<string name="error_invalid_statistic_key">Invalid key specified for the statistic</string>
+	
+	<string name="units_gallons">Gallons</string>
+	<string name="units_gallons_abbr">g</string>
+	<string name="units_litres">Litres</string>
+	<string name="units_litres_abbr">L</string>
+	<string name="units_imperial_gallons">Imperial Gallons</string>
+	<string name="units_miles">Miles</string>
+	<string name="units_miles_abbr">mi</string>
+	<string name="units_kilometers">Kilometers</string>
+	<string name="units_kilometers_abbr">km</string>
+	<string name="units_per">%s / %s</string>
+	<string name="units_mpg">mpg</string>
+	<string name="units_mpl">mpL</string>
+	<string name="units_kmpg">km/g</string>
+	<string name="units_kmpl">km/L</string>
+	<string name="units_gpckm">g/100 km</string>
+	<string name="units_lpckm">L/100 km</string>
+	
+	<string name="per_month">/ mo</string>
+	<string name="per_year">/ yr</string>
 </resources>

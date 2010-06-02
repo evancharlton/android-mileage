@@ -196,7 +196,7 @@ public class Fillup extends Dao {
 	}
 
 	public double getCostPerDistance() {
-		if (hasPrevious()) {
+		if (hasPrevious() && getDistance() > 0) {
 			return getTotalCost() / getDistance();
 		}
 		return -1D;

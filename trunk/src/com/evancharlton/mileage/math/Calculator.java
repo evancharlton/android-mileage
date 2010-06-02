@@ -1,5 +1,11 @@
 package com.evancharlton.mileage.math;
 
+import java.util.Currency;
+import java.util.Locale;
+
+import android.content.Context;
+
+import com.evancharlton.mileage.R;
 import com.evancharlton.mileage.dao.Fillup;
 import com.evancharlton.mileage.dao.FillupSeries;
 import com.evancharlton.mileage.dao.Vehicle;
@@ -29,6 +35,9 @@ public class Calculator {
 	public static final int GALLONS_PER_100KM = 12;
 	public static final int LITRES_PER_100KM = 13;
 	public static final int IMP_GAL_PER_100KM = 14;
+
+	// cache
+	private static String CURRENCY_SYMBOL = null;
 
 	/**
 	 * Returns a positive integer if first is a *better* economy than second, a
@@ -244,5 +253,75 @@ public class Calculator {
 				return value *= 51.7399537;
 		}
 		return value;
+	}
+
+	public static String getVolumeUnits(Context context, Vehicle vehicle) {
+		switch (vehicle.getVolumeUnits()) {
+			case LITRES:
+				return context.getString(R.string.units_litres);
+			case IMPERIAL_GALLONS:
+			case GALLONS:
+			default:
+				return context.getString(R.string.units_gallons);
+		}
+	}
+
+	public static String getVolumeUnitsAbbr(Context context, Vehicle vehicle) {
+		switch (vehicle.getVolumeUnits()) {
+			case LITRES:
+				return context.getString(R.string.units_litres_abbr);
+			case IMPERIAL_GALLONS:
+			case GALLONS:
+			default:
+				return context.getString(R.string.units_gallons_abbr);
+		}
+	}
+
+	public static String getDistanceUnits(Context context, Vehicle vehicle) {
+		switch (vehicle.getDistanceUnits()) {
+			case KM:
+				return context.getString(R.string.units_kilometers);
+			case MI:
+			default:
+				return context.getString(R.string.units_miles);
+		}
+	}
+
+	public static String getDistanceUnitsAbbr(Context context, Vehicle vehicle) {
+		switch (vehicle.getDistanceUnits()) {
+			case KM:
+				return context.getString(R.string.units_kilometers_abbr);
+			case MI:
+			default:
+				return context.getString(R.string.units_miles_abbr);
+		}
+	}
+
+	public static String getEconomyUnitsAbbr(Context context, Vehicle vehicle) {
+		switch (vehicle.getEconomyUnits()) {
+			case KM_PER_GALLON:
+			case KM_PER_IMP_GALLON:
+				return context.getString(R.string.units_kmpg);
+			case MI_PER_LITRE:
+				return context.getString(R.string.units_mpl);
+			case KM_PER_LITRE:
+				return context.getString(R.string.units_kmpl);
+			case LITRES_PER_100KM:
+				return context.getString(R.string.units_lpckm);
+			case GALLONS_PER_100KM:
+			case IMP_GAL_PER_100KM:
+				return context.getString(R.string.units_gpckm);
+			case MI_PER_GALLON:
+			case MI_PER_IMP_GALLON:
+			default:
+				return context.getString(R.string.units_mpg);
+		}
+	}
+
+	public static String getCurrencySymbol() {
+		if (CURRENCY_SYMBOL == null) {
+			CURRENCY_SYMBOL = Currency.getInstance(Locale.getDefault()).getSymbol();
+		}
+		return CURRENCY_SYMBOL;
 	}
 };

@@ -384,11 +384,18 @@ public class VehicleStatisticsActivity extends Activity {
 		@Override
 		public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
 			TextView textView = (TextView) view;
+			String key = cursor.getString(2);
+			Statistic statistic = Statistics.STRINGS.get(key);
 			switch (columnIndex) {
 				case 2:
 					// KEY
-					String key = cursor.getString(columnIndex);
-					textView.setText(Statistics.STRINGS.get(key).getLabel());
+					textView.setText(statistic.getLabel(VehicleStatisticsActivity.this, mVehicle));
+					return true;
+				case 3:
+					// VALUE
+					String prefix = statistic.getValuePrefix(VehicleStatisticsActivity.this, mVehicle);
+					String suffix = statistic.getValueSuffix(VehicleStatisticsActivity.this, mVehicle);
+					textView.setText(prefix + cursor.getString(3) + suffix);
 					return true;
 			}
 			return false;
