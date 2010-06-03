@@ -5,7 +5,6 @@ import java.text.DecimalFormat;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -162,7 +161,6 @@ public class FillupListActivity extends BaseListActivity {
 					if (Calculator.isBetterEconomy(mVehicle, economy, mAvgEconomy)) {
 						tv.setTextColor(0xFF0AB807);
 					} else {
-						Log.d("ViewBinder", economy + " < " + mAvgEconomy);
 						tv.setTextColor(0xFFD90000);
 					}
 					units = Calculator.getEconomyUnitsAbbr(FillupListActivity.this, mVehicle);
