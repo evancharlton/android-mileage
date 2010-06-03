@@ -5,6 +5,7 @@ import java.text.DecimalFormat;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -12,14 +13,23 @@ import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.SimpleCursorAdapter.ViewBinder;
 
+import com.evancharlton.mileage.dao.CachedValue;
 import com.evancharlton.mileage.dao.Fillup;
+import com.evancharlton.mileage.dao.Vehicle;
+import com.evancharlton.mileage.math.Calculator;
+import com.evancharlton.mileage.provider.Statistics;
+import com.evancharlton.mileage.provider.tables.CacheTable;
 import com.evancharlton.mileage.provider.tables.FillupsTable;
+import com.evancharlton.mileage.provider.tables.VehiclesTable;
 import com.evancharlton.mileage.views.CursorSpinner;
 
 public class FillupListActivity extends BaseListActivity {
 	private static final DecimalFormat ECONOMY_FORMAT = new DecimalFormat("0.00");
+	private static final DecimalFormat VOLUME_FORMAT = new DecimalFormat("0.00");
 
 	private CursorSpinner mVehicles;
+	private Vehicle mVehicle;
+	private double mAvgEconomy;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +50,36 @@ public class FillupListActivity extends BaseListActivity {
 			public void onNothingSelected(AdapterView<?> arg0) {
 			}
 		});
+
+		String selection = CachedValue.KEY + " = ? AND " + CachedValue.ITEM + " = ? AND " + CachedValue.VALID + " = 1";
+		String[] selectionArgs = new String[] {
+				Statistics.AVG_ECONOMY.getKey(),
+				String.valueOf(mVehicles.getSelectedItemId())
+		};
+
+		Cursor cursor = managedQuery(CacheTable.BASE_URI, new String[] {
+			CachedValue.VALUE
+		}, selection, selectionArgs, null);
+		if (cursor.getCount() > 0) {
+			cursor.moveToFirst();
+			mAvgEconomy = cursor.getDouble(0);
+		} else {
+			mAvgEconomy = 0D;
+		}
+
+		// have to round the average economy
+		mAvgEconomy *= 100;
+		mAvgEconomy = Math.floor(mAvgEconomy);
+		mAvgEconomy /= 100;
+
+		mVehicle = getVehicle();
+	}
+
+	protected final Vehicle getVehicle() {
+		Cursor cursor = managedQuery(VehiclesTable.BASE_URI, VehiclesTable.PROJECTION, Vehicle._ID + " = ?", new String[] {
+			String.valueOf(mVehicles.getSelectedItemId())
+		}, null);
+		return new Vehicle(cursor);
 	}
 
 	@Override
@@ -109,13 +149,25 @@ public class FillupListActivity extends BaseListActivity {
 		public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
 			TextView tv = (TextView) view;
 			switch (columnIndex) {
-				case 0: // Fillup.DATE
-				case 2:
-					// currency
-					return false;
-				case 3:
-					// economy
-					return false;
+				case 3: // Fillup.VOLUME
+					String volume = VOLUME_FORMAT.format(cursor.getDouble(columnIndex));
+					String units = Calculator.getVolumeUnits(FillupListActivity.this, mVehicle);
+					tv.setText(volume + " " + units);
+					return true;
+				case 5: // Fillup.ECONOMY
+					double economy = cursor.getDouble(columnIndex);
+					if (economy == 0) {
+						return true;
+					}
+					if (Calculator.isBetterEconomy(mVehicle, economy, mAvgEconomy)) {
+						tv.setTextColor(0xFF0AB807);
+					} else {
+						Log.d("ViewBinder", economy + " < " + mAvgEconomy);
+						tv.setTextColor(0xFFD90000);
+					}
+					units = Calculator.getEconomyUnitsAbbr(FillupListActivity.this, mVehicle);
+					tv.setText(ECONOMY_FORMAT.format(economy) + " " + units);
+					return true;
 			}
 			return false;
 		}

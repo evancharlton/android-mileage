@@ -23,7 +23,7 @@ public class FillupsTable extends ContentTable {
 	public static final Uri BASE_URI = Uri.withAppendedPath(FillUpsProvider.BASE_URI, URI);
 
 	public static final String[] PROJECTION = new String[] {
-			Dao._ID,
+			Fillup._ID,
 			Fillup.TOTAL_COST,
 			Fillup.UNIT_PRICE,
 			Fillup.VOLUME,
@@ -36,7 +36,7 @@ public class FillupsTable extends ContentTable {
 			Fillup.PARTIAL,
 			Fillup.RESTART
 	};
-	
+
 	@Override
 	protected Class<? extends Dao> getDaoType() {
 		return Fillup.class;

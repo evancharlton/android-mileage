@@ -101,9 +101,9 @@ public class Calculator {
 			case GALLONS_PER_100KM:
 			case LITRES_PER_100KM:
 			case IMP_GAL_PER_100KM:
-				return first < second;
+				return first <= second;
 		}
-		return first > second;
+		return first >= second;
 	}
 
 	public static double averageEconomy(Vehicle vehicle, FillupSeries series) {
