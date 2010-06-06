@@ -349,8 +349,8 @@ public class VehicleStatisticsActivity extends Activity {
 			update(Statistics.FUEL_PER_YEAR, fuelPerDay * 365);
 
 			double costPerDay = Calculator.averageCostPerDay(series);
-			update(Statistics.MONTHLY_COST, costPerDay * 30);
-			update(Statistics.YEARLY_COST, costPerDay * 365);
+			update(Statistics.AVG_MONTHLY_COST, costPerDay * 30);
+			update(Statistics.AVG_YEARLY_COST, costPerDay * 365);
 
 			cursor.close();
 			return 0;

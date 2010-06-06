@@ -46,71 +46,53 @@ public final class Statistics {
 	public static final ArrayList<Statistic> STATISTICS = new ArrayList<Statistic>();
 	public static final ArrayList<StatisticsGroup> GROUPS = new ArrayList<StatisticsGroup>();
 
-	public static final Statistic AVG_ECONOMY = new Statistic(new CachedValue("average_economy"), AverageFuelEconomyChart.class,
-			R.string.stat_avg_economy, null, args(ECONOMY));
-	public static final Statistic MIN_ECONOMY = new Statistic(new CachedValue("minimum_economy"), WorstFuelEconomyChart.class,
-			R.string.stat_min_economy, null, args(ECONOMY));
-	public static final Statistic MAX_ECONOMY = new Statistic(new CachedValue("maximum_economy"), BestFuelEconomyChart.class,
-			R.string.stat_max_economy, null, args(ECONOMY));
+	public static final Statistic AVG_ECONOMY = new Statistic("avg_economy", AverageFuelEconomyChart.class, R.string.stat_avg_economy, ECONOMY);
+	public static final Statistic MIN_ECONOMY = new Statistic("min_economy", WorstFuelEconomyChart.class, R.string.stat_min_economy, ECONOMY);
+	public static final Statistic MAX_ECONOMY = new Statistic("max_economy", BestFuelEconomyChart.class, R.string.stat_max_economy, ECONOMY);
 	public static final StatisticsGroup ECONOMIES = new StatisticsGroup(R.string.stat_fuel_economy, AVG_ECONOMY, MIN_ECONOMY, MAX_ECONOMY);
 
-	public static final Statistic AVG_DISTANCE = new Statistic(new CachedValue("average_distance"), AverageDistanceChart.class,
-			R.string.stat_avg_distance, null, args(ABBR_DISTANCE));
-	public static final Statistic MIN_DISTANCE = new Statistic(new CachedValue("minimum_distance"), MinimumDistanceChart.class,
-			R.string.stat_min_distance, null, args(ABBR_DISTANCE));
-	public static final Statistic MAX_DISTANCE = new Statistic(new CachedValue("maximum_distance"), MaximumDistanceChart.class,
-			R.string.stat_max_distance, null, args(ABBR_DISTANCE));
+	public static final Statistic AVG_DISTANCE = new Statistic("avg_distance", AverageDistanceChart.class, R.string.stat_avg_distance, ABBR_DISTANCE);
+	public static final Statistic MIN_DISTANCE = new Statistic("min_distance", MinimumDistanceChart.class, R.string.stat_min_distance, ABBR_DISTANCE);
+	public static final Statistic MAX_DISTANCE = new Statistic("max_distance", MaximumDistanceChart.class, R.string.stat_max_distance, ABBR_DISTANCE);
 	public static final StatisticsGroup DISTANCES = new StatisticsGroup(R.string.stat_distance_between_fillups, AVG_DISTANCE, MIN_DISTANCE,
 			MAX_DISTANCE);
 
-	public static final Statistic AVG_COST = new Statistic(new CachedValue("average_cost"), AverageCostChart.class, R.string.stat_avg_cost, null,
-			args(0, CURRENCY));
-	public static final Statistic MIN_COST = new Statistic(new CachedValue("minimum_cost"), MinimumCostChart.class, R.string.stat_min_cost, null,
-			args(0, CURRENCY));
-	public static final Statistic MAX_COST = new Statistic(new CachedValue("maximum_cost"), MaximumCostChart.class, R.string.stat_max_cost, null,
-			args(0, CURRENCY));
-	public static final Statistic TOTAL_COST = new Statistic(new CachedValue("total_cost"), TotalCostChart.class, R.string.stat_total_cost, null,
-			args(0, CURRENCY));
-	public static final Statistic MONTHLY_COST = new Statistic(new CachedValue("monthly_cost"), R.string.stat_month_cost, null, args(
-			R.string.per_month, CURRENCY));
-	public static final Statistic YEARLY_COST = new Statistic(new CachedValue("yearly_cost"), R.string.stat_year_cost, null, args(R.string.per_year,
-			CURRENCY));
+	public static final Statistic AVG_COST = new Statistic("avg_cost", AverageCostChart.class, R.string.stat_avg_cost, 0, CURRENCY);
+	public static final Statistic MIN_COST = new Statistic("min_cost", MinimumCostChart.class, R.string.stat_min_cost, 0, CURRENCY);
+	public static final Statistic MAX_COST = new Statistic("max_cost", MaximumCostChart.class, R.string.stat_max_cost, 0, CURRENCY);
+	public static final Statistic TOTAL_COST = new Statistic("total_cost", TotalCostChart.class, R.string.stat_total_cost, 0, CURRENCY);
+	public static final Statistic LAST_MONTH_COST = new Statistic("last_month_cost", R.string.stat_last_month_cost, 0, CURRENCY);
+	public static final Statistic AVG_MONTHLY_COST = new Statistic("monthly_cost", R.string.stat_avg_month_cost, R.string.per_month, CURRENCY);
+	public static final Statistic LAST_YEAR_COST = new Statistic("last_year_cost", R.string.stat_last_year_cost, 0, CURRENCY);
+	public static final Statistic AVG_YEARLY_COST = new Statistic("yearly_cost", R.string.stat_avg_year_cost, R.string.per_year, CURRENCY);
 	public static final StatisticsGroup COSTS = new StatisticsGroup(R.string.stat_fillup_cost, AVG_COST, MIN_COST, MAX_COST, TOTAL_COST,
-			MONTHLY_COST, YEARLY_COST);
+			LAST_MONTH_COST, AVG_MONTHLY_COST, LAST_YEAR_COST, AVG_YEARLY_COST);
 
-	public static final Statistic AVG_COST_PER_DISTANCE = new Statistic(new CachedValue("average_cost_per_distance"),
-			R.string.stat_avg_cost_per_distance, args(ABBR_DISTANCE), args(PER_DISTANCE, CURRENCY));
-	public static final Statistic MIN_COST_PER_DISTANCE = new Statistic(new CachedValue("minimum_cost_per_distance"),
-			R.string.stat_min_cost_per_distance, args(ABBR_DISTANCE), args(PER_DISTANCE, CURRENCY));
-	public static final Statistic MAX_COST_PER_DISTANCE = new Statistic(new CachedValue("maximum_cost_per_distance"),
-			R.string.stat_max_cost_per_distance, args(ABBR_DISTANCE), args(PER_DISTANCE, CURRENCY));
+	public static final Statistic AVG_COST_PER_DISTANCE = new Statistic("avg_$/mi", R.string.stat_avg_cost_per_distance, args(ABBR_DISTANCE),
+			PER_DISTANCE, CURRENCY);
+	public static final Statistic MIN_COST_PER_DISTANCE = new Statistic("min_$/mi", R.string.stat_min_cost_per_distance, args(ABBR_DISTANCE),
+			PER_DISTANCE, CURRENCY);
+	public static final Statistic MAX_COST_PER_DISTANCE = new Statistic("max_$/mi", R.string.stat_max_cost_per_distance, args(ABBR_DISTANCE),
+			PER_DISTANCE, CURRENCY);
 	public static final StatisticsGroup COSTS_PER_DISTANCE = new StatisticsGroup(R.string.stat_cost_per_distance, AVG_COST_PER_DISTANCE,
 			MIN_COST_PER_DISTANCE, MAX_COST_PER_DISTANCE);
 
-	public static final Statistic AVG_PRICE = new Statistic(new CachedValue("average_price"), AveragePriceChart.class, R.string.stat_avg_price, null,
-			args(VOLUME, CURRENCY));
-	public static final Statistic MIN_PRICE = new Statistic(new CachedValue("minimum_price"), MinimumPriceChart.class, R.string.stat_min_price, null,
-			args(VOLUME, CURRENCY));
-	public static final Statistic MAX_PRICE = new Statistic(new CachedValue("maximum_price"), MaximumPriceChart.class, R.string.stat_max_price, null,
-			args(VOLUME, CURRENCY));
+	public static final Statistic AVG_PRICE = new Statistic("avg_price", AveragePriceChart.class, R.string.stat_avg_price, VOLUME, CURRENCY);
+	public static final Statistic MIN_PRICE = new Statistic("min_price", MinimumPriceChart.class, R.string.stat_min_price, VOLUME, CURRENCY);
+	public static final Statistic MAX_PRICE = new Statistic("max_price", MaximumPriceChart.class, R.string.stat_max_price, VOLUME, CURRENCY);
 	public static final StatisticsGroup PRICES = new StatisticsGroup(R.string.stat_price, AVG_PRICE, MIN_PRICE, MAX_PRICE);
 
-	public static final Statistic MIN_FUEL = new Statistic(new CachedValue("minimum_fuel"), MinimumVolumeChart.class, R.string.stat_min_fuel, null,
-			args(VOLUME));
-	public static final Statistic MAX_FUEL = new Statistic(new CachedValue("maximum_fuel"), MaximumVolumeChart.class, R.string.stat_max_fuel, null,
-			args(VOLUME));
-	public static final Statistic AVG_FUEL = new Statistic(new CachedValue("average_fuel"), AverageVolumeChart.class, R.string.stat_avg_fuel, null,
-			args(VOLUME));
-	public static final Statistic TOTAL_FUEL = new Statistic(new CachedValue("total_fuel"), TotalVolumeChart.class, R.string.stat_total_fuel, null,
-			args(VOLUME));
-	public static final Statistic FUEL_PER_YEAR = new Statistic(new CachedValue("fuel_per_year"), R.string.stat_fuel_per_year, null,
-			args(R.string.per_year));
+	public static final Statistic MIN_FUEL = new Statistic("min_fuel", MinimumVolumeChart.class, R.string.stat_min_fuel, VOLUME);
+	public static final Statistic MAX_FUEL = new Statistic("max_fuel", MaximumVolumeChart.class, R.string.stat_max_fuel, VOLUME);
+	public static final Statistic AVG_FUEL = new Statistic("avg_fuel", AverageVolumeChart.class, R.string.stat_avg_fuel, VOLUME);
+	public static final Statistic TOTAL_FUEL = new Statistic("total_fuel", TotalVolumeChart.class, R.string.stat_total_fuel, VOLUME);
+	public static final Statistic FUEL_PER_YEAR = new Statistic("fuel_per_year", R.string.stat_fuel_per_year, R.string.per_year);
 	public static final StatisticsGroup VOLUMES = new StatisticsGroup(R.string.stat_fuel, MIN_FUEL, MAX_FUEL, AVG_FUEL, TOTAL_FUEL, FUEL_PER_YEAR);
 
-	public static final Statistic NORTH = new Statistic(new CachedValue("north"), NorthChart.class, R.string.stat_north, null, null);
-	public static final Statistic SOUTH = new Statistic(new CachedValue("south"), SouthChart.class, R.string.stat_south, null, null);
-	public static final Statistic EAST = new Statistic(new CachedValue("east"), EastChart.class, R.string.stat_east, null, null);
-	public static final Statistic WEST = new Statistic(new CachedValue("west"), WestChart.class, R.string.stat_west, null, null);
+	public static final Statistic NORTH = new Statistic("north", NorthChart.class, R.string.stat_north);
+	public static final Statistic SOUTH = new Statistic("south", SouthChart.class, R.string.stat_south);
+	public static final Statistic EAST = new Statistic("east", EastChart.class, R.string.stat_east);
+	public static final Statistic WEST = new Statistic("west", WestChart.class, R.string.stat_west);
 	public static final StatisticsGroup LOCATION = new StatisticsGroup(R.string.stat_location, NORTH, SOUTH, EAST, WEST);
 
 	public static class Statistic {
@@ -120,16 +102,23 @@ public final class Statistics {
 		private final CachedValue mValue;
 		private final Class<? extends ChartActivity> mChartClass;
 
-		// FIXME: Remove this
-		public Statistic(CachedValue value, int label, int[] labelArgs, int[] valueArgs) {
+		private Statistic(String value, int label, int... valueArgs) {
+			this(value, null, label, null, valueArgs);
+		}
+
+		private Statistic(String value, int label, int[] labelArgs, int... valueArgs) {
 			this(value, null, label, labelArgs, valueArgs);
 		}
 
-		public Statistic(CachedValue value, Class<? extends ChartActivity> chartClass, int label, int[] labelArgs, int[] valueArgs) {
+		private Statistic(String value, Class<? extends ChartActivity> chartClass, int label, int... valueArgs) {
+			this(value, chartClass, label, null, valueArgs);
+		}
+
+		private Statistic(String value, Class<? extends ChartActivity> chartClass, int label, int[] labelArgs, int... valueArgs) {
 			STATISTICS.add(this);
-			STRINGS.put(value.getKey(), this);
+			STRINGS.put(value, this);
 			mLabel = label;
-			mValue = value;
+			mValue = new CachedValue(value);
 			mChartClass = chartClass;
 			mLabelArgs = labelArgs;
 			mValueArgs = valueArgs;
