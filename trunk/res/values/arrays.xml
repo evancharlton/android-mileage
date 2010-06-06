@@ -1,23 +1,23 @@
 <resources>
 	<string-array name="distances">
-		<item>@string/miles</item>
-		<item>@string/kilometers</item>
+		<item>@string/units_miles</item>
+		<item>@string/units_kilometers</item>
 	</string-array>
 	<string-array name="volumes">
-		<item>@string/gallons</item>
-		<item>@string/litres</item>
-		<item>@string/imperial_gallons</item>
+		<item>@string/units_gallons</item>
+		<item>@string/units_litres</item>
+		<item>@string/units_imperial_gallons</item>
 	</string-array>
 	<string-array name="economies">
-		<item>@string/miles_per_gallon</item>
-		<item>@string/km_per_gallon</item>
-		<item>@string/miles_per_imperial_gallon</item>
-		<item>@string/km_per_imperial_gallon</item>
-		<item>@string/miles_per_litre</item>
-		<item>@string/km_per_litre</item>
-		<item>@string/gallons_per_100km</item>
-		<item>@string/litres_per_100km</item>
-		<item>@string/imperial_gallons_per_100km</item>
+		<item>@string/units_miles_per_gallon</item>
+		<item>@string/units_kilometers_per_gallon</item>
+		<item>@string/units_miles_per_imperial_gallon</item>
+		<item>@string/units_kilometers_per_imperial_gallon</item>
+		<item>@string/units_miles_per_litre</item>
+		<item>@string/units_kilometers_per_litre</item>
+		<item>@string/units_gallons_per_100km</item>
+		<item>@string/units_litres_per_100km</item>
+		<item>@string/units_imperial_gallons_per_100km</item>
 	</string-array>
 	<string-array name="data_formats">
 		<item>@string/unit_price_volume</item>

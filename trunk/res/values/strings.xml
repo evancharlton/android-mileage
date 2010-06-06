@@ -1,33 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<!-- new strings -->
-	<string name="app_name">Mileage</string>
-	<string name="author">Evan Charlton</string>
-	<string name="contact">mileage@evancharlton.com</string>
-	<string name="website">http://evancharlton.com/</string>
+	<string name="app_name" translatable="false">Mileage</string>
+	<string name="author" translatable="false">Evan Charlton</string>
+	<string name="contact" translatable="false">mileage@evancharlton.com</string>
+	<string name="website" translatable="false">http://evancharlton.com/</string>
 	
 	<string name="creating_chart">Creating chart...</string>
-	
-	<string name="miles">Miles</string>
-	<string name="miles_abbr">mi</string>
-	<string name="kilometers">Kilometers</string>
-	<string name="kilometers_abbr">km</string>
-	
-	<string name="gallons">Gallons</string>
-	<string name="gallons_abbr">gal</string>
-	<string name="litres">Litres</string>
-	<string name="litres_abbr">L</string>
-	<string name="imperial_gallons">Imperial Gallons</string>
-	<string name="imperial_gallons_abbr">gal</string>
-	<string name="miles_per_gallon">Miles / Gallon</string>
-	<string name="km_per_gallon">Km / Gallon</string>
-	<string name="miles_per_imperial_gallon">Miles / Imp. Gal.</string>
-	<string name="km_per_imperial_gallon">Km / Imp. Gal.</string>
-	<string name="miles_per_litre">Miles / Litre</string>
-	<string name="km_per_litre">Km / Litre</string>
-	<string name="gallons_per_100km">Gallons / 100 Km</string>
-	<string name="litres_per_100km">Litres / 100 Km</string>
-	<string name="imperial_gallons_per_100km">Imp. Gal. / 100 Km</string>
 	
 	<string name="unit_price_volume">Unit price, volume</string>
 	<string name="cost_volume">Total cost, volume</string>
@@ -180,13 +159,44 @@
 	<string name="units_kilometers">Kilometers</string>
 	<string name="units_kilometers_abbr">km</string>
 	<string name="units_per">%s / %s</string>
+	<string name="units_miles_per_gallon">Miles / Gallon</string>
+	<string name="units_miles_per_imperial_gallon">Miles / Imp. Gal.</string>
 	<string name="units_mpg">mpg</string>
+	<string name="units_miles_per_litre">Miles / Litre</string>
 	<string name="units_mpl">mpL</string>
+	<string name="units_kilometers_per_gallon">Km / Gallon</string>
+	<string name="units_kilometers_per_imperial_gallon">Km / Imp. Gal.</string>
 	<string name="units_kmpg">km/g</string>
+	<string name="units_kilometers_per_litre">Km / Litre</string>
 	<string name="units_kmpl">km/L</string>
+	<string name="units_gallons_per_100km">Gallons / 100 km</string>
+	<string name="units_imperial_gallons_per_100km">Imp. Gal. / 100 km</string>
 	<string name="units_gpckm">g/100 km</string>
+	<string name="units_litres_per_100km">Litres / 100 km</string>
 	<string name="units_lpckm">L/100 km</string>
 	
 	<string name="per_month">/ mo</string>
 	<string name="per_year">/ yr</string>
+	
+	<string name="title_fillup">Vehicle fillup</string>
+	<string name="title_fillup_list">Fillup history</string>
+	<string name="title_field">Fillup field</string>
+	<string name="title_field_list">Fillup fields</string>
+	<string name="title_vehicle">Vehicle</string>
+	<string name="title_vehicle_list">Vehicles</string>
+	<string name="title_vehicle_type">Vehicle type</string>
+	<string name="title_vehicle_type_list">Vehicle types</string>
+	<string name="title_service_interval">Service interval</string>
+	<string name="title_service_interval_list">Service intervals</string>
+	<string name="title_service_interval_template">Service interval template</string>
+	<string name="title_service_interval_template_list">Service interval templates</string>
+	<string name="title_settings">Settings</string>
+	<string name="title_transport_settings">Transport settings</string>
+	<string name="title_statistics">Statistics</string>
+	<string name="title_chart_avg_economy">Average fuel economy</string>
+	<string name="title_chart_min_economy">Worst fuel economy</string>
+	<string name="title_chart_max_economy">Best fuel economy</string>
+	<string name="title_chart_avg_distance">Average distance between fillups</string>
+	<string name="title_chart_min_distance">Minimum distance between fillups</string>
+	<string name="title_chart_max_distance">Maximum distance between fillups</string>
 </resources>

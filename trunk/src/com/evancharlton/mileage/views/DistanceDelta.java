@@ -19,8 +19,8 @@ public class DistanceDelta extends DeltaView {
 
 	public DistanceDelta(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		TEXTS[0] = context.getString(R.string.miles);
-		TEXTS[1] = context.getString(R.string.kilometers);
+		TEXTS[0] = context.getString(R.string.units_miles);
+		TEXTS[1] = context.getString(R.string.units_kilometers);
 	}
 
 	@Override

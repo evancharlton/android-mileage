@@ -19,27 +19,27 @@
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
-		<activity android:name=".FillupActivity" />
-		<activity android:name=".FillupListActivity" />
-		<activity android:name=".FieldListActivity" />
-		<activity android:name=".FieldActivity" />
-		<activity android:name=".VehicleListActivity" />
-		<activity android:name=".VehicleActivity" />
-		<activity android:name=".VehicleTypeListActivity" />
-		<activity android:name=".VehicleTypeActivity" />
-		<activity android:name=".ServiceIntervalsListActivity" />
-		<activity android:name=".ServiceIntervalActivity" />
-		<activity android:name=".ServiceIntervalTemplateListActivity" />
-		<activity android:name=".ServiceIntervalTemplateActivity" />
-		<activity android:name=".SettingsActivity" />
-		<activity android:name=".TransportSettingsActivity" />
-		<activity android:name=".VehicleStatisticsActivity" />
-		<activity android:name=".charts.AverageFuelEconomyChart" android:label="@string/stat_avg_economy" />
-		<activity android:name=".charts.WorstFuelEconomyChart" android:label="@string/stat_min_economy" />
-		<activity android:name=".charts.BestFuelEconomyChart" android:label="@string/stat_max_economy" />
-		<activity android:name=".charts.AverageDistanceChart" android:label="@string/stat_avg_distance" />
-		<activity android:name=".charts.MinimumDistanceChart" android:label="@string/stat_min_distance" />
-		<activity android:name=".charts.MaximumDistanceChart" android:label="@string/stat_max_distance" />
+		<activity android:name=".FillupActivity" android:label="@string/title_fillup" />
+		<activity android:name=".FillupListActivity" android:label="@string/title_fillup_list" />
+		<activity android:name=".FieldActivity" android:label="@string/title_field" />
+		<activity android:name=".FieldListActivity" android:label="@string/title_field_list" />
+		<activity android:name=".VehicleActivity" android:label="@string/title_vehicle" />
+		<activity android:name=".VehicleListActivity" android:label="@string/title_vehicle_list" />
+		<activity android:name=".VehicleTypeActivity" android:label="@string/title_vehicle_type" />
+		<activity android:name=".VehicleTypeListActivity" android:label="@string/title_vehicle_type_list" />
+		<activity android:name=".ServiceIntervalActivity" android:label="@string/title_service_interval" />
+		<activity android:name=".ServiceIntervalsListActivity" android:label="@string/title_service_interval_list" />
+		<activity android:name=".ServiceIntervalTemplateActivity" android:label="@string/title_service_interval_template" />
+		<activity android:name=".ServiceIntervalTemplateListActivity" android:label="@string/title_service_interval_template_list" />
+		<activity android:name=".SettingsActivity" android:label="@string/title_settings" />
+		<activity android:name=".TransportSettingsActivity" android:label="@string/title_transport_settings" />
+		<activity android:name=".VehicleStatisticsActivity" android:label="@string/title_statistics" />
+		<activity android:name=".charts.AverageFuelEconomyChart" android:label="@string/title_chart_avg_economy" />
+		<activity android:name=".charts.WorstFuelEconomyChart" android:label="@string/title_chart_min_economy" />
+		<activity android:name=".charts.BestFuelEconomyChart" android:label="@string/title_chart_max_economy" />
+		<activity android:name=".charts.AverageDistanceChart" android:label="@string/title_chart_avg_distance" />
+		<activity android:name=".charts.MinimumDistanceChart" android:label="@string/title_chart_min_distance" />
+		<activity android:name=".charts.MaximumDistanceChart" android:label="@string/title_chart_max_distance" />
 		<activity android:name=".charts.AverageCostChart" android:label="@string/stat_avg_cost" />
 		<activity android:name=".charts.MaximumCostChart" android:label="@string/stat_max_cost" />
 		<activity android:name=".charts.MinimumCostChart" android:label="@string/stat_min_cost" />

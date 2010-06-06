@@ -11,6 +11,7 @@ import com.evancharlton.mileage.dao.ServiceIntervalTemplate;
 import com.evancharlton.mileage.provider.FillUpsProvider;
 import com.evancharlton.mileage.provider.tables.ServiceIntervalTemplatesTable;
 import com.evancharlton.mileage.views.CursorSpinner;
+import com.evancharlton.mileage.views.DateDelta;
 import com.evancharlton.mileage.views.DistanceDelta;
 
 public class ServiceIntervalTemplateActivity extends BaseFormActivity {
@@ -19,7 +20,7 @@ public class ServiceIntervalTemplateActivity extends BaseFormActivity {
 	protected EditText mTitle;
 	protected EditText mDescription;
 	protected DistanceDelta mDistance;
-	protected DistanceDelta mDuration;
+	protected DateDelta mDuration;
 	protected CursorSpinner mVehicleTypes;
 
 	@Override
@@ -47,7 +48,7 @@ public class ServiceIntervalTemplateActivity extends BaseFormActivity {
 		mTitle = (EditText) findViewById(R.id.title);
 		mDescription = (EditText) findViewById(R.id.description);
 		mDistance = (DistanceDelta) findViewById(R.id.distance);
-		mDuration = (DistanceDelta) findViewById(R.id.duration);
+		mDuration = (DateDelta) findViewById(R.id.duration);
 		mVehicleTypes = (CursorSpinner) findViewById(R.id.types);
 	}
 

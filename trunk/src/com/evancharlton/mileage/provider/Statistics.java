@@ -164,7 +164,7 @@ public final class Statistics {
 		}
 
 		public String getValueSuffix(Context context, Vehicle vehicle) {
-			return getValue(context, vehicle, 0);
+			return " " + getValue(context, vehicle, 0);
 		}
 
 		public String getValuePrefix(Context context, Vehicle vehicle) {

@@ -53,7 +53,7 @@ public class VehicleStatisticsActivity extends Activity {
 		Object[] saved = (Object[]) getLastNonConfigurationInstance();
 		if (saved != null) {
 			mCalculationTask = (CalculateTask) saved[0];
-			mAdapter = (SimpleCursorAdapter) saved[1];
+			mAdapter = null;
 		}
 		if (mCalculationTask != null) {
 			mCalculationTask.activity = this;
@@ -110,6 +110,7 @@ public class VehicleStatisticsActivity extends Activity {
 		}
 		mAdapter.setViewBinder(mViewBinder);
 		mListView.setAdapter(mAdapter);
+		mAdapter.notifyDataSetChanged();
 	}
 
 	private void calculate() {
