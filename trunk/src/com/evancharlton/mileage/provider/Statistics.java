@@ -1,5 +1,6 @@
 package com.evancharlton.mileage.provider;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -43,6 +44,9 @@ public final class Statistics {
 	private static final int ABBR_VOLUME = 5;
 	private static final int CURRENCY = 6;
 	private static final int PER_DISTANCE = 7;
+
+	// the length shouldn't ever exceed 200 chars, right?
+	private static final StringBuilder BUILDER = new StringBuilder(200);
 
 	public static final HashMap<String, Statistic> STRINGS = new HashMap<String, Statistic>();
 	public static final ArrayList<Statistic> STATISTICS = new ArrayList<Statistic>();
@@ -104,6 +108,7 @@ public final class Statistics {
 		private final int[] mValueArgs;
 		private final CachedValue mValue;
 		private final Class<? extends ChartActivity> mChartClass;
+		private final DecimalFormat mFormatter = new DecimalFormat("0.00");
 
 		private Statistic(String value, int label, int... valueArgs) {
 			this(value, null, label, null, valueArgs);
@@ -156,14 +161,14 @@ public final class Statistics {
 		}
 
 		public String getValueSuffix(Context context, Vehicle vehicle) {
-			return " " + getValue(context, vehicle, 0);
+			return " " + getValueTrimmings(context, vehicle, 0);
 		}
 
 		public String getValuePrefix(Context context, Vehicle vehicle) {
-			return getValue(context, vehicle, 1);
+			return getValueTrimmings(context, vehicle, 1);
 		}
 
-		private String getValue(Context context, Vehicle vehicle, int index) {
+		private String getValueTrimmings(Context context, Vehicle vehicle, int index) {
 			if (mValueArgs != null && mValueArgs.length >= index + 1 && mValueArgs[index] != 0) {
 				switch (mValueArgs[index]) {
 					case ABBR_DISTANCE:
@@ -185,6 +190,18 @@ public final class Statistics {
 				}
 			}
 			return "";
+		}
+
+		public String format(final Context context, final Vehicle vehicle, final double value) {
+			BUILDER.setLength(0);
+			BUILDER.append(getValuePrefix(context, vehicle));
+			if (mFormatter != null) {
+				BUILDER.append(mFormatter.format(value));
+			} else {
+				BUILDER.append(String.valueOf(value));
+			}
+			BUILDER.append(getValueSuffix(context, vehicle));
+			return BUILDER.toString();
 		}
 
 		public void setValue(double value) {

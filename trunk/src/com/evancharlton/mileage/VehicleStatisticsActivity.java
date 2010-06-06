@@ -414,9 +414,7 @@ public class VehicleStatisticsActivity extends Activity {
 						return true;
 					case 3:
 						// VALUE
-						String prefix = statistic.getValuePrefix(VehicleStatisticsActivity.this, mVehicle);
-						String suffix = statistic.getValueSuffix(VehicleStatisticsActivity.this, mVehicle);
-						textView.setText(prefix + cursor.getString(3) + suffix);
+						textView.setText(statistic.format(VehicleStatisticsActivity.this, mVehicle, cursor.getDouble(3)));
 						return true;
 				}
 			}
