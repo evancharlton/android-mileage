@@ -14,6 +14,8 @@ import com.evancharlton.mileage.charts.AveragePriceChart;
 import com.evancharlton.mileage.charts.AverageVolumeChart;
 import com.evancharlton.mileage.charts.BestFuelEconomyChart;
 import com.evancharlton.mileage.charts.EastChart;
+import com.evancharlton.mileage.charts.LastMonthCostChart;
+import com.evancharlton.mileage.charts.LastYearCostChart;
 import com.evancharlton.mileage.charts.MaximumCostChart;
 import com.evancharlton.mileage.charts.MaximumDistanceChart;
 import com.evancharlton.mileage.charts.MaximumPriceChart;
@@ -61,9 +63,10 @@ public final class Statistics {
 	public static final Statistic MIN_COST = new Statistic("min_cost", MinimumCostChart.class, R.string.stat_min_cost, 0, CURRENCY);
 	public static final Statistic MAX_COST = new Statistic("max_cost", MaximumCostChart.class, R.string.stat_max_cost, 0, CURRENCY);
 	public static final Statistic TOTAL_COST = new Statistic("total_cost", TotalCostChart.class, R.string.stat_total_cost, 0, CURRENCY);
-	public static final Statistic LAST_MONTH_COST = new Statistic("last_month_cost", R.string.stat_last_month_cost, 0, CURRENCY);
+	public static final Statistic LAST_MONTH_COST = new Statistic("last_month_cost", LastMonthCostChart.class, R.string.stat_last_month_cost, 0,
+			CURRENCY);
 	public static final Statistic AVG_MONTHLY_COST = new Statistic("monthly_cost", R.string.stat_avg_month_cost, R.string.per_month, CURRENCY);
-	public static final Statistic LAST_YEAR_COST = new Statistic("last_year_cost", R.string.stat_last_year_cost, 0, CURRENCY);
+	public static final Statistic LAST_YEAR_COST = new Statistic("last_year_cost", LastYearCostChart.class, R.string.stat_last_year_cost, 0, CURRENCY);
 	public static final Statistic AVG_YEARLY_COST = new Statistic("yearly_cost", R.string.stat_avg_year_cost, R.string.per_year, CURRENCY);
 	public static final StatisticsGroup COSTS = new StatisticsGroup(R.string.stat_fillup_cost, AVG_COST, MIN_COST, MAX_COST, TOTAL_COST,
 			LAST_MONTH_COST, AVG_MONTHLY_COST, LAST_YEAR_COST, AVG_YEARLY_COST);

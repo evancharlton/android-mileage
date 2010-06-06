@@ -180,6 +180,7 @@ public class VehicleStatisticsActivity extends Activity {
 		resolver.bulkInsert(CacheTable.BASE_URI, bulkValues);
 	}
 
+	// TODO: Pull this out into another class for testing
 	private static class CalculateTask extends AsyncTask<Cursor, Statistics.Statistic, Integer> {
 		public VehicleStatisticsActivity activity;
 		private final HashMap<String, Statistic> mStatistics = new HashMap<String, Statistic>();
@@ -236,8 +237,8 @@ public class VehicleStatisticsActivity extends Activity {
 			double lastMonthCost = 0D;
 			double lastYearCost = 0D;
 
-			final long lastYear = System.currentTimeMillis() - (1000L * 60L * 60L * 24L * 365L);
-			final long lastMonth = System.currentTimeMillis() - (1000L * 60L * 60L * 24L * 30L);
+			final long lastYear = System.currentTimeMillis() - Calculator.YEAR_MS;
+			final long lastMonth = System.currentTimeMillis() - Calculator.MONTH_MS;
 
 			final Vehicle vehicle = activity.mVehicle;
 			while (cursor.moveToNext()) {

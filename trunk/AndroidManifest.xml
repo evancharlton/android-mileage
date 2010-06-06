@@ -44,6 +44,8 @@
 		<activity android:name=".charts.MaximumCostChart" android:label="@string/stat_max_cost" />
 		<activity android:name=".charts.MinimumCostChart" android:label="@string/stat_min_cost" />
 		<activity android:name=".charts.TotalCostChart" android:label="@string/stat_total_cost" />
+		<activity android:name=".charts.LastMonthCostChart" android:label="@string/title_chart_last_month_cost" />
+		<activity android:name=".charts.LastYearCostChart" android:label="@string/title_chart_last_year_cost" />
 		<activity android:name=".charts.AveragePriceChart" android:label="@string/stat_avg_price" />
 		<activity android:name=".charts.MinimumPriceChart" android:label="@string/stat_min_price" />
 		<activity android:name=".charts.MaximumPriceChart" android:label="@string/stat_max_price" />

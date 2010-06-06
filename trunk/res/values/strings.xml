@@ -201,4 +201,6 @@
 	<string name="title_chart_avg_distance">Average distance between fillups</string>
 	<string name="title_chart_min_distance">Minimum distance between fillups</string>
 	<string name="title_chart_max_distance">Maximum distance between fillups</string>
+	<string name="title_chart_last_month_cost">Money spent in the last month</string>
+	<string name="title_chart_last_year_cost">Money spent in the last year</string>
 </resources>
