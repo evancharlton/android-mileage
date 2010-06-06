@@ -233,6 +233,12 @@ public class VehicleStatisticsActivity extends Activity {
 			double minLongitude = MAX;
 			double maxLongitude = MIN;
 
+			double lastMonthCost = 0D;
+			double lastYearCost = 0D;
+
+			final long lastYear = System.currentTimeMillis() - (1000L * 60L * 60L * 24L * 365L);
+			final long lastMonth = System.currentTimeMillis() - (1000L * 60L * 60L * 24L * 30L);
+
 			final Vehicle vehicle = activity.mVehicle;
 			while (cursor.moveToNext()) {
 				Fillup fillup = new Fillup(cursor);
@@ -267,6 +273,17 @@ public class VehicleStatisticsActivity extends Activity {
 					if (costPerDistance < minCostPerDistance) {
 						minCostPerDistance = costPerDistance;
 						update(Statistics.MIN_COST_PER_DISTANCE, minCostPerDistance);
+					}
+
+					long timestamp = fillup.getTimestamp();
+					if (timestamp >= lastMonth) {
+						lastMonthCost += fillup.getTotalCost();
+						update(Statistics.LAST_MONTH_COST, lastMonthCost);
+					}
+
+					if (timestamp >= lastYear) {
+						lastYearCost += fillup.getTotalCost();
+						update(Statistics.LAST_YEAR_COST, lastYearCost);
 					}
 				}
 
@@ -387,17 +404,20 @@ public class VehicleStatisticsActivity extends Activity {
 			TextView textView = (TextView) view;
 			String key = cursor.getString(2);
 			Statistic statistic = Statistics.STRINGS.get(key);
-			switch (columnIndex) {
-				case 2:
-					// KEY
-					textView.setText(statistic.getLabel(VehicleStatisticsActivity.this, mVehicle));
-					return true;
-				case 3:
-					// VALUE
-					String prefix = statistic.getValuePrefix(VehicleStatisticsActivity.this, mVehicle);
-					String suffix = statistic.getValueSuffix(VehicleStatisticsActivity.this, mVehicle);
-					textView.setText(prefix + cursor.getString(3) + suffix);
-					return true;
+			if (statistic != null) {
+				// if it's null, then the cache is dead so ignore it
+				switch (columnIndex) {
+					case 2:
+						// KEY
+						textView.setText(statistic.getLabel(VehicleStatisticsActivity.this, mVehicle));
+						return true;
+					case 3:
+						// VALUE
+						String prefix = statistic.getValuePrefix(VehicleStatisticsActivity.this, mVehicle);
+						String suffix = statistic.getValueSuffix(VehicleStatisticsActivity.this, mVehicle);
+						textView.setText(prefix + cursor.getString(3) + suffix);
+						return true;
+				}
 			}
 			return false;
 		}
