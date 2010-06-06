@@ -90,25 +90,6 @@ public class Fillup extends Dao {
 		super(cursor);
 	}
 
-	// @Override
-	// public void load(Cursor cursor) {
-	// super.load(cursor);
-	// mVehicleId = getLong(cursor, VEHICLE_ID);
-	// mOdometer = getLong(cursor, ODOMETER);
-	// mTimestamp = getLong(cursor, DATE);
-	// mVolume = getDouble(cursor, VOLUME);
-	// mUnitPrice = getDouble(cursor, UNIT_PRICE);
-	// mIsPartial = getBoolean(cursor, PARTIAL);
-	// mIsRestart = getBoolean(cursor, RESTART);
-	// // should the economy be stored in the cache table? I say no because the
-	// // added performance benefit of being able to load this oft-used field
-	// // from the same table will outweigh the ugliness of putting calculated
-	// // fields in here. Things to watch out for:
-	// // - when changing a vehicle's unit preferences, invalidate the field
-	// // - when editing a field before it, invalidate the field (partials)
-	// mEconomy = getDouble(cursor, ECONOMY);
-	// }
-
 	@Override
 	protected void preValidate() {
 		getVolume();

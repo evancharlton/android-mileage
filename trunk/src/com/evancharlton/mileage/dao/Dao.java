@@ -193,7 +193,13 @@ public abstract class Dao {
 					// we made it without any errors (or no validation needed)
 					Column column = field.getAnnotation(Column.class);
 					if (column != null) {
-						values.put(column.name(), String.valueOf(value));
+						String data = null;
+						if (value instanceof Date) {
+							data = String.valueOf(((Date) value).getTime());
+						} else {
+							data = String.valueOf(value);
+						}
+						values.put(column.name(), data);
 					}
 				}
 			} catch (IllegalArgumentException e) {
