@@ -75,11 +75,11 @@ public final class Statistics {
 	public static final StatisticsGroup COSTS = new StatisticsGroup(R.string.stat_fillup_cost, AVG_COST, MIN_COST, MAX_COST, TOTAL_COST,
 			LAST_MONTH_COST, AVG_MONTHLY_COST, LAST_YEAR_COST, AVG_YEARLY_COST);
 
-	public static final Statistic AVG_COST_PER_DISTANCE = new Statistic("avg_$/mi", R.string.stat_avg_cost_per_distance, args(ABBR_DISTANCE),
+	public static final Statistic AVG_COST_PER_DISTANCE = new Statistic("avg_cost_per_mi", R.string.stat_avg_cost_per_distance, args(ABBR_DISTANCE),
 			PER_DISTANCE, CURRENCY);
-	public static final Statistic MIN_COST_PER_DISTANCE = new Statistic("min_$/mi", R.string.stat_min_cost_per_distance, args(ABBR_DISTANCE),
+	public static final Statistic MIN_COST_PER_DISTANCE = new Statistic("min_cost_per_mi", R.string.stat_min_cost_per_distance, args(ABBR_DISTANCE),
 			PER_DISTANCE, CURRENCY);
-	public static final Statistic MAX_COST_PER_DISTANCE = new Statistic("max_$/mi", R.string.stat_max_cost_per_distance, args(ABBR_DISTANCE),
+	public static final Statistic MAX_COST_PER_DISTANCE = new Statistic("max_cost_per_mi", R.string.stat_max_cost_per_distance, args(ABBR_DISTANCE),
 			PER_DISTANCE, CURRENCY);
 	public static final StatisticsGroup COSTS_PER_DISTANCE = new StatisticsGroup(R.string.stat_cost_per_distance, AVG_COST_PER_DISTANCE,
 			MIN_COST_PER_DISTANCE, MAX_COST_PER_DISTANCE);

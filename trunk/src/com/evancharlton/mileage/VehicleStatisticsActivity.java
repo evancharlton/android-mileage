@@ -3,7 +3,6 @@ package com.evancharlton.mileage;
 import java.util.ArrayList;
 
 import android.app.Activity;
-import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -51,7 +50,7 @@ public class VehicleStatisticsActivity extends Activity {
 			mAdapter = null;
 		}
 		if (mCalculationTask != null) {
-			mCalculationTask.activity = this;
+			mCalculationTask.setActivity(this);
 		}
 
 		mListView = (ListView) findViewById(android.R.id.list);
@@ -75,7 +74,6 @@ public class VehicleStatisticsActivity extends Activity {
 		final int numStats = statistics.size();
 		Log.d(TAG, "Checking statistics ... " + numStats);
 		if (c.getCount() < numStats) {
-			populateCache(Statistics.STATISTICS, false);
 			// kick off the task
 			calculate();
 		}
@@ -121,7 +119,7 @@ public class VehicleStatisticsActivity extends Activity {
 
 	private void calculate() {
 		mCalculationTask = new VehicleStatisticsTask();
-		mCalculationTask.activity = this;
+		mCalculationTask.setActivity(this);
 		mCalculationTask.execute();
 	}
 
@@ -155,35 +153,6 @@ public class VehicleStatisticsActivity extends Activity {
 		Cursor vehicle = managedQuery(uri, VehiclesTable.PROJECTION, null, null, null);
 		vehicle.moveToFirst();
 		mVehicle.load(vehicle);
-	}
-
-	public void populateCache(ArrayList<Statistic> statistics, boolean valid) {
-		final long vehicleId = mVehicle.getId();
-		ContentResolver resolver = getContentResolver();
-
-		// clear the cache first
-		String where = CachedValue.ITEM + " = ?";
-		String[] selectionArgs = new String[] {
-			String.valueOf(vehicleId)
-		};
-		resolver.delete(CacheTable.BASE_URI, where, selectionArgs);
-
-		// fill with the new values
-		final int numStats = statistics.size();
-		ContentValues[] bulkValues = new ContentValues[numStats];
-		int position = 0;
-		for (int i = 0; i < numStats; i++) {
-			Statistics.Statistic statistic = statistics.get(i);
-			ContentValues values = new ContentValues();
-			values.put(CachedValue.ITEM, vehicleId);
-			values.put(CachedValue.KEY, statistic.getKey());
-			values.put(CachedValue.VALID, valid);
-			values.put(CachedValue.VALUE, statistic.getValue());
-			values.put(CachedValue.GROUP, statistic.getGroup());
-			values.put(CachedValue.ORDER, statistic.getOrder());
-			bulkValues[position++] = values;
-		}
-		resolver.bulkInsert(CacheTable.BASE_URI, bulkValues);
 	}
 
 	public Vehicle getVehicle() {

@@ -1,8 +1,9 @@
 package com.evancharlton.mileage.tasks;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -19,25 +20,31 @@ import com.evancharlton.mileage.provider.tables.CacheTable;
 import com.evancharlton.mileage.provider.tables.FillupsTable;
 
 public class VehicleStatisticsTask extends AsyncTask<Cursor, Statistics.Statistic, Integer> {
-	public VehicleStatisticsActivity activity;
-	private final HashMap<String, Statistic> mStatistics = new HashMap<String, Statistic>();
+	private VehicleStatisticsActivity mActivity;
+	private ContentResolver mContentResolver;
 
-	@Override
-	protected void onPreExecute() {
-		String[] args = new String[] {
-			String.valueOf(activity.getVehicle().getId())
-		};
-		activity.getContentResolver().delete(CacheTable.BASE_URI, CachedValue.ITEM + " = ?", args);
+	public void setActivity(VehicleStatisticsActivity activity) {
+		mActivity = activity;
+		mContentResolver = activity.getContentResolver();
 	}
 
 	@Override
 	protected Integer doInBackground(Cursor... cursors) {
-		String selection = Fillup.VEHICLE_ID + " = ?";
+		// delete the cache
 		String[] args = new String[] {
-			String.valueOf(activity.getVehicle().getId())
+			String.valueOf(mActivity.getVehicle().getId())
 		};
-		Cursor cursor = activity.getContentResolver()
-				.query(FillupsTable.BASE_URI, FillupsTable.PROJECTION, selection, args, Fillup.ODOMETER + " asc");
+		mContentResolver.delete(CacheTable.BASE_URI, CachedValue.ITEM + " = ?", args);
+
+		// initialize the cache so that we can update it later
+		populateCache(Statistics.STATISTICS, false);
+
+		String selection = Fillup.VEHICLE_ID + " = ?";
+		args = new String[] {
+			String.valueOf(mActivity.getVehicle().getId())
+		};
+
+		Cursor cursor = mContentResolver.query(FillupsTable.BASE_URI, FillupsTable.PROJECTION, selection, args, Fillup.ODOMETER + " asc");
 		Log.d("CalculateTask", "Recalculating...");
 		// recalculate a whole bunch of shit
 		FillupSeries series = new FillupSeries();
@@ -77,7 +84,7 @@ public class VehicleStatisticsTask extends AsyncTask<Cursor, Statistics.Statisti
 		final long lastYear = System.currentTimeMillis() - Calculator.YEAR_MS;
 		final long lastMonth = System.currentTimeMillis() - Calculator.MONTH_MS;
 
-		final Vehicle vehicle = activity.getVehicle();
+		final Vehicle vehicle = mActivity.getVehicle();
 		while (cursor.moveToNext()) {
 			Fillup fillup = new Fillup(cursor);
 			series.add(fillup);
@@ -208,30 +215,66 @@ public class VehicleStatisticsTask extends AsyncTask<Cursor, Statistics.Statisti
 		update(Statistics.AVG_YEARLY_COST, costPerDay * 365);
 
 		cursor.close();
+
 		return 0;
 	}
 
 	private void update(Statistics.Statistic statistic, double value) {
 		statistic.setValue(value);
-		mStatistics.put(statistic.getKey(), statistic);
+		ContentValues values = new ContentValues();
+		values.put(CachedValue.VALID, "1");
+		values.put(CachedValue.VALUE, value);
+		String where = CachedValue.KEY + " = ? AND " + CachedValue.ITEM + " = ?";
+		String[] args = new String[] {
+				statistic.getKey(),
+				// TODO(release) -- use a class-local variable to avoid races
+				String.valueOf(mActivity.getVehicle().getId())
+		};
+		mContentResolver.update(CacheTable.BASE_URI, values, where, args);
+	}
+
+	public void populateCache(ArrayList<Statistic> statistics, boolean valid) {
+		final long vehicleId = mActivity.getVehicle().getId();
+		ContentResolver resolver = mContentResolver;
+
+		// clear the cache first
+		String where = CachedValue.ITEM + " = ?";
+		String[] selectionArgs = new String[] {
+			String.valueOf(vehicleId)
+		};
+		resolver.delete(CacheTable.BASE_URI, where, selectionArgs);
+
+		// fill with the new values
+		final int numStats = statistics.size();
+		ContentValues[] bulkValues = new ContentValues[numStats];
+		int position = 0;
+		for (int i = 0; i < numStats; i++) {
+			Statistics.Statistic statistic = statistics.get(i);
+			ContentValues values = new ContentValues();
+			values.put(CachedValue.ITEM, vehicleId);
+			values.put(CachedValue.KEY, statistic.getKey());
+			values.put(CachedValue.VALID, valid);
+			values.put(CachedValue.VALUE, statistic.getValue());
+			values.put(CachedValue.GROUP, statistic.getGroup());
+			values.put(CachedValue.ORDER, statistic.getOrder());
+			bulkValues[position++] = values;
+		}
+		resolver.bulkInsert(CacheTable.BASE_URI, bulkValues);
 	}
 
 	@Override
 	protected void onProgressUpdate(Statistics.Statistic... updates) {
-		Statistic update = updates[0];
-		mStatistics.put(update.getKey(), update);
+
 	}
 
 	@Override
 	protected void onPostExecute(Integer done) {
 		// FIXME: we can't do this on the UI thread
 		Log.d("CalculateTask", "Done recalculating!");
-		ArrayList<Statistic> stats = new ArrayList<Statistic>(mStatistics.values());
-		activity.populateCache(stats, true);
-		if (activity.getAdapter() == null) {
-			activity.setAdapter(activity.getCursor());
+		if (mActivity.getAdapter() == null) {
+			mActivity.setAdapter(mActivity.getCursor());
 		} else {
-			activity.getAdapter().notifyDataSetChanged();
+			mActivity.getAdapter().notifyDataSetChanged();
 		}
 	}
 }

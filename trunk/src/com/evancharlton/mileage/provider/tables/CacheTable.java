@@ -14,7 +14,7 @@ public class CacheTable extends ContentTable {
 	private static final int CACHES = 80;
 	private static final int CACHE_ID = 81;
 
-	public static final String URI = "cache/";
+	public static final String URI = "cache";
 	public static final Uri BASE_URI = Uri.withAppendedPath(FillUpsProvider.BASE_URI, URI);
 
 	private static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.evancharlton.statistics";
@@ -74,7 +74,7 @@ public class CacheTable extends ContentTable {
 	public boolean query(int type, Uri uri, SQLiteQueryBuilder queryBuilder) {
 		switch (type) {
 			case CACHE_ID:
-				queryBuilder.appendWhere(CachedValue._ID + " = " + uri.getPathSegments().get(1));
+				queryBuilder.appendWhere(CachedValue.KEY + " = " + uri.getPathSegments().get(1));
 			case CACHES:
 				queryBuilder.setTables(getTableName());
 				queryBuilder.setProjectionMap(buildProjectionMap(PROJECTION));
@@ -86,7 +86,7 @@ public class CacheTable extends ContentTable {
 	@Override
 	public void registerUris(UriMatcher uriMatcher) {
 		uriMatcher.addURI(FillUpsProvider.AUTHORITY, URI, CACHES);
-		uriMatcher.addURI(FillUpsProvider.AUTHORITY, URI + "#", CACHE_ID);
+		uriMatcher.addURI(FillUpsProvider.AUTHORITY, URI + "/*", CACHE_ID);
 	}
 
 	@Override
