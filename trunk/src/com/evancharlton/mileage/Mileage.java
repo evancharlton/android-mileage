@@ -6,20 +6,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 
 public class Mileage extends TabActivity {
-	private static final int MENU_FIELDS = 1;
-	private static final int MENU_VEHICLES = 2;
-	private static final int MENU_INTERVALS = 3;
-	private static final int MENU_SETTINGS = 4;
-
-	private static final String TAG_FILLUP = "fillups";
-	private static final String TAG_HISTORY = "history";
-	private static final String TAG_STATISTICS = "statistics";
+	public static final String TAG_FILLUP = "fillups";
+	public static final String TAG_HISTORY = "history";
+	public static final String TAG_STATISTICS = "statistics";
 
 	private TabHost mTabHost;
 
@@ -43,6 +37,10 @@ public class Mileage extends TabActivity {
 		});
 	}
 
+	public void switchTo(String tag) {
+		mTabHost.setCurrentTabByTag(tag);
+	}
+
 	private TabSpec createTabSpec(String tag, Class<? extends Activity> cls, int string) {
 		TabSpec spec = mTabHost.newTabSpec(tag);
 		spec.setContent(new Intent(this, cls));
@@ -52,29 +50,11 @@ public class Mileage extends TabActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.add(Menu.NONE, MENU_FIELDS, Menu.NONE, R.string.edit_fields);
-		menu.add(Menu.NONE, MENU_VEHICLES, Menu.NONE, R.string.vehicles);
-		menu.add(Menu.NONE, MENU_INTERVALS, Menu.NONE, R.string.service_intervals);
-		menu.add(Menu.NONE, MENU_SETTINGS, Menu.NONE, R.string.settings);
+		menu.add(Menu.NONE, R.string.edit_fields, Menu.NONE, R.string.edit_fields).setIntent(new Intent(this, FieldListActivity.class));
+		menu.add(Menu.NONE, R.string.vehicles, Menu.NONE, R.string.vehicles).setIntent(new Intent(this, VehicleListActivity.class));
+		menu.add(Menu.NONE, R.string.service_intervals, Menu.NONE, R.string.service_intervals).setIntent(
+				new Intent(this, ServiceIntervalsListActivity.class));
+		menu.add(Menu.NONE, R.string.settings, Menu.NONE, R.string.settings).setIntent(new Intent(this, SettingsActivity.class));
 		return super.onCreateOptionsMenu(menu);
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-			case MENU_FIELDS:
-				startActivity(new Intent(this, FieldListActivity.class));
-				return true;
-			case MENU_VEHICLES:
-				startActivity(new Intent(this, VehicleListActivity.class));
-				return true;
-			case MENU_INTERVALS:
-				startActivity(new Intent(this, ServiceIntervalsListActivity.class));
-				return true;
-			case MENU_SETTINGS:
-				startActivity(new Intent(this, SettingsActivity.class));
-				return true;
-		}
-		return super.onOptionsItemSelected(item);
 	}
 }

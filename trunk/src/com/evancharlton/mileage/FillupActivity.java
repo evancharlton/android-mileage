@@ -3,6 +3,7 @@ package com.evancharlton.mileage;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import android.app.Activity;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -15,6 +16,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.evancharlton.mileage.dao.CachedValue;
 import com.evancharlton.mileage.dao.Dao;
 import com.evancharlton.mileage.dao.Field;
 import com.evancharlton.mileage.dao.Fillup;
@@ -25,6 +27,7 @@ import com.evancharlton.mileage.dao.Dao.InvalidFieldException;
 import com.evancharlton.mileage.math.Calculator;
 import com.evancharlton.mileage.provider.FillUpsProvider;
 import com.evancharlton.mileage.provider.Settings;
+import com.evancharlton.mileage.provider.tables.CacheTable;
 import com.evancharlton.mileage.provider.tables.FieldsTable;
 import com.evancharlton.mileage.provider.tables.FillupsTable;
 import com.evancharlton.mileage.provider.tables.VehiclesTable;
@@ -132,10 +135,19 @@ public class FillupActivity extends BaseFormActivity {
 
 	@Override
 	protected void saved() {
-		if (getParent() == null) {
+		// invalidate the cache
+		ContentValues values = new ContentValues();
+		values.put(CachedValue.VALID, "0");
+		getContentResolver().update(CacheTable.BASE_URI, values, CachedValue.ITEM + " = ?", new String[] {
+			String.valueOf(mVehicles.getSelectedItemId())
+		});
+
+		Activity parent = getParent();
+		if (parent == null || !(parent instanceof Mileage)) {
+			// TODO: broadcast intent or something?
 			finish();
-		} else {
-			onCreate(null);
+		} else if (parent instanceof Mileage) {
+			((Mileage) parent).switchTo(Mileage.TAG_HISTORY);
 		}
 	}
 

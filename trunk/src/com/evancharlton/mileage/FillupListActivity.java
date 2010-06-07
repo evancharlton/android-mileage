@@ -158,10 +158,12 @@ public class FillupListActivity extends BaseListActivity {
 					if (economy == 0) {
 						return true;
 					}
-					if (Calculator.isBetterEconomy(mVehicle, economy, mAvgEconomy)) {
-						tv.setTextColor(0xFF0AB807);
-					} else {
-						tv.setTextColor(0xFFD90000);
+					if (mAvgEconomy > 0) {
+						if (Calculator.isBetterEconomy(mVehicle, economy, mAvgEconomy)) {
+							tv.setTextColor(0xFF0AB807);
+						} else {
+							tv.setTextColor(0xFFD90000);
+						}
 					}
 					units = Calculator.getEconomyUnitsAbbr(FillupListActivity.this, mVehicle);
 					tv.setText(ECONOMY_FORMAT.format(economy) + " " + units);
