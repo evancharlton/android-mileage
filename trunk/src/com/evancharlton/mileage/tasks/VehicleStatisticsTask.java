@@ -1,7 +1,5 @@
 package com.evancharlton.mileage.tasks;
 
-import java.util.ArrayList;
-
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -15,17 +13,21 @@ import com.evancharlton.mileage.dao.FillupSeries;
 import com.evancharlton.mileage.dao.Vehicle;
 import com.evancharlton.mileage.math.Calculator;
 import com.evancharlton.mileage.provider.Statistics;
-import com.evancharlton.mileage.provider.Statistics.Statistic;
 import com.evancharlton.mileage.provider.tables.CacheTable;
 import com.evancharlton.mileage.provider.tables.FillupsTable;
 
-public class VehicleStatisticsTask extends AsyncTask<Cursor, Statistics.Statistic, Integer> {
+public class VehicleStatisticsTask extends AsyncTask<Cursor, Integer, Integer> {
 	private VehicleStatisticsActivity mActivity;
 	private ContentResolver mContentResolver;
 
 	public void setActivity(VehicleStatisticsActivity activity) {
 		mActivity = activity;
 		mContentResolver = activity.getContentResolver();
+	}
+
+	@Override
+	protected void onPreExecute() {
+		mActivity.setProgressBarVisible(true);
 	}
 
 	@Override
@@ -36,15 +38,13 @@ public class VehicleStatisticsTask extends AsyncTask<Cursor, Statistics.Statisti
 		};
 		mContentResolver.delete(CacheTable.BASE_URI, CachedValue.ITEM + " = ?", args);
 
-		// initialize the cache so that we can update it later
-		populateCache(Statistics.STATISTICS, false);
-
 		String selection = Fillup.VEHICLE_ID + " = ?";
 		args = new String[] {
 			String.valueOf(mActivity.getVehicle().getId())
 		};
 
 		Cursor cursor = mContentResolver.query(FillupsTable.BASE_URI, FillupsTable.PROJECTION, selection, args, Fillup.ODOMETER + " asc");
+		publishProgress(0, cursor.getCount());
 		Log.d("CalculateTask", "Recalculating...");
 		// recalculate a whole bunch of shit
 		FillupSeries series = new FillupSeries();
@@ -85,6 +85,7 @@ public class VehicleStatisticsTask extends AsyncTask<Cursor, Statistics.Statisti
 		final long lastMonth = System.currentTimeMillis() - Calculator.MONTH_MS;
 
 		final Vehicle vehicle = mActivity.getVehicle();
+		int i = 0;
 		while (cursor.moveToNext()) {
 			Fillup fillup = new Fillup(cursor);
 			series.add(fillup);
@@ -188,6 +189,7 @@ public class VehicleStatisticsTask extends AsyncTask<Cursor, Statistics.Statisti
 				minLongitude = longitude;
 				update(Statistics.WEST, minLongitude);
 			}
+			publishProgress(++i);
 		}
 		double avgFuel = totalVolume / series.size();
 		update(Statistics.AVG_FUEL, avgFuel);
@@ -221,50 +223,31 @@ public class VehicleStatisticsTask extends AsyncTask<Cursor, Statistics.Statisti
 
 	private void update(Statistics.Statistic statistic, double value) {
 		statistic.setValue(value);
+		final String vehicleId = String.valueOf(mActivity.getVehicle().getId());
 		ContentValues values = new ContentValues();
-		values.put(CachedValue.VALID, "1");
-		values.put(CachedValue.VALUE, value);
-		String where = CachedValue.KEY + " = ? AND " + CachedValue.ITEM + " = ?";
+		values.put(CachedValue.VALID, true);
+		values.put(CachedValue.VALUE, statistic.getValue());
+		String where = CachedValue.KEY + " = ? and " + CachedValue.ITEM + " = ?";
 		String[] args = new String[] {
 				statistic.getKey(),
-				// TODO(release) -- use a class-local variable to avoid races
-				String.valueOf(mActivity.getVehicle().getId())
+				vehicleId
 		};
-		mContentResolver.update(CacheTable.BASE_URI, values, where, args);
-	}
-
-	public void populateCache(ArrayList<Statistic> statistics, boolean valid) {
-		final long vehicleId = mActivity.getVehicle().getId();
-		ContentResolver resolver = mContentResolver;
-
-		// clear the cache first
-		String where = CachedValue.ITEM + " = ?";
-		String[] selectionArgs = new String[] {
-			String.valueOf(vehicleId)
-		};
-		resolver.delete(CacheTable.BASE_URI, where, selectionArgs);
-
-		// fill with the new values
-		final int numStats = statistics.size();
-		ContentValues[] bulkValues = new ContentValues[numStats];
-		int position = 0;
-		for (int i = 0; i < numStats; i++) {
-			Statistics.Statistic statistic = statistics.get(i);
-			ContentValues values = new ContentValues();
+		int num = mContentResolver.update(CacheTable.BASE_URI, values, where, args);
+		if (num == 0) {
 			values.put(CachedValue.ITEM, vehicleId);
 			values.put(CachedValue.KEY, statistic.getKey());
-			values.put(CachedValue.VALID, valid);
-			values.put(CachedValue.VALUE, statistic.getValue());
 			values.put(CachedValue.GROUP, statistic.getGroup());
 			values.put(CachedValue.ORDER, statistic.getOrder());
-			bulkValues[position++] = values;
+			mContentResolver.insert(CacheTable.BASE_URI, values);
 		}
-		resolver.bulkInsert(CacheTable.BASE_URI, bulkValues);
 	}
 
 	@Override
-	protected void onProgressUpdate(Statistics.Statistic... updates) {
-
+	protected void onProgressUpdate(Integer... updates) {
+		mActivity.setProgressValue(updates[0]);
+		if (updates.length > 1) {
+			mActivity.setMax(updates[1]);
+		}
 	}
 
 	@Override
@@ -276,5 +259,6 @@ public class VehicleStatisticsTask extends AsyncTask<Cursor, Statistics.Statisti
 		} else {
 			mActivity.getAdapter().notifyDataSetChanged();
 		}
+		mActivity.setProgressBarVisible(false);
 	}
 }

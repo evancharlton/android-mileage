@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -36,6 +37,7 @@ public class VehicleStatisticsActivity extends Activity {
 	private Spinner mVehicleSpinner;
 	private ListView mListView;
 	private VehicleStatisticsTask mCalculationTask = null;
+	private ProgressBar mProgressBar;
 
 	private SimpleCursorAdapter mAdapter;
 
@@ -55,11 +57,12 @@ public class VehicleStatisticsActivity extends Activity {
 
 		mListView = (ListView) findViewById(android.R.id.list);
 		mVehicleSpinner = (Spinner) findViewById(R.id.vehicle);
+		mProgressBar = (ProgressBar) findViewById(R.id.progress);
 
 		mVehicleSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-				// TODO(release) -- recalculate based on the new vehicle
+				// TODO(release) - make this change vehicles
 			}
 
 			@Override
@@ -98,6 +101,19 @@ public class VehicleStatisticsActivity extends Activity {
 				String.valueOf(mVehicle.getId()),
 				"1"
 		}, CachedValue.GROUP + " asc, " + CachedValue.ORDER + " asc");
+	}
+
+	public void setProgressValue(int progress) {
+		super.setProgress(progress);
+		mProgressBar.setProgress(progress);
+	}
+
+	public void setMax(int max) {
+		mProgressBar.setMax(max);
+	}
+
+	public void setProgressBarVisible(boolean visible) {
+		mProgressBar.setVisibility(visible ? View.VISIBLE : View.GONE);
 	}
 
 	public void setAdapter(Cursor c) {
