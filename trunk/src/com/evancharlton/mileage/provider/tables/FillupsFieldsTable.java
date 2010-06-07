@@ -21,12 +21,13 @@ public class FillupsFieldsTable extends ContentTable {
 	 * Given a fillup ID, return all of the fields that were saved on that
 	 * fillup
 	 */
-	public static final String FILLUPS_FIELDS_URI = "fillups/fields";
+	public static final String FILLUPS_FIELDS_PATH = "fillups/fields";
+	public static final Uri FILLUPS_FIELDS_URI = Uri.withAppendedPath(FillUpsProvider.BASE_URI, FILLUPS_FIELDS_PATH);
 
 	/**
 	 * Given a field ID, return the field
 	 */
-	public static final String FILLUPS_FIELD_URI = "fillups/field";
+	public static final String FILLUPS_FIELD_PATH = "fillups/field";
 
 	private static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.evancharlton.fillup_fields";
 	private static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.evancharlton.fillup_field_id";
@@ -40,7 +41,7 @@ public class FillupsFieldsTable extends ContentTable {
 				FillupField.VALUE
 		};
 	}
-	
+
 	@Override
 	protected Class<? extends Dao> getDaoType() {
 		return FillupField.class;
@@ -101,6 +102,7 @@ public class FillupsFieldsTable extends ContentTable {
 				queryBuilder.setTables(getTableName());
 				queryBuilder.setProjectionMap(buildProjectionMap(getFullProjectionArray()));
 				queryBuilder.appendWhere(FillupField.FILLUP_ID + " = " + uri.getPathSegments().get(2));
+				return true;
 			case FILLUP_FIELD:
 				queryBuilder.setTables(getTableName());
 				queryBuilder.setProjectionMap(buildProjectionMap(getFullProjectionArray()));
@@ -112,9 +114,9 @@ public class FillupsFieldsTable extends ContentTable {
 
 	@Override
 	public void registerUris(UriMatcher uriMatcher) {
-		uriMatcher.addURI(FillUpsProvider.AUTHORITY, FILLUPS_FIELDS_URI, FILLUPS_FIELDS);
-		uriMatcher.addURI(FillUpsProvider.AUTHORITY, FILLUPS_FIELDS_URI + "/#", FILLUP_FIELDS);
-		uriMatcher.addURI(FillUpsProvider.AUTHORITY, FILLUPS_FIELD_URI + "/#", FILLUP_FIELD);
+		uriMatcher.addURI(FillUpsProvider.AUTHORITY, FILLUPS_FIELDS_PATH, FILLUPS_FIELDS);
+		uriMatcher.addURI(FillUpsProvider.AUTHORITY, FILLUPS_FIELDS_PATH + "/#", FILLUP_FIELDS);
+		uriMatcher.addURI(FillUpsProvider.AUTHORITY, FILLUPS_FIELD_PATH + "/#", FILLUP_FIELD);
 	}
 
 	@Override
@@ -124,7 +126,11 @@ public class FillupsFieldsTable extends ContentTable {
 				return db.update(getTableName(), values, FillupField._ID + " = ?", new String[] {
 					values.getAsString(FillupField._ID)
 				});
-
+			case FILLUPS_FIELDS:
+				if (values.containsKey(Dao._ID)) {
+					values.remove(Dao._ID);
+				}
+				return db.update(getTableName(), values, null, null);
 		}
 		return -1;
 	}

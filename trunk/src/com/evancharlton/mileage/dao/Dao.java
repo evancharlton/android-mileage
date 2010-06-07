@@ -215,7 +215,7 @@ public abstract class Dao {
 	protected void preValidate() {
 	}
 
-	public final boolean save(Context context) {
+	public boolean save(Context context) {
 		ContentValues values = new ContentValues();
 		validate(values);
 		if (isExistingObject()) {

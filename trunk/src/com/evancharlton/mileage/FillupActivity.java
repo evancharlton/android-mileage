@@ -1,6 +1,7 @@
 package com.evancharlton.mileage;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -59,6 +60,16 @@ public class FillupActivity extends BaseFormActivity {
 				null, null);
 		LayoutInflater inflater = LayoutInflater.from(this);
 		mFieldsContainer.removeAllViews();
+
+		HashMap<Long, FillupField> fieldMap = new HashMap<Long, FillupField>();
+		if (mFillup.isExistingObject()) {
+			// set the fields
+			ArrayList<FillupField> objectFields = mFillup.getFields(this);
+			for (FillupField field : objectFields) {
+				fieldMap.put(field.getTemplateId(), field);
+			}
+		}
+
 		while (fields.moveToNext()) {
 			String hint = fields.getString(fields.getColumnIndex(Field.TITLE));
 			long id = fields.getLong(fields.getColumnIndex(Field._ID));
@@ -70,10 +81,21 @@ public class FillupActivity extends BaseFormActivity {
 			mFieldsContainer.addView(container);
 			mFields.add(field);
 
-			if (mIcicle != null) {
-				String value = mIcicle.getString(field.getKey());
-				if (value != null) {
+			if (mIcicle != null || fieldMap.size() > 0) {
+				String value = null;
+				if (mIcicle != null) {
+					value = mIcicle.getString(field.getKey());
+				}
+				if (value != null && value.length() > 0) {
 					field.setText(value);
+				} else {
+					if (mFillup.isExistingObject()) {
+						// set the value from the database, if present
+						FillupField objectField = fieldMap.get(id);
+						if (objectField != null) {
+							field.setText(objectField.getValue());
+						}
+					}
 				}
 			}
 		}

@@ -43,6 +43,7 @@ public class FileBackupTransport extends BackupTransport {
 		new Thread() {
 			@Override
 			public void run() {
+				// TODO: I *really* don't like this...
 				File src = new File("/data/data/com.evancharlton.mileage/databases/mileage.db");
 				File dest = new File(destFile);
 

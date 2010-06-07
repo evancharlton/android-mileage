@@ -1,8 +1,9 @@
 package com.evancharlton.mileage.dao;
 
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -10,6 +11,7 @@ import android.net.Uri;
 
 import com.evancharlton.mileage.R;
 import com.evancharlton.mileage.dao.Dao.DataObject;
+import com.evancharlton.mileage.provider.tables.FillupsFieldsTable;
 import com.evancharlton.mileage.provider.tables.FillupsTable;
 
 @DataObject(path = FillupsTable.URI)
@@ -78,7 +80,7 @@ public class Fillup extends Dao {
 	@Column(type = Column.DOUBLE, name = LONGITUDE)
 	protected double mLongitude;
 
-	private List<FillupField> mFields = null;
+	private final ArrayList<FillupField> mFields = new ArrayList<FillupField>();
 	private Fillup mNext = null;
 	private Fillup mPrevious = null;
 
@@ -101,6 +103,7 @@ public class Fillup extends Dao {
 	}
 
 	public Fillup loadPrevious(Context context) {
+		Fillup previous = null;
 		if (!mIsRestart) {
 			Uri uri = FillupsTable.BASE_URI;
 			String[] projection = FillupsTable.PROJECTION;
@@ -110,23 +113,37 @@ public class Fillup extends Dao {
 			}, Fillup.ODOMETER + " desc");
 			if (c.getCount() >= 1) {
 				c.moveToFirst();
-				return new Fillup(c);
+				previous = new Fillup(c);
 			}
+			c.close();
 		}
-		return null;
+		return previous;
 	}
 
 	public double getEconomy() {
 		return mEconomy;
 	}
 
-	public List<FillupField> getFields() {
+	public ArrayList<FillupField> getFields() {
 		return mFields;
 	}
 
-	public List<FillupField> getFields(Context context) {
-		if (mFields == null) {
-			// TODO: load the fields from the database
+	/**
+	 * Note that this is run synchronously!
+	 * 
+	 * @param context
+	 * @return
+	 */
+	public ArrayList<FillupField> getFields(Context context) {
+		if (mFields.size() == 0) {
+			Uri uri = ContentUris.withAppendedId(FillupsFieldsTable.FILLUPS_FIELDS_URI, getId());
+			Cursor c = context.getContentResolver().query(uri, FillupsFieldsTable.getFullProjectionArray(), null, null, null);
+			if (c.getCount() > 0) {
+				c.moveToFirst();
+				FillupField field = new FillupField(c);
+				mFields.add(field);
+			}
+			c.close();
 		}
 		return mFields;
 	}
@@ -211,8 +228,9 @@ public class Fillup extends Dao {
 		mEconomy = economy;
 	}
 
-	public void setFields(List<FillupField> fields) {
-		mFields = fields;
+	public void setFields(ArrayList<FillupField> fields) {
+		mFields.clear();
+		mFields.addAll(fields);
 	}
 
 	public void setNext(Fillup next) {

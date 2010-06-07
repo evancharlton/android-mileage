@@ -2,10 +2,12 @@ package com.evancharlton.mileage;
 
 import android.app.Activity;
 import android.app.TabActivity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 
@@ -30,6 +32,15 @@ public class Mileage extends TabActivity {
 		mTabHost.addTab(createTabSpec(TAG_FILLUP, FillupActivity.class, R.string.fillup));
 		mTabHost.addTab(createTabSpec(TAG_HISTORY, FillupListActivity.class, R.string.history));
 		mTabHost.addTab(createTabSpec(TAG_STATISTICS, VehicleStatisticsActivity.class, R.string.statistics));
+
+		mTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
+			@Override
+			public void onTabChanged(String tabId) {
+				// hide the virtual keyboard when switching tabs
+				InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+				imm.hideSoftInputFromWindow(mTabHost.getApplicationWindowToken(), 0);
+			}
+		});
 	}
 
 	private TabSpec createTabSpec(String tag, Class<? extends Activity> cls, int string) {

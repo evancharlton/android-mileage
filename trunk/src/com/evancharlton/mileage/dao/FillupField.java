@@ -41,12 +41,39 @@ public class FillupField extends Dao {
 	public Uri getUri() {
 		Uri base = FillUpsProvider.BASE_URI;
 		if (isExistingObject()) {
-			base = Uri.withAppendedPath(base, FillupsFieldsTable.FILLUPS_FIELD_URI);
+			base = Uri.withAppendedPath(base, FillupsFieldsTable.FILLUPS_FIELD_PATH);
 			base = ContentUris.withAppendedId(base, getId());
 		} else {
-			base = Uri.withAppendedPath(base, FillupsFieldsTable.FILLUPS_FIELDS_URI);
+			base = Uri.withAppendedPath(base, FillupsFieldsTable.FILLUPS_FIELDS_PATH);
 		}
 		return base;
+	}
+
+	@Override
+	public boolean save(Context context) {
+		ContentValues values = new ContentValues();
+		validate(values);
+		String selection = FillupField.FILLUP_ID + " = ? AND " + FillupField.TEMPLATE_ID + " = ?";
+		String[] selectionArgs = new String[] {
+				String.valueOf(mFillupId),
+				String.valueOf(mTemplateId)
+		};
+		Cursor c = context.getContentResolver().query(FillupsFieldsTable.FILLUPS_FIELDS_URI, FillupsFieldsTable.getFullProjectionArray(), selection,
+				selectionArgs, null);
+		long id = 0;
+		if (c.getCount() > 0) {
+			c.moveToFirst();
+			id = c.getLong(c.getColumnIndex(FillupField._ID));
+		}
+		c.close();
+		if (id != 0 || isExistingObject()) {
+			// update
+			values.put(_ID, id);
+			context.getContentResolver().update(getUri(), values, null, null);
+			return true;
+		} else {
+			return super.save(context);
+		}
 	}
 
 	public Fillup getFillup(Context context) {
@@ -58,7 +85,12 @@ public class FillupField extends Dao {
 	}
 
 	public Field getFieldTemplate(Context context) {
+		// TODO
 		return null;
+	}
+
+	public long getTemplateId() {
+		return mTemplateId;
 	}
 
 	public void setFillupId(long id) {

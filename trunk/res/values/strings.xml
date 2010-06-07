@@ -95,8 +95,8 @@
 	<string name="stat_min_cost">Minimum cost</string>
 	<string name="stat_max_cost">Maximum cost</string>
 	<string name="stat_total_cost">Total cost</string>
-	<string name="stat_avg_month_cost">Average cost per month</string>
-	<string name="stat_avg_year_cost">Average cost per year</string>
+	<string name="stat_avg_month_cost">Estimated cost per month</string>
+	<string name="stat_avg_year_cost">Estimated cost per year</string>
 	<string name="stat_last_month_cost">Cost last month</string>
 	<string name="stat_last_year_cost">Cost last year</string>
 	<string name="stat_cost_per_distance">Cost per distance</string>
