@@ -17,7 +17,7 @@ import com.evancharlton.mileage.dao.Dao;
 
 public abstract class BaseListActivity extends ListActivity implements AdapterView.OnItemClickListener, View.OnCreateContextMenuListener {
 	protected ListView mListView;
-	protected SimpleCursorAdapter mAdapter;
+	private SimpleCursorAdapter mAdapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +42,10 @@ public abstract class BaseListActivity extends ListActivity implements AdapterVi
 		mListView.setOnCreateContextMenuListener(this);
 
 		postUI();
+	}
+
+	protected final SimpleCursorAdapter getAdapter() {
+		return mAdapter;
 	}
 
 	protected void initUI() {

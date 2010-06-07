@@ -4,6 +4,7 @@ import java.text.DecimalFormat;
 
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.View;
@@ -12,23 +13,22 @@ import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.SimpleCursorAdapter.ViewBinder;
 
-import com.evancharlton.mileage.dao.CachedValue;
 import com.evancharlton.mileage.dao.Fillup;
 import com.evancharlton.mileage.dao.Vehicle;
 import com.evancharlton.mileage.math.Calculator;
-import com.evancharlton.mileage.provider.Statistics;
-import com.evancharlton.mileage.provider.tables.CacheTable;
 import com.evancharlton.mileage.provider.tables.FillupsTable;
 import com.evancharlton.mileage.provider.tables.VehiclesTable;
+import com.evancharlton.mileage.tasks.AverageEconomyTask;
 import com.evancharlton.mileage.views.CursorSpinner;
 
-public class FillupListActivity extends BaseListActivity {
+public class FillupListActivity extends BaseListActivity implements AverageEconomyTask.AsyncCallback {
 	private static final DecimalFormat ECONOMY_FORMAT = new DecimalFormat("0.00");
 	private static final DecimalFormat VOLUME_FORMAT = new DecimalFormat("0.00");
 
 	private CursorSpinner mVehicles;
 	private Vehicle mVehicle;
 	private double mAvgEconomy;
+	private AverageEconomyTask mAverageTask;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -40,9 +40,16 @@ public class FillupListActivity extends BaseListActivity {
 		mVehicles = (CursorSpinner) findViewById(R.id.vehicle);
 		mVehicles.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			@Override
-			public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-				mAdapter.changeCursor(getCursor());
-				mAdapter.notifyDataSetInvalidated();
+			public void onItemSelected(AdapterView<?> list, View row, int position, long id) {
+				if (mAverageTask.getStatus() == AsyncTask.Status.RUNNING) {
+					mAverageTask.cancel(true);
+				}
+				mAverageTask = new AverageEconomyTask();
+				mAverageTask.setActivity(FillupListActivity.this);
+				mAverageTask.execute(id);
+
+				getAdapter().changeCursor(getCursor());
+				getAdapter().notifyDataSetChanged();
 			}
 
 			@Override
@@ -50,26 +57,16 @@ public class FillupListActivity extends BaseListActivity {
 			}
 		});
 
-		String selection = CachedValue.KEY + " = ? AND " + CachedValue.ITEM + " = ? AND " + CachedValue.VALID + " = 1";
-		String[] selectionArgs = new String[] {
-				Statistics.AVG_ECONOMY.getKey(),
-				String.valueOf(mVehicles.getSelectedItemId())
-		};
-
-		Cursor cursor = managedQuery(CacheTable.BASE_URI, new String[] {
-			CachedValue.VALUE
-		}, selection, selectionArgs, null);
-		if (cursor.getCount() > 0) {
-			cursor.moveToFirst();
-			mAvgEconomy = cursor.getDouble(0);
+		Object saved = getLastNonConfigurationInstance();
+		if (saved != null) {
+			mAverageTask = (AverageEconomyTask) saved;
 		} else {
-			mAvgEconomy = 0D;
+			mAverageTask = new AverageEconomyTask();
 		}
-
-		// have to round the average economy
-		mAvgEconomy *= 100;
-		mAvgEconomy = Math.floor(mAvgEconomy);
-		mAvgEconomy /= 100;
+		mAverageTask.setActivity(this);
+		if (mAverageTask.getStatus() != AsyncTask.Status.RUNNING) {
+			mAverageTask.execute(mVehicles.getSelectedItemId());
+		}
 
 		mVehicle = getVehicle();
 	}
@@ -82,8 +79,14 @@ public class FillupListActivity extends BaseListActivity {
 	}
 
 	@Override
+	public void calculationFinished(double avgEconomy) {
+		mAvgEconomy = avgEconomy;
+		getAdapter().notifyDataSetChanged();
+	}
+
+	@Override
 	protected void postUI() {
-		mAdapter.setViewBinder(mViewBinder);
+		getAdapter().setViewBinder(mViewBinder);
 	}
 
 	@Override
@@ -156,6 +159,7 @@ public class FillupListActivity extends BaseListActivity {
 				case 5: // Fillup.ECONOMY
 					double economy = cursor.getDouble(columnIndex);
 					if (economy == 0) {
+						tv.setText("");
 						return true;
 					}
 					if (mAvgEconomy > 0) {
