@@ -6,7 +6,8 @@ public abstract class FuelEconomyChart extends LineChart {
 	@Override
 	protected final ChartGenerator createChartGenerator() {
 		return new LineChartGenerator(this, getVehicle(), new String[] {
-			Fillup.ECONOMY
+				Fillup.DATE,
+				Fillup.ECONOMY
 		});
 	}
 }

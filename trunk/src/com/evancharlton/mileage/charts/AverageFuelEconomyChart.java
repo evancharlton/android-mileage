@@ -21,7 +21,7 @@ public class AverageFuelEconomyChart extends FuelEconomyChart {
 				break;
 			}
 			if (num > 0) {
-				points.add(new ChartPoint(num, cursor.getDouble(0)));
+				points.add(new ChartPoint(num, cursor.getDouble(1)));
 			}
 			generator.update(num++);
 			cursor.moveToNext();
