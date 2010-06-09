@@ -23,7 +23,7 @@ import com.evancharlton.mileage.dao.Fillup;
 import com.evancharlton.mileage.dao.FillupField;
 import com.evancharlton.mileage.dao.FillupSeries;
 import com.evancharlton.mileage.dao.Vehicle;
-import com.evancharlton.mileage.dao.Dao.InvalidFieldException;
+import com.evancharlton.mileage.exceptions.InvalidFieldException;
 import com.evancharlton.mileage.math.Calculator;
 import com.evancharlton.mileage.provider.FillUpsProvider;
 import com.evancharlton.mileage.provider.Settings;
@@ -225,51 +225,55 @@ public class FillupActivity extends BaseFormActivity {
 
 	@Override
 	protected void setFields() {
-		int dataFormat = Integer.parseInt(mPreferences.getString(Settings.DATA_FORMAT, "0"));
-		switch (dataFormat) {
-			case 1:
-				// total cost, volume
-				try {
-					mFillup.setVolume(Double.parseDouble(mVolume.getText().toString()));
-				} catch (NumberFormatException e) {
-					throw new InvalidFieldException(R.string.error_no_volume_specified);
-				}
+		try {
+			int dataFormat = Integer.parseInt(mPreferences.getString(Settings.DATA_FORMAT, "0"));
+			switch (dataFormat) {
+				case 1:
+					// total cost, volume
+					try {
+						mFillup.setVolume(Double.parseDouble(mVolume.getText().toString()));
+					} catch (NumberFormatException e) {
+						throw new InvalidFieldException(R.string.error_no_volume_specified);
+					}
 
-				try {
-					mFillup.setTotalCost(Double.parseDouble(mPrice.getText().toString()));
-				} catch (NumberFormatException e) {
-					throw new InvalidFieldException(R.string.error_no_total_cost_specified);
-				}
-				break;
-			case 2:
-				// total cost, unit price
-				try {
-					mFillup.setTotalCost(Double.parseDouble(mVolume.getText().toString()));
-				} catch (NumberFormatException e) {
-					throw new InvalidFieldException(R.string.error_no_total_cost_specified);
-				}
+					try {
+						mFillup.setTotalCost(Double.parseDouble(mPrice.getText().toString()));
+					} catch (NumberFormatException e) {
+						throw new InvalidFieldException(R.string.error_no_total_cost_specified);
+					}
+					break;
+				case 2:
+					// total cost, unit price
+					try {
+						mFillup.setTotalCost(Double.parseDouble(mVolume.getText().toString()));
+					} catch (NumberFormatException e) {
+						throw new InvalidFieldException(R.string.error_no_total_cost_specified);
+					}
 
-				try {
-					mFillup.setUnitPrice(Double.parseDouble(mPrice.getText().toString()));
-				} catch (NumberFormatException e) {
-					throw new InvalidFieldException(R.string.error_no_price_specified);
-				}
-				break;
-			default:
-			case 0:
-				// unit price, volume
-				try {
-					mFillup.setVolume(Double.parseDouble(mVolume.getText().toString()));
-				} catch (NumberFormatException e) {
-					throw new InvalidFieldException(R.string.error_no_volume_specified);
-				}
+					try {
+						mFillup.setUnitPrice(Double.parseDouble(mPrice.getText().toString()));
+					} catch (NumberFormatException e) {
+						throw new InvalidFieldException(R.string.error_no_price_specified);
+					}
+					break;
+				default:
+				case 0:
+					// unit price, volume
+					try {
+						mFillup.setVolume(Double.parseDouble(mVolume.getText().toString()));
+					} catch (NumberFormatException e) {
+						throw new InvalidFieldException(R.string.error_no_volume_specified);
+					}
 
-				try {
-					mFillup.setUnitPrice(Double.parseDouble(mPrice.getText().toString()));
-				} catch (NumberFormatException e) {
-					throw new InvalidFieldException(R.string.error_no_price_specified);
-				}
-				break;
+					try {
+						mFillup.setUnitPrice(Double.parseDouble(mPrice.getText().toString()));
+					} catch (NumberFormatException e) {
+						throw new InvalidFieldException(R.string.error_no_price_specified);
+					}
+					break;
+			}
+		} catch (InvalidFieldException e) {
+			Toast.makeText(this, getString(e.getErrorMessage()), Toast.LENGTH_LONG).show();
 		}
 
 		try {
@@ -283,7 +287,7 @@ public class FillupActivity extends BaseFormActivity {
 			}
 			mFillup.setOdometer(odometerValue);
 		} catch (NumberFormatException e) {
-			throw new InvalidFieldException(R.string.error_no_odometer_specified);
+			Toast.makeText(this, getString(R.string.error_no_odometer_specified), Toast.LENGTH_LONG).show();
 		}
 
 		mFillup.setPartial(mPartial.isChecked());

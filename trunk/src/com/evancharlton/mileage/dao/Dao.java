@@ -16,6 +16,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.util.Log;
 
+import com.evancharlton.mileage.exceptions.InvalidFieldException;
 import com.evancharlton.mileage.provider.FillUpsProvider;
 
 /**
@@ -137,8 +138,9 @@ public abstract class Dao {
 	 * an invalid field value, throw an InvalidFieldException
 	 * 
 	 * @return the ContentValues to be passed to persistent storage.
+	 * @throws InvalidFieldException in the event of a validation error
 	 */
-	protected final void validate(ContentValues values) {
+	protected final void validate(ContentValues values) throws InvalidFieldException {
 		preValidate();
 		Field[] fields = getClass().getDeclaredFields();
 		for (Field field : fields) {
@@ -215,7 +217,7 @@ public abstract class Dao {
 	protected void preValidate() {
 	}
 
-	public boolean save(Context context) {
+	public boolean save(Context context) throws InvalidFieldException {
 		ContentValues values = new ContentValues();
 		validate(values);
 		if (isExistingObject()) {
@@ -302,21 +304,6 @@ public abstract class Dao {
 			return value.longValue();
 		}
 		return defaultValue;
-	}
-
-	// TODO: break this out into its own class. Make it checked?
-	public static class InvalidFieldException extends RuntimeException {
-		private static final long serialVersionUID = 3415877365632636406L;
-
-		private int mErrorMessage = 0;
-
-		public InvalidFieldException(int errorMessage) {
-			mErrorMessage = errorMessage;
-		}
-
-		public int getErrorMessage() {
-			return mErrorMessage;
-		}
 	}
 
 	// TODO: make this a series of annotations instead?

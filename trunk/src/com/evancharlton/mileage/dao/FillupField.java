@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.net.Uri;
 
 import com.evancharlton.mileage.R;
+import com.evancharlton.mileage.exceptions.InvalidFieldException;
 import com.evancharlton.mileage.provider.FillUpsProvider;
 import com.evancharlton.mileage.provider.tables.FillupsFieldsTable;
 
@@ -50,7 +51,7 @@ public class FillupField extends Dao {
 	}
 
 	@Override
-	public boolean save(Context context) {
+	public boolean save(Context context) throws InvalidFieldException {
 		ContentValues values = new ContentValues();
 		validate(values);
 		String selection = FillupField.FILLUP_ID + " = ? AND " + FillupField.TEMPLATE_ID + " = ?";

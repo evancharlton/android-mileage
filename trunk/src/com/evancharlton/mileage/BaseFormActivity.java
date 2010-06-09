@@ -13,7 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.evancharlton.mileage.dao.Dao;
-import com.evancharlton.mileage.dao.Dao.InvalidFieldException;
+import com.evancharlton.mileage.exceptions.InvalidFieldException;
 import com.evancharlton.mileage.provider.Settings;
 
 public abstract class BaseFormActivity extends Activity {
