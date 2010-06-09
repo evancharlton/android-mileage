@@ -1,13 +1,12 @@
 package com.evancharlton.mileage;
 
-import java.text.SimpleDateFormat;
-
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.ZoomControls;
 
@@ -125,7 +124,7 @@ public abstract class ChartActivity extends Activity implements DialogInterface.
 
 	protected void addChartSeries(ChartSeries series) {
 		ChartArea area = new ChartArea();
-		area.getDefaultXAxis().setFormat(new SimpleDateFormat("MM/dd"));
+		area.getDefaultXAxis().setFormat(DateFormat.getDateFormat(this));
 		mChart.getSeries().add(series);
 		mChart.getAreas().add(area);
 	}

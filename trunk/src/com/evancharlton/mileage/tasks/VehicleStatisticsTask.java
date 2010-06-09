@@ -19,6 +19,8 @@ import com.evancharlton.mileage.provider.tables.CacheTable;
 import com.evancharlton.mileage.provider.tables.FillupsTable;
 
 public class VehicleStatisticsTask extends AsyncTask<Cursor, Integer, Integer> {
+	private static final String TAG = "VehicleStatisticsTask";
+
 	private VehicleStatisticsActivity mActivity;
 	private ContentResolver mContentResolver;
 	private int mProgress = 0;
@@ -32,6 +34,8 @@ public class VehicleStatisticsTask extends AsyncTask<Cursor, Integer, Integer> {
 
 	@Override
 	protected void onPreExecute() {
+		Log.d(TAG, "Calculation starting...");
+
 		mProgressBar = mActivity.getProgressBar();
 		mProgressBar.setVisibility(View.VISIBLE);
 		mProgressBar.setIndeterminate(true);
@@ -319,13 +323,13 @@ public class VehicleStatisticsTask extends AsyncTask<Cursor, Integer, Integer> {
 
 	@Override
 	protected void onPostExecute(Integer done) {
-		// FIXME: we can't do this on the UI thread
-		Log.d("CalculateTask", "Done recalculating!");
 		if (mActivity.getAdapter() == null) {
 			mActivity.setAdapter(mActivity.getCacheCursor());
 		} else {
 			mActivity.getAdapter().notifyDataSetChanged();
 		}
 		mProgressBar.setVisibility(View.GONE);
+
+		Log.d(TAG, "Done recalculating!");
 	}
 }
