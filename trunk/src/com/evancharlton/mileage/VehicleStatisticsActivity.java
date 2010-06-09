@@ -111,17 +111,8 @@ public class VehicleStatisticsActivity extends Activity {
 		}, CachedValue.GROUP + " asc, " + CachedValue.ORDER + " asc");
 	}
 
-	public void setProgressValue(int progress) {
-		super.setProgress(progress);
-		mProgressBar.setProgress(progress);
-	}
-
-	public void setMax(int max) {
-		mProgressBar.setMax(max);
-	}
-
-	public void setProgressBarVisible(boolean visible) {
-		mProgressBar.setVisibility(visible ? View.VISIBLE : View.GONE);
+	public ProgressBar getProgressBar() {
+		return mProgressBar;
 	}
 
 	public void setAdapter(Cursor c) {

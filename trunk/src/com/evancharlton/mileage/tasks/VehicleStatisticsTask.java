@@ -5,6 +5,8 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import com.evancharlton.mileage.VehicleStatisticsActivity;
 import com.evancharlton.mileage.dao.CachedValue;
@@ -21,6 +23,7 @@ public class VehicleStatisticsTask extends AsyncTask<Cursor, Integer, Integer> {
 	private ContentResolver mContentResolver;
 	private int mProgress = 0;
 	private int mTotal = 0;
+	private ProgressBar mProgressBar;
 
 	public void setActivity(VehicleStatisticsActivity activity) {
 		mActivity = activity;
@@ -29,7 +32,9 @@ public class VehicleStatisticsTask extends AsyncTask<Cursor, Integer, Integer> {
 
 	@Override
 	protected void onPreExecute() {
-		mActivity.setProgressBarVisible(true);
+		mProgressBar = mActivity.getProgressBar();
+		mProgressBar.setVisibility(View.VISIBLE);
+		mProgressBar.setIndeterminate(true);
 	}
 
 	@Override
@@ -299,16 +304,17 @@ public class VehicleStatisticsTask extends AsyncTask<Cursor, Integer, Integer> {
 
 	@Override
 	protected void onProgressUpdate(Integer... updates) {
+		if (mTotal > 0) {
+			mProgressBar.setIndeterminate(false);
+			mProgressBar.setMax(mTotal * Statistics.STATISTICS.size());
+			mTotal = 0;
+		}
 		if (updates.length > 0) {
 			mProgress += updates[0];
 		} else {
 			mProgress += 1;
 		}
-		mActivity.setProgressValue(mProgress);
-		if (mTotal > 0) {
-			mActivity.setMax(mTotal * Statistics.STATISTICS.size());
-			mTotal = 0;
-		}
+		mProgressBar.setProgress(mProgress);
 	}
 
 	@Override
@@ -320,6 +326,6 @@ public class VehicleStatisticsTask extends AsyncTask<Cursor, Integer, Integer> {
 		} else {
 			mActivity.getAdapter().notifyDataSetChanged();
 		}
-		mActivity.setProgressBarVisible(false);
+		mProgressBar.setVisibility(View.GONE);
 	}
 }
