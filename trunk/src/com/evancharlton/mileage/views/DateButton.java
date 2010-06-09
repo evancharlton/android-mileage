@@ -76,7 +76,7 @@ public class DateButton extends Button {
 					mDialog.show();
 				}
 			} catch (BadTokenException e) {
-				// TODO silently fail?
+				// silently fail
 			}
 		}
 	}

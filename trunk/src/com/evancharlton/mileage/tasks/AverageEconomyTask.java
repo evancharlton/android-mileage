@@ -56,7 +56,7 @@ public class AverageEconomyTask extends AsyncTask<Long, Integer, Double> {
 					totalEconomy += f.getEconomy();
 				}
 				// subtract 1 to account for the invalid first fillup.
-				// TODO(restart) -- add support for restarting calculations
+				// TODO(3.1) -- add support for restarting calculations
 				avgEconomy = totalEconomy / (fillupsCursor.getCount() - 1);
 				Log.d(TAG, "Done! Result is " + avgEconomy);
 			}

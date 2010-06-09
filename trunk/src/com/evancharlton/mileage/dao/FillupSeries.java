@@ -8,6 +8,7 @@ public class FillupSeries extends ArrayList<Fillup> {
 	private static final long serialVersionUID = 5304523564485608182L;
 
 	private double mTotalCost = 0D;
+	private double mEconomyVolume = 0D;
 
 	public FillupSeries(Fillup... fillups) {
 		final int length = fillups.length;
@@ -35,6 +36,7 @@ public class FillupSeries extends ArrayList<Fillup> {
 		super.add(fillup);
 
 		mTotalCost += fillup.getTotalCost();
+		mEconomyVolume = 0D;
 		return true;
 	}
 
@@ -61,14 +63,16 @@ public class FillupSeries extends ArrayList<Fillup> {
 	 * 
 	 * @return
 	 */
-	// TODO: cache
 	public double getEconomyVolume() {
-		final int size = size();
-		double total = 0D;
-		for (int i = 1; i < size; i++) {
-			total += get(i).getVolume();
+		if (mEconomyVolume == 0) {
+			final int size = size();
+			double total = 0D;
+			for (int i = 1; i < size; i++) {
+				total += get(i).getVolume();
+			}
+			mEconomyVolume = total;
 		}
-		return total;
+		return mEconomyVolume;
 	}
 
 	public double getTotalCost() {
