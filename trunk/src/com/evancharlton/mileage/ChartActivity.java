@@ -1,5 +1,7 @@
 package com.evancharlton.mileage;
 
+import java.text.SimpleDateFormat;
+
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -123,6 +125,7 @@ public abstract class ChartActivity extends Activity implements DialogInterface.
 
 	protected void addChartSeries(ChartSeries series) {
 		ChartArea area = new ChartArea();
+		area.getDefaultXAxis().setFormat(new SimpleDateFormat("MM/dd"));
 		mChart.getSeries().add(series);
 		mChart.getAreas().add(area);
 	}

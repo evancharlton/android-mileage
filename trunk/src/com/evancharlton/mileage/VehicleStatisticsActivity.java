@@ -1,13 +1,12 @@
 package com.evancharlton.mileage;
 
-import java.util.ArrayList;
-
 import android.app.Activity;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -61,8 +60,12 @@ public class VehicleStatisticsActivity extends Activity {
 
 		mVehicleSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			@Override
-			public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-				// TODO(release) - make this change vehicles
+			public void onItemSelected(AdapterView<?> list, View row, int position, long id) {
+				if (mVehicle.getId() != id) {
+					loadVehicle();
+					cancelTask();
+					recalculate();
+				}
 			}
 
 			@Override
@@ -71,16 +74,7 @@ public class VehicleStatisticsActivity extends Activity {
 		});
 
 		loadVehicle();
-		Cursor c = getCursor();
-
-		final ArrayList<Statistics.Statistic> statistics = Statistics.STATISTICS;
-		final int numStats = statistics.size();
-		Log.d(TAG, "Checking statistics ... " + numStats);
-		if (c.getCount() < numStats) {
-			// kick off the task
-			calculate();
-		}
-		setAdapter(c);
+		recalculate();
 
 		mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
@@ -96,7 +90,21 @@ public class VehicleStatisticsActivity extends Activity {
 		});
 	}
 
-	public Cursor getCursor() {
+	private void recalculate() {
+		Cursor c = getCacheCursor();
+		if (c.getCount() < Statistics.STATISTICS.size()) {
+			calculate();
+		}
+		setAdapter(c);
+	}
+
+	private void cancelTask() {
+		if (mCalculationTask != null && mCalculationTask.getStatus() == AsyncTask.Status.RUNNING) {
+			mCalculationTask.cancel(true);
+		}
+	}
+
+	public Cursor getCacheCursor() {
 		return managedQuery(CacheTable.BASE_URI, CacheTable.PROJECTION, CachedValue.ITEM + " = ? and " + CachedValue.VALID + " = ?", new String[] {
 				String.valueOf(mVehicle.getId()),
 				"1"
@@ -127,6 +135,8 @@ public class VehicleStatisticsActivity extends Activity {
 					R.id.value
 			};
 			mAdapter = new SimpleCursorAdapter(this, R.layout.statistic, c, from, to);
+		} else {
+			mAdapter.changeCursor(c);
 		}
 		mAdapter.setViewBinder(mViewBinder);
 		mListView.setAdapter(mAdapter);
@@ -134,6 +144,7 @@ public class VehicleStatisticsActivity extends Activity {
 	}
 
 	private void calculate() {
+		Log.d(TAG, "Recalculating statistics");
 		mCalculationTask = new VehicleStatisticsTask();
 		mCalculationTask.setActivity(this);
 		mCalculationTask.execute();

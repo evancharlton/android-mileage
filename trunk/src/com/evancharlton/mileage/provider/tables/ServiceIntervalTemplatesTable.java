@@ -16,7 +16,6 @@ public class ServiceIntervalTemplatesTable extends ContentTable {
 	private static final int SERVICE_TEMPLATE_ID = 61;
 
 	public static final String URI = "intervals/templates";
-	public static final String SERVICE_TEMPLATE_URI = "intervals/template";
 
 	private static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.evancharlton.interval_template";
 	private static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.evancharlton.interval_template";
@@ -31,7 +30,7 @@ public class ServiceIntervalTemplatesTable extends ContentTable {
 				ServiceIntervalTemplate.VEHICLE_TYPE
 		};
 	}
-	
+
 	@Override
 	protected Class<? extends Dao> getDaoType() {
 		return ServiceIntervalTemplate.class;
@@ -94,7 +93,7 @@ public class ServiceIntervalTemplatesTable extends ContentTable {
 	@Override
 	public void registerUris(UriMatcher uriMatcher) {
 		uriMatcher.addURI(FillUpsProvider.AUTHORITY, URI, SERVICE_TEMPLATES);
-		uriMatcher.addURI(FillUpsProvider.AUTHORITY, SERVICE_TEMPLATE_URI + "/#", SERVICE_TEMPLATE_ID);
+		uriMatcher.addURI(FillUpsProvider.AUTHORITY, URI + "/#", SERVICE_TEMPLATE_ID);
 	}
 
 	@Override

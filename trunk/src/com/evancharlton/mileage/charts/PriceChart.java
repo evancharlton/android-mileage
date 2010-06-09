@@ -6,7 +6,8 @@ public abstract class PriceChart extends LineChart {
 	@Override
 	protected ChartGenerator createChartGenerator() {
 		return new LineChartGenerator(this, getVehicle(), new String[] {
-			Fillup.UNIT_PRICE
+				Fillup.DATE,
+				Fillup.UNIT_PRICE
 		});
 	}
 }

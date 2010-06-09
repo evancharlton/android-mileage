@@ -2,6 +2,7 @@ package com.evancharlton.mileage;
 
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -9,10 +10,13 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 
 import com.evancharlton.mileage.dao.Dao;
+import com.evancharlton.mileage.dao.Fillup;
 import com.evancharlton.mileage.dao.ServiceInterval;
 import com.evancharlton.mileage.dao.ServiceIntervalTemplate;
 import com.evancharlton.mileage.dao.Vehicle;
 import com.evancharlton.mileage.provider.FillUpsProvider;
+import com.evancharlton.mileage.provider.tables.FillupsTable;
+import com.evancharlton.mileage.provider.tables.ServiceIntervalTemplatesTable;
 import com.evancharlton.mileage.provider.tables.ServiceIntervalsTable;
 import com.evancharlton.mileage.views.CursorSpinner;
 import com.evancharlton.mileage.views.DateButton;
@@ -66,10 +70,56 @@ public class ServiceIntervalActivity extends BaseFormActivity {
 			@Override
 			public void onItemSelected(AdapterView<?> list, View row, int position, long id) {
 				filterTemplates(id);
+
+				// update the odometer field
+				String[] projection = new String[] {
+					Fillup.ODOMETER
+				};
+				String selection = Fillup.VEHICLE_ID + " = ?";
+				String[] args = new String[] {
+					String.valueOf(id)
+				};
+				Cursor fillupsCursor = getContentResolver().query(FillupsTable.BASE_URI, projection, selection, args, Fillup.ODOMETER + " desc");
+				if (fillupsCursor.getCount() > 0) {
+					fillupsCursor.moveToFirst();
+					mOdometer.setText(fillupsCursor.getString(0));
+				}
+				fillupsCursor.close();
 			}
 
 			@Override
 			public void onNothingSelected(AdapterView<?> arg0) {
+			}
+		});
+
+		mIntervalTemplates.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> list, View row, int position, long id) {
+				Uri uri = Uri.withAppendedPath(FillUpsProvider.BASE_URI, ServiceIntervalTemplatesTable.URI);
+				uri = ContentUris.withAppendedId(uri, id);
+				Cursor intervalCursor = getContentResolver().query(uri, ServiceIntervalTemplatesTable.getFullProjectionArray(), null, null, null);
+				ServiceIntervalTemplate template = new ServiceIntervalTemplate(intervalCursor);
+				intervalCursor.close();
+
+				if (mTitle.getText().length() == 0) {
+					mTitle.setText(template.getTitle());
+				}
+
+				if (mDescription.getText().length() == 0) {
+					mDescription.setText(template.getDescription());
+				}
+
+				if (mDistance.getDelta() == 0) {
+					mDistance.setDelta(template.getDistance());
+				}
+
+				if (mDuration.getDelta() == 0) {
+					mDuration.setDelta(template.getDuration());
+				}
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> list) {
 			}
 		});
 	}

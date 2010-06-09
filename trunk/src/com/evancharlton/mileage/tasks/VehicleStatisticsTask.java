@@ -316,7 +316,7 @@ public class VehicleStatisticsTask extends AsyncTask<Cursor, Integer, Integer> {
 		// FIXME: we can't do this on the UI thread
 		Log.d("CalculateTask", "Done recalculating!");
 		if (mActivity.getAdapter() == null) {
-			mActivity.setAdapter(mActivity.getCursor());
+			mActivity.setAdapter(mActivity.getCacheCursor());
 		} else {
 			mActivity.getAdapter().notifyDataSetChanged();
 		}

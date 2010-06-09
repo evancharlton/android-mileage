@@ -40,7 +40,7 @@ public class ServiceIntervalTemplateActivity extends BaseFormActivity {
 
 	@Override
 	protected Uri getUri(long id) {
-		return ContentUris.withAppendedId(Uri.withAppendedPath(FillUpsProvider.BASE_URI, ServiceIntervalTemplatesTable.SERVICE_TEMPLATE_URI), id);
+		return ContentUris.withAppendedId(Uri.withAppendedPath(FillUpsProvider.BASE_URI, ServiceIntervalTemplatesTable.URI), id);
 	}
 
 	@Override

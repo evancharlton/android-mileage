@@ -1,5 +1,7 @@
 package com.evancharlton.mileage.charts;
 
+import java.util.Date;
+
 import android.database.Cursor;
 
 import com.artfulbits.aiCharts.Base.ChartPoint;
@@ -13,11 +15,27 @@ import com.evancharlton.mileage.provider.tables.FillupsTable;
 import com.evancharlton.mileage.provider.tables.VehiclesTable;
 
 public abstract class LineChart extends ChartActivity {
+	private ChartPointCollection mPoints;
+
 	protected abstract String getAxisTitle();
 
 	protected abstract ChartGenerator createChartGenerator();
 
-	protected abstract void processCursor(LineChartGenerator generator, ChartPointCollection points, Cursor cursor, Vehicle vehicle);
+	protected final void createSeries(LineChartGenerator generator, ChartPointCollection points, Cursor cursor, Vehicle vehicle) {
+		mPoints = points;
+		// TODO(3.1) - consolidate this while loop
+		processCursor(generator, cursor, vehicle);
+	}
+
+	protected final void addPoint(Date date, double value) {
+		mPoints.addDate(date, value);
+	}
+
+	protected final void addPoint(long timestamp, double value) {
+		addPoint(new Date(timestamp), value);
+	}
+
+	protected abstract void processCursor(LineChartGenerator generator, Cursor cursor, Vehicle vehicle);
 
 	protected final Vehicle getVehicle() {
 		Cursor cursor = managedQuery(VehiclesTable.BASE_URI, VehiclesTable.PROJECTION, Vehicle._ID + " = ?", new String[] {
@@ -74,7 +92,7 @@ public abstract class LineChart extends ChartActivity {
 			}, Fillup.ODOMETER + " asc");
 			publishProgress(0, cursor.getCount());
 			cursor.moveToFirst();
-			mActivity.processCursor(this, points, cursor, mVehicle);
+			mActivity.createSeries(this, points, cursor, mVehicle);
 			cursor.close();
 
 			if (isCancelled()) {

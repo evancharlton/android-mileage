@@ -6,8 +6,8 @@ public abstract class CostChart extends LineChart {
 	@Override
 	protected ChartGenerator createChartGenerator() {
 		return new LineChartGenerator(this, getVehicle(), new String[] {
-				Fillup.TOTAL_COST,
-				Fillup.DATE
+				Fillup.DATE,
+				Fillup.TOTAL_COST
 		});
 	}
 }

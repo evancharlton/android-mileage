@@ -2,15 +2,13 @@ package com.evancharlton.mileage.charts;
 
 import android.database.Cursor;
 
-import com.artfulbits.aiCharts.Base.ChartPoint;
-import com.artfulbits.aiCharts.Base.ChartPointCollection;
 import com.evancharlton.mileage.R;
 import com.evancharlton.mileage.dao.Vehicle;
 import com.evancharlton.mileage.math.Calculator;
 
 public class WorstFuelEconomyChart extends FuelEconomyChart {
 	@Override
-	protected void processCursor(LineChartGenerator generator, ChartPointCollection points, Cursor cursor, Vehicle vehicle) {
+	protected void processCursor(LineChartGenerator generator, Cursor cursor, Vehicle vehicle) {
 		int num = 0;
 		double worst_fuel_economy = 100000;
 		while (cursor.isAfterLast() == false) {
@@ -18,11 +16,11 @@ public class WorstFuelEconomyChart extends FuelEconomyChart {
 				break;
 			}
 			if (num > 0) {
-				double economy = cursor.getDouble(0);
+				double economy = cursor.getDouble(1);
 				if (Calculator.isBetterEconomy(vehicle, economy, worst_fuel_economy) == false) {
 					worst_fuel_economy = economy;
 				}
-				points.add(new ChartPoint(num, worst_fuel_economy));
+				addPoint(cursor.getLong(0), worst_fuel_economy);
 			}
 			generator.update(num++);
 			cursor.moveToNext();

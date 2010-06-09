@@ -6,7 +6,8 @@ public abstract class LongitudeChart extends LineChart {
 	@Override
 	protected ChartGenerator createChartGenerator() {
 		return new LineChartGenerator(this, getVehicle(), new String[] {
-			Fillup.LONGITUDE
+				Fillup.DATE,
+				Fillup.LONGITUDE
 		});
 	}
 }

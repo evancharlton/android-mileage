@@ -6,7 +6,8 @@ public abstract class DistanceChart extends LineChart {
 	@Override
 	protected ChartGenerator createChartGenerator() {
 		return new LineChartGenerator(this, getVehicle(), new String[] {
-			Fillup.ODOMETER
+				Fillup.DATE,
+				Fillup.ODOMETER
 		});
 	}
 }
