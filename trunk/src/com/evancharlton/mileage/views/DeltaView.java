@@ -54,8 +54,11 @@ public abstract class DeltaView extends LinearLayout {
 	}
 
 	public final long getDelta() {
-		long value = Long.parseLong(mValue.getText().toString());
-		return value * getValues()[mUnits.getSelectedItemPosition()];
+		if (mValue.getText().length() > 0) {
+			long value = Long.parseLong(mValue.getText().toString());
+			return value * getValues()[mUnits.getSelectedItemPosition()];
+		}
+		return 0;
 	}
 
 	public final void setDelta(long delta) {

@@ -5,10 +5,9 @@ import android.util.AttributeSet;
 
 import com.evancharlton.mileage.R;
 
-// FIXME: this doesn't restore correctly.
 public class DistanceDelta extends DeltaView {
 
-	private static final long ONE_METER = 100; // cms
+	private static final long ONE_METER = 100; // centimeters
 
 	private static final long[] VALUES = new long[] {
 			1609 * ONE_METER, // mile
