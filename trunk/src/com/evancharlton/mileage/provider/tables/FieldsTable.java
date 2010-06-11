@@ -5,6 +5,7 @@ import android.content.UriMatcher;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.text.TextUtils;
 
 import com.evancharlton.mileage.dao.Dao;
 import com.evancharlton.mileage.dao.Field;
@@ -103,12 +104,21 @@ public class FieldsTable extends ContentTable {
 
 	@Override
 	public int update(int match, SQLiteDatabase db, Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+		if (selection == null) {
+			selection = "";
+		}
+		if (selectionArgs == null) {
+			selectionArgs = new String[0];
+		}
 		switch (match) {
 			case FIELD_ID:
-				// TODO: use selection(Args)
-				return db.update(getTableName(), values, Field._ID + " = ?", new String[] {
-					values.getAsString(Field._ID)
-				});
+				String query = Field._ID + " = ?" + (TextUtils.isEmpty(selection) ? "" : " AND (" + selection + ")");
+				String[] args = new String[selectionArgs.length + 1];
+				args[0] = values.getAsString(Field._ID);
+				for (int i = 0; i < selectionArgs.length; i++) {
+					args[i + 1] = selectionArgs[i];
+				}
+				return db.update(getTableName(), values, query, args);
 		}
 		return -1;
 	}
