@@ -27,6 +27,7 @@ import com.evancharlton.mileage.exceptions.InvalidFieldException;
 import com.evancharlton.mileage.math.Calculator;
 import com.evancharlton.mileage.provider.FillUpsProvider;
 import com.evancharlton.mileage.provider.Settings;
+import com.evancharlton.mileage.provider.Settings.DataFormats;
 import com.evancharlton.mileage.provider.tables.CacheTable;
 import com.evancharlton.mileage.provider.tables.FieldsTable;
 import com.evancharlton.mileage.provider.tables.FillupsTable;
@@ -59,8 +60,8 @@ public class FillupActivity extends BaseFormActivity {
 	protected void onResume() {
 		super.onResume();
 
-		Cursor fields = managedQuery(Uri.withAppendedPath(FillUpsProvider.BASE_URI, FieldsTable.URI_PATH), FieldsTable.getFullProjectionArray(), null,
-				null, null);
+		Cursor fields = managedQuery(Uri.withAppendedPath(FillUpsProvider.BASE_URI, FieldsTable.URI_PATH), FieldsTable.getFullProjectionArray(),
+				null, null, null);
 		LayoutInflater inflater = LayoutInflater.from(this);
 		mFieldsContainer.removeAllViews();
 
@@ -186,12 +187,10 @@ public class FillupActivity extends BaseFormActivity {
 	}
 
 	private void setDataFormats() {
-		// TODO: magic numbers
 		int dataFormat = Integer.parseInt(mPreferences.getString(Settings.DATA_FORMAT, "0"));
 		boolean existing = mFillup.isExistingObject();
 		switch (dataFormat) {
-			case 0:
-				// unit price, volume
+			case DataFormats.UNIT_PRICE_VOLUME:
 				mVolume.setHint(R.string.unit_count);
 				mPrice.setHint(R.string.price_per_unit);
 				if (existing) {
@@ -199,8 +198,7 @@ public class FillupActivity extends BaseFormActivity {
 					mPrice.setText(String.valueOf(mFillup.getUnitPrice()));
 				}
 				break;
-			case 1:
-				// total cost, volume
+			case DataFormats.TOTAL_COST_VOLUME:
 				mVolume.setHint(R.string.unit_count);
 				mPrice.setHint(R.string.total_cost);
 				if (existing) {
@@ -208,8 +206,7 @@ public class FillupActivity extends BaseFormActivity {
 					mPrice.setText(String.valueOf(mFillup.getTotalCost()));
 				}
 				break;
-			case 2:
-				// total cost, unit price
+			case DataFormats.TOTAL_COST_UNIT_PRICE:
 				mVolume.setHint(R.string.total_cost);
 				mPrice.setHint(R.string.price_per_unit);
 				if (existing) {

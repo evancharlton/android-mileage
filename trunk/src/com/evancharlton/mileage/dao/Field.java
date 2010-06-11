@@ -24,7 +24,7 @@ public class Field extends Dao {
 	@Validate
 	@Nullable
 	@Column(type = Column.STRING, name = TYPE)
-	protected String mType; // TODO: Implement this in a future release.
+	protected String mType; // TODO(3.2) - Add the ability to set field types
 
 	public Field(ContentValues values) {
 		super(values);
