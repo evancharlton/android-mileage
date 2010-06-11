@@ -143,11 +143,8 @@ public class FillupActivity extends BaseFormActivity {
 		});
 
 		Activity parent = getParent();
-		if (parent == null || !(parent instanceof Mileage)) {
-			// TODO: broadcast intent or something?
+		if (parent == null) {
 			finish();
-		} else if (parent instanceof Mileage) {
-			((Mileage) parent).switchTo(Mileage.TAG_HISTORY);
 		}
 	}
 

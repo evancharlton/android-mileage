@@ -4,11 +4,15 @@ import android.app.Activity;
 import android.app.TabActivity;
 import android.content.Context;
 import android.content.Intent;
+import android.database.ContentObserver;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
+
+import com.evancharlton.mileage.provider.tables.FillupsTable;
 
 public class Mileage extends TabActivity {
 	public static final String TAG_FILLUP = "fillups";
@@ -16,6 +20,14 @@ public class Mileage extends TabActivity {
 	public static final String TAG_STATISTICS = "statistics";
 
 	private TabHost mTabHost;
+
+	private final Handler mHandler = new Handler();
+
+	private final ContentObserver mFillupsObserver = new ContentObserver(mHandler) {
+		public void onChange(boolean selfChange) {
+			mTabHost.setCurrentTabByTag(TAG_HISTORY);
+		}
+	};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +47,8 @@ public class Mileage extends TabActivity {
 				imm.hideSoftInputFromWindow(mTabHost.getApplicationWindowToken(), 0);
 			}
 		});
+
+		getContentResolver().registerContentObserver(FillupsTable.BASE_URI, true, mFillupsObserver);
 	}
 
 	public void switchTo(String tag) {
