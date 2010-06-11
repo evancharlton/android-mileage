@@ -222,8 +222,7 @@ public class FillupActivity extends BaseFormActivity {
 		try {
 			int dataFormat = Integer.parseInt(mPreferences.getString(Settings.DATA_FORMAT, "0"));
 			switch (dataFormat) {
-				case 1:
-					// total cost, volume
+				case DataFormats.TOTAL_COST_VOLUME:
 					try {
 						mFillup.setVolume(Double.parseDouble(mVolume.getText().toString()));
 					} catch (NumberFormatException e) {
@@ -236,8 +235,7 @@ public class FillupActivity extends BaseFormActivity {
 						throw new InvalidFieldException(R.string.error_no_total_cost_specified);
 					}
 					break;
-				case 2:
-					// total cost, unit price
+				case DataFormats.TOTAL_COST_UNIT_PRICE:
 					try {
 						mFillup.setTotalCost(Double.parseDouble(mVolume.getText().toString()));
 					} catch (NumberFormatException e) {
@@ -251,8 +249,7 @@ public class FillupActivity extends BaseFormActivity {
 					}
 					break;
 				default:
-				case 0:
-					// unit price, volume
+				case DataFormats.UNIT_PRICE_VOLUME:
 					try {
 						mFillup.setVolume(Double.parseDouble(mVolume.getText().toString()));
 					} catch (NumberFormatException e) {
