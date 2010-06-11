@@ -21,7 +21,8 @@ public class FieldsTable extends ContentTable {
 	/**
 	 * All saved field templates
 	 */
-	public static final String URI = "fields/";
+	public static final String URI_PATH = "fields/";
+	public static final Uri URI = Uri.withAppendedPath(FillUpsProvider.BASE_URI, URI_PATH);
 
 	public static String[] getFullProjectionArray() {
 		return new String[] {
@@ -96,8 +97,8 @@ public class FieldsTable extends ContentTable {
 
 	@Override
 	public void registerUris(UriMatcher uriMatcher) {
-		uriMatcher.addURI(FillUpsProvider.AUTHORITY, URI, FIELDS);
-		uriMatcher.addURI(FillUpsProvider.AUTHORITY, URI + "#", FIELD_ID);
+		uriMatcher.addURI(FillUpsProvider.AUTHORITY, URI_PATH, FIELDS);
+		uriMatcher.addURI(FillUpsProvider.AUTHORITY, URI_PATH + "#", FIELD_ID);
 	}
 
 	@Override

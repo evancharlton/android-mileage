@@ -7,7 +7,7 @@ import com.evancharlton.mileage.R;
 import com.evancharlton.mileage.dao.Dao.DataObject;
 import com.evancharlton.mileage.provider.tables.FieldsTable;
 
-@DataObject(path = FieldsTable.URI)
+@DataObject(path = FieldsTable.URI_PATH)
 public class Field extends Dao {
 	public static final String TITLE = "title";
 	public static final String DESCRIPTION = "description";

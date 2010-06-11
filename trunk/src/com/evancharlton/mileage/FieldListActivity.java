@@ -39,7 +39,7 @@ public class FieldListActivity extends BaseListActivity {
 
 	@Override
 	protected Uri getUri() {
-		return Uri.withAppendedPath(FillUpsProvider.BASE_URI, FieldsTable.URI);
+		return Uri.withAppendedPath(FillUpsProvider.BASE_URI, FieldsTable.URI_PATH);
 	}
 
 	@Override

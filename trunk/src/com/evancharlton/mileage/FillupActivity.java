@@ -44,7 +44,7 @@ public class FillupActivity extends BaseFormActivity {
 	private CheckBox mPartial;
 	private LinearLayout mFieldsContainer;
 	private final ArrayList<FieldView> mFields = new ArrayList<FieldView>();
-	private final Fillup mFillup = new Fillup(new ContentValues());
+	private Fillup mFillup = new Fillup(new ContentValues());
 
 	private Bundle mIcicle;
 
@@ -59,7 +59,7 @@ public class FillupActivity extends BaseFormActivity {
 	protected void onResume() {
 		super.onResume();
 
-		Cursor fields = managedQuery(Uri.withAppendedPath(FillUpsProvider.BASE_URI, FieldsTable.URI), FieldsTable.getFullProjectionArray(), null,
+		Cursor fields = managedQuery(Uri.withAppendedPath(FillUpsProvider.BASE_URI, FieldsTable.URI_PATH), FieldsTable.getFullProjectionArray(), null,
 				null, null);
 		LayoutInflater inflater = LayoutInflater.from(this);
 		mFieldsContainer.removeAllViews();

@@ -9,6 +9,7 @@ import android.net.Uri;
 import com.evancharlton.mileage.R;
 import com.evancharlton.mileage.exceptions.InvalidFieldException;
 import com.evancharlton.mileage.provider.FillUpsProvider;
+import com.evancharlton.mileage.provider.tables.FieldsTable;
 import com.evancharlton.mileage.provider.tables.FillupsFieldsTable;
 
 public class FillupField extends Dao {
@@ -86,8 +87,11 @@ public class FillupField extends Dao {
 	}
 
 	public Field getFieldTemplate(Context context) {
-		// TODO
-		return null;
+		Uri uri = ContentUris.withAppendedId(FieldsTable.URI, getTemplateId());
+		Cursor c = context.getContentResolver().query(uri, FieldsTable.getFullProjectionArray(), null, null, null);
+		Field f = new Field(c);
+		c.close();
+		return f;
 	}
 
 	public long getTemplateId() {

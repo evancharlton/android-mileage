@@ -165,6 +165,9 @@ public class Fillup extends Dao {
 	}
 
 	public long getTimestamp() {
+		if (mDate == null) {
+			mDate = new Date();
+		}
 		return mDate.getTime();
 	}
 
