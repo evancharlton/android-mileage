@@ -1,6 +1,5 @@
 package com.evancharlton.mileage.dao;
 
-import java.lang.annotation.Annotation;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -55,62 +54,59 @@ public abstract class Dao {
 		// automagically populate based on @Column annotation definitions
 		Field[] fields = getClass().getDeclaredFields();
 		for (Field field : fields) {
-			Annotation[] annotations = field.getAnnotations();
-			for (Annotation annotation : annotations) {
-				if (annotation instanceof Column) {
-					Column column = (Column) annotation;
-					int columnIndex = cursor.getColumnIndex(column.name());
-					Object value = null;
-					switch (column.type()) {
-						case Column.BOOLEAN:
-							value = cursor.getInt(columnIndex);
-							if (value == null) {
-								value = new Boolean(column.value() == 1);
-							} else {
-								value = ((Integer) value).intValue() == 1;
-							}
-							break;
-						case Column.DOUBLE:
-							value = cursor.getDouble(columnIndex);
-							if (value == null) {
-								value = new Double(column.value());
-							}
-							break;
-						case Column.INTEGER:
-							value = cursor.getInt(columnIndex);
-							if (value == null) {
-								value = new Integer(column.value());
-							}
-							break;
-						case Column.LONG:
-							value = cursor.getLong(columnIndex);
-							if (value == null) {
-								value = new Long(column.value());
-							}
-							break;
-						case Column.STRING:
-							value = cursor.getString(columnIndex);
-							if (value == null) {
-								value = "";
-							}
-							break;
-						case Column.TIMESTAMP:
-							Long ms = cursor.getLong(columnIndex);
-							if (ms != null) {
-								value = new Date(ms);
-							} else {
-								value = new Date(System.currentTimeMillis());
-							}
-							break;
-					}
-					if (value != null) {
-						try {
-							field.set(this, value);
-						} catch (IllegalArgumentException e) {
-							Log.e(TAG, "Couldn't set value for " + field.getName(), e);
-						} catch (IllegalAccessException e) {
-							Log.e(TAG, "Couldn't access " + field.getName(), e);
+			Column column = field.getAnnotation(Column.class);
+			if (column != null) {
+				int columnIndex = cursor.getColumnIndex(column.name());
+				Object value = null;
+				switch (column.type()) {
+					case Column.BOOLEAN:
+						value = cursor.getInt(columnIndex);
+						if (value == null) {
+							value = new Boolean(column.value() == 1);
+						} else {
+							value = ((Integer) value).intValue() == 1;
 						}
+						break;
+					case Column.DOUBLE:
+						value = cursor.getDouble(columnIndex);
+						if (value == null) {
+							value = new Double(column.value());
+						}
+						break;
+					case Column.INTEGER:
+						value = cursor.getInt(columnIndex);
+						if (value == null) {
+							value = new Integer(column.value());
+						}
+						break;
+					case Column.LONG:
+						value = cursor.getLong(columnIndex);
+						if (value == null) {
+							value = new Long(column.value());
+						}
+						break;
+					case Column.STRING:
+						value = cursor.getString(columnIndex);
+						if (value == null) {
+							value = "";
+						}
+						break;
+					case Column.TIMESTAMP:
+						Long ms = cursor.getLong(columnIndex);
+						if (ms != null) {
+							value = new Date(ms);
+						} else {
+							value = new Date(System.currentTimeMillis());
+						}
+						break;
+				}
+				if (value != null) {
+					try {
+						field.set(this, value);
+					} catch (IllegalArgumentException e) {
+						Log.e(TAG, "Couldn't set value for " + field.getName(), e);
+					} catch (IllegalAccessException e) {
+						Log.e(TAG, "Couldn't access " + field.getName(), e);
 					}
 				}
 			}
