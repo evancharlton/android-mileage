@@ -18,6 +18,7 @@ import android.widget.ProgressBar;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.SimpleCursorAdapter.ViewBinder;
 
 import com.evancharlton.mileage.dao.CachedValue;
@@ -85,6 +86,8 @@ public class VehicleStatisticsActivity extends Activity {
 					Intent intent = new Intent(VehicleStatisticsActivity.this, target);
 					intent.putExtra(ChartActivity.VEHICLE_ID, String.valueOf(mVehicle.getId()));
 					startActivity(intent);
+				} else {
+					Toast.makeText(VehicleStatisticsActivity.this, getString(R.string.no_chart), Toast.LENGTH_SHORT).show();
 				}
 			}
 		});

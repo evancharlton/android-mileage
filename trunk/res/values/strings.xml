@@ -36,6 +36,7 @@
 	<string name="service_interval_templates">Templates</string>
 	<string name="set_vehicle_as_default">This is the default vehicle</string>
 	<string name="perform_backup">Perform backup</string>
+	<string name="no_chart">No chart for this statistic (yet!)</string>
 	
 	<string name="delta_days">Days</string>
 	<string name="delta_weeks">Weeks</string>
@@ -203,4 +204,19 @@
 	<string name="title_chart_max_distance">Maximum distance between fillups</string>
 	<string name="title_chart_last_month_cost">Money spent in the last month</string>
 	<string name="title_chart_last_year_cost">Money spent in the last year</string>
+	<string name="title_chart_avg_cost">Average cost per fillup</string>
+	<string name="title_chart_min_cost">Least expensive fillup</string>
+	<string name="title_chart_max_cost">Most expensive fillup</string>
+	<string name="title_chart_total_cost">Total amount spent on fuel</string>
+	<string name="title_chart_avg_price">Average fuel price</string>
+	<string name="title_chart_min_price">Least expensive fuel</string>
+	<string name="title_chart_max_price">Most expensive fuel</string>
+	<string name="title_chart_avg_fuel">Average fillup size</string>
+	<string name="title_chart_min_fuel">Smallest fillup size</string>
+	<string name="title_chart_max_fuel">Largest fillup size</string>
+	<string name="title_chart_total_fuel">Total fuel purchased</string>
+	<string name="title_chart_north">Farthest north fillup</string>
+	<string name="title_chart_south">Farthest south fillup</string>
+	<string name="title_chart_east">Farthest east fillup</string>
+	<string name="title_chart_west">Farthest west fillup</string>
 </resources>

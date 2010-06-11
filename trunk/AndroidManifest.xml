@@ -40,22 +40,22 @@
 		<activity android:name=".charts.AverageDistanceChart" android:label="@string/title_chart_avg_distance" />
 		<activity android:name=".charts.MinimumDistanceChart" android:label="@string/title_chart_min_distance" />
 		<activity android:name=".charts.MaximumDistanceChart" android:label="@string/title_chart_max_distance" />
-		<activity android:name=".charts.AverageCostChart" android:label="@string/stat_avg_cost" />
-		<activity android:name=".charts.MaximumCostChart" android:label="@string/stat_max_cost" />
-		<activity android:name=".charts.MinimumCostChart" android:label="@string/stat_min_cost" />
-		<activity android:name=".charts.TotalCostChart" android:label="@string/stat_total_cost" />
+		<activity android:name=".charts.AverageCostChart" android:label="@string/title_chart_avg_cost" />
+		<activity android:name=".charts.MaximumCostChart" android:label="@string/title_chart_max_cost" />
+		<activity android:name=".charts.MinimumCostChart" android:label="@string/title_chart_min_cost" />
+		<activity android:name=".charts.TotalCostChart" android:label="@string/title_chart_total_cost" />
 		<activity android:name=".charts.LastMonthCostChart" android:label="@string/title_chart_last_month_cost" />
 		<activity android:name=".charts.LastYearCostChart" android:label="@string/title_chart_last_year_cost" />
-		<activity android:name=".charts.AveragePriceChart" android:label="@string/stat_avg_price" />
-		<activity android:name=".charts.MinimumPriceChart" android:label="@string/stat_min_price" />
-		<activity android:name=".charts.MaximumPriceChart" android:label="@string/stat_max_price" />
-		<activity android:name=".charts.AverageVolumeChart" android:label="@string/stat_avg_fuel" />
-		<activity android:name=".charts.MinimumVolumeChart" android:label="@string/stat_min_fuel" />
-		<activity android:name=".charts.MaximumVolumeChart" android:label="@string/stat_max_fuel" />
-		<activity android:name=".charts.TotalVolumeChart" android:label="@string/stat_total_fuel" />
-		<activity android:name=".charts.NorthChart" android:label="@string/stat_north" />
-		<activity android:name=".charts.SouthChart" android:label="@string/stat_south" />
-		<activity android:name=".charts.EastChart" android:label="@string/stat_east" />
-		<activivy android:name=".charts.WestChart" android:label="@string/stat_west" />
+		<activity android:name=".charts.AveragePriceChart" android:label="@string/title_chart_avg_price" />
+		<activity android:name=".charts.MinimumPriceChart" android:label="@string/title_chart_min_price" />
+		<activity android:name=".charts.MaximumPriceChart" android:label="@string/title_chart_max_price" />
+		<activity android:name=".charts.AverageVolumeChart" android:label="@string/title_chart_avg_fuel" />
+		<activity android:name=".charts.MinimumVolumeChart" android:label="@string/title_chart_min_fuel" />
+		<activity android:name=".charts.MaximumVolumeChart" android:label="@string/title_chart_max_fuel" />
+		<activity android:name=".charts.TotalVolumeChart" android:label="@string/title_chart_total_fuel" />
+		<activity android:name=".charts.NorthChart" android:label="@string/title_chart_north" />
+		<activity android:name=".charts.SouthChart" android:label="@string/title_chart_south" />
+		<activity android:name=".charts.EastChart" android:label="@string/title_chart_east" />
+		<activivy android:name=".charts.WestChart" android:label="@string/title_chart_west" />
 	</application>
 </manifest> 
