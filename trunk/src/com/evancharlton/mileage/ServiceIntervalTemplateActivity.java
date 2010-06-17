@@ -5,9 +5,11 @@ import android.content.ContentValues;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.evancharlton.mileage.dao.Dao;
 import com.evancharlton.mileage.dao.ServiceIntervalTemplate;
+import com.evancharlton.mileage.exceptions.InvalidFieldException;
 import com.evancharlton.mileage.provider.FillUpsProvider;
 import com.evancharlton.mileage.provider.tables.ServiceIntervalTemplatesTable;
 import com.evancharlton.mileage.views.CursorSpinner;
@@ -62,12 +64,31 @@ public class ServiceIntervalTemplateActivity extends BaseFormActivity {
 
 	@Override
 	protected void setFields() {
-		// TODO: Error checking
-		mTemplate.setTitle(mTitle.getText().toString());
-		mTemplate.setDescription(mDescription.getText().toString());
-		mTemplate.setDistance(mDistance.getDelta());
-		mTemplate.setDuration(mDuration.getDelta());
-		mTemplate.setVehicleTypeId(mVehicleTypes.getSelectedItemId());
+		try {
+			String title = mTitle.getText().toString();
+			if (title.length() == 0) {
+				throw new InvalidFieldException(R.string.error_invalid_interval_title);
+			}
+			mTemplate.setTitle(title);
+
+			mTemplate.setDescription(mDescription.getText().toString());
+
+			long distance = mDistance.getDelta();
+			if (distance <= 0) {
+				throw new InvalidFieldException(R.string.error_invalid_interval_distance);
+			}
+			mTemplate.setDistance(distance);
+
+			long duration = mDuration.getDelta();
+			if (duration <= 0) {
+				throw new InvalidFieldException(R.string.error_invalid_interval_duration);
+			}
+			mTemplate.setDuration(mDuration.getDelta());
+
+			mTemplate.setVehicleTypeId(mVehicleTypes.getSelectedItemId());
+		} catch (InvalidFieldException e) {
+			Toast.makeText(this, getString(e.getErrorMessage()), Toast.LENGTH_LONG).show();
+		}
 	}
 
 	@Override
