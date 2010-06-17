@@ -4,13 +4,13 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.net.Uri;
+import android.provider.BaseColumns;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Spinner;
 
 import com.evancharlton.mileage.R;
 import com.evancharlton.mileage.adapters.SpinnerCursorAdapter;
-import com.evancharlton.mileage.dao.Dao;
 import com.evancharlton.mileage.provider.FillUpsProvider;
 
 public class CursorSpinner extends Spinner {
@@ -34,7 +34,7 @@ public class CursorSpinner extends Spinner {
 	public void filter(String selection, String[] selectionArgs) {
 		Uri uri = Uri.withAppendedPath(FillUpsProvider.BASE_URI, mUriPath);
 		mCursor = getContext().getContentResolver().query(uri, new String[] {
-				Dao._ID,
+				BaseColumns._ID,
 				mDisplayField
 		}, selection, selectionArgs, null);
 		if (mAdapter == null) {

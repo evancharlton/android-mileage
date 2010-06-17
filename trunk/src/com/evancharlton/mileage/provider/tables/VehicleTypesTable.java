@@ -5,6 +5,7 @@ import android.content.UriMatcher;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.provider.BaseColumns;
 
 import com.evancharlton.mileage.dao.Dao;
 import com.evancharlton.mileage.dao.VehicleType;
@@ -97,7 +98,7 @@ public class VehicleTypesTable extends ContentTable {
 
 	public static String[] getFullProjectionArray() {
 		return new String[] {
-				Dao._ID,
+				BaseColumns._ID,
 				VehicleType.TITLE,
 				VehicleType.DESCRIPTION
 		};

@@ -5,6 +5,7 @@ import android.content.UriMatcher;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.provider.BaseColumns;
 import android.text.TextUtils;
 
 import com.evancharlton.mileage.dao.Dao;
@@ -27,7 +28,7 @@ public class FieldsTable extends ContentTable {
 
 	public static String[] getFullProjectionArray() {
 		return new String[] {
-				Dao._ID,
+				BaseColumns._ID,
 				Field.TITLE,
 				Field.DESCRIPTION,
 				Field.TYPE
@@ -84,7 +85,7 @@ public class FieldsTable extends ContentTable {
 			case FIELD_ID:
 				queryBuilder.setTables(getTableName());
 				queryBuilder.setProjectionMap(buildProjectionMap(getFullProjectionArray()));
-				queryBuilder.appendWhere(Dao._ID + " = " + uri.getPathSegments().get(1));
+				queryBuilder.appendWhere(BaseColumns._ID + " = " + uri.getPathSegments().get(1));
 				return true;
 		}
 		return false;

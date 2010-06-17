@@ -5,6 +5,7 @@ import android.content.UriMatcher;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.provider.BaseColumns;
 
 import com.evancharlton.mileage.dao.Dao;
 import com.evancharlton.mileage.dao.ServiceIntervalTemplate;
@@ -78,7 +79,7 @@ public class ServiceIntervalTemplatesTable extends ContentTable {
 			case SERVICE_TEMPLATE_ID:
 				queryBuilder.setTables(getTableName());
 				queryBuilder.setProjectionMap(buildProjectionMap(getFullProjectionArray()));
-				queryBuilder.appendWhere(Dao._ID + " = " + uri.getPathSegments().get(2));
+				queryBuilder.appendWhere(BaseColumns._ID + " = " + uri.getPathSegments().get(2));
 				return true;
 		}
 		return false;

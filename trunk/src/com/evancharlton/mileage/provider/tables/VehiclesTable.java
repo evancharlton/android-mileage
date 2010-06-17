@@ -5,6 +5,7 @@ import android.content.UriMatcher;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.provider.BaseColumns;
 
 import com.evancharlton.mileage.dao.Dao;
 import com.evancharlton.mileage.dao.Vehicle;
@@ -22,7 +23,7 @@ public class VehiclesTable extends ContentTable {
 	private static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.evancharlton.vehicle";
 
 	public static String[] PROJECTION = new String[] {
-			Dao._ID,
+			BaseColumns._ID,
 			Vehicle.TITLE,
 			Vehicle.DESCRIPTION,
 			Vehicle.YEAR,
@@ -84,7 +85,7 @@ public class VehiclesTable extends ContentTable {
 			case VEHICLE_ID:
 				queryBuilder.setTables(getTableName());
 				queryBuilder.setProjectionMap(buildProjectionMap(PROJECTION));
-				queryBuilder.appendWhere(Dao._ID + " = " + uri.getPathSegments().get(1));
+				queryBuilder.appendWhere(BaseColumns._ID + " = " + uri.getPathSegments().get(1));
 				return true;
 		}
 		return false;

@@ -6,14 +6,13 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.BaseColumns;
 import android.view.ContextMenu;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
-
-import com.evancharlton.mileage.dao.Dao;
 
 public abstract class BaseListActivity extends ListActivity implements AdapterView.OnItemClickListener, View.OnCreateContextMenuListener {
 	protected ListView mListView;
@@ -74,7 +73,7 @@ public abstract class BaseListActivity extends ListActivity implements AdapterVi
 		final String[] from = getFrom();
 		final int length = from.length;
 		final String[] projection = new String[length + 1];
-		projection[0] = Dao._ID;
+		projection[0] = BaseColumns._ID;
 		for (int i = 0; i < length; i++) {
 			projection[1 + i] = from[i];
 		}

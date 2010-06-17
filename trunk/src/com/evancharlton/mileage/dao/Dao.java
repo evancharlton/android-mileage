@@ -13,6 +13,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.provider.BaseColumns;
 import android.util.Log;
 
 import com.evancharlton.mileage.exceptions.InvalidFieldException;
@@ -21,15 +22,13 @@ import com.evancharlton.mileage.provider.FillUpsProvider;
 /**
  * A base data access object (DAO). Exposes/provides the common functionality
  * such as persisting objects.
- * 
- * @author evan
- * 
  */
 public abstract class Dao {
 	private static final String TAG = "Dao";
-	public static final String _ID = "_id";
 
-	@Column(type = Column.LONG, name = _ID)
+	public static final String _ID = BaseColumns._ID;
+
+	@Column(type = Column.LONG, name = BaseColumns._ID)
 	private long mId;
 
 	private Uri mUriBase = null;

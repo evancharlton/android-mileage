@@ -5,6 +5,7 @@ import android.content.UriMatcher;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.provider.BaseColumns;
 
 import com.evancharlton.mileage.dao.Dao;
 import com.evancharlton.mileage.dao.FillupField;
@@ -35,7 +36,7 @@ public class FillupsFieldsTable extends ContentTable {
 
 	public static final String[] getFullProjectionArray() {
 		return new String[] {
-				Dao._ID,
+				BaseColumns._ID,
 				FillupField.FILLUP_ID,
 				FillupField.TEMPLATE_ID,
 				FillupField.VALUE
@@ -121,8 +122,8 @@ public class FillupsFieldsTable extends ContentTable {
 					values.getAsString(FillupField._ID)
 				});
 			case FILLUPS_FIELDS:
-				if (values.containsKey(Dao._ID)) {
-					values.remove(Dao._ID);
+				if (values.containsKey(BaseColumns._ID)) {
+					values.remove(BaseColumns._ID);
 				}
 				return db.update(getTableName(), values, null, null);
 		}

@@ -11,6 +11,7 @@ import android.content.UriMatcher;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.provider.BaseColumns;
 
 import com.evancharlton.mileage.dao.Dao;
 import com.evancharlton.mileage.dao.Dao.Column;
@@ -23,7 +24,7 @@ public abstract class ContentTable {
 	public static final HashMap<String, String> buildProjectionMap(String[] map) {
 		HashMap<String, String> projection = new HashMap<String, String>();
 		// just in case
-		projection.put(Dao._ID, Dao._ID);
+		projection.put(BaseColumns._ID, BaseColumns._ID);
 		for (String key : map) {
 			projection.put(key, key);
 		}
@@ -31,7 +32,7 @@ public abstract class ContentTable {
 	}
 
 	public String getDefaultSortOrder() {
-		return Dao._ID + " desc";
+		return BaseColumns._ID + " desc";
 	}
 
 	abstract public void registerUris(UriMatcher uriMatcher);
@@ -42,7 +43,7 @@ public abstract class ContentTable {
 			if (selection == null) {
 				selection = "";
 			}
-			selection += Dao._ID + " = ?";
+			selection += BaseColumns._ID + " = ?";
 
 			if (selectionArgs == null) {
 				selectionArgs = new String[0];
@@ -116,7 +117,7 @@ public abstract class ContentTable {
 
 		public TableBuilder() {
 			mBuilder.append("CREATE TABLE ").append(getTableName()).append(" (");
-			mBuilder.append(Dao._ID).append(" INTEGER PRIMARY KEY AUTOINCREMENT");
+			mBuilder.append(BaseColumns._ID).append(" INTEGER PRIMARY KEY AUTOINCREMENT");
 		}
 
 		public TableBuilder addDouble(String fieldName) {

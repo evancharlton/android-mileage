@@ -5,6 +5,7 @@ import android.content.UriMatcher;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.provider.BaseColumns;
 
 import com.evancharlton.mileage.dao.CachedValue;
 import com.evancharlton.mileage.dao.Dao;
@@ -21,7 +22,7 @@ public class CacheTable extends ContentTable {
 	private static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.evancharlton.statistic";
 
 	public static final String[] PROJECTION = new String[] {
-			Dao._ID,
+			BaseColumns._ID,
 			CachedValue.ITEM,
 			CachedValue.KEY,
 			CachedValue.VALUE,
