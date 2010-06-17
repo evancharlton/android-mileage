@@ -34,4 +34,28 @@
 	        />
     	</PreferenceScreen>
 	</PreferenceCategory>
+	<PreferenceCategory
+		android:title="@string/settings_notification_title"
+		android:key="notifications"
+	>
+		<EditTextPreference
+			android:key="interval_notification_sound"
+			android:defaultValue="true"
+			android:title="@string/settings_interval_sound"
+		/>
+		<CheckBoxPreference
+			android:key="interval_notification_led"
+			android:defaultValue="true"
+			android:title="@string/settings_interval_led"
+			android:summaryOn="@string/settings_interval_led_on"
+			android:summaryOff="@string/settings_interval_led_off"
+		/>
+		<CheckBoxPreference
+			android:key="interval_notification_vibrate"
+			android:defaultValue="true"
+			android:title="@string/settings_interval_vibrate"
+			android:summaryOn="@string/settings_interval_vibrate_on"
+			android:summaryOff="@string/settings_interval_vibrate_off"
+		/>
+	</PreferenceCategory>
 </PreferenceScreen>

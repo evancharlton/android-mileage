@@ -12,6 +12,12 @@ public abstract class BackupTransport {
 
 	abstract public void performIncrementalBackup(Context context);
 
+	/**
+	 * Perform a complete backup. It's fine to run this on the UI thread--the
+	 * transport should do its work on a separate thread.
+	 * 
+	 * @param context
+	 */
 	abstract public void performCompleteBackup(Context context);
 
 	abstract public boolean isEnabled(SharedPreferences preferences);

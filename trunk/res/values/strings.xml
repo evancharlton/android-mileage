@@ -71,6 +71,14 @@
 	<string name="settings_currency_summary">What symbol to use when displaying money</string>
 	<string name="settings_data_format_title">Fillup options</string>
 	<string name="settings_data_format_summary">Choose the most convenient way to enter data</string>
+	<string name="settings_notification_title">Notifications</string>
+	<string name="settings_interval_sound">Select ringtone</string>
+	<string name="settings_interval_led">Blink LED</string>
+	<string name="settings_interval_led_on">LED will flash for reminders</string>
+	<string name="settings_interval_led_off">LED will not flash</string>
+	<string name="settings_interval_vibrate">Vibrate</string>
+	<string name="settings_interval_vibrate_on">Phone will vibrate for reminders</string>
+	<string name="settings_interval_vibrate_off">Phone will not vibrate</string>
 
 	<string name="transport_enable">Enable</string>
 	<string name="transport_enabled">Data will be backed up</string>
