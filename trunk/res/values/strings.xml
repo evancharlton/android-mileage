@@ -146,6 +146,7 @@
 	<string name="error_invalid_interval_vehicle">Vehicle not specified</string>
 	<string name="error_invalid_interval_duration">Invalid service interval duration</string>
 	<string name="error_invalid_interval_distance">Invalid service interval distance</string>
+	<string name="error_invalid_interval_timestamp">Invalid service interval start date</string>
 	<string name="error_invalid_statistic_item">Invalid item specified for the statistic</string>
 	<string name="error_invalid_statistic_key">Invalid key specified for the statistic</string>
 	

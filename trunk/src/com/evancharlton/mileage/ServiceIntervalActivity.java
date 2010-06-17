@@ -8,12 +8,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.evancharlton.mileage.dao.Dao;
 import com.evancharlton.mileage.dao.Fillup;
 import com.evancharlton.mileage.dao.ServiceInterval;
 import com.evancharlton.mileage.dao.ServiceIntervalTemplate;
 import com.evancharlton.mileage.dao.Vehicle;
+import com.evancharlton.mileage.exceptions.InvalidFieldException;
 import com.evancharlton.mileage.provider.FillUpsProvider;
 import com.evancharlton.mileage.provider.tables.FillupsTable;
 import com.evancharlton.mileage.provider.tables.ServiceIntervalTemplatesTable;
@@ -146,14 +148,43 @@ public class ServiceIntervalActivity extends BaseFormActivity {
 
 	@Override
 	protected void setFields() {
-		// TODO: Error checking
-		mInterval.setTitle(mTitle.getText().toString());
-		mInterval.setDescription(mDescription.getText().toString());
-		mInterval.setDuration(mDuration.getDelta());
-		mInterval.setStartOdometer(Double.parseDouble(mOdometer.getText().toString()));
-		mInterval.setStartDate(mDate.getTimestamp());
-		mInterval.setDistance(mDistance.getDelta());
-		mInterval.setVehicleId(mVehicles.getSelectedItemId());
+		try {
+			String title = mTitle.getText().toString();
+			if (title.length() == 0) {
+				throw new InvalidFieldException(R.string.error_invalid_interval_title);
+			}
+			mInterval.setTitle(title);
+
+			mInterval.setDescription(mDescription.getText().toString());
+
+			long duration = mDuration.getDelta();
+			if (duration == 0) {
+				throw new InvalidFieldException(R.string.error_invalid_interval_duration);
+			}
+			mInterval.setDuration(duration);
+
+			try {
+				mInterval.setStartOdometer(Double.parseDouble(mOdometer.getText().toString()));
+			} catch (NumberFormatException e) {
+				throw new InvalidFieldException(R.string.error_invalid_interval_odometer);
+			}
+
+			long timestamp = mDate.getTimestamp();
+			if (timestamp == 0) {
+				throw new InvalidFieldException(R.string.error_invalid_interval_timestamp);
+			}
+			mInterval.setStartDate(timestamp);
+
+			long distance = mDistance.getDelta();
+			if (distance == 0) {
+				throw new InvalidFieldException(R.string.error_invalid_interval_distance);
+			}
+			mInterval.setDistance(mDistance.getDelta());
+
+			mInterval.setVehicleId(mVehicles.getSelectedItemId());
+		} catch (InvalidFieldException e) {
+			Toast.makeText(this, getString(e.getErrorMessage()), Toast.LENGTH_LONG).show();
+		}
 	}
 
 	@Override
