@@ -50,7 +50,6 @@
 	<string name="make">Make</string>
 	<string name="model">Model</string>
 	
-	<!-- TODO: replace with actual unit names -->
 	<string name="price_per_unit">Price per %1$s</string>
 	<string name="total_cost">Total cost</string>
 	

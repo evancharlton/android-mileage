@@ -54,7 +54,7 @@ public class FillupSeries extends ArrayList<Fillup> {
 	}
 
 	public long getTimeRange() {
-		return last().getTimestamp() - first().getTimestamp();
+		return Math.abs(last().getTimestamp() - first().getTimestamp());
 	}
 
 	/**
