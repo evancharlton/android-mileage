@@ -49,11 +49,20 @@ public class FillupActivity extends BaseFormActivity {
 
 	private Bundle mIcicle;
 
+	private Vehicle mVehicle;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState, R.layout.fillup);
 		// save the icicle so that we can restore the meta fields later on.
 		mIcicle = savedInstanceState;
+	}
+
+	private final Vehicle getVehicle() {
+		if (mVehicle == null) {
+			mVehicle = Vehicle.loadById(this, mVehicles.getSelectedItemId());
+		}
+		return mVehicle;
 	}
 
 	@Override
@@ -191,15 +200,15 @@ public class FillupActivity extends BaseFormActivity {
 		boolean existing = mFillup.isExistingObject();
 		switch (dataFormat) {
 			case DataFormats.UNIT_PRICE_VOLUME:
-				mVolume.setHint(R.string.unit_count);
-				mPrice.setHint(R.string.price_per_unit);
+				mVolume.setHint(Calculator.getVolumeUnits(this, getVehicle()));
+				mPrice.setHint(getString(R.string.price_per_unit, Calculator.getVolumeUnits(this, mVehicle)));
 				if (existing) {
 					mVolume.setText(String.valueOf(mFillup.getVolume()));
 					mPrice.setText(String.valueOf(mFillup.getUnitPrice()));
 				}
 				break;
 			case DataFormats.TOTAL_COST_VOLUME:
-				mVolume.setHint(R.string.unit_count);
+				mVolume.setHint(Calculator.getVolumeUnits(this, getVehicle()));
 				mPrice.setHint(R.string.total_cost);
 				if (existing) {
 					mVolume.setText(String.valueOf(mFillup.getVolume()));
@@ -208,7 +217,7 @@ public class FillupActivity extends BaseFormActivity {
 				break;
 			case DataFormats.TOTAL_COST_UNIT_PRICE:
 				mVolume.setHint(R.string.total_cost);
-				mPrice.setHint(R.string.price_per_unit);
+				mPrice.setHint(getString(R.string.price_per_unit, Calculator.getVolumeUnits(this, mVehicle)));
 				if (existing) {
 					mVolume.setText(String.valueOf(mFillup.getTotalCost()));
 					mPrice.setText(String.valueOf(mFillup.getUnitPrice()));

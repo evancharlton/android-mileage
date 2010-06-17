@@ -1,5 +1,6 @@
 package com.evancharlton.mileage.dao;
 
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -77,6 +78,20 @@ public class Vehicle extends Dao {
 
 	public Vehicle(Cursor cursor) {
 		super(cursor);
+	}
+
+	public static final Vehicle loadById(final Context context, final long id) {
+		Uri uri = ContentUris.withAppendedId(VehiclesTable.BASE_URI, id);
+		Cursor cursor = context.getContentResolver().query(uri, VehiclesTable.PROJECTION, null, null, null);
+		Vehicle v = null;
+		if (cursor.getCount() > 0) {
+			v = new Vehicle(cursor);
+		}
+		cursor.close();
+		if (v == null) {
+			throw new IllegalArgumentException("Unable to load vehicle #" + id);
+		}
+		return v;
 	}
 
 	public Fillup loadLatestFillup(Context context) {

@@ -43,7 +43,7 @@ public class FillupSeries extends ArrayList<Fillup> {
 	public double getTotalDistance() {
 		final int size = size();
 		if (size >= 2) {
-			// TODO: will this work for partials? check the edge case here
+			// TODO(3.0) - will this work for partials? check the edge case here
 			return Math.abs(last().getOdometer() - first().getOdometer());
 		}
 		return 0D;
