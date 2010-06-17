@@ -5,6 +5,7 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Set;
 
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.sqlite.SQLiteDatabase;
@@ -35,7 +36,35 @@ public abstract class ContentTable {
 
 	abstract public void registerUris(UriMatcher uriMatcher);
 
-	abstract public int delete(SQLiteDatabase db, Uri uri, String selection, String[] selectionArgs);
+	public int delete(SQLiteDatabase db, Uri uri, String selection, String[] selectionArgs) {
+		try {
+			long id = ContentUris.parseId(uri);
+			if (selection == null) {
+				selection = "";
+			}
+			selection += Dao._ID + " = ?";
+
+			if (selectionArgs == null) {
+				selectionArgs = new String[0];
+			}
+			final int length = selectionArgs.length + 1;
+			String[] args = new String[length];
+			for (int i = 0; i < length - 1; i++) {
+				args[i] = selectionArgs[i];
+			}
+			args[length - 1] = String.valueOf(id);
+			selectionArgs = args;
+		} catch (UnsupportedOperationException e) {
+			// silently fail
+		} catch (NumberFormatException e) {
+			// silently fail
+		}
+		return db.delete(getTableName(), selection, selectionArgs);
+	}
+
+	public final boolean isValidType(int type) {
+		return getType(type) != null;
+	}
 
 	abstract public String getType(int type);
 

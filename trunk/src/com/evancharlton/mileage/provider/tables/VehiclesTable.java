@@ -42,12 +42,6 @@ public class VehiclesTable extends ContentTable {
 	}
 
 	@Override
-	public int delete(SQLiteDatabase db, Uri uri, String selection, String[] selectionArgs) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
 	public String getTableName() {
 		return "vehicles";
 	}

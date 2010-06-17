@@ -27,6 +27,7 @@ import com.evancharlton.mileage.exceptions.InvalidFieldException;
 import com.evancharlton.mileage.math.Calculator;
 import com.evancharlton.mileage.provider.FillUpsProvider;
 import com.evancharlton.mileage.provider.Settings;
+import com.evancharlton.mileage.provider.Statistics;
 import com.evancharlton.mileage.provider.Settings.DataFormats;
 import com.evancharlton.mileage.provider.tables.CacheTable;
 import com.evancharlton.mileage.provider.tables.FieldsTable;
@@ -314,6 +315,14 @@ public class FillupActivity extends BaseFormActivity {
 				mFillup.setEconomy(economy);
 			}
 		}
+	}
+
+	@Override
+	protected void deleted() {
+		getContentResolver().delete(CacheTable.BASE_URI, CachedValue.KEY + " = ?", new String[] {
+			Statistics.AVG_ECONOMY.getKey()
+		});
+		super.deleted();
 	}
 
 	@Override

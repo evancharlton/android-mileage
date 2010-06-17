@@ -6,8 +6,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 
-import com.evancharlton.mileage.dao.ServiceInterval;
 import com.evancharlton.mileage.dao.Dao;
+import com.evancharlton.mileage.dao.ServiceInterval;
 import com.evancharlton.mileage.provider.FillUpsProvider;
 
 public class ServiceIntervalsTable extends ContentTable {
@@ -33,16 +33,10 @@ public class ServiceIntervalsTable extends ContentTable {
 				ServiceInterval.DISTANCE
 		};
 	}
-	
+
 	@Override
 	protected Class<? extends Dao> getDaoType() {
 		return ServiceInterval.class;
-	}
-
-	@Override
-	public int delete(SQLiteDatabase db, Uri uri, String selection, String[] selectionArgs) {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 
 	@Override

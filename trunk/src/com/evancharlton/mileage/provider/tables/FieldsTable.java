@@ -50,12 +50,6 @@ public class FieldsTable extends ContentTable {
 	}
 
 	@Override
-	public int delete(SQLiteDatabase db, Uri uri, String selection, String[] selectionArgs) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
 	public String getType(int type) {
 		switch (type) {
 			case FIELDS:

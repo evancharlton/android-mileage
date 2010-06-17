@@ -37,12 +37,6 @@ public class ServiceIntervalTemplatesTable extends ContentTable {
 	}
 
 	@Override
-	public int delete(SQLiteDatabase db, Uri uri, String selection, String[] selectionArgs) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
 	public String getTableName() {
 		return "service_interval_templates";
 	}

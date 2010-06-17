@@ -132,10 +132,13 @@ public class FillUpsProvider extends ContentProvider {
 		SQLiteDatabase db = mDatabaseHelper.getWritableDatabase();
 
 		int count = -1;
+		final int type = URI_MATCHER.match(uri);
 		for (ContentTable table : TABLES) {
-			count = table.delete(db, uri, selection, selectionArgs);
-			if (count > 0) {
-				break;
+			if (table.isValidType(type)) {
+				count = table.delete(db, uri, selection, selectionArgs);
+				if (count > 0) {
+					break;
+				}
 			}
 		}
 

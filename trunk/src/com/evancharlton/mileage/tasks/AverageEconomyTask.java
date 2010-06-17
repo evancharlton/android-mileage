@@ -1,6 +1,7 @@
 package com.evancharlton.mileage.tasks;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -61,8 +62,19 @@ public class AverageEconomyTask extends AsyncTask<Long, Integer, Double> {
 				Log.d(TAG, "Done! Result is " + avgEconomy);
 			}
 			fillupsCursor.close();
+
+			// cache the new value
+			ContentValues values = new ContentValues();
+			values.put(CachedValue.ITEM, vehicleId);
+			values.put(CachedValue.VALID, true);
+			values.put(CachedValue.KEY, Statistics.AVG_ECONOMY.getKey());
+			values.put(CachedValue.VALUE, avgEconomy);
+			values.put(CachedValue.GROUP, Statistics.AVG_ECONOMY.getGroup());
+			values.put(CachedValue.ORDER, Statistics.AVG_ECONOMY.getOrder());
+			mActivity.getContentResolver().insert(CacheTable.BASE_URI, values);
 		}
 		cacheCursor.close();
+
 		// have to round the average economy
 		avgEconomy *= 100;
 		avgEconomy = Math.floor(avgEconomy);

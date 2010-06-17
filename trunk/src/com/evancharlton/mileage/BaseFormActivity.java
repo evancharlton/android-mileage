@@ -1,12 +1,17 @@
 package com.evancharlton.mileage;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -66,6 +71,51 @@ public abstract class BaseFormActivity extends Activity {
 				mSaveBtn.setText(R.string.save_changes);
 			}
 		}
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		if (getDao().isExistingObject()) {
+			menu.add(Menu.NONE, R.string.delete, Menu.NONE, R.string.delete);
+		}
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case R.string.delete:
+				showDialog(R.string.delete);
+				return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	protected Dialog onCreateDialog(final int id) {
+		switch (id) {
+			case R.string.delete:
+				return new AlertDialog.Builder(this).setTitle(R.string.dialog_title_delete).setMessage(R.string.dialog_message_delete)
+						.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								removeDialog(id);
+								if (getDao().delete(BaseFormActivity.this)) {
+									deleted();
+								}
+							}
+						}).setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								removeDialog(id);
+							}
+						}).create();
+		}
+		return super.onCreateDialog(id);
+	}
+
+	protected void deleted() {
+		finish();
 	}
 
 	protected boolean postSaveValidation() {

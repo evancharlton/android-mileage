@@ -36,11 +36,6 @@ public class CacheTable extends ContentTable {
 	}
 
 	@Override
-	public int delete(SQLiteDatabase db, Uri uri, String selection, String[] selectionArgs) {
-		return db.delete(getTableName(), selection, selectionArgs);
-	}
-
-	@Override
 	public String getTableName() {
 		return "cache";
 	}

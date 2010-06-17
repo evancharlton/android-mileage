@@ -228,6 +228,10 @@ public abstract class Dao {
 		return true;
 	}
 
+	public boolean delete(Context context) {
+		return context.getContentResolver().delete(getUri(), null, null) > 0;
+	}
+
 	public final boolean isExistingObject() {
 		return mId > 0;
 	}
