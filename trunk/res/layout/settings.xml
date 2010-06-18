@@ -34,17 +34,29 @@
 	        />
     	</PreferenceScreen>
 	</PreferenceCategory>
+	<!-- TODO(3.2) - Allow for interval-specific notifications -->
 	<PreferenceCategory
 		android:title="@string/settings_notification_title"
 		android:key="notifications"
 	>
-		<EditTextPreference
-			android:key="interval_notification_sound"
+		<CheckBoxPreference
+			android:key="interval_notification_enabled"
 			android:defaultValue="true"
+			android:title="@string/settings_interval_enabled_title"
+			android:summaryOn="@string/settings_interval_enabled_on"
+			android:summaryOff="@string/settings_interval_enabled_off"
+		/>
+		<RingtonePreference
+			android:layout="?android:attr/preferenceLayoutChild"
+			android:dependency="interval_notification_enabled"
+			android:key="interval_notification_ringtone"
 			android:title="@string/settings_interval_sound"
+			android:ringtoneType="notification"
+			android:defaultValue="content://settings/system/notification_sound"
 		/>
 		<CheckBoxPreference
 			android:key="interval_notification_led"
+			android:dependency="interval_notification_enabled"
 			android:defaultValue="true"
 			android:title="@string/settings_interval_led"
 			android:summaryOn="@string/settings_interval_led_on"
@@ -52,6 +64,7 @@
 		/>
 		<CheckBoxPreference
 			android:key="interval_notification_vibrate"
+			android:dependency="interval_notification_enabled"
 			android:defaultValue="true"
 			android:title="@string/settings_interval_vibrate"
 			android:summaryOn="@string/settings_interval_vibrate_on"

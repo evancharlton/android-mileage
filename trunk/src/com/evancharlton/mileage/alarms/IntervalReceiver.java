@@ -11,8 +11,7 @@ public class IntervalReceiver extends BroadcastReceiver {
 	public void onReceive(Context context, Intent intent) {
 		long id = intent.getExtras().getLong(ServiceInterval._ID, -1L);
 
-		// ServiceInterval interval = new ServiceInterval(id);
-		//
-		// interval.raiseNotification(context);
+		ServiceInterval interval = ServiceInterval.loadById(context, id);
+		interval.raiseNotification(context);
 	}
 }

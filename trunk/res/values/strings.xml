@@ -37,6 +37,8 @@
 	<string name="perform_backup">Perform backup</string>
 	<string name="no_chart">No chart for this statistic (yet!)</string>
 	<string name="delete">Delete</string>
+	<string name="service_interval_set">Reminder set for %s</string>
+	<string name="service_interval_canceled">Reminder canceled</string>
 	
 	<string name="dialog_title_delete">Really delete?</string>
 	<string name="dialog_message_delete">Are you sure you want to delete this? This cannot be undone!</string>
@@ -72,6 +74,9 @@
 	<string name="settings_data_format_title">Fillup options</string>
 	<string name="settings_data_format_summary">Choose the most convenient way to enter data</string>
 	<string name="settings_notification_title">Notifications</string>
+	<string name="settings_interval_enabled_title">Enable notifications</string>
+	<string name="settings_interval_enabled_on">Service interval reminders enabled</string>
+	<string name="settings_interval_enabled_off">Service interval reminders disabled</string>
 	<string name="settings_interval_sound">Select ringtone</string>
 	<string name="settings_interval_led">Blink LED</string>
 	<string name="settings_interval_led_on">LED will flash for reminders</string>

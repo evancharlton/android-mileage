@@ -1,20 +1,28 @@
 package com.evancharlton.mileage.math;
 
 import java.util.Currency;
+import java.util.Date;
 import java.util.Locale;
 
 import android.content.Context;
+import android.text.format.DateFormat;
 
 import com.evancharlton.mileage.R;
 import com.evancharlton.mileage.dao.Fillup;
 import com.evancharlton.mileage.dao.FillupSeries;
 import com.evancharlton.mileage.dao.Vehicle;
 
+// TODO(future) - Does the name of this still make sense?
 public class Calculator {
 	// dates
 	public static final long DAY_MS = 1000L * 60L * 60L * 24L;
 	public static final long MONTH_MS = DAY_MS * 30L;
 	public static final long YEAR_MS = DAY_MS * 365L;
+
+	public static final int DATE_DATE = 1;
+	public static final int DATE_LONG = 2;
+	public static final int DATE_MEDIUM = 3;
+	public static final int DATE_TIME = 4;
 
 	// distance
 	public static final int KM = 1;
@@ -38,6 +46,11 @@ public class Calculator {
 
 	// cache
 	private static String CURRENCY_SYMBOL = null;
+	private static final java.text.DateFormat[] FORMATTERS = new java.text.DateFormat[4];
+
+	private Calculator() {
+		// no initialization
+	}
 
 	/**
 	 * Returns a positive integer if first is a *better* economy than second, a
@@ -323,5 +336,25 @@ public class Calculator {
 			CURRENCY_SYMBOL = Currency.getInstance(Locale.getDefault()).getSymbol();
 		}
 		return CURRENCY_SYMBOL;
+	}
+
+	public static String getDateString(Context context, int type, Date date) {
+		if (FORMATTERS[type] == null) {
+			switch (type) {
+				case DATE_DATE:
+					FORMATTERS[DATE_DATE] = DateFormat.getDateFormat(context);
+					break;
+				case DATE_LONG:
+					FORMATTERS[DATE_LONG] = DateFormat.getTimeFormat(context);
+					break;
+				case DATE_MEDIUM:
+					FORMATTERS[DATE_MEDIUM] = DateFormat.getMediumDateFormat(context);
+					break;
+				case DATE_TIME:
+					FORMATTERS[DATE_TIME] = DateFormat.getMediumDateFormat(context);
+			}
+		}
+
+		return FORMATTERS[type].format(date);
 	}
 };
