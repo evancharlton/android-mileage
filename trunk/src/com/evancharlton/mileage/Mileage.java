@@ -48,7 +48,20 @@ public class Mileage extends TabActivity {
 			}
 		});
 
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+
 		getContentResolver().registerContentObserver(FillupsTable.BASE_URI, true, mFillupsObserver);
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+
+		getContentResolver().unregisterContentObserver(mFillupsObserver);
 	}
 
 	public void switchTo(String tag) {

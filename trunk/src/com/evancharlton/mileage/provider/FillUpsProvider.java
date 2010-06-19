@@ -227,14 +227,14 @@ public class FillUpsProvider extends ContentProvider {
 		throw new IllegalArgumentException("Unknown URI: " + uri);
 	}
 
-	private void notifyListeners(Uri uri) {
+	private void notifyListeners(final Uri uri) {
 		Context context = getContext();
 		context.getContentResolver().notifyChange(uri, null);
 
 		SharedPreferences preferences = context.getSharedPreferences(SettingsActivity.NAME, Context.MODE_PRIVATE);
 		for (BackupTransport transport : BACKUPS.values()) {
 			if (transport.isEnabled(preferences)) {
-				transport.performIncrementalBackup(context);
+				transport.performIncrementalBackup(context, uri);
 			}
 		}
 	}

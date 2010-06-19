@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.evancharlton.mileage.dao.ServiceInterval;
+import com.evancharlton.mileage.dao.Vehicle;
 import com.evancharlton.mileage.math.Calculator;
 import com.evancharlton.mileage.provider.FillUpsProvider;
 import com.evancharlton.mileage.provider.tables.ServiceIntervalsTable;
@@ -31,10 +32,14 @@ public class ServiceIntervalsListActivity extends BaseListActivity implements Di
 
 	@Override
 	protected Dialog onCreateDialog(int id) {
+		ServiceInterval interval = ServiceInterval.loadById(this, getIntent().getLongExtra(ServiceInterval._ID, -1));
+		Vehicle vehicle = Vehicle.loadById(this, interval.getVehicleId());
 		switch (id) {
 			case R.string.delete_service_interval:
 				return new AlertDialog.Builder(this).setPositiveButton(android.R.string.yes, this).setNegativeButton(android.R.string.no, this)
-						.setNeutralButton(R.string.remind_later, this).setMessage(R.string.delete_service_interval).create();
+						.setNeutralButton(R.string.remind_later, this).setTitle(R.string.delete_service_interval).setMessage(
+								getString(R.string.service_interval_reminder_message, interval.getTitle(), interval.getDescription(), vehicle
+										.getTitle())).create();
 		}
 		return super.onCreateDialog(id);
 	}

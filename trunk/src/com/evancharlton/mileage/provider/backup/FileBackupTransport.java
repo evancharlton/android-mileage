@@ -9,6 +9,7 @@ import java.nio.channels.FileChannel;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Environment;
 import android.widget.Toast;
 
@@ -27,7 +28,7 @@ public class FileBackupTransport extends BackupTransport {
 	}
 
 	@Override
-	public void performIncrementalBackup(Context context) {
+	public void performIncrementalBackup(Context context, Uri changedUri) {
 		// for the file backup, these are identical
 		performCompleteBackup(context);
 	}
