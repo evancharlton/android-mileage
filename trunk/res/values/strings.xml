@@ -86,7 +86,7 @@
 	<string name="settings_interval_vibrate_on">Phone will vibrate for reminders</string>
 	<string name="settings_interval_vibrate_off">Phone will not vibrate</string>
 	<string name="delete_service_interval">Delete this service interval?</string>
-	<string name="remind_later">Remind me tomorrow</string>
+	<string name="remind_later">Ask tomorrow</string>
 
 	<string name="transport_enable">Enable</string>
 	<string name="transport_enabled">Data will be backed up</string>
