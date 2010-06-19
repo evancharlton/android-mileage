@@ -41,6 +41,7 @@ public class Mileage extends TabActivity {
 		mTabHost.addTab(createTabSpec(TAG_FILLUP, FillupActivity.class, R.string.fillup));
 		mTabHost.addTab(createTabSpec(TAG_HISTORY, FillupListActivity.class, R.string.history));
 		mTabHost.addTab(createTabSpec(TAG_STATISTICS, VehicleStatisticsActivity.class, R.string.statistics));
+		mTabHost.addTab(createTabSpec(TAG_VEHICLES, VehicleListActivity.class, R.string.vehicles));
 
 		mTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
 			@Override
@@ -85,7 +86,6 @@ public class Mileage extends TabActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(Menu.NONE, R.string.edit_fields, Menu.NONE, R.string.edit_fields).setIntent(new Intent(this, FieldListActivity.class));
-		menu.add(Menu.NONE, R.string.vehicles, Menu.NONE, R.string.vehicles).setIntent(new Intent(this, VehicleListActivity.class));
 		menu.add(Menu.NONE, R.string.service_intervals, Menu.NONE, R.string.service_intervals).setIntent(
 				new Intent(this, ServiceIntervalsListActivity.class));
 		menu.add(Menu.NONE, R.string.settings, Menu.NONE, R.string.settings).setIntent(new Intent(this, SettingsActivity.class));
