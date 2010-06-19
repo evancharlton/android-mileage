@@ -88,7 +88,7 @@ public class ServiceIntervalsListActivity extends BaseListActivity implements Di
 			case DialogInterface.BUTTON_NEUTRAL:
 				// remind tomorrow
 				interval.deleteAlarm(this);
-				interval.scheduleAlarm(this, System.currentTimeMillis() + Calculator.DAY_MS);
+				interval.scheduleAlarm(this, System.currentTimeMillis() + Calculator.DAY_MILLIS);
 				break;
 			case DialogInterface.BUTTON_NEGATIVE:
 				// no action

@@ -15,9 +15,9 @@ import com.evancharlton.mileage.dao.Vehicle;
 // TODO(future) - Does the name of this still make sense?
 public class Calculator {
 	// dates
-	public static final long DAY_MS = 1000L * 60L * 60L * 24L;
-	public static final long MONTH_MS = DAY_MS * 30L;
-	public static final long YEAR_MS = DAY_MS * 365L;
+	public static final long DAY_MILLIS = 1000L * 60L * 60L * 24L;
+	public static final long MONTH_MS = DAY_MILLIS * 30L;
+	public static final long YEAR_MS = DAY_MILLIS * 365L;
 
 	public static final int DATE_DATE = 1;
 	public static final int DATE_LONG = 2;
@@ -165,13 +165,13 @@ public class Calculator {
 
 	public static double averageFuelPerDay(FillupSeries series) {
 		long timeRange = series.getTimeRange();
-		double numDays = Math.ceil((double) timeRange / (double) DAY_MS);
+		double numDays = Math.ceil((double) timeRange / (double) DAY_MILLIS);
 		return series.getTotalVolume() / numDays;
 	}
 
 	public static double averageCostPerDay(FillupSeries series) {
 		long timeRange = series.getTimeRange();
-		double numDays = Math.ceil((double) timeRange / (double) DAY_MS);
+		double numDays = Math.ceil((double) timeRange / (double) DAY_MILLIS);
 		return series.getTotalCost() / numDays;
 	}
 
