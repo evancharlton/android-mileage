@@ -2,14 +2,22 @@ package com.evancharlton.mileage.dao;
 
 import java.util.Date;
 
+import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 
 import com.evancharlton.mileage.R;
+import com.evancharlton.mileage.ServiceIntervalsListActivity;
 import com.evancharlton.mileage.dao.Dao.DataObject;
+import com.evancharlton.mileage.provider.Settings;
 import com.evancharlton.mileage.provider.tables.ServiceIntervalsTable;
 
 @DataObject(path = ServiceIntervalsTable.URI)
@@ -81,39 +89,48 @@ public class ServiceInterval extends Dao {
 	public void raiseNotification(Context context) {
 		// TODO(3.2) - Support per-interval notification settings
 
-		// TODO(6/18) - Finish this. I'm too tired tonight.
-		// Intent i = new Intent(context, ServiceIntervalsListActivity.class);
-		//
-		// Vehicle v = new Vehicle(m_vehicleId);
-		// String description =
-		// String.format(context.getString(R.string.service_interval_due),
-		// v.getTitle());
-		//
-		// Notification notification = new Notification(R.drawable.gasbuttonx,
-		// getDescription(), System.currentTimeMillis());
-		// i.putExtra(ServiceInterval._ID, m_id);
-		// PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
-		// i, 0);
-		//
-		// notification.flags = Notification.FLAG_SHOW_LIGHTS |
-		// Notification.FLAG_AUTO_CANCEL;
-		// notification.ledARGB = 0xFFFCAF15;
-		// notification.ledOffMS = 500;
-		// notification.ledOnMS = 500;
-		// notification.vibrate = new long[] {
-		// 250,
-		// 250,
-		// 250,
-		// 250
-		// };
-		// notification.defaults = Notification.DEFAULT_ALL;
-		// notification.setLatestEventInfo(context, getDescription(),
-		// description, contentIntent);
-		// NotificationManager notificationMgr = (NotificationManager)
-		// context.getSystemService(Activity.NOTIFICATION_SERVICE);
-		// if (notificationMgr != null) {
-		// notificationMgr.notify((int) m_id, notification);
-		// }
+		SharedPreferences prefs = context.getSharedPreferences(Settings.NAME, Context.MODE_PRIVATE);
+
+		if (prefs.getBoolean(Settings.NOTIFICATIONS_ENABLED, true)) {
+			Intent i = new Intent(context, ServiceIntervalsListActivity.class);
+
+			Vehicle v = Vehicle.loadById(context, getVehicleId());
+			String description = context.getString(R.string.service_interval_due, v.getTitle());
+
+			Notification notification = new Notification(R.drawable.gasbuttonx, getDescription(), System.currentTimeMillis());
+			i.putExtra(ServiceInterval._ID, getId());
+			PendingIntent contentIntent = PendingIntent.getActivity(context, 0, i, 0);
+
+			notification.flags = Notification.FLAG_AUTO_CANCEL;
+
+			if (prefs.getBoolean(Settings.NOTIFICATIONS_LED, true)) {
+				notification.flags |= Notification.FLAG_SHOW_LIGHTS;
+				notification.ledARGB = 0xFFFCAF15;
+				notification.ledOffMS = 500;
+				notification.ledOnMS = 500;
+			}
+
+			if (prefs.getBoolean(Settings.NOTIFICATIONS_VIBRATE, true)) {
+				notification.vibrate = new long[] {
+						250,
+						250,
+						250,
+						250
+				};
+			}
+
+			String uri = prefs.getString(Settings.NOTIFICATIONS_RINGTONE, "");
+			if (uri != null && uri.length() > 0) {
+				notification.sound = Uri.parse(uri);
+			}
+
+			notification.defaults = Notification.DEFAULT_ALL;
+			notification.setLatestEventInfo(context, getDescription(), description, contentIntent);
+			NotificationManager notificationMgr = (NotificationManager) context.getSystemService(Activity.NOTIFICATION_SERVICE);
+			if (notificationMgr != null) {
+				notificationMgr.notify((int) getId(), notification);
+			}
+		}
 	}
 
 	public String getTitle() {

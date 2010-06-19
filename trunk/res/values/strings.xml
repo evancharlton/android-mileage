@@ -39,6 +39,7 @@
 	<string name="delete">Delete</string>
 	<string name="service_interval_set">Reminder set for %s</string>
 	<string name="service_interval_canceled">Reminder canceled</string>
+	<string name="service_interval_due">Service due for %s</string>
 	
 	<string name="dialog_title_delete">Really delete?</string>
 	<string name="dialog_message_delete">Are you sure you want to delete this? This cannot be undone!</string>
