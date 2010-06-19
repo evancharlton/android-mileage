@@ -15,9 +15,12 @@ import android.widget.TabHost.TabSpec;
 import com.evancharlton.mileage.provider.tables.FillupsTable;
 
 public class Mileage extends TabActivity {
+	public static final String VISIBLE_TAB = "visible_tab";
+
 	public static final String TAG_FILLUP = "fillups";
 	public static final String TAG_HISTORY = "history";
 	public static final String TAG_STATISTICS = "statistics";
+	public static final String TAG_VEHICLES = "vehicles";
 
 	private TabHost mTabHost;
 
@@ -48,6 +51,10 @@ public class Mileage extends TabActivity {
 			}
 		});
 
+		String requestedTab = getIntent().getStringExtra(VISIBLE_TAB);
+		if (requestedTab != null) {
+			switchTo(requestedTab);
+		}
 	}
 
 	@Override
