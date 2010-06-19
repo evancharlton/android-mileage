@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="com.evancharlton.mileage" android:versionName="2.2.5" android:versionCode="2250">
+	package="com.evancharlton.mileage" android:versionName="3.0.0" android:versionCode="3000">
 	<uses-sdk android:minSdkVersion="3" android:targetSdkVersion="4"/>
 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -13,6 +13,7 @@
 	/>
 	<application android:label="@string/app_name" android:icon="@drawable/gasbuttonx" android:debuggable="true">
 		<provider android:name=".provider.FillUpsProvider" android:authorities="com.evancharlton.mileage" />
+
 		<activity android:name=".Mileage" android:theme="@android:style/Theme.NoTitleBar">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
@@ -57,5 +58,7 @@
 		<activity android:name=".charts.SouthChart" android:label="@string/title_chart_south" />
 		<activity android:name=".charts.EastChart" android:label="@string/title_chart_east" />
 		<activivy android:name=".charts.WestChart" android:label="@string/title_chart_west" />
+
+		<receiver android:name=".alarms.IntervalReceiver" />
 	</application>
 </manifest> 

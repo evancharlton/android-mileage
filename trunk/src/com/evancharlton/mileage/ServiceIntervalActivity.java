@@ -1,12 +1,7 @@
 package com.evancharlton.mileage;
 
-import java.util.Date;
-
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.ContentUris;
 import android.content.ContentValues;
-import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,14 +10,12 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.evancharlton.mileage.alarms.IntervalReceiver;
 import com.evancharlton.mileage.dao.Dao;
 import com.evancharlton.mileage.dao.Fillup;
 import com.evancharlton.mileage.dao.ServiceInterval;
 import com.evancharlton.mileage.dao.ServiceIntervalTemplate;
 import com.evancharlton.mileage.dao.Vehicle;
 import com.evancharlton.mileage.exceptions.InvalidFieldException;
-import com.evancharlton.mileage.math.Calculator;
 import com.evancharlton.mileage.provider.FillUpsProvider;
 import com.evancharlton.mileage.provider.tables.FillupsTable;
 import com.evancharlton.mileage.provider.tables.ServiceIntervalTemplatesTable;
@@ -196,33 +189,11 @@ public class ServiceIntervalActivity extends BaseFormActivity {
 		}
 	}
 
-	private PendingIntent getPendingIntent() {
-		Intent action = new Intent(this, IntervalReceiver.class);
-		action.putExtra(ServiceInterval._ID, mInterval.getId());
-		return PendingIntent.getBroadcast(this, (int) mInterval.getId(), action, PendingIntent.FLAG_UPDATE_CURRENT);
-	}
-
 	@Override
 	protected void saved() {
-		// schedule the alarm
-		AlarmManager mgr = (AlarmManager) getSystemService(ALARM_SERVICE);
-		Date trigger = new Date(mInterval.getStartDate() + mInterval.getDuration());
-
-		mgr.set(AlarmManager.RTC, trigger.getTime(), getPendingIntent());
-		String date = Calculator.getDateString(this, Calculator.DATE_DATE, trigger);
-		Toast.makeText(this, getString(R.string.service_interval_set, date), Toast.LENGTH_LONG).show();
-
+		mInterval.deleteAlarm(this);
+		mInterval.scheduleAlarm(this, mInterval.getStartDate() + mInterval.getDuration());
 		super.saved();
-	}
-
-	@Override
-	protected void deleted() {
-		// cancel the alarm
-		AlarmManager mgr = (AlarmManager) getSystemService(ALARM_SERVICE);
-		mgr.cancel(getPendingIntent());
-		Toast.makeText(this, getString(R.string.service_interval_canceled), Toast.LENGTH_SHORT).show();
-
-		super.deleted();
 	}
 
 	@Override

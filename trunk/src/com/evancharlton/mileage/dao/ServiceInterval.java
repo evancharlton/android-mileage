@@ -3,6 +3,7 @@ package com.evancharlton.mileage.dao;
 import java.util.Date;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -13,10 +14,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
+import android.widget.Toast;
 
 import com.evancharlton.mileage.R;
 import com.evancharlton.mileage.ServiceIntervalsListActivity;
+import com.evancharlton.mileage.alarms.IntervalReceiver;
 import com.evancharlton.mileage.dao.Dao.DataObject;
+import com.evancharlton.mileage.math.Calculator;
 import com.evancharlton.mileage.provider.Settings;
 import com.evancharlton.mileage.provider.tables.ServiceIntervalsTable;
 
@@ -86,6 +90,29 @@ public class ServiceInterval extends Dao {
 		return interval;
 	}
 
+	public void scheduleAlarm(final Context context, long when) {
+		// schedule the alarm
+		AlarmManager mgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+		Date trigger = new Date(when);
+
+		mgr.set(AlarmManager.RTC, trigger.getTime(), getPendingIntent(context));
+		String date = Calculator.getDateString(context, Calculator.DATE_DATE, trigger);
+		Toast.makeText(context, context.getString(R.string.service_interval_set, date), Toast.LENGTH_LONG).show();
+	}
+
+	public void deleteAlarm(final Context context) {
+		// cancel the alarm
+		AlarmManager mgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+		mgr.cancel(getPendingIntent(context));
+		Toast.makeText(context, context.getString(R.string.service_interval_canceled), Toast.LENGTH_SHORT).show();
+	}
+
+	private PendingIntent getPendingIntent(Context context) {
+		Intent action = new Intent(context, IntervalReceiver.class);
+		action.putExtra(ServiceInterval._ID, getId());
+		return PendingIntent.getBroadcast(context, (int) getId(), action, PendingIntent.FLAG_UPDATE_CURRENT);
+	}
+
 	public void raiseNotification(Context context) {
 		// TODO(3.2) - Support per-interval notification settings
 
@@ -131,6 +158,12 @@ public class ServiceInterval extends Dao {
 				notificationMgr.notify((int) getId(), notification);
 			}
 		}
+	}
+
+	@Override
+	public boolean delete(final Context context) {
+		deleteAlarm(context);
+		return super.delete(context);
 	}
 
 	public String getTitle() {
