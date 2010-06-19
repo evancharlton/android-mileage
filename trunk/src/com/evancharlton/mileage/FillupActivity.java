@@ -6,10 +6,12 @@ import java.util.HashMap;
 import android.app.Activity;
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -116,6 +118,12 @@ public class FillupActivity extends BaseFormActivity {
 		if (fields.getCount() == 0) {
 			mFieldsContainer.setVisibility(View.GONE);
 		}
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		menu.add(Menu.NONE, R.string.edit_fields, Menu.NONE, R.string.edit_fields).setIntent(new Intent(this, FieldListActivity.class));
+		return super.onCreateOptionsMenu(menu);
 	}
 
 	@Override

@@ -85,7 +85,6 @@ public class Mileage extends TabActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.add(Menu.NONE, R.string.edit_fields, Menu.NONE, R.string.edit_fields).setIntent(new Intent(this, FieldListActivity.class));
 		menu.add(Menu.NONE, R.string.service_intervals, Menu.NONE, R.string.service_intervals).setIntent(
 				new Intent(this, ServiceIntervalsListActivity.class));
 		menu.add(Menu.NONE, R.string.settings, Menu.NONE, R.string.settings).setIntent(new Intent(this, SettingsActivity.class));
