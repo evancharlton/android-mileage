@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:layout_weight="1"
+>
+	<LinearLayout
+	    android:orientation="vertical"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:id="@+id/contents"
+	>
+		<Spinner
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:entries="@array/exporters"
+			android:id="@+id/exporter"
+		/>
+		<Spinner
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:id="@+id/files"
+		/>
+		<View
+			android:layout_width="fill_parent"
+			android:layout_height="0dp"
+			android:layout_weight="1"
+		/>
+		<Button
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:id="@+id/submit"
+		/>
+	</LinearLayout>
+</ScrollView>

@@ -88,6 +88,9 @@
 	<string name="delete_service_interval">Delete service interval?</string>
 	<string name="service_interval_reminder_message">There is a scheduled %s (%s) for %s due. Would you like to delete this service interval?</string>
 	<string name="remind_later">Ask tomorrow</string>
+	<string name="import_export">Import / Export</string>
+	<string name="import_data">Import data</string>
+	<string name="export_data">Export data</string>
 
 	<string name="transport_enable">Enable</string>
 	<string name="transport_enabled">Data will be backed up</string>
@@ -215,6 +218,9 @@
 	<string name="title_settings">Settings</string>
 	<string name="title_transport_settings">Transport settings</string>
 	<string name="title_statistics">Statistics</string>
+	<string name="title_importexport">Import / Export data</string>
+	<string name="title_import">Import data</string>
+	<string name="title_export">Export data</string>
 	<string name="title_chart_avg_economy">Average fuel economy</string>
 	<string name="title_chart_min_economy">Worst fuel economy</string>
 	<string name="title_chart_max_economy">Best fuel economy</string>
@@ -238,4 +244,29 @@
 	<string name="title_chart_south">Farthest south fillup</string>
 	<string name="title_chart_east">Farthest east fillup</string>
 	<string name="title_chart_west">Farthest west fillup</string>
+	
+	<string name="importer_csv">Spreadsheet (*.csv)</string>
+	<string name="importer_sqlite">Database (*.db)</string>
+	<string name="exporter_csv">Spreadsheet (Excel, Google Docs)</string>
+	<string name="exporter_sqlite">Database (backups, SQLite)</string>
+	<string name="exporting">Exporting to %1$s ...</string>
+	<string name="exported">Exported data to %1$s!</string>
+	<string name="export_error">Unable to export data!</string>
+	<string name="importing">Importing from %1$s ...</string>
+	
+	<string name="column_id">ID</string>
+	<string name="column_total_cost">Total cost</string>
+	<string name="column_unit_price">Price per unit</string>
+	<string name="column_volume">Volume</string>
+	<string name="column_odometer">Odometer</string>
+	<string name="column_economy">Fuel economy</string>
+	<string name="column_vehicle">Vehicle</string>
+	<string name="column_date">Date</string>
+	<string name="column_latitude">Latitude</string>
+	<string name="column_longitude">Longitude</string>
+	<string name="column_partial">Is partial?</string>
+	<string name="column_restart">Restart calculations?</string>
+	
+	<string name="update_wrote_headers">Wrote headers...</string>
+	<string name="update_wrote_rows">%1$d rows written (%2$s total)</string>
 </resources>

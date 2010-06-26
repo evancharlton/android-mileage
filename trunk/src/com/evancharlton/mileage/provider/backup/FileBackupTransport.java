@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.evancharlton.mileage.R;
 import com.evancharlton.mileage.SettingsActivity;
+import com.evancharlton.mileage.provider.Settings;
 
 public class FileBackupTransport extends BackupTransport {
 	@Override
@@ -38,14 +39,13 @@ public class FileBackupTransport extends BackupTransport {
 		SharedPreferences preferences = context.getSharedPreferences(SettingsActivity.NAME, Context.MODE_PRIVATE);
 
 		final String destFolder = Environment.getExternalStorageDirectory() + "/mileage/";
-		final String destName = preferences.getString(Settings.FILENAME, "mileage");
+		final String destName = preferences.getString(TransportSettings.FILENAME, "mileage");
 		final String destFile = destFolder + destName + ".db";
 
 		new Thread() {
 			@Override
 			public void run() {
-				// TODO: I *really* don't like this...
-				File src = new File("/data/data/com.evancharlton.mileage/databases/mileage.db");
+				File src = new File(Settings.DATABASE_PATH);
 				File dest = new File(destFile);
 
 				FileChannel source = null;
@@ -96,10 +96,10 @@ public class FileBackupTransport extends BackupTransport {
 
 	@Override
 	public boolean isEnabled(SharedPreferences preferences) {
-		return preferences.getBoolean(Settings.ENABLED, true);
+		return preferences.getBoolean(TransportSettings.ENABLED, true);
 	}
 
-	public static final class Settings {
+	public static final class TransportSettings {
 		public static final String ENABLED = "transport_file_enabled";
 		public static final String FILENAME = "transport_file_filename";
 	}

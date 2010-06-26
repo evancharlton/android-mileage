@@ -32,6 +32,7 @@ public class CursorSpinner extends Spinner {
 	}
 
 	public void filter(String selection, String[] selectionArgs) {
+		// TODO(3.2) - run this on a background thread
 		Uri uri = Uri.withAppendedPath(FillUpsProvider.BASE_URI, mUriPath);
 		mCursor = getContext().getContentResolver().query(uri, new String[] {
 				BaseColumns._ID,

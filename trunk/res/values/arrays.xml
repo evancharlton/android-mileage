@@ -29,4 +29,12 @@
 		<item>1</item>
 		<item>2</item>
 	</string-array>
+	<string-array name="importers">
+		<item>@string/importer_sqlite</item>
+		<item>@string/importer_csv</item>
+	</string-array>
+	<string-array name="exporters">
+		<item>@string/exporter_sqlite</item>
+		<item>@string/exporter_csv</item>
+	</string-array>
 </resources>

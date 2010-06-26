@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
 
+import com.evancharlton.mileage.R;
 import com.evancharlton.mileage.dao.Dao;
 import com.evancharlton.mileage.dao.Fillup;
 import com.evancharlton.mileage.provider.FillUpsProvider;
@@ -35,6 +36,21 @@ public class FillupsTable extends ContentTable {
 			Fillup.LONGITUDE,
 			Fillup.PARTIAL,
 			Fillup.RESTART
+	};
+
+	public static final int[] PLAINTEXT = new int[] {
+			R.string.column_id,
+			R.string.column_total_cost,
+			R.string.column_unit_price,
+			R.string.column_volume,
+			R.string.column_odometer,
+			R.string.column_economy,
+			R.string.column_vehicle,
+			R.string.column_date,
+			R.string.column_latitude,
+			R.string.column_longitude,
+			R.string.column_partial,
+			R.string.column_restart
 	};
 
 	@Override
