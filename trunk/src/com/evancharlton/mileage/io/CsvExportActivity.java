@@ -3,12 +3,15 @@ package com.evancharlton.mileage.io;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.util.Date;
 
 import android.database.Cursor;
 import android.net.Uri;
 import au.com.bytecode.opencsv.CSVWriter;
 
 import com.evancharlton.mileage.R;
+import com.evancharlton.mileage.dao.Fillup;
 import com.evancharlton.mileage.provider.tables.FillupsTable;
 
 public class CsvExportActivity extends BaseExportActivity {
@@ -41,11 +44,25 @@ public class CsvExportActivity extends BaseExportActivity {
 				csvWriter.flush();
 				publishProgress(new Update(mActivity.getString(R.string.update_wrote_headers), 1));
 
+				// figure out what columns are where, for formatting purposes
+				int COLUMN_DATE = -1;
+				for (int i = 0; i < COLUMN_COUNT; i++) {
+					if (FillupsTable.PROJECTION[i].equals(Fillup.DATE)) {
+						COLUMN_DATE = i;
+					}
+				}
+
+				final DateFormat DATE_FORMAT = android.text.format.DateFormat.getDateFormat(mActivity);
+
 				// now write the real data
 				int numWritten = 0;
 				while (fillups.moveToNext()) {
 					for (int i = 0; i < COLUMN_COUNT; i++) {
-						data[i] = fillups.getString(i);
+						if (i == COLUMN_DATE) {
+							data[i] = DATE_FORMAT.format(new Date(fillups.getLong(i)));
+						} else {
+							data[i] = fillups.getString(i);
+						}
 					}
 					csvWriter.writeNext(data);
 					if (++numWritten % 10 == 0) {

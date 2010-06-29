@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +24,7 @@ import com.evancharlton.mileage.io.DbImportActivity;
 import com.evancharlton.mileage.provider.Settings;
 
 public class ImportActivity extends Activity {
-	private static final String FILENAME = "filename";
+	public static final String FILENAME = "filename";
 
 	private static final String[] FILE_TYPES = new String[] {
 			".db",
@@ -34,8 +33,8 @@ public class ImportActivity extends Activity {
 
 	@SuppressWarnings("unchecked")
 	private static final Class[] EXPORTERS = new Class[] {
-			CsvImportActivity.class,
-			DbImportActivity.class
+			DbImportActivity.class,
+			CsvImportActivity.class
 	};
 
 	private FileLoader mFileLoader;
@@ -61,6 +60,7 @@ public class ImportActivity extends Activity {
 				Intent intent = new Intent(ImportActivity.this, EXPORTERS[mFileTypes.getSelectedItemPosition()]);
 				intent.putExtra(ImportActivity.FILENAME, getFilename());
 				startActivity(intent);
+				finish();
 			}
 		});
 
@@ -91,7 +91,6 @@ public class ImportActivity extends Activity {
 			@Override
 			public boolean accept(File dir, String filename) {
 				final String extension = FILE_TYPES[mFileTypes.getSelectedItemPosition()];
-				Log.d("FilenameFilter", filename + " ~= " + extension);
 				return filename.toLowerCase().endsWith(extension);
 			}
 		};
