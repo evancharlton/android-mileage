@@ -102,7 +102,6 @@ public class CsvImportActivity extends Activity {
 
 		public FieldAdapter(Context context) {
 			mInflater = LayoutInflater.from(context);
-			mContext = context;
 		}
 
 		@Override
