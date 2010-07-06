@@ -294,6 +294,7 @@ public class VehicleStatisticsTask extends AsyncTask<Cursor, Integer, Integer> {
 				statistic.getKey(),
 				vehicleId
 		};
+		// TODO(3.0) - Speed this up with an in-memory database.
 		int num = mContentResolver.update(CacheTable.BASE_URI, values, where, args);
 		if (num == 0) {
 			values.put(CachedValue.ITEM, vehicleId);
@@ -308,17 +309,17 @@ public class VehicleStatisticsTask extends AsyncTask<Cursor, Integer, Integer> {
 
 	@Override
 	protected void onProgressUpdate(Integer... updates) {
-		 if (mTotal > 0) {
-		 mProgressBar.setIndeterminate(false);
-		 mProgressBar.setMax(mTotal * Statistics.STATISTICS.size());
-		 mTotal = 0;
-		 }
-		 if (updates.length > 0) {
-		 mProgress += updates[0];
-		 } else {
-		 mProgress += 1;
-		 }
-		 mProgressBar.setProgress(mProgress);
+		if (mTotal > 0) {
+			mProgressBar.setIndeterminate(false);
+			mProgressBar.setMax(mTotal * Statistics.STATISTICS.size());
+			mTotal = 0;
+		}
+		if (updates.length > 0) {
+			mProgress += updates[0];
+		} else {
+			mProgress += 1;
+		}
+		mProgressBar.setProgress(mProgress);
 	}
 
 	@Override
