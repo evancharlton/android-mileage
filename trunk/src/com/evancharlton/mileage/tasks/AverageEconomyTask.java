@@ -3,7 +3,6 @@ package com.evancharlton.mileage.tasks;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.os.AsyncTask;
 import android.util.Log;
 
 import com.evancharlton.mileage.dao.CachedValue;
@@ -12,15 +11,15 @@ import com.evancharlton.mileage.provider.Statistics;
 import com.evancharlton.mileage.provider.tables.CacheTable;
 import com.evancharlton.mileage.provider.tables.FillupsTable;
 
-public class AverageEconomyTask extends AsyncTask<Long, Integer, Double> {
+public class AverageEconomyTask extends AttachableAsyncTask<Activity, Long, Integer, Double> {
 	private static final String TAG = "AverageEconomyTask";
-	private Activity mActivity = null;
 
-	public void setActivity(Activity activity) {
-		if (activity instanceof AsyncCallback) {
-			mActivity = activity;
+	@Override
+	public void attach(Activity parent) {
+		if (parent instanceof AsyncCallback) {
+			super.attach(parent);
 		} else {
-			throw new IllegalArgumentException("Activity must implement AsyncCallback");
+			throw new IllegalArgumentException("parent must implement AsyncCallback");
 		}
 	}
 
@@ -34,7 +33,7 @@ public class AverageEconomyTask extends AsyncTask<Long, Integer, Double> {
 				String.valueOf(vehicleId)
 		};
 
-		Cursor cacheCursor = mActivity.getContentResolver().query(CacheTable.BASE_URI, new String[] {
+		Cursor cacheCursor = getParent().getContentResolver().query(CacheTable.BASE_URI, new String[] {
 			CachedValue.VALUE
 		}, selection, selectionArgs, null);
 
@@ -46,9 +45,10 @@ public class AverageEconomyTask extends AsyncTask<Long, Integer, Double> {
 		} else {
 			Log.d(TAG, "Calculating average economy...");
 			String[] projection = FillupsTable.PROJECTION;
-			Cursor fillupsCursor = mActivity.getContentResolver().query(FillupsTable.BASE_URI, projection, Fillup.VEHICLE_ID + " = ?", new String[] {
-				String.valueOf(vehicleId)
-			}, null);
+			Cursor fillupsCursor = getParent().getContentResolver().query(FillupsTable.BASE_URI, projection, Fillup.VEHICLE_ID + " = ?",
+					new String[] {
+						String.valueOf(vehicleId)
+					}, null);
 			if (fillupsCursor.getCount() > 1) {
 				double totalEconomy = 0D;
 				while (fillupsCursor.isLast() == false) {
@@ -71,7 +71,7 @@ public class AverageEconomyTask extends AsyncTask<Long, Integer, Double> {
 			values.put(CachedValue.VALUE, avgEconomy);
 			values.put(CachedValue.GROUP, Statistics.AVG_ECONOMY.getGroup());
 			values.put(CachedValue.ORDER, Statistics.AVG_ECONOMY.getOrder());
-			mActivity.getContentResolver().insert(CacheTable.BASE_URI, values);
+			getParent().getContentResolver().insert(CacheTable.BASE_URI, values);
 		}
 		cacheCursor.close();
 
@@ -84,7 +84,7 @@ public class AverageEconomyTask extends AsyncTask<Long, Integer, Double> {
 
 	@Override
 	protected void onPostExecute(Double avgEconomy) {
-		((AsyncCallback) mActivity).calculationFinished(avgEconomy.doubleValue());
+		((AsyncCallback) getParent()).calculationFinished(avgEconomy.doubleValue());
 	}
 
 	public interface AsyncCallback {

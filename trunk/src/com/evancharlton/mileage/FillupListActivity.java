@@ -45,7 +45,7 @@ public class FillupListActivity extends BaseListActivity implements AverageEcono
 					mAverageTask.cancel(true);
 				}
 				mAverageTask = new AverageEconomyTask();
-				mAverageTask.setActivity(FillupListActivity.this);
+				mAverageTask.attach(FillupListActivity.this);
 				mAverageTask.execute(id);
 
 				getAdapter().changeCursor(getCursor());
@@ -63,7 +63,7 @@ public class FillupListActivity extends BaseListActivity implements AverageEcono
 		} else {
 			mAverageTask = new AverageEconomyTask();
 		}
-		mAverageTask.setActivity(this);
+		mAverageTask.attach(this);
 		if (mAverageTask.getStatus() != AsyncTask.Status.RUNNING) {
 			mAverageTask.execute(mVehicles.getSelectedItemId());
 		}

@@ -4,20 +4,13 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-import android.os.AsyncTask;
 import android.util.Log;
 import au.com.bytecode.opencsv.CSVReader;
 
 import com.evancharlton.mileage.io.CsvImportActivity;
 import com.evancharlton.mileage.provider.Settings;
 
-public class CsvColumnReaderTask extends AsyncTask<String, Void, String[]> {
-	private CsvImportActivity mActivity;
-
-	public void attach(CsvImportActivity activity) {
-		mActivity = activity;
-	}
-
+public class CsvColumnReaderTask extends AttachableAsyncTask<CsvImportActivity, String, Void, String[]> {
 	@Override
 	protected String[] doInBackground(String... inputFiles) {
 		final String inputFile = inputFiles[0];
@@ -37,6 +30,6 @@ public class CsvColumnReaderTask extends AsyncTask<String, Void, String[]> {
 
 	@Override
 	protected void onPostExecute(String[] columnNames) {
-		mActivity.setColumns(columnNames);
+		getParent().setColumns(columnNames);
 	}
 }

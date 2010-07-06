@@ -3,7 +3,6 @@ package com.evancharlton.mileage.tasks;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -18,17 +17,17 @@ import com.evancharlton.mileage.provider.Statistics;
 import com.evancharlton.mileage.provider.tables.CacheTable;
 import com.evancharlton.mileage.provider.tables.FillupsTable;
 
-public class VehicleStatisticsTask extends AsyncTask<Cursor, Integer, Integer> {
+public class VehicleStatisticsTask extends AttachableAsyncTask<VehicleStatisticsActivity, Cursor, Integer, Integer> {
 	private static final String TAG = "VehicleStatisticsTask";
 
-	private VehicleStatisticsActivity mActivity;
 	private ContentResolver mContentResolver;
 	private int mProgress = 0;
 	private int mTotal = 0;
 	private ProgressBar mProgressBar;
 
-	public void setActivity(VehicleStatisticsActivity activity) {
-		mActivity = activity;
+	@Override
+	public void attach(VehicleStatisticsActivity activity) {
+		super.attach(activity);
 		mContentResolver = activity.getContentResolver();
 	}
 
@@ -36,7 +35,7 @@ public class VehicleStatisticsTask extends AsyncTask<Cursor, Integer, Integer> {
 	protected void onPreExecute() {
 		Log.d(TAG, "Calculation starting...");
 
-		mProgressBar = mActivity.getProgressBar();
+		mProgressBar = getParent().getProgressBar();
 		mProgressBar.setVisibility(View.VISIBLE);
 		mProgressBar.setIndeterminate(true);
 	}
@@ -45,13 +44,13 @@ public class VehicleStatisticsTask extends AsyncTask<Cursor, Integer, Integer> {
 	protected Integer doInBackground(Cursor... cursors) {
 		// delete the cache
 		String[] args = new String[] {
-			String.valueOf(mActivity.getVehicle().getId())
+			String.valueOf(getParent().getVehicle().getId())
 		};
 		mContentResolver.delete(CacheTable.BASE_URI, CachedValue.ITEM + " = ?", args);
 
 		String selection = Fillup.VEHICLE_ID + " = ?";
 		args = new String[] {
-			String.valueOf(mActivity.getVehicle().getId())
+			String.valueOf(getParent().getVehicle().getId())
 		};
 
 		Cursor cursor = mContentResolver.query(FillupsTable.BASE_URI, FillupsTable.PROJECTION, selection, args, Fillup.ODOMETER + " asc");
@@ -95,7 +94,7 @@ public class VehicleStatisticsTask extends AsyncTask<Cursor, Integer, Integer> {
 		final long lastYear = System.currentTimeMillis() - Calculator.YEAR_MS;
 		final long lastMonth = System.currentTimeMillis() - Calculator.MONTH_MS;
 
-		final Vehicle vehicle = mActivity.getVehicle();
+		final Vehicle vehicle = getParent().getVehicle();
 		while (cursor.moveToNext()) {
 			Fillup fillup = new Fillup(cursor);
 			series.add(fillup);
@@ -285,7 +284,7 @@ public class VehicleStatisticsTask extends AsyncTask<Cursor, Integer, Integer> {
 
 	private void update(Statistics.Statistic statistic, double value) {
 		statistic.setValue(value);
-		final String vehicleId = String.valueOf(mActivity.getVehicle().getId());
+		final String vehicleId = String.valueOf(getParent().getVehicle().getId());
 		ContentValues values = new ContentValues();
 		values.put(CachedValue.VALID, true);
 		values.put(CachedValue.VALUE, statistic.getValue());
@@ -324,10 +323,10 @@ public class VehicleStatisticsTask extends AsyncTask<Cursor, Integer, Integer> {
 
 	@Override
 	protected void onPostExecute(Integer done) {
-		if (mActivity.getAdapter() == null) {
-			mActivity.setAdapter(mActivity.getCacheCursor());
+		if (getParent().getAdapter() == null) {
+			getParent().setAdapter(getParent().getCacheCursor());
 		} else {
-			mActivity.getAdapter().notifyDataSetChanged();
+			getParent().getAdapter().notifyDataSetChanged();
 		}
 		mProgressBar.setVisibility(View.GONE);
 
