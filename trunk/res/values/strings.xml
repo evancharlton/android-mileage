@@ -16,6 +16,8 @@
 	<string name="save_changes">Save changes</string>
 	<string name="add_service_interval">Add service interval</string>
 	
+	<string name="previous">Previous</string>
+	<string name="next">Next</string>
 	<string name="partial_fillup">Tank was not filled to the top</string>
 	<string name="odometer">Odometer</string>
 	<string name="close">Close</string>

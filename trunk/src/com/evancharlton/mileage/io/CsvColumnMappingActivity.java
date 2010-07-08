@@ -1,6 +1,6 @@
 package com.evancharlton.mileage.io;
 
-import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,18 +13,16 @@ import android.widget.TextView;
 import com.evancharlton.mileage.ImportActivity;
 import com.evancharlton.mileage.R;
 import com.evancharlton.mileage.adapters.CsvFieldAdapter;
+import com.evancharlton.mileage.io.importers.CsvWizardActivity;
 import com.evancharlton.mileage.tasks.CsvColumnReaderTask;
 
-public class CsvColumnMappingActivity extends Activity {
+public class CsvColumnMappingActivity extends CsvWizardActivity {
 	private CsvColumnReaderTask mColumnReaderTask;
 	private LinearLayout mMappingContainer;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.import_progress_csv);
-
-		mMappingContainer = (LinearLayout) findViewById(R.id.mapping_container);
 
 		restoreTask();
 	}
@@ -61,5 +59,10 @@ public class CsvColumnMappingActivity extends Activity {
 			spinner.setId(columnName.hashCode());
 			spinner.setSelection(i);
 		}
+	}
+
+	protected Intent buildIntent() {
+		// TODO(3.0) - stub
+		return null;
 	}
 }
