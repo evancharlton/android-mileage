@@ -15,7 +15,7 @@ import com.evancharlton.mileage.R;
 import com.evancharlton.mileage.adapters.CsvFieldAdapter;
 import com.evancharlton.mileage.tasks.CsvColumnReaderTask;
 
-public class CsvImportActivity extends Activity {
+public class CsvColumnMappingActivity extends Activity {
 	private CsvColumnReaderTask mColumnReaderTask;
 	private LinearLayout mMappingContainer;
 
@@ -26,21 +26,16 @@ public class CsvImportActivity extends Activity {
 
 		mMappingContainer = (LinearLayout) findViewById(R.id.mapping_container);
 
-		restoreTasks();
+		restoreTask();
 	}
 
 	@Override
 	public Object onRetainNonConfigurationInstance() {
-		return new Object[] {
-			mColumnReaderTask
-		};
+		return mColumnReaderTask;
 	}
 
-	private void restoreTasks() {
-		Object[] tasks = (Object[]) getLastNonConfigurationInstance();
-		if (tasks != null) {
-			mColumnReaderTask = (CsvColumnReaderTask) tasks[0];
-		}
+	private void restoreTask() {
+		mColumnReaderTask = (CsvColumnReaderTask) getLastNonConfigurationInstance();
 
 		if (mColumnReaderTask == null) {
 			mColumnReaderTask = new CsvColumnReaderTask();

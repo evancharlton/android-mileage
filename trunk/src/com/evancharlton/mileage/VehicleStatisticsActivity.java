@@ -52,7 +52,7 @@ public class VehicleStatisticsActivity extends Activity {
 			mAdapter = null;
 		}
 		if (mCalculationTask != null) {
-			mCalculationTask.setActivity(this);
+			mCalculationTask.attach(this);
 		}
 
 		mListView = (ListView) findViewById(android.R.id.list);
@@ -140,7 +140,7 @@ public class VehicleStatisticsActivity extends Activity {
 	private void calculate() {
 		Log.d(TAG, "Recalculating statistics");
 		mCalculationTask = new VehicleStatisticsTask();
-		mCalculationTask.setActivity(this);
+		mCalculationTask.attach(this);
 		mCalculationTask.execute();
 	}
 

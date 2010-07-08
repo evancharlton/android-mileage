@@ -7,10 +7,10 @@ import java.io.IOException;
 import android.util.Log;
 import au.com.bytecode.opencsv.CSVReader;
 
-import com.evancharlton.mileage.io.CsvImportActivity;
+import com.evancharlton.mileage.io.CsvColumnMappingActivity;
 import com.evancharlton.mileage.provider.Settings;
 
-public class CsvColumnReaderTask extends AttachableAsyncTask<CsvImportActivity, String, Void, String[]> {
+public class CsvColumnReaderTask extends AttachableAsyncTask<CsvColumnMappingActivity, String, Void, String[]> {
 	@Override
 	protected String[] doInBackground(String... inputFiles) {
 		final String inputFile = inputFiles[0];

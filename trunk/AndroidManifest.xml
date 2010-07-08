@@ -39,7 +39,7 @@
 		<activity android:name=".ImportActivity" android:label="@string/title_import" />
 		<activity android:name=".ExportActivity" android:label="@string/title_export" />
 		<activity android:name=".io.CsvExportActivity" android:label=""/>
-		<activity android:name=".io.CsvImportActivity" android:label=""/>
+		<activity android:name=".io.CsvColumnMappingActivity" android:label=""/>
 		<activity android:name=".io.DbExportActivity" android:label=""/>
 		<activity android:name=".io.DbImportActivity" android:label=""/>
 		<activity android:name=".charts.AverageFuelEconomyChart" android:label="@string/title_chart_avg_economy" />

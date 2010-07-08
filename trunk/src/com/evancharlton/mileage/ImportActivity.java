@@ -19,7 +19,7 @@ import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
-import com.evancharlton.mileage.io.CsvImportActivity;
+import com.evancharlton.mileage.io.CsvColumnMappingActivity;
 import com.evancharlton.mileage.io.DbImportActivity;
 import com.evancharlton.mileage.provider.Settings;
 
@@ -34,7 +34,7 @@ public class ImportActivity extends Activity {
 	@SuppressWarnings("unchecked")
 	private static final Class[] EXPORTERS = new Class[] {
 			DbImportActivity.class,
-			CsvImportActivity.class
+			CsvColumnMappingActivity.class
 	};
 
 	private FileLoader mFileLoader;
