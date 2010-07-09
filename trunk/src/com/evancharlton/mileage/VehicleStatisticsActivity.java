@@ -15,12 +15,12 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.SimpleCursorAdapter.ViewBinder;
 
+import com.evancharlton.mileage.adapters.VehicleStatisticsAdapter;
 import com.evancharlton.mileage.dao.CachedValue;
 import com.evancharlton.mileage.dao.Vehicle;
 import com.evancharlton.mileage.provider.Statistics;
@@ -39,7 +39,7 @@ public class VehicleStatisticsActivity extends Activity {
 	private VehicleStatisticsTask mCalculationTask = null;
 	private ProgressBar mProgressBar;
 
-	private SimpleCursorAdapter mAdapter;
+	private VehicleStatisticsAdapter mAdapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -125,14 +125,13 @@ public class VehicleStatisticsActivity extends Activity {
 					CachedValue.VALUE
 			};
 			int[] to = new int[] {
-					R.id.label,
+					android.R.id.text1,
 					R.id.value
 			};
-			mAdapter = new SimpleCursorAdapter(this, R.layout.statistic, c, from, to);
+			mAdapter = new VehicleStatisticsAdapter(this, mVehicle);
 		} else {
-			mAdapter.changeCursor(c);
+			// mAdapter.changeCursor(c);
 		}
-		mAdapter.setViewBinder(mViewBinder);
 		mListView.setAdapter(mAdapter);
 		mAdapter.notifyDataSetChanged();
 	}
@@ -180,7 +179,7 @@ public class VehicleStatisticsActivity extends Activity {
 		return mVehicle;
 	}
 
-	public SimpleCursorAdapter getAdapter() {
+	public VehicleStatisticsAdapter getAdapter() {
 		return mAdapter;
 	}
 

@@ -261,6 +261,10 @@ public final class Statistics {
 		public int getLabel() {
 			return mLabel;
 		}
+
+		public ArrayList<Statistic> getStatistics() {
+			return mStatistics;
+		}
 	}
 
 	private static int[] args(int... args) {

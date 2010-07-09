@@ -1,5 +1,7 @@
 package com.evancharlton.mileage.io;
 
+import java.util.ArrayList;
+
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -19,6 +21,7 @@ import com.evancharlton.mileage.tasks.CsvColumnReaderTask;
 public class CsvColumnMappingActivity extends CsvWizardActivity {
 	private CsvColumnReaderTask mColumnReaderTask;
 	private LinearLayout mMappingContainer;
+	private final ArrayList<Spinner> mColumnSpinners = new ArrayList<Spinner>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -58,11 +61,17 @@ public class CsvColumnMappingActivity extends CsvWizardActivity {
 			spinner.setAdapter(new CsvFieldAdapter(this));
 			spinner.setId(columnName.hashCode());
 			spinner.setSelection(i);
+			spinner.setTag(columnName);
+
+			mColumnSpinners.add(spinner);
 		}
 	}
 
 	protected Intent buildIntent() {
-		// TODO(3.0) - stub
-		return null;
+		Intent intent = new Intent(this, CsvVehicleMappingActivity.class);
+		for (Spinner columnSpinner : mColumnSpinners) {
+			intent.putExtra(columnSpinner.getSelectedItem().toString(), columnSpinner.getSelectedItemPosition());
+		}
+		return intent;
 	}
 }
