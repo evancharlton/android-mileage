@@ -32,8 +32,6 @@ public class VehicleStatisticsAdapter extends BaseAdapter {
 	private final Vehicle mVehicle;
 	private final LayoutInflater mInflater;
 
-	private Cursor mCursor;
-
 	public VehicleStatisticsAdapter(Context context, Vehicle vehicle) {
 		mInflater = LayoutInflater.from(context);
 		mContext = context;
@@ -89,8 +87,6 @@ public class VehicleStatisticsAdapter extends BaseAdapter {
 	}
 
 	public void changeCursor(Cursor cursor) {
-		mCursor = cursor;
-
 		// TODO(3.1) - This isn't efficient and it runs on the UI thread. Boo!
 		cursor.moveToPosition(-1);
 		final int key_position = cursor.getColumnIndex(CachedValue.KEY);

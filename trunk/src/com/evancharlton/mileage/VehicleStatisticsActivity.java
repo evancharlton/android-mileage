@@ -16,9 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.SimpleCursorAdapter.ViewBinder;
 
 import com.evancharlton.mileage.adapters.VehicleStatisticsAdapter;
 import com.evancharlton.mileage.dao.CachedValue;
@@ -120,14 +118,6 @@ public class VehicleStatisticsActivity extends Activity {
 
 	public void setAdapter(Cursor c) {
 		if (mAdapter == null) {
-			String[] from = new String[] {
-					CachedValue.KEY,
-					CachedValue.VALUE
-			};
-			int[] to = new int[] {
-					android.R.id.text1,
-					R.id.value
-			};
 			mAdapter = new VehicleStatisticsAdapter(this, mVehicle);
 		} else {
 			mAdapter.changeCursor(c);
@@ -182,27 +172,4 @@ public class VehicleStatisticsActivity extends Activity {
 	public VehicleStatisticsAdapter getAdapter() {
 		return mAdapter;
 	}
-
-	private final ViewBinder mViewBinder = new ViewBinder() {
-		@Override
-		public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
-			TextView textView = (TextView) view;
-			String key = cursor.getString(2);
-			Statistic statistic = Statistics.STRINGS.get(key);
-			if (statistic != null) {
-				// if it's null, then the cache is dead so ignore it
-				switch (columnIndex) {
-					case 2:
-						// KEY
-						textView.setText(statistic.getLabel(VehicleStatisticsActivity.this, mVehicle));
-						return true;
-					case 3:
-						// VALUE
-						textView.setText(statistic.format(VehicleStatisticsActivity.this, mVehicle, cursor.getDouble(3)));
-						return true;
-				}
-			}
-			return false;
-		}
-	};
 }
