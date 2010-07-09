@@ -1,7 +1,6 @@
 package com.evancharlton.mileage.tasks;
 
 import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.database.Cursor;
 import android.util.Log;
 import android.view.View;
@@ -284,25 +283,7 @@ public class VehicleStatisticsTask extends AttachableAsyncTask<VehicleStatistics
 
 	private void update(Statistics.Statistic statistic, double value) {
 		statistic.setValue(value);
-		final String vehicleId = String.valueOf(getParent().getVehicle().getId());
-		ContentValues values = new ContentValues();
-		values.put(CachedValue.VALID, true);
-		values.put(CachedValue.VALUE, statistic.getValue());
-		String where = CachedValue.KEY + " = ? and " + CachedValue.ITEM + " = ?";
-		String[] args = new String[] {
-				statistic.getKey(),
-				vehicleId
-		};
-		// TODO(3.0) - Speed this up with an in-memory database.
-		int num = mContentResolver.update(CacheTable.BASE_URI, values, where, args);
-		if (num == 0) {
-			values.put(CachedValue.ITEM, vehicleId);
-			values.put(CachedValue.KEY, statistic.getKey());
-			values.put(CachedValue.GROUP, statistic.getGroup());
-			values.put(CachedValue.ORDER, statistic.getOrder());
-			mContentResolver.insert(CacheTable.BASE_URI, values);
-		}
-
+		getParent().getAdapter().setValue(statistic, value);
 		publishProgress();
 	}
 
@@ -319,6 +300,7 @@ public class VehicleStatisticsTask extends AttachableAsyncTask<VehicleStatistics
 			mProgress += 1;
 		}
 		mProgressBar.setProgress(mProgress);
+		getParent().getAdapter().notifyDataSetChanged();
 	}
 
 	@Override
@@ -331,5 +313,7 @@ public class VehicleStatisticsTask extends AttachableAsyncTask<VehicleStatistics
 		mProgressBar.setVisibility(View.GONE);
 
 		Log.d(TAG, "Done recalculating!");
+
+		getParent().getAdapter().flush();
 	}
 }

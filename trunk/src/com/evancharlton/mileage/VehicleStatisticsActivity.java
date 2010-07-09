@@ -130,7 +130,7 @@ public class VehicleStatisticsActivity extends Activity {
 			};
 			mAdapter = new VehicleStatisticsAdapter(this, mVehicle);
 		} else {
-			// mAdapter.changeCursor(c);
+			mAdapter.changeCursor(c);
 		}
 		mListView.setAdapter(mAdapter);
 		mAdapter.notifyDataSetChanged();
