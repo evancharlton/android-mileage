@@ -92,9 +92,13 @@ public class VehicleStatisticsActivity extends Activity {
 	}
 
 	private void recalculate() {
+		Log.d(TAG, "Checking recalculation ...");
 		Cursor c = getCacheCursor();
 		if (c.getCount() < Statistics.STATISTICS.size()) {
 			calculate();
+			Log.d(TAG, "Recalculation started!");
+		} else {
+			Log.d(TAG, "Recalculation not necessary.");
 		}
 		setAdapter(c);
 	}
@@ -119,9 +123,8 @@ public class VehicleStatisticsActivity extends Activity {
 	public void setAdapter(Cursor c) {
 		if (mAdapter == null) {
 			mAdapter = new VehicleStatisticsAdapter(this, mVehicle);
-		} else {
-			mAdapter.changeCursor(c);
 		}
+		mAdapter.changeCursor(c);
 		mListView.setAdapter(mAdapter);
 		mAdapter.notifyDataSetChanged();
 	}
