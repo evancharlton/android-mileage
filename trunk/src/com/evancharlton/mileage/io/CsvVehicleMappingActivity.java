@@ -22,40 +22,15 @@ import com.evancharlton.mileage.provider.tables.VehiclesTable;
 import com.evancharlton.mileage.tasks.CsvVehicleReaderTask;
 
 public class CsvVehicleMappingActivity extends CsvWizardActivity {
-	private static final String TAG = "CsvVehicleMappingActivity";
-
 	private final ArrayList<HashMap<String, String>> mVehicles = new ArrayList<HashMap<String, String>>();
 	private final ArrayList<SimpleAdapter> mAdapters = new ArrayList<SimpleAdapter>();
+	private final HashMap<Long, Spinner> mVehicleMapping = new HashMap<Long, Spinner>();
 
 	private CsvVehicleReaderTask mVehicleReaderTask;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		restoreTask();
-	}
-
-	@Override
-	public Object onRetainNonConfigurationInstance() {
-		return mVehicleReaderTask;
-	}
-
-	private void restoreTask() {
-		mVehicleReaderTask = (CsvVehicleReaderTask) getLastNonConfigurationInstance();
-
-		if (mVehicleReaderTask == null) {
-			mVehicleReaderTask = new CsvVehicleReaderTask(getIntent().getIntExtra(Fillup.VEHICLE_ID, 0));
-		}
-		mVehicleReaderTask.attach(this);
-		if (mVehicleReaderTask.getStatus() == AsyncTask.Status.PENDING) {
-			mVehicleReaderTask.execute(getIntent().getStringExtra(ImportActivity.FILENAME));
-		}
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
 
 		LayoutInflater inflater = LayoutInflater.from(this);
 
@@ -80,13 +55,41 @@ public class CsvVehicleMappingActivity extends CsvWizardActivity {
 			spinner.setAdapter(vehicles);
 			spinner.setId(title.hashCode());
 			mAdapters.add(vehicles);
+
+			mVehicleMapping.put(vehicleCursor.getLong(vehicleCursor.getColumnIndex(Vehicle._ID)), spinner);
 		}
 		vehicleCursor.close();
+
+		restoreTask();
+	}
+
+	@Override
+	public Object onRetainNonConfigurationInstance() {
+		return mVehicleReaderTask;
+	}
+
+	private void restoreTask() {
+		mVehicleReaderTask = (CsvVehicleReaderTask) getLastNonConfigurationInstance();
+
+		if (mVehicleReaderTask == null) {
+			mVehicleReaderTask = new CsvVehicleReaderTask(getIntent().getIntExtra(Fillup.VEHICLE_ID, 0));
+		}
+		mVehicleReaderTask.attach(this);
+		if (mVehicleReaderTask.getStatus() == AsyncTask.Status.PENDING) {
+			mVehicleReaderTask.execute(getIntent().getStringExtra(ImportActivity.FILENAME));
+		}
 	}
 
 	@Override
 	protected void buildIntent(Intent intent) {
-		intent.setClass(this, CsvVehicleMappingActivity.class);
+		intent.setClass(this, CsvImportActivity.class);
+
+		for (Long vehicleId : mVehicleMapping.keySet()) {
+			Spinner spinner = mVehicleMapping.get(vehicleId);
+			HashMap<String, String> mapping = mVehicles.get(spinner.getSelectedItemPosition());
+			String title = mapping.get(Vehicle.TITLE);
+			intent.putExtra("vehicle_" + title, vehicleId);
+		}
 	}
 
 	public void dataRead(String vehicle) {

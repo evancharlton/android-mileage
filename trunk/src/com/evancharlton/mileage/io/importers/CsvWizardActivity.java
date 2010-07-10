@@ -33,12 +33,6 @@ public abstract class CsvWizardActivity extends Activity implements View.OnClick
 		switch (v.getId()) {
 			case R.id.next:
 				Intent intent = getIntent();
-				Bundle extras = intent.getExtras();
-				if (extras != null) {
-					for (String key : extras.keySet()) {
-						intent.putExtra(key, extras.getString(key));
-					}
-				}
 				buildIntent(intent);
 				startActivity(intent);
 				break;
