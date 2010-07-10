@@ -32,7 +32,15 @@ public abstract class CsvWizardActivity extends Activity implements View.OnClick
 	public void onClick(View v) {
 		switch (v.getId()) {
 			case R.id.next:
-				startActivity(buildIntent());
+				Intent intent = getIntent();
+				Bundle extras = intent.getExtras();
+				if (extras != null) {
+					for (String key : extras.keySet()) {
+						intent.putExtra(key, extras.getString(key));
+					}
+				}
+				buildIntent(intent);
+				startActivity(intent);
 				break;
 			case R.id.previous:
 				finish();
@@ -40,5 +48,5 @@ public abstract class CsvWizardActivity extends Activity implements View.OnClick
 		}
 	}
 
-	protected abstract Intent buildIntent();
+	protected abstract void buildIntent(Intent intent);
 }

@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -20,7 +19,6 @@ import com.evancharlton.mileage.tasks.CsvColumnReaderTask;
 
 public class CsvColumnMappingActivity extends CsvWizardActivity {
 	private CsvColumnReaderTask mColumnReaderTask;
-	private LinearLayout mMappingContainer;
 	private final ArrayList<Spinner> mColumnSpinners = new ArrayList<Spinner>();
 
 	@Override
@@ -53,7 +51,7 @@ public class CsvColumnMappingActivity extends CsvWizardActivity {
 		for (int i = 0; i < length; i++) {
 			String columnName = columnNames[i];
 			Log.d("CsvImportActivity", "Adding a UI mapping for " + columnName);
-			View v = inflater.inflate(R.layout.import_csv_mapping, mMappingContainer);
+			View v = inflater.inflate(R.layout.import_csv_mapping, mContainer);
 			TextView title = (TextView) v.findViewById(R.id.title);
 			title.setText(columnName);
 			title.setId(columnName.hashCode());
@@ -67,11 +65,11 @@ public class CsvColumnMappingActivity extends CsvWizardActivity {
 		}
 	}
 
-	protected Intent buildIntent() {
-		Intent intent = new Intent(this, CsvVehicleMappingActivity.class);
+	@Override
+	protected void buildIntent(Intent intent) {
+		intent.setClass(this, CsvVehicleMappingActivity.class);
 		for (Spinner columnSpinner : mColumnSpinners) {
 			intent.putExtra(columnSpinner.getSelectedItem().toString(), columnSpinner.getSelectedItemPosition());
 		}
-		return intent;
 	}
 }
