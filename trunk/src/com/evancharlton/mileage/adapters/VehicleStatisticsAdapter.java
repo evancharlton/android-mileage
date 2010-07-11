@@ -68,20 +68,27 @@ public class VehicleStatisticsAdapter extends BaseAdapter {
 
 				Log.d(TAG, "Building new values ...");
 				// write the new cache
-				ContentValues[] values = new ContentValues[mObjects.size()];
+				ContentValues[] values = new ContentValues[Statistics.STATISTICS.size()];
 				final int length = mObjects.size();
 				final long vehicleId = mVehicle.getId();
+				int num = 0;
 				for (int i = 0; i < length; i++) {
-					ContentValues v = new ContentValues();
-					v.put(CachedValue.ITEM, vehicleId);
-					v.put(CachedValue.VALID, true);
-					v.put(CachedValue.VALUE, mValues.get(mObjects.get(i).key));
-					v.put(CachedValue.KEY, mObjects.get(i).key);
-					values[i] = v;
+					StatisticHolder holder = mObjects.get(i);
+					if (holder.type == TYPE_STATISTIC) {
+						ContentValues v = new ContentValues();
+						v.put(CachedValue.ITEM, vehicleId);
+						v.put(CachedValue.VALID, true);
+						v.put(CachedValue.VALUE, mValues.get(holder.key));
+						v.put(CachedValue.KEY, holder.key);
+						values[num++] = v;
+					}
 				}
-				Log.d(TAG, "Writing to database ...");
+				Log.d(TAG, "Writing " + num + " records to the database ...");
+				long start = System.currentTimeMillis();
 				mContext.getContentResolver().bulkInsert(CacheTable.BASE_URI, values);
-				Log.d(TAG, "Caching complete!");
+				long diff = System.currentTimeMillis() - start;
+				double seconds = (double) diff / 1000D;
+				Log.d(TAG, "Caching of " + num + " records complete! (" + seconds + " seconds)");
 			}
 		}.start();
 	}

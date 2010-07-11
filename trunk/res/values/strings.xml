@@ -249,6 +249,12 @@
 	<string name="title_chart_south">Farthest south fillup</string>
 	<string name="title_chart_east">Farthest east fillup</string>
 	<string name="title_chart_west">Farthest west fillup</string>
+	<string name="title_export_csv">Exporting CSV</string>
+	<string name="title_export_db">Exporting DB</string>
+	<string name="title_csv_map_columns">Column mappings</string>
+	<string name="title_csv_map_vehicles">Vehicle mappings</string>
+	<string name="title_import_csv">Importing CSV</string>
+	<string name="title_import_db">Importing DB</string>
 	
 	<string name="importer_csv">Spreadsheet (*.csv)</string>
 	<string name="importer_sqlite">Database (*.db)</string>
