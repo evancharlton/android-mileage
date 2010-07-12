@@ -66,10 +66,11 @@ public class CsvColumnMappingActivity extends CsvWizardActivity {
 	}
 
 	@Override
-	protected void buildIntent(Intent intent) {
+	protected boolean buildIntent(Intent intent) {
 		intent.setClass(this, CsvVehicleMappingActivity.class);
 		for (Spinner columnSpinner : mColumnSpinners) {
 			intent.putExtra(columnSpinner.getSelectedItem().toString(), columnSpinner.getSelectedItemPosition());
 		}
+		return true;
 	}
 }

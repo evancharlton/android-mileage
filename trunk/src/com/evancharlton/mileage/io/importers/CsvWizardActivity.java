@@ -28,13 +28,24 @@ public abstract class CsvWizardActivity extends Activity implements View.OnClick
 		mPrevButton.setOnClickListener(this);
 	}
 
+	protected final Button getPreviousButton() {
+		return mPrevButton;
+	}
+
+	protected final Button getNextButton() {
+		return mNextButton;
+	}
+
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
 			case R.id.next:
 				Intent intent = getIntent();
-				buildIntent(intent);
-				startActivity(intent);
+				if (!buildIntent(intent)) {
+					finish();
+				} else {
+					startActivity(intent);
+				}
 				break;
 			case R.id.previous:
 				finish();
@@ -42,5 +53,5 @@ public abstract class CsvWizardActivity extends Activity implements View.OnClick
 		}
 	}
 
-	protected abstract void buildIntent(Intent intent);
+	protected abstract boolean buildIntent(Intent intent);
 }

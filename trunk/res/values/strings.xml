@@ -45,6 +45,7 @@
 	<string name="start_import">Import data</string>
 	<string name="erase_database">Erase database before importing</string>
 	<string name="start_export">Export data</string>
+	<string name="done">Done</string>
 	
 	<string name="dialog_title_delete">Really delete?</string>
 	<string name="dialog_message_delete">Are you sure you want to delete this? This cannot be undone!</string>
@@ -280,4 +281,6 @@
 	
 	<string name="update_wrote_headers">Wrote headers...</string>
 	<string name="update_wrote_rows">%1$d rows written (%2$s total)</string>
+	<string name="update_read_rows">%1$d rows processed (%2$s total)</string>
+	<string name="update_imported">Processed %1$d rows!</string>
 </resources>

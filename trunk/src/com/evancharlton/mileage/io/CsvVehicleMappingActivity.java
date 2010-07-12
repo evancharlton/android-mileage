@@ -26,6 +26,7 @@ public class CsvVehicleMappingActivity extends CsvWizardActivity {
 	private final ArrayList<SimpleAdapter> mAdapters = new ArrayList<SimpleAdapter>();
 	private final HashMap<Long, Spinner> mVehicleMapping = new HashMap<Long, Spinner>();
 
+	private int mRowCount = 100;
 	private CsvVehicleReaderTask mVehicleReaderTask;
 
 	@Override
@@ -81,7 +82,7 @@ public class CsvVehicleMappingActivity extends CsvWizardActivity {
 	}
 
 	@Override
-	protected void buildIntent(Intent intent) {
+	protected boolean buildIntent(Intent intent) {
 		intent.setClass(this, CsvImportActivity.class);
 
 		for (Long vehicleId : mVehicleMapping.keySet()) {
@@ -90,6 +91,9 @@ public class CsvVehicleMappingActivity extends CsvWizardActivity {
 			String title = mapping.get(Vehicle.TITLE);
 			intent.putExtra("vehicle_" + title, vehicleId);
 		}
+
+		intent.putExtra(CsvImportActivity.TOTAL_ROWS, mRowCount);
+		return true;
 	}
 
 	public void dataRead(String vehicle) {
@@ -100,5 +104,9 @@ public class CsvVehicleMappingActivity extends CsvWizardActivity {
 		for (SimpleAdapter adapter : mAdapters) {
 			adapter.notifyDataSetChanged();
 		}
+	}
+
+	public void setRowCount(int rowCount) {
+		mRowCount = rowCount;
 	}
 }

@@ -34,10 +34,7 @@ public abstract class Dao {
 	private Uri mUriBase = null;
 
 	protected Dao(final ContentValues values) {
-		Long id = values.getAsLong(_ID);
-		if (id != null) {
-			mId = id;
-		}
+		load(values);
 	}
 
 	public Dao(final Cursor cursor) {
@@ -92,6 +89,78 @@ public abstract class Dao {
 						break;
 					case Column.TIMESTAMP:
 						Long ms = cursor.getLong(columnIndex);
+						if (ms != null) {
+							value = new Date(ms);
+						} else {
+							value = new Date(System.currentTimeMillis());
+						}
+						break;
+				}
+				if (value != null) {
+					try {
+						field.set(this, value);
+					} catch (IllegalArgumentException e) {
+						Log.e(TAG, "Couldn't set value for " + field.getName(), e);
+					} catch (IllegalAccessException e) {
+						Log.e(TAG, "Couldn't access " + field.getName(), e);
+					}
+				}
+			}
+		}
+	}
+
+	// TODO(3.1) - Remove this code duplication.
+	public void load(ContentValues values) {
+		if (values == null) {
+			mId = -1;
+			return;
+		}
+		Long id = values.getAsLong(_ID);
+		if (id == null) {
+			mId = -1;
+			return;
+		}
+		mId = id.longValue();
+
+		// automagically populate based on @Column annotation definitions
+		Field[] fields = getClass().getDeclaredFields();
+		for (Field field : fields) {
+			Column column = field.getAnnotation(Column.class);
+			if (column != null) {
+				Object value = null;
+				switch (column.type()) {
+					case Column.BOOLEAN:
+						value = values.getAsBoolean(column.name());
+						if (value == null) {
+							value = new Boolean(column.value() == 1);
+						}
+						break;
+					case Column.DOUBLE:
+						value = values.getAsDouble(column.name());
+						if (value == null) {
+							value = new Double(column.value());
+						}
+						break;
+					case Column.INTEGER:
+						value = values.getAsInteger(column.name());
+						if (value == null) {
+							value = new Integer(column.value());
+						}
+						break;
+					case Column.LONG:
+						value = values.getAsLong(column.name());
+						if (value == null) {
+							value = new Long(column.value());
+						}
+						break;
+					case Column.STRING:
+						value = values.getAsString(column.name());
+						if (value == null) {
+							value = "";
+						}
+						break;
+					case Column.TIMESTAMP:
+						Long ms = values.getAsLong(column.name());
 						if (ms != null) {
 							value = new Date(ms);
 						} else {

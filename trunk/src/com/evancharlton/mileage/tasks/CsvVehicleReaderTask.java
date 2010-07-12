@@ -11,7 +11,7 @@ import au.com.bytecode.opencsv.CSVReader;
 import com.evancharlton.mileage.io.CsvVehicleMappingActivity;
 import com.evancharlton.mileage.provider.Settings;
 
-public class CsvVehicleReaderTask extends AttachableAsyncTask<CsvVehicleMappingActivity, String, String, Void> {
+public class CsvVehicleReaderTask extends AttachableAsyncTask<CsvVehicleMappingActivity, String, String, Integer> {
 	private static final String TAG = "CsvVehicleReaderTask";
 
 	private final int INDEX;
@@ -23,9 +23,10 @@ public class CsvVehicleReaderTask extends AttachableAsyncTask<CsvVehicleMappingA
 	}
 
 	@Override
-	protected Void doInBackground(String... inputFiles) {
+	protected Integer doInBackground(String... inputFiles) {
 		final String inputFile = inputFiles[0];
 		final String absoluteInputFile = Settings.EXTERNAL_DIR + inputFile;
+		int i = 0;
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(absoluteInputFile));
 			CSVReader csvReader = new CSVReader(reader);
@@ -40,16 +41,22 @@ public class CsvVehicleReaderTask extends AttachableAsyncTask<CsvVehicleMappingA
 					mTitles.add(title);
 					publishProgress(title);
 				}
+				i++;
 			}
 			csvReader.close();
 		} catch (IOException e) {
 			Log.e(TAG, "Could not get columns!", e);
 		}
-		return null;
+		return i;
 	}
 
 	@Override
 	protected void onProgressUpdate(String... titles) {
 		getParent().dataRead(titles[0]);
+	}
+
+	@Override
+	protected void onPostExecute(Integer numRows) {
+		getParent().setRowCount(numRows);
 	}
 }
