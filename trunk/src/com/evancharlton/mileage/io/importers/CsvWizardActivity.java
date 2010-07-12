@@ -10,6 +10,10 @@ import android.widget.LinearLayout;
 import com.evancharlton.mileage.R;
 
 public abstract class CsvWizardActivity extends Activity implements View.OnClickListener {
+	protected static final int REQUEST_NEXT = 0;
+	protected static final int FINISH = 1;
+	protected static final int PREVIOUS = 2;
+
 	private Button mNextButton;
 	private Button mPrevButton;
 	protected LinearLayout mContainer;
@@ -44,13 +48,26 @@ public abstract class CsvWizardActivity extends Activity implements View.OnClick
 				if (!buildIntent(intent)) {
 					finish();
 				} else {
-					startActivity(intent);
+					startActivityForResult(intent, REQUEST_NEXT);
 				}
 				break;
 			case R.id.previous:
 				finish();
 				break;
 		}
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		switch (requestCode) {
+			case REQUEST_NEXT:
+				if (resultCode == FINISH) {
+					setResult(resultCode);
+					finish();
+				}
+				break;
+		}
+		super.onActivityResult(requestCode, resultCode, data);
 	}
 
 	protected abstract boolean buildIntent(Intent intent);

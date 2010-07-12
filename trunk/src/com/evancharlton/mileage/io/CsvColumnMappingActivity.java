@@ -71,6 +71,7 @@ public class CsvColumnMappingActivity extends CsvWizardActivity {
 		for (Spinner columnSpinner : mColumnSpinners) {
 			intent.putExtra(columnSpinner.getSelectedItem().toString(), columnSpinner.getSelectedItemPosition());
 		}
+		setResult(PREVIOUS);
 		return true;
 	}
 }

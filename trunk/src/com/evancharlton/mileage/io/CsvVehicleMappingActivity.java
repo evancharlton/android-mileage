@@ -93,6 +93,7 @@ public class CsvVehicleMappingActivity extends CsvWizardActivity {
 		}
 
 		intent.putExtra(CsvImportActivity.TOTAL_ROWS, mRowCount);
+		setResult(PREVIOUS);
 		return true;
 	}
 

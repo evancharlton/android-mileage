@@ -71,6 +71,7 @@ public class CsvImportActivity extends CsvWizardActivity {
 
 	@Override
 	protected boolean buildIntent(Intent intent) {
+		setResult(FINISH);
 		return false;
 	}
 }
