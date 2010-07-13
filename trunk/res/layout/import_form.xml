@@ -1,42 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
+	android:orientation="vertical"
 >
-	<LinearLayout
-	    android:orientation="vertical"
-	    android:layout_width="fill_parent"
-	    android:layout_height="fill_parent"
-	    android:id="@+id/contents"
+	<ScrollView
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="fill_parent"
+		android:layout_height="0dp"
+		android:layout_weight="1"
 	>
-		<Spinner
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:entries="@array/exporters"
-			android:id="@+id/exporter"
-		/>
-		<Spinner
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:id="@+id/files"
-		/>
-		<CheckBox
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:id="@+id/erase_database"
-			android:text="@string/erase_database"
-		/>
-		<View
-			android:layout_width="fill_parent"
-			android:layout_height="0dp"
-			android:layout_weight="1"
-		/>
-		<Button
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:id="@+id/submit"
-			android:text="@string/start_import"
-		/>
-	</LinearLayout>
-</ScrollView>
+		<LinearLayout
+		    android:orientation="vertical"
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:id="@+id/contents"
+		>
+			<Spinner
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:entries="@array/exporters"
+				android:id="@+id/exporter"
+			/>
+			<Spinner
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:id="@+id/files"
+			/>
+			<CheckBox
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:id="@+id/erase_database"
+				android:text="@string/erase_database"
+			/>
+		</LinearLayout>
+	</ScrollView>
+	<Button
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:id="@+id/submit"
+		android:text="@string/start_import"
+	/>
+</LinearLayout>

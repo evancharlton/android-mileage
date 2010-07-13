@@ -11,10 +11,12 @@ import android.util.Log;
 import au.com.bytecode.opencsv.CSVReader;
 
 import com.evancharlton.mileage.ImportActivity;
+import com.evancharlton.mileage.R;
 import com.evancharlton.mileage.dao.Fillup;
 import com.evancharlton.mileage.exceptions.InvalidFieldException;
 import com.evancharlton.mileage.io.CsvImportActivity;
 import com.evancharlton.mileage.provider.Settings;
+import com.evancharlton.mileage.provider.tables.FillupsTable;
 
 public class CsvImportTask extends AttachableAsyncTask<CsvImportActivity, Bundle, Integer, Integer> {
 	private static final String TAG = "CsvImportTask";
@@ -22,6 +24,13 @@ public class CsvImportTask extends AttachableAsyncTask<CsvImportActivity, Bundle
 	@Override
 	protected Integer doInBackground(Bundle... params) {
 		Bundle args = params[0];
+
+		boolean erase = args.getBoolean(ImportActivity.WIPE_DATA);
+		if (erase) {
+			getParent().getContentResolver().delete(FillupsTable.BASE_URI, null, null);
+			publishProgress(0, R.string.update_erased_database);
+		}
+
 		String base = args.getString(ImportActivity.FILENAME);
 		String filename = Settings.EXTERNAL_DIR + base;
 		CSVReader csvReader = null;
@@ -36,9 +45,6 @@ public class CsvImportTask extends AttachableAsyncTask<CsvImportActivity, Bundle
 			while ((data = csvReader.readNext()) != null) {
 				try {
 					ContentValues values = new ContentValues();
-					// have to enumerate; can't iterate over the list because of
-					// the
-					// special cases (vehicle, dates, etc)
 					setDouble(values, Fillup.TOTAL_COST, args, data);
 					setDouble(values, Fillup.UNIT_PRICE, args, data);
 					setDouble(values, Fillup.VOLUME, args, data);
@@ -95,17 +101,6 @@ public class CsvImportTask extends AttachableAsyncTask<CsvImportActivity, Bundle
 
 	private String getData(Bundle args, String column, String[] data) {
 		return data[args.getInt(column)];
-	}
-
-	private void setLong(ContentValues values, String column, Bundle args, String[] data) throws InvalidFieldException {
-		try {
-			String value = getData(args, column, data);
-			Log.d(TAG, "Parsing '" + value + "' for " + column);
-			long parsed = Long.parseLong(value);
-			values.put(column, parsed);
-		} catch (NumberFormatException e) {
-			e.printStackTrace();
-		}
 	}
 
 	private void setDouble(ContentValues values, String column, Bundle args, String[] data) throws InvalidFieldException {

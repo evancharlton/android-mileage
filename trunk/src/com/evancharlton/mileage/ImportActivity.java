@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.CheckedTextView;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
@@ -25,6 +26,7 @@ import com.evancharlton.mileage.provider.Settings;
 
 public class ImportActivity extends Activity {
 	public static final String FILENAME = "filename";
+	public static final String WIPE_DATA = "wipe data";
 
 	private static final String[] FILE_TYPES = new String[] {
 			".db",
@@ -42,6 +44,7 @@ public class ImportActivity extends Activity {
 	private Spinner mInputFile;
 	private Button mSubmitButton;
 	private FileAdapter mFileAdapter;
+	private CheckBox mWipeData;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -53,12 +56,14 @@ public class ImportActivity extends Activity {
 
 		mFileTypes = (Spinner) findViewById(R.id.exporter);
 		mInputFile = (Spinner) findViewById(R.id.files);
+		mWipeData = (CheckBox) findViewById(R.id.erase_database);
 		mSubmitButton = (Button) findViewById(R.id.submit);
 		mSubmitButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(ImportActivity.this, EXPORTERS[mFileTypes.getSelectedItemPosition()]);
 				intent.putExtra(ImportActivity.FILENAME, getFilename());
+				intent.putExtra(ImportActivity.WIPE_DATA, mWipeData.isChecked());
 				startActivity(intent);
 				finish();
 			}
@@ -70,7 +75,7 @@ public class ImportActivity extends Activity {
 
 		mFileTypes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			@Override
-			public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+			public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long arg3) {
 				if (mFileLoader == null) {
 					mFileLoader = new FileLoader();
 				}
@@ -78,6 +83,9 @@ public class ImportActivity extends Activity {
 				if (mFileLoader.getStatus() == AsyncTask.Status.PENDING) {
 					mFileLoader.execute();
 				}
+
+				mWipeData.setChecked(position == 0);
+				mWipeData.setEnabled(position != 0);
 			}
 
 			@Override
