@@ -283,5 +283,6 @@
 	<string name="update_wrote_rows">%1$d rows written (%2$s total)</string>
 	<string name="update_read_rows">%1$d rows processed (%2$s total)</string>
 	<string name="update_imported">Processed %1$d rows!</string>
-	<string name="update_erased_database">Erased the database</string>
+	<string name="update_erased_database">Erased fillup data</string>
+	<string name="update_erased_cache">Erased statistics cache</string>
 </resources>

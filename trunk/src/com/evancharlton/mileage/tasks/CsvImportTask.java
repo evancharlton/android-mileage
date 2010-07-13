@@ -16,6 +16,7 @@ import com.evancharlton.mileage.dao.Fillup;
 import com.evancharlton.mileage.exceptions.InvalidFieldException;
 import com.evancharlton.mileage.io.CsvImportActivity;
 import com.evancharlton.mileage.provider.Settings;
+import com.evancharlton.mileage.provider.tables.CacheTable;
 import com.evancharlton.mileage.provider.tables.FillupsTable;
 
 public class CsvImportTask extends AttachableAsyncTask<CsvImportActivity, Bundle, Integer, Integer> {
@@ -30,6 +31,9 @@ public class CsvImportTask extends AttachableAsyncTask<CsvImportActivity, Bundle
 			getParent().getContentResolver().delete(FillupsTable.BASE_URI, null, null);
 			publishProgress(0, R.string.update_erased_database);
 		}
+
+		getParent().getContentResolver().delete(CacheTable.BASE_URI, null, null);
+		publishProgress(0, R.string.update_erased_cache);
 
 		String base = args.getString(ImportActivity.FILENAME);
 		String filename = Settings.EXTERNAL_DIR + base;
