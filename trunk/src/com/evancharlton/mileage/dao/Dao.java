@@ -118,9 +118,9 @@ public abstract class Dao {
 		Long id = values.getAsLong(_ID);
 		if (id == null) {
 			mId = -1;
-			return;
+		} else {
+			mId = id.longValue();
 		}
-		mId = id.longValue();
 
 		// automagically populate based on @Column annotation definitions
 		Field[] fields = getClass().getDeclaredFields();

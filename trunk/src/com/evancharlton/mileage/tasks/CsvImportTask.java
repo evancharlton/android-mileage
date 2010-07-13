@@ -39,7 +39,6 @@ public class CsvImportTask extends AttachableAsyncTask<CsvImportActivity, Bundle
 					// have to enumerate; can't iterate over the list because of
 					// the
 					// special cases (vehicle, dates, etc)
-					setLong(values, Fillup._ID, args, data);
 					setDouble(values, Fillup.TOTAL_COST, args, data);
 					setDouble(values, Fillup.UNIT_PRICE, args, data);
 					setDouble(values, Fillup.VOLUME, args, data);
