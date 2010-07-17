@@ -110,8 +110,6 @@ public abstract class ContentTable {
 		return builder.build();
 	}
 
-	abstract public String upgrade(final int currentVersion);
-
 	protected final class TableBuilder {
 		private StringBuilder mBuilder = new StringBuilder();
 

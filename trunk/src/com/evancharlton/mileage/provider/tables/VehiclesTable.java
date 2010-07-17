@@ -16,6 +16,7 @@ public class VehiclesTable extends ContentTable {
 	private static final int VEHICLES = 40;
 	private static final int VEHICLE_ID = 41;
 
+	public static final String TABLE_NAME = "vehicles";
 	public static final String VEHICLES_URI = "vehicles/";
 	public static final Uri BASE_URI = Uri.withAppendedPath(FillUpsProvider.BASE_URI, VEHICLES_URI);
 
@@ -44,7 +45,7 @@ public class VehiclesTable extends ContentTable {
 
 	@Override
 	public String getTableName() {
-		return "vehicles";
+		return TABLE_NAME;
 	}
 
 	@Override
@@ -106,12 +107,6 @@ public class VehiclesTable extends ContentTable {
 				});
 		}
 		return -1;
-	}
-
-	@Override
-	public String upgrade(int currentVersion) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override

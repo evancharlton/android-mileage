@@ -83,12 +83,16 @@ public class VehicleStatisticsAdapter extends BaseAdapter {
 						values[num++] = v;
 					}
 				}
-				Log.d(TAG, "Writing " + num + " records to the database ...");
-				long start = System.currentTimeMillis();
-				mContext.getContentResolver().bulkInsert(CacheTable.BASE_URI, values);
-				long diff = System.currentTimeMillis() - start;
-				double seconds = (double) diff / 1000D;
-				Log.d(TAG, "Caching of " + num + " records complete! (" + seconds + " seconds)");
+				if (num != values.length) {
+					Log.d(TAG, "Not writing to the database because we don't have all the stats");
+				} else {
+					Log.d(TAG, "Writing " + num + " records to the database ...");
+					long start = System.currentTimeMillis();
+					mContext.getContentResolver().bulkInsert(CacheTable.BASE_URI, values);
+					long diff = System.currentTimeMillis() - start;
+					double seconds = (double) diff / 1000D;
+					Log.d(TAG, "Caching of " + num + " records complete! (" + seconds + " seconds)");
+				}
 			}
 		}.start();
 	}

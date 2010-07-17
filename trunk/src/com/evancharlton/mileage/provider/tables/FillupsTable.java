@@ -121,11 +121,6 @@ public class FillupsTable extends ContentTable {
 	}
 
 	@Override
-	public String upgrade(final int currentVersion) {
-		return null;
-	}
-
-	@Override
 	public String getDefaultSortOrder() {
 		return Fillup.ODOMETER + " desc";
 	}

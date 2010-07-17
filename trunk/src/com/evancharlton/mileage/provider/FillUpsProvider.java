@@ -36,7 +36,7 @@ public class FillUpsProvider extends ContentProvider {
 	public static final Uri BASE_URI = Uri.parse("content://" + AUTHORITY);
 
 	private static final String DATABASE_NAME = "mileage.db";
-	private static final int DATABASE_VERSION = 50;
+	private static final int DATABASE_VERSION = 6;
 	private static final ArrayList<ContentTable> TABLES = new ArrayList<ContentTable>();
 	private static final HashMap<String, BackupTransport> BACKUPS = new HashMap<String, BackupTransport>();
 	private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
@@ -95,16 +95,7 @@ public class FillUpsProvider extends ContentProvider {
 
 		@Override
 		public void onUpgrade(SQLiteDatabase db, final int oldVersion, final int newVersion) {
-			if (oldVersion < newVersion) {
-				Log.d(TAG, "Upgrading from " + String.valueOf(oldVersion));
-				for (ContentTable table : TABLES) {
-					String sql = table.upgrade(oldVersion);
-					if (sql != null) {
-						db.execSQL(sql);
-					}
-				}
-				onUpgrade(db, oldVersion + 1, newVersion);
-			}
+			DatabaseUpgrader.upgradeDatabase(oldVersion, db);
 		}
 	}
 

@@ -129,11 +129,4 @@ public class FillupsFieldsTable extends ContentTable {
 		}
 		return -1;
 	}
-
-	@Override
-	public String upgrade(int currentVersion) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

@@ -37,6 +37,10 @@ public class VehicleActivity extends BaseFormActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState, R.layout.vehicle);
+
+		if (mVehicle.isExistingObject()) {
+			setTitle(mVehicle.getTitle());
+		}
 	}
 
 	@Override

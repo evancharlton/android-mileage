@@ -95,9 +95,4 @@ public class CacheTable extends ContentTable {
 		}
 		return -1;
 	}
-
-	@Override
-	public String upgrade(int currentVersion) {
-		return null;
-	}
 }

@@ -90,12 +90,6 @@ public class VehicleTypesTable extends ContentTable {
 		return -1;
 	}
 
-	@Override
-	public String upgrade(int currentVersion) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	public static String[] getFullProjectionArray() {
 		return new String[] {
 				BaseColumns._ID,
