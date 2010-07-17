@@ -165,6 +165,9 @@ public class FillupActivity extends BaseFormActivity {
 		if (parent == null) {
 			finish();
 		}
+
+		mFillup = new Fillup(new ContentValues());
+		onCreate(null);
 	}
 
 	@Override

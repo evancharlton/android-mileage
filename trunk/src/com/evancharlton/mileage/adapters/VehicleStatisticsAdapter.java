@@ -25,9 +25,9 @@ public class VehicleStatisticsAdapter extends BaseAdapter {
 	private static final String TAG = "VehicleStatisticsAdapter";
 	private static final int TYPE_STATISTIC = 0;
 	private static final int TYPE_GROUP = 1;
-	private static final ArrayList<StatisticHolder> mObjects = new ArrayList<StatisticHolder>();
-	private static final HashMap<String, String> mValues = new HashMap<String, String>();
 
+	private final ArrayList<StatisticHolder> mObjects = new ArrayList<StatisticHolder>();
+	private final HashMap<String, String> mValues = new HashMap<String, String>();
 	private final Context mContext;
 	private final Vehicle mVehicle;
 	private final LayoutInflater mInflater;

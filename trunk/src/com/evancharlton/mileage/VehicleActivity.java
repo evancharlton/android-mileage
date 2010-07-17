@@ -37,10 +37,6 @@ public class VehicleActivity extends BaseFormActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState, R.layout.vehicle);
-
-		if (mVehicle.isExistingObject()) {
-			setTitle(mVehicle.getTitle());
-		}
 	}
 
 	@Override
@@ -93,6 +89,10 @@ public class VehicleActivity extends BaseFormActivity {
 		mDistances.setSelection(getDistanceUnits());
 		mVolumes.setSelection(getVolumeUnits());
 		mEconomies.setSelection(getEconomyUnits());
+
+		if (mVehicle.isExistingObject()) {
+			setTitle(mVehicle.getTitle());
+		}
 	}
 
 	@Override
