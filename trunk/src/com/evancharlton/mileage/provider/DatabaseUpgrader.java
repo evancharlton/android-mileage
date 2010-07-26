@@ -5,6 +5,8 @@ import android.database.sqlite.SQLiteException;
 import android.provider.BaseColumns;
 import android.util.Log;
 
+import com.evancharlton.mileage.dao.Fillup;
+import com.evancharlton.mileage.dao.FillupField;
 import com.evancharlton.mileage.dao.Vehicle;
 import com.evancharlton.mileage.provider.tables.CacheTable;
 import com.evancharlton.mileage.provider.tables.ContentTable;
@@ -33,55 +35,59 @@ public class DatabaseUpgrader {
 	// column name constants but I likely won't.
 	public static void upgradeDatabase(final int oldVersion, final SQLiteDatabase database) {
 		sDatabase = database;
-		switch (oldVersion) {
-			case V2:
-				// add the comment field
-				exec("ALTER TABLE fillups ADD COLUMN comment TEXT;");
+		try {
+			switch (oldVersion) {
+				case V2:
+					// add the comment field
+					exec("ALTER TABLE fillups ADD COLUMN comment TEXT;");
 
-				// add the default setting for vehicles
-				exec("ALTER TABLE vehicles ADD COLUMN def INTEGER;");
-			case V3:
-				// add the partial flag
-				exec("ALTER TABLE fillups ADD COLUMN is_partial INTEGER;");
+					// add the default setting for vehicles
+					exec("ALTER TABLE vehicles ADD COLUMN def INTEGER;");
+				case V3:
+					// add the partial flag
+					exec("ALTER TABLE fillups ADD COLUMN is_partial INTEGER;");
 
-				// add the restart flag
-				exec("ALTER TABLE fillups ADD COLUMN restart INTEGER;");
+					// add the restart flag
+					exec("ALTER TABLE fillups ADD COLUMN restart INTEGER;");
 
-				// add the distance units
-				exec("ALTER TABLE vehicles ADD COLUMN distance INTEGER DEFAULT -1;");
+					// add the distance units
+					exec("ALTER TABLE vehicles ADD COLUMN distance INTEGER DEFAULT -1;");
 
-				// add the volume units
-				exec("ALTER TABLE vehicles ADD COLUMN volume INTEGER DEFAULT -1;");
+					// add the volume units
+					exec("ALTER TABLE vehicles ADD COLUMN volume INTEGER DEFAULT -1;");
 
-				// create the service interval table
-				BUILDER.append("CREATE TABLE maintenance_intervals (");
-				BUILDER.append(BaseColumns._ID).append(" INTEGER PRIMARY KEY AUTOINCREMENT,");
-				BUILDER.append("creation_date INTEGER,");
-				BUILDER.append("creation_odometer DOUBLE,");
-				BUILDER.append("description TEXT,");
-				BUILDER.append("interval_distance DOUBLE,");
-				BUILDER.append("interval_duration INTEGER,");
-				BUILDER.append("vehicle_id INTEGER,");
-				BUILDER.append("is_repeating INTEGER");
-				BUILDER.append(");");
-				flush();
+					// create the service interval table
+					BUILDER.append("CREATE TABLE maintenance_intervals (");
+					BUILDER.append(BaseColumns._ID).append(" INTEGER PRIMARY KEY AUTOINCREMENT,");
+					BUILDER.append("creation_date INTEGER,");
+					BUILDER.append("creation_odometer DOUBLE,");
+					BUILDER.append("description TEXT,");
+					BUILDER.append("interval_distance DOUBLE,");
+					BUILDER.append("interval_duration INTEGER,");
+					BUILDER.append("vehicle_id INTEGER,");
+					BUILDER.append("is_repeating INTEGER");
+					BUILDER.append(");");
+					flush();
 
-				// create the version table
-				BUILDER.append("CREATE TABLE version (");
-				BUILDER.append("version INTEGER");
-				BUILDER.append(");");
-				flush();
-			case V4:
-				// add the economy field
-				exec("ALTER TABLE fillups ADD COLUMN economy DOUBLE;");
-			case V5:
-				// This is the upgrade to 3.0 -- brace for impact!
+					// create the version table
+					BUILDER.append("CREATE TABLE version (");
+					BUILDER.append("version INTEGER");
+					BUILDER.append(");");
+					flush();
+				case V4:
+					// add the economy field
+					exec("ALTER TABLE fillups ADD COLUMN economy DOUBLE;");
+				case V5:
+					// This is the upgrade to 3.0 -- brace for impact!
 
-				if (backupExistingTables() && createNewTables() && migrateOldData() && populateCalculatedFields() && cleanUpOldTables()) {
-					Log.d(TAG, "Completed migration!");
-				} else {
-					Log.e(TAG, "Unable to complete migration!");
-				}
+					if (backupExistingTables() && createNewTables() && migrateOldData() && cleanUpOldTables()) {
+						Log.d(TAG, "Completed migration!");
+					} else {
+						Log.e(TAG, "Unable to complete migration!");
+					}
+			}
+		} catch (SQLiteException e) {
+			Log.e(TAG, "Couldn't upgrade database!", e);
 		}
 	}
 
@@ -96,7 +102,7 @@ public class DatabaseUpgrader {
 	}
 
 	private static final void log(final String msg) {
-		if (Log.isLoggable(TAG, Log.DEBUG)) {
+		if (true || Log.isLoggable(TAG, Log.DEBUG)) {
 			Log.d(TAG, msg);
 		}
 	}
@@ -152,24 +158,47 @@ public class DatabaseUpgrader {
 	private static boolean migrateOldData() {
 		try {
 			// migrate vehicle data
-			BUILDER.append("INSERT INTO ").append(VehiclesTable.TABLE_NAME).append("(");
+			BUILDER.append("INSERT INTO ").append(VehiclesTable.TABLE_NAME).append(" (");
 			BUILDER.append(Vehicle.MAKE).append(", ");
 			BUILDER.append(Vehicle.MODEL).append(", ");
 			BUILDER.append(Vehicle.TITLE).append(", ");
-			BUILDER.append(Vehicle.DEFAULT_TIME);
-			BUILDER.append(") SELECT make, model, title, def FROM OLD_vehicles;");
+			BUILDER.append(Vehicle.DEFAULT_TIME).append(", ");
+			BUILDER.append(Vehicle.VEHICLE_TYPE);
+			BUILDER.append(") SELECT make, model, title, def, '1' FROM OLD_vehicles;");
 			flush();
-			// migrate service intervals
+
+			// TODO(3.1) - migrate service intervals.
+
 			// migrate fillup data
+			BUILDER.append("INSERT INTO ").append(FillupsTable.TABLE_NAME).append(" (");
+			BUILDER.append(Fillup.DATE).append(", ");
+			BUILDER.append(Fillup.ECONOMY).append(", ");
+			BUILDER.append(Fillup.LATITUDE).append(", ");
+			BUILDER.append(Fillup.LONGITUDE).append(", ");
+			BUILDER.append(Fillup.ODOMETER).append(", ");
+			BUILDER.append(Fillup.PARTIAL).append(", ");
+			BUILDER.append(Fillup.RESTART).append(", ");
+			BUILDER.append(Fillup.TOTAL_COST).append(", ");
+			BUILDER.append(Fillup.UNIT_PRICE).append(", ");
+			BUILDER.append(Fillup.VEHICLE_ID).append(", ");
+			BUILDER.append(Fillup.VOLUME);
+			BUILDER.append(") SELECT date, '0', latitude, longitude, mileage, is_partial, restart, ");
+			BUILDER.append("(cost * amount), cost, vehicle_id, amount FROM OLD_fillups;");
+			flush();
+
+			// migrate the fillup comments
+			BUILDER.append("INSERT INTO ").append(FillupsFieldsTable.TABLE_NAME).append(" (");
+			BUILDER.append(FillupField.FILLUP_ID).append(", ");
+			BUILDER.append(FillupField.TEMPLATE_ID).append(", ");
+			BUILDER.append(FillupField.VALUE);
+			BUILDER.append(") SELECT _id, '1', comment FROM OLD_fillups;");
+			flush();
+
 			return true;
 		} catch (SQLiteException e) {
 			Log.e(TAG, "Unable to migrate data!", e);
+			return false;
 		}
-		return false;
-	}
-
-	private static boolean populateCalculatedFields() {
-		return true;
 	}
 
 	private static boolean cleanUpOldTables() {

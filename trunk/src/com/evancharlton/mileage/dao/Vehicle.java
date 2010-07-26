@@ -155,6 +155,9 @@ public class Vehicle extends Dao {
 	}
 
 	public String getTitle() {
+		if (mTitle.trim().length() == 0) {
+			mTitle = String.format("%s %s %s", getYear(), getMake(), getModel());
+		}
 		return mTitle;
 	}
 

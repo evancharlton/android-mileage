@@ -11,10 +11,10 @@ import com.evancharlton.mileage.dao.ServiceInterval;
 import com.evancharlton.mileage.provider.FillUpsProvider;
 
 public class ServiceIntervalsTable extends ContentTable {
-
 	private static final int SERVICE_INTERVALS = 70;
 	private static final int SERVICE_INTERVAL_ID = 71;
 
+	public static final String TABLE_NAME = "service_intervals";
 	public static final String URI = "intervals/";
 	public static final Uri BASE_URI = Uri.withAppendedPath(FillUpsProvider.BASE_URI, URI);
 
@@ -40,7 +40,7 @@ public class ServiceIntervalsTable extends ContentTable {
 
 	@Override
 	public String getTableName() {
-		return "service_intervals";
+		return TABLE_NAME;
 	}
 
 	@Override

@@ -205,6 +205,10 @@ public class FillupActivity extends BaseFormActivity {
 		mPartial.setChecked(mFillup.isPartial());
 
 		setDataFormats();
+
+		if (mFillup.isExistingObject()) {
+			setTitle(getString(R.string.title_fillup, mDate.getText()));
+		}
 	}
 
 	private void setDataFormats() {

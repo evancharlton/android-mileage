@@ -18,6 +18,8 @@ public class FillupsFieldsTable extends ContentTable {
 	private static final int FILLUP_FIELD = 21;
 	private static final int FILLUPS_FIELDS = 22;
 
+	public static final String TABLE_NAME = "fillups_fields";
+
 	/**
 	 * Given a fillup ID, return all of the fields that were saved on that
 	 * fillup
@@ -50,7 +52,7 @@ public class FillupsFieldsTable extends ContentTable {
 
 	@Override
 	public String getTableName() {
-		return "fillups_fields";
+		return TABLE_NAME;
 	}
 
 	@Override

@@ -18,6 +18,8 @@ public class DbExportActivity extends BaseExportActivity {
 				FileChannel input = new FileInputStream(inputFile).getChannel();
 				FileChannel output = new FileOutputStream(outputFile).getChannel();
 				input.transferTo(0, input.size(), output);
+				input.close();
+				output.close();
 				return outputFile;
 			} catch (IOException e) {
 			}

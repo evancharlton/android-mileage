@@ -209,7 +209,7 @@
 	<string name="per_month">/ mo</string>
 	<string name="per_year">/ yr</string>
 	
-	<string name="title_fillup">Vehicle fillup</string>
+	<string name="title_fillup">Fillup on %s</string>
 	<string name="title_fillup_list">Fillup history</string>
 	<string name="title_field">Fillup field</string>
 	<string name="title_field_list">Fillup fields</string>

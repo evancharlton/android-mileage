@@ -20,6 +20,7 @@ public class FillupsTable extends ContentTable {
 	private static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.evancharlton.fillup";
 	private static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.evancharlton.fillup";
 
+	public static final String TABLE_NAME = "fillups";
 	public static final String URI = "fillups/";
 	public static final Uri BASE_URI = Uri.withAppendedPath(FillUpsProvider.BASE_URI, URI);
 
@@ -60,7 +61,7 @@ public class FillupsTable extends ContentTable {
 
 	@Override
 	public String getTableName() {
-		return "fillups";
+		return TABLE_NAME;
 	}
 
 	@Override
