@@ -19,7 +19,7 @@ import com.evancharlton.mileage.dao.Dao.Column;
 public abstract class ContentTable {
 	protected static String TABLE_NAME = "content_table";
 
-	abstract protected String getTableName();
+	abstract public String getTableName();
 
 	public static final HashMap<String, String> buildProjectionMap(String[] map) {
 		HashMap<String, String> projection = new HashMap<String, String>();

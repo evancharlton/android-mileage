@@ -17,15 +17,14 @@ import com.evancharlton.mileage.provider.tables.ServiceIntervalTemplatesTable;
 import com.evancharlton.mileage.provider.tables.ServiceIntervalsTable;
 import com.evancharlton.mileage.provider.tables.VehicleTypesTable;
 import com.evancharlton.mileage.provider.tables.VehiclesTable;
+import com.evancharlton.mileage.util.Debugger;
 
 public class DatabaseUpgrader {
 	private static final String TAG = "DatabaseUpgrader";
 
-	// TODO: Replace these with actual version numbers
-	private static final int V2 = 2;
-	private static final int V3 = 3;
-	private static final int V4 = 4;
-	private static final int V5 = 5;
+	private static final int V1_DATABASE = 3; // Version 1.X
+	private static final int V2_DATABASE = 4; // Version 2.X
+	private static final int V3_DATABASE = 5; // Version 3.X
 
 	private static final StringBuilder BUILDER = new StringBuilder();
 
@@ -33,17 +32,11 @@ public class DatabaseUpgrader {
 
 	// Note: these columns are hard-coded for now. I should back-port the old
 	// column name constants but I likely won't.
-	public static void upgradeDatabase(final int oldVersion, final SQLiteDatabase database) {
+	public static void upgradeDatabase(final SQLiteDatabase database) {
 		sDatabase = database;
 		try {
-			switch (oldVersion) {
-				case V2:
-					// add the comment field
-					exec("ALTER TABLE fillups ADD COLUMN comment TEXT;");
-
-					// add the default setting for vehicles
-					exec("ALTER TABLE vehicles ADD COLUMN def INTEGER;");
-				case V3:
+			switch (database.getVersion()) {
+				case V1_DATABASE:
 					// add the partial flag
 					exec("ALTER TABLE fillups ADD COLUMN is_partial INTEGER;");
 
@@ -74,10 +67,10 @@ public class DatabaseUpgrader {
 					BUILDER.append("version INTEGER");
 					BUILDER.append(");");
 					flush();
-				case V4:
+				case V2_DATABASE:
 					// add the economy field
 					exec("ALTER TABLE fillups ADD COLUMN economy DOUBLE;");
-				case V5:
+				case V3_DATABASE:
 					// This is the upgrade to 3.0 -- brace for impact!
 
 					if (backupExistingTables() && createNewTables() && migrateOldData() && cleanUpOldTables()) {
@@ -85,7 +78,14 @@ public class DatabaseUpgrader {
 					} else {
 						Log.e(TAG, "Unable to complete migration!");
 					}
+					break;
+				default:
+					// unknown version; recurse and start from the beginning
+					database.setVersion(V1_DATABASE);
+					upgradeDatabase(database);
+					return;
 			}
+			database.setVersion(FillUpsProvider.DATABASE_VERSION);
 		} catch (SQLiteException e) {
 			Log.e(TAG, "Couldn't upgrade database!", e);
 		}
@@ -102,9 +102,7 @@ public class DatabaseUpgrader {
 	}
 
 	private static final void log(final String msg) {
-		if (true || Log.isLoggable(TAG, Log.DEBUG)) {
-			Log.d(TAG, msg);
-		}
+		Debugger.d(TAG, msg);
 	}
 
 	private static boolean backupExistingTables() {
@@ -162,9 +160,12 @@ public class DatabaseUpgrader {
 			BUILDER.append(Vehicle.MAKE).append(", ");
 			BUILDER.append(Vehicle.MODEL).append(", ");
 			BUILDER.append(Vehicle.TITLE).append(", ");
+			BUILDER.append(Vehicle.YEAR).append(", ");
 			BUILDER.append(Vehicle.DEFAULT_TIME).append(", ");
 			BUILDER.append(Vehicle.VEHICLE_TYPE);
-			BUILDER.append(") SELECT make, model, title, def, '1' FROM OLD_vehicles;");
+			BUILDER.append(") SELECT make, model, ");
+			BUILDER.append("CASE WHEN title IS NULL OR title=\"\" THEN (year||\" \"||make||\" \"||model) ELSE title END AS d_title, ");
+			BUILDER.append("year, def, '1' FROM OLD_vehicles;");
 			flush();
 
 			// TODO(3.1) - migrate service intervals.

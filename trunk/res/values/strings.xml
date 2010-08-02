@@ -179,6 +179,7 @@
 	<string name="error_invalid_interval_timestamp">Invalid service interval start date</string>
 	<string name="error_invalid_statistic_item">Invalid item specified for the statistic</string>
 	<string name="error_invalid_statistic_key">Invalid key specified for the statistic</string>
+	<string name="error_media_unmounted">SD card unmounted or not present!</string>
 	
 	<string name="units_gallons">Gallons</string>
 	<string name="units_gallons_abbr">g</string>

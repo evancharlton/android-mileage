@@ -15,10 +15,8 @@ import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
-import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.evancharlton.mileage.SettingsActivity;
 import com.evancharlton.mileage.provider.backup.BackupTransport;
@@ -32,25 +30,19 @@ import com.evancharlton.mileage.provider.tables.ServiceIntervalTemplatesTable;
 import com.evancharlton.mileage.provider.tables.ServiceIntervalsTable;
 import com.evancharlton.mileage.provider.tables.VehicleTypesTable;
 import com.evancharlton.mileage.provider.tables.VehiclesTable;
+import com.evancharlton.mileage.util.Debugger;
 
 public class FillUpsProvider extends ContentProvider {
-	private static final int DEBUG_NONE = 0;
-	private static final int DEBUG_QUIET = 1;
-	private static final int DEBUG_WARN = 2;
-	private static final int DEBUG_YELL = 3;
-	private static final int DEBUG_LEVEL = DEBUG_WARN;
 
 	public static final String AUTHORITY = "com.evancharlton.mileage";
 	public static final Uri BASE_URI = Uri.parse("content://" + AUTHORITY);
+	public static final int DATABASE_VERSION = 6;
+	public static final ArrayList<ContentTable> TABLES = new ArrayList<ContentTable>();
 
 	private static final String DATABASE_NAME = "mileage.db";
-	private static final int DATABASE_VERSION = 6;
-	private static final ArrayList<ContentTable> TABLES = new ArrayList<ContentTable>();
 	private static final HashMap<String, BackupTransport> BACKUPS = new HashMap<String, BackupTransport>();
 	private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 	private static final String TAG = "FillupsProvider";
-
-	private static final StringBuilder BUILDER = new StringBuilder();
 
 	private DatabaseHelper mDatabaseHelper;
 
@@ -105,7 +97,7 @@ public class FillUpsProvider extends ContentProvider {
 
 		@Override
 		public void onUpgrade(SQLiteDatabase db, final int oldVersion, final int newVersion) {
-			DatabaseUpgrader.upgradeDatabase(oldVersion, db);
+			DatabaseUpgrader.upgradeDatabase(db);
 		}
 	}
 
@@ -130,7 +122,7 @@ public class FillUpsProvider extends ContentProvider {
 
 	@Override
 	public int delete(Uri uri, String selection, String[] selectionArgs) {
-		ensureNotOnUiThread();
+		Debugger.checkQueryOnUiThread(getContext());
 		SQLiteDatabase db = mDatabaseHelper.getWritableDatabase();
 
 		int count = -1;
@@ -167,7 +159,7 @@ public class FillUpsProvider extends ContentProvider {
 
 	@Override
 	public Uri insert(Uri uri, ContentValues initialValues) {
-		ensureNotOnUiThread();
+		Debugger.checkQueryOnUiThread(getContext());
 		final int match = URI_MATCHER.match(uri);
 		long newId = -1L;
 		SQLiteDatabase db = mDatabaseHelper.getWritableDatabase();
@@ -184,7 +176,7 @@ public class FillUpsProvider extends ContentProvider {
 
 	@Override
 	public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-		ensureNotOnUiThread();
+		Debugger.checkQueryOnUiThread(getContext());
 		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 		final int match = URI_MATCHER.match(uri);
 		boolean changed = false;
@@ -216,7 +208,7 @@ public class FillUpsProvider extends ContentProvider {
 
 	@Override
 	public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-		ensureNotOnUiThread();
+		Debugger.checkQueryOnUiThread(getContext());
 		final int match = URI_MATCHER.match(uri);
 		if (match >= 0) {
 			SQLiteDatabase db = mDatabaseHelper.getWritableDatabase();
@@ -242,28 +234,5 @@ public class FillUpsProvider extends ContentProvider {
 				transport.performIncrementalBackup(context, uri);
 			}
 		}
-	}
-
-	private final void ensureNotOnUiThread() {
-		if (DEBUG_LEVEL > DEBUG_NONE && Looper.getMainLooper() == Looper.myLooper()) {
-			switch (DEBUG_LEVEL) {
-				case DEBUG_YELL:
-					throw new IllegalStateException("Attempting to run a query on the UI thread!");
-				case DEBUG_WARN:
-					Toast.makeText(getContext(), "Query on UI thread!", Toast.LENGTH_SHORT).show();
-				case DEBUG_QUIET:
-					Log.e(TAG, "Query on UI thread!" + getStackTrace());
-			}
-		}
-	}
-
-	private final String getStackTrace() {
-		final StackTraceElement[] elements = Thread.currentThread().getStackTrace();
-		final int count = elements.length;
-		BUILDER.setLength(0);
-		for (int i = 3; i < count; i++) {
-			BUILDER.append("\n    ").append(elements[i].toString());
-		}
-		return BUILDER.toString();
 	}
 }

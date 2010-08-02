@@ -59,7 +59,7 @@ public class DbImportTask extends AttachableAsyncTask<DbImportActivity, Void, St
 	private void upgradeDatabase() {
 		SQLiteDatabase db = SQLiteDatabase.openDatabase(TEMP_FILE, null, SQLiteDatabase.OPEN_READWRITE);
 		// TODO(3.0) - determine the actual database version
-		DatabaseUpgrader.upgradeDatabase(4, db);
+		DatabaseUpgrader.upgradeDatabase(db);
 		db.close();
 	}
 

@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Environment;
+import android.os.Handler;
 import android.widget.Toast;
 
 import com.evancharlton.mileage.R;
@@ -18,6 +19,8 @@ import com.evancharlton.mileage.SettingsActivity;
 import com.evancharlton.mileage.provider.Settings;
 
 public class FileBackupTransport extends BackupTransport {
+	private final Handler mErrorHandler = new Handler();
+
 	@Override
 	public int getName() {
 		return R.string.transport_file_name;
@@ -45,46 +48,53 @@ public class FileBackupTransport extends BackupTransport {
 		new Thread() {
 			@Override
 			public void run() {
-				File src = new File(Settings.DATABASE_PATH);
-				File dest = new File(destFile);
+				if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) {
+					File src = new File(Settings.DATABASE_PATH);
+					File dest = new File(destFile);
 
-				FileChannel source = null;
-				FileChannel destination = null;
+					FileChannel source = null;
+					FileChannel destination = null;
 
-				try {
-					if (!dest.exists()) {
-						if (!dest.getParentFile().exists()) {
-							dest.getParentFile().mkdirs();
+					try {
+						if (!dest.exists()) {
+							if (!dest.getParentFile().exists()) {
+								dest.getParentFile().mkdirs();
+							}
+							dest.createNewFile();
 						}
-						dest.createNewFile();
-					}
-					source = new FileInputStream(src).getChannel();
-					destination = new FileOutputStream(dest).getChannel();
-					destination.transferFrom(source, 0, source.size());
-				} catch (FileNotFoundException fnfe) {
-					error(fnfe);
-				} catch (IOException e) {
-					error(e);
-				} finally {
-					if (source != null) {
-						try {
-							source.close();
-						} catch (IOException e) {
-							// silently fail
+						source = new FileInputStream(src).getChannel();
+						destination = new FileOutputStream(dest).getChannel();
+						destination.transferFrom(source, 0, source.size());
+					} catch (FileNotFoundException fnfe) {
+						error(fnfe);
+					} catch (IOException e) {
+						error(e);
+					} finally {
+						if (source != null) {
+							try {
+								source.close();
+							} catch (IOException e) {
+								// silently fail
+							}
 						}
-					}
-					if (destination != null) {
-						try {
-							destination.close();
-						} catch (IOException e) {
-							// silently fail
+						if (destination != null) {
+							try {
+								destination.close();
+							} catch (IOException e) {
+								// silently fail
+							}
 						}
 					}
 				}
 			}
 
-			private void error(Exception e) {
-				Toast.makeText(context, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+			private void error(final Exception e) {
+				mErrorHandler.post(new Runnable() {
+					@Override
+					public void run() {
+						Toast.makeText(context, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+					}
+				});
 			}
 		}.start();
 	}
