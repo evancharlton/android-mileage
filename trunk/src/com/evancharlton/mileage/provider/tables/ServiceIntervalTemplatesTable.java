@@ -56,8 +56,8 @@ public class ServiceIntervalTemplatesTable extends ContentTable {
 	@Override
 	public String init() {
 		return new InsertBuilder().add(ServiceIntervalTemplate.TITLE, "Oil change").add(ServiceIntervalTemplate.DESCRIPTION, "Standard oil change")
-				.add(ServiceIntervalTemplate.DISTANCE, 3000).add(ServiceIntervalTemplate.DURATION, 1000L * 60L * 60L * 24L * 30L * 3L).add(
-						ServiceIntervalTemplate.VEHICLE_TYPE, 1).build();
+				.add(ServiceIntervalTemplate.DISTANCE, 482803200L /* 3000 mi in cm */).add(ServiceIntervalTemplate.DURATION,
+						1000L * 60L * 60L * 24L * 90L /* 90 days */).add(ServiceIntervalTemplate.VEHICLE_TYPE, 1).build();
 	}
 
 	@Override
