@@ -45,4 +45,9 @@ public class ServiceIntervalTemplateListActivity extends BaseListActivity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+
+	@Override
+	protected boolean canDelete(int position) {
+		return getAdapter().getCount() > 1;
+	}
 }

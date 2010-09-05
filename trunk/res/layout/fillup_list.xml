@@ -19,4 +19,5 @@
 		android:layout_weight="1"
 		android:id="@android:id/list"
 	/>
+	<include layout="@layout/empty" />
 </LinearLayout>

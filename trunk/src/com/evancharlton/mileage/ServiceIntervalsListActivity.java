@@ -6,8 +6,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.evancharlton.mileage.dao.ServiceInterval;
 import com.evancharlton.mileage.dao.Vehicle;
@@ -15,7 +17,7 @@ import com.evancharlton.mileage.math.Calculator;
 import com.evancharlton.mileage.provider.FillUpsProvider;
 import com.evancharlton.mileage.provider.tables.ServiceIntervalsTable;
 
-public class ServiceIntervalsListActivity extends BaseListActivity implements DialogInterface.OnClickListener {
+public class ServiceIntervalsListActivity extends BaseListActivity implements DialogInterface.OnClickListener, View.OnClickListener {
 	private static final int MENU_CREATE = 1;
 	private static final int MENU_TEMPLATES = 2;
 
@@ -99,5 +101,26 @@ public class ServiceIntervalsListActivity extends BaseListActivity implements Di
 				// no action
 		}
 		dialog.dismiss();
+	}
+
+	@Override
+	protected View getEmptyView() {
+		mEmptyView.removeAllViews();
+		View emptyView = LayoutInflater.from(this).inflate(R.layout.empty_service_intervals, mEmptyView);
+		emptyView.findViewById(R.id.empty_add_interval).setOnClickListener(this);
+		emptyView.findViewById(R.id.empty_edit_templates).setOnClickListener(this);
+		return emptyView;
+	}
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+			case R.id.empty_add_interval:
+				startActivity(new Intent(ServiceIntervalsListActivity.this, ServiceIntervalActivity.class));
+				break;
+			case R.id.empty_edit_templates:
+				startActivity(new Intent(this, ServiceIntervalTemplateListActivity.class));
+				break;
+		}
 	}
 }

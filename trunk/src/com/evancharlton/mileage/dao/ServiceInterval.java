@@ -101,10 +101,12 @@ public class ServiceInterval extends Dao {
 	}
 
 	public void deleteAlarm(final Context context) {
-		// cancel the alarm
-		AlarmManager mgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-		mgr.cancel(getPendingIntent(context));
-		Toast.makeText(context, context.getString(R.string.service_interval_canceled), Toast.LENGTH_SHORT).show();
+		if (isExistingObject()) {
+			// cancel the alarm
+			AlarmManager mgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+			mgr.cancel(getPendingIntent(context));
+			Toast.makeText(context, context.getString(R.string.service_interval_canceled), Toast.LENGTH_SHORT).show();
+		}
 	}
 
 	private PendingIntent getPendingIntent(Context context) {

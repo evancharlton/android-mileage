@@ -55,11 +55,30 @@ public class ServiceIntervalTemplatesTable extends ContentTable {
 
 	@Override
 	public String[] init() {
+		// FIXME - Strings
 		return new String[] {
-			new InsertBuilder().add(ServiceIntervalTemplate.TITLE, "Oil change").add(ServiceIntervalTemplate.DESCRIPTION, "Standard oil change").add(
-					ServiceIntervalTemplate.DISTANCE, 482803200L /* 3000 mi in cm */).add(ServiceIntervalTemplate.DURATION,
-					1000L * 60L * 60L * 24L * 90L /* 90 days */).add(ServiceIntervalTemplate.VEHICLE_TYPE, 1).build()
+				createInterval("Transmission fluid", "Replace transmission fluid", 25000, 25),
+				createInterval("Timing belt", "Replace timing belt", 60000, 60),
+				createInterval("Fuel filter", "Replace fuel filter", 25000, 25),
+				createInterval("Power steering fluid", "Replace power steering fluid", 30000, 30),
+				createInterval("Replace air filter", "Replace air filter", 15000, 15),
+				createInterval("Oil change (synthetic)", "Synthetic oil change", 1000, 10),
+				createInterval("Oil change (standard)", "Standard oil change", 3000, 3)
 		};
+	}
+
+	private String createInterval(String title, String description, long miles, long months) {
+		return new InsertBuilder().add(ServiceIntervalTemplate.TITLE, title).add(ServiceIntervalTemplate.DESCRIPTION, description).add(
+				ServiceIntervalTemplate.DISTANCE, miles(miles)).add(ServiceIntervalTemplate.DURATION, months(months)).add(
+				ServiceIntervalTemplate.VEHICLE_TYPE, 1).build();
+	}
+
+	private long miles(long num) {
+		return 1609L * 100L * num;
+	}
+
+	private long months(long num) {
+		return 1000L * 60L * 60L * 24L * 30L * num;
 	}
 
 	@Override

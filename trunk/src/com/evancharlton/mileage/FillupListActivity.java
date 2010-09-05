@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
@@ -137,6 +138,12 @@ public class FillupListActivity extends BaseListActivity implements AverageEcono
 				Fillup.UNIT_PRICE,
 				Fillup.ECONOMY
 		};
+	}
+
+	@Override
+	protected View getEmptyView() {
+		mEmptyView.removeAllViews();
+		return LayoutInflater.from(this).inflate(R.layout.empty_fillups, mEmptyView);
 	}
 
 	private final ViewBinder mViewBinder = new ViewBinder() {

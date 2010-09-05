@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.AdapterView.AdapterContextMenuInfo;
@@ -24,6 +25,7 @@ import com.evancharlton.mileage.dao.Dao;
 
 public abstract class BaseListActivity extends ListActivity implements AdapterView.OnItemClickListener, View.OnCreateContextMenuListener {
 	protected ListView mListView;
+	protected LinearLayout mEmptyView;
 	private SimpleCursorAdapter mAdapter;
 
 	@Override
@@ -34,6 +36,7 @@ public abstract class BaseListActivity extends ListActivity implements AdapterVi
 	protected void onCreate(Bundle savedInstanceState, int layoutResId) {
 		super.onCreate(savedInstanceState);
 		setContentView(layoutResId);
+		mEmptyView = (LinearLayout) findViewById(android.R.id.empty);
 	}
 
 	@Override
@@ -48,6 +51,8 @@ public abstract class BaseListActivity extends ListActivity implements AdapterVi
 		mListView.setOnItemClickListener(this);
 		mListView.setOnCreateContextMenuListener(this);
 
+		getEmptyView();
+
 		postUI();
 	}
 
@@ -59,6 +64,10 @@ public abstract class BaseListActivity extends ListActivity implements AdapterVi
 	}
 
 	protected void postUI() {
+	}
+
+	protected View getEmptyView() {
+		return null;
 	}
 
 	protected Cursor getCursor() {

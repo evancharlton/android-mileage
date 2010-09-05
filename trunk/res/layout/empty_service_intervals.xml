@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge
+	xmlns:android="http://schemas.android.com/apk/res/android"
+>
+	<TextView
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/empty_service_intervals"
+    	android:textAppearance="?android:attr/textAppearanceMedium"
+    	android:gravity="center"
+	/>
+	<Button
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:id="@+id/empty_add_interval"
+		android:text="@string/add_service_interval"
+	/>
+	<Button
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:id="@+id/empty_edit_templates"
+		android:text="@string/edit_service_interval_templates"
+	/>
+</merge>

@@ -15,6 +15,10 @@
 	<string name="service_intervals">Service intervals</string>
 	<string name="save_changes">Save changes</string>
 	<string name="add_service_interval">Add service interval</string>
+	<string name="edit_service_interval_templates">Edit templates</string>
+	
+	<string name="empty_service_intervals">You haven\'t set any service intervals!\nPress menu or use the buttons below to add some!</string>
+	<string name="empty_fillups">No saved fillups for this vehicle!\nGo fill up your tank and try again.</string>
 	
 	<string name="previous">Previous</string>
 	<string name="next">Next</string>
