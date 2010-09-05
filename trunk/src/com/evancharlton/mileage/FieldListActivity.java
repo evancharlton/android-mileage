@@ -2,8 +2,10 @@ package com.evancharlton.mileage;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.evancharlton.mileage.dao.Field;
 import com.evancharlton.mileage.provider.FillUpsProvider;
@@ -45,5 +47,18 @@ public class FieldListActivity extends BaseListActivity {
 	@Override
 	public void onItemClick(long id) {
 		loadItem(id, FieldActivity.class);
+	}
+
+	@Override
+	protected View getEmptyView() {
+		mEmptyView.removeAllViews();
+		View emptyView = LayoutInflater.from(this).inflate(R.layout.empty_fields, mEmptyView);
+		emptyView.findViewById(R.id.empty_add_field).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				startActivity(new Intent(FieldListActivity.this, FieldActivity.class));
+			}
+		});
+		return emptyView;
 	}
 }

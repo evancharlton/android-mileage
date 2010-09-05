@@ -19,6 +19,7 @@
 	
 	<string name="empty_service_intervals">You haven\'t set any service intervals!\nPress menu or use the buttons below to add some!</string>
 	<string name="empty_fillups">No saved fillups for this vehicle!\nGo fill up your tank and try again.</string>
+	<string name="empty_fields">No additional fields have been created!\nPress menu or use the button below to add as many as you want!</string>
 	
 	<string name="previous">Previous</string>
 	<string name="next">Next</string>
