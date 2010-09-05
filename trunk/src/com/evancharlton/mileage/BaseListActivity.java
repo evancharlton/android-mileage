@@ -1,18 +1,26 @@
 package com.evancharlton.mileage;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ListActivity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.BaseColumns;
 import android.view.ContextMenu;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.AdapterView.AdapterContextMenuInfo;
+
+import com.evancharlton.mileage.dao.Dao;
 
 public abstract class BaseListActivity extends ListActivity implements AdapterView.OnItemClickListener, View.OnCreateContextMenuListener {
 	protected ListView mListView;
@@ -105,6 +113,77 @@ public abstract class BaseListActivity extends ListActivity implements AdapterVi
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, view, menuInfo);
+
+		AdapterContextMenuInfo info = (AdapterContextMenuInfo) menuInfo;
+		long id = getAdapter().getItemId(info.position);
+
+		addContextMenuItems(menu, info, id);
+	}
+
+	protected Intent createContextMenuIntent(String action, long itemId) {
+		Intent i = new Intent(action);
+		i.putExtra(BaseColumns._ID, itemId);
+		return i;
+	}
+
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		Intent intent = item.getIntent();
+		if (intent != null) {
+			final long itemId = intent.getLongExtra(BaseColumns._ID, -1);
+			if (itemId >= 0) {
+				return handleContextMenuSelection(intent, itemId);
+			}
+		}
+		return super.onContextItemSelected(item);
+	}
+
+	protected void showDeleteDialog(final Runnable deleteAction) {
+		// TODO(3.1) - This dialog doesn't persist through rotations.
+		Dialog deleteDialog = new AlertDialog.Builder(this).setTitle(R.string.dialog_title_delete).setMessage(R.string.dialog_message_delete)
+				.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						deleteAction.run();
+						dialog.dismiss();
+					}
+				}).setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+					}
+				}).create();
+		deleteDialog.show();
+	}
+
+	protected boolean canDelete(int position) {
+		return true;
+	}
+
+	protected void addContextMenuItems(ContextMenu menu, AdapterContextMenuInfo info, long id) {
+		menu.add(Menu.NONE, Menu.NONE, Menu.NONE, R.string.edit).setIntent(createContextMenuIntent(Intent.ACTION_EDIT, id));
+
+		if (canDelete(info.position)) {
+			menu.add(Menu.NONE, Menu.NONE, Menu.NONE, R.string.delete).setIntent(createContextMenuIntent(Intent.ACTION_DELETE, id));
+		}
+	}
+
+	protected boolean handleContextMenuSelection(Intent intent, final long itemId) {
+		if (intent.getAction().equals(Intent.ACTION_EDIT)) {
+			onItemClick(itemId);
+			return true;
+		} else if (intent.getAction().equals(Intent.ACTION_DELETE)) {
+			showDeleteDialog(new Runnable() {
+				@Override
+				public void run() {
+					getContentResolver().delete(getUri(), Dao._ID + " = ?", new String[] {
+						String.valueOf(itemId)
+					});
+				}
+			});
+			return true;
+		}
+		return false;
 	}
 
 	abstract protected String[] getFrom();

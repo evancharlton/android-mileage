@@ -36,9 +36,11 @@
 	<string name="add_service_interval_template">Add service interval template</string>
 	<string name="service_interval_templates">Templates</string>
 	<string name="set_vehicle_as_default">This is the default vehicle</string>
+	<string name="set_vehicle_as_default_menu">Set vehicle as default</string>
 	<string name="perform_backup">Perform backup</string>
 	<string name="no_chart">No chart for this statistic (yet!)</string>
 	<string name="delete">Delete</string>
+	<string name="edit">Edit</string>
 	<string name="service_interval_set">Reminder set for %s</string>
 	<string name="service_interval_canceled">Reminder canceled</string>
 	<string name="service_interval_due">Service due for %s</string>

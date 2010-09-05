@@ -6,9 +6,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.ContextMenu;
 import android.view.View;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.SimpleCursorAdapter.ViewBinder;
@@ -129,11 +127,6 @@ public class FillupListActivity extends BaseListActivity implements AverageEcono
 	@Override
 	protected int getListLayout() {
 		return R.layout.fillup_list_item;
-	}
-
-	@Override
-	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenuInfo menuInfo) {
-		super.onCreateContextMenu(menu, view, menuInfo);
 	}
 
 	@Override
