@@ -139,9 +139,11 @@ public class DatabaseUpgrader {
 		try {
 			for (ContentTable table : tables) {
 				exec(table.create());
-				String init = table.init();
+				String[] init = table.init();
 				if (init != null) {
-					exec(init);
+					for (String sql : init) {
+						exec(sql);
+					}
 				}
 			}
 			return true;

@@ -55,7 +55,7 @@ public class ServiceIntervalsTable extends ContentTable {
 	}
 
 	@Override
-	public String init() {
+	public String[] init() {
 		return null;
 	}
 

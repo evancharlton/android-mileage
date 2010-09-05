@@ -107,9 +107,11 @@ public class FillUpsProvider extends ContentProvider {
 
 	public static void initTables(SQLiteDatabase db) {
 		for (ContentTable table : TABLES) {
-			String sql = table.init();
-			if (sql != null) {
-				db.execSQL(sql);
+			String[] init = table.init();
+			if (init != null) {
+				for (String sql : init) {
+					db.execSQL(sql);
+				}
 			}
 		}
 	}

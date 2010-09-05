@@ -60,11 +60,13 @@ public class VehiclesTable extends ContentTable {
 	}
 
 	@Override
-	public String init() {
+	public String[] init() {
 		// FIXME: hardcoded strings = bad!
-		return new InsertBuilder().add(Vehicle.TITLE, "Default vehicle").add(Vehicle.DESCRIPTION, "Auto-generated vehicle").add(Vehicle.DEFAULT_TIME,
-				System.currentTimeMillis()).add(Vehicle.MAKE, "Android").add(Vehicle.MODEL, "Mileage").add(Vehicle.YEAR, "2010").add(
-				Vehicle.VEHICLE_TYPE, 1).build();
+		return new String[] {
+			new InsertBuilder().add(Vehicle.TITLE, "Default vehicle").add(Vehicle.DESCRIPTION, "Auto-generated vehicle").add(Vehicle.DEFAULT_TIME,
+					System.currentTimeMillis()).add(Vehicle.MAKE, "Android").add(Vehicle.MODEL, "Mileage").add(Vehicle.YEAR, "2010").add(
+					Vehicle.VEHICLE_TYPE, 1).build()
+		};
 	}
 
 	@Override

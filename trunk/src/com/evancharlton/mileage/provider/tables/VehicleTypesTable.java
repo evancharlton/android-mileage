@@ -43,9 +43,11 @@ public class VehicleTypesTable extends ContentTable {
 	}
 
 	@Override
-	public String init() {
+	public String[] init() {
 		// FIXME: hardcoded strings = bad!
-		return new InsertBuilder().add(VehicleType.TITLE, "Car").add(VehicleType.DESCRIPTION, "Passenger car").build();
+		return new String[] {
+			new InsertBuilder().add(VehicleType.TITLE, "Car").add(VehicleType.DESCRIPTION, "Passenger car").build()
+		};
 	}
 
 	@Override

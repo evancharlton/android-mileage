@@ -62,9 +62,11 @@ public class FieldsTable extends ContentTable {
 	}
 
 	@Override
-	public String init() {
+	public String[] init() {
 		// FIXME - Hardcoded strings = bad!
-		return new InsertBuilder().add(Field.TITLE, "Comment").add(Field.DESCRIPTION, "Comment about your fillup.").build();
+		return new String[] {
+			new InsertBuilder().add(Field.TITLE, "Comment").add(Field.DESCRIPTION, "Comment about your fillup.").build()
+		};
 	}
 
 	@Override
