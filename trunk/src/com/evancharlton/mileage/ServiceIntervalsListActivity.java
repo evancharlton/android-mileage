@@ -104,12 +104,11 @@ public class ServiceIntervalsListActivity extends BaseListActivity implements Di
 	}
 
 	@Override
-	protected View getEmptyView() {
+	protected void setupEmptyView() {
 		mEmptyView.removeAllViews();
 		View emptyView = LayoutInflater.from(this).inflate(R.layout.empty_service_intervals, mEmptyView);
 		emptyView.findViewById(R.id.empty_add_interval).setOnClickListener(this);
 		emptyView.findViewById(R.id.empty_edit_templates).setOnClickListener(this);
-		return emptyView;
 	}
 
 	@Override

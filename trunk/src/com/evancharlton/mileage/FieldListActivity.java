@@ -50,7 +50,7 @@ public class FieldListActivity extends BaseListActivity {
 	}
 
 	@Override
-	protected View getEmptyView() {
+	protected void setupEmptyView() {
 		mEmptyView.removeAllViews();
 		View emptyView = LayoutInflater.from(this).inflate(R.layout.empty_fields, mEmptyView);
 		emptyView.findViewById(R.id.empty_add_field).setOnClickListener(new View.OnClickListener() {
@@ -59,6 +59,5 @@ public class FieldListActivity extends BaseListActivity {
 				startActivity(new Intent(FieldListActivity.this, FieldActivity.class));
 			}
 		});
-		return emptyView;
 	}
 }

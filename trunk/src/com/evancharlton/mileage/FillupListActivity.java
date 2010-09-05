@@ -141,9 +141,9 @@ public class FillupListActivity extends BaseListActivity implements AverageEcono
 	}
 
 	@Override
-	protected View getEmptyView() {
+	protected void setupEmptyView() {
 		mEmptyView.removeAllViews();
-		return LayoutInflater.from(this).inflate(R.layout.empty_fillups, mEmptyView);
+		LayoutInflater.from(this).inflate(R.layout.empty_fillups, mEmptyView);
 	}
 
 	private final ViewBinder mViewBinder = new ViewBinder() {

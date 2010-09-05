@@ -51,7 +51,7 @@ public abstract class BaseListActivity extends ListActivity implements AdapterVi
 		mListView.setOnItemClickListener(this);
 		mListView.setOnCreateContextMenuListener(this);
 
-		getEmptyView();
+		setupEmptyView();
 
 		postUI();
 	}
@@ -66,8 +66,7 @@ public abstract class BaseListActivity extends ListActivity implements AdapterVi
 	protected void postUI() {
 	}
 
-	protected View getEmptyView() {
-		return null;
+	protected void setupEmptyView() {
 	}
 
 	protected Cursor getCursor() {
