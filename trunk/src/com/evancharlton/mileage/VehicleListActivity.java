@@ -1,14 +1,13 @@
 package com.evancharlton.mileage;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
+import android.content.ContentUris;
 import android.content.ContentValues;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
 import com.evancharlton.mileage.dao.Vehicle;
@@ -65,25 +64,11 @@ public class VehicleListActivity extends BaseListActivity {
 	@Override
 	protected boolean handleContextMenuSelection(Intent intent, final long itemId) {
 		if (intent.getAction().equals(Intent.ACTION_DEFAULT)) {
-			// TODO(3.1) - This dialog doesn't persist through rotations.
-			Dialog defaultDialog = new AlertDialog.Builder(this).setTitle(R.string.dialog_title_delete).setMessage(R.string.dialog_message_delete)
-					.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							ContentValues values = new ContentValues();
-							values.put(Vehicle.DEFAULT_TIME, System.currentTimeMillis());
-							getContentResolver().update(VehiclesTable.BASE_URI, values, Vehicle._ID + " = ?", new String[] {
-								String.valueOf(itemId)
-							});
-							dialog.dismiss();
-						}
-					}).setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							dialog.dismiss();
-						}
-					}).create();
-			defaultDialog.show();
+			ContentValues values = new ContentValues();
+			values.put(Vehicle.DEFAULT_TIME, System.currentTimeMillis());
+			Uri uri = ContentUris.withAppendedId(VehiclesTable.BASE_URI, itemId);
+			getContentResolver().update(uri, values, null, null);
+			Toast.makeText(this, getString(R.string.toast_vehicle_set_as_default), Toast.LENGTH_SHORT).show();
 			return true;
 		}
 		return super.handleContextMenuSelection(intent, itemId);
