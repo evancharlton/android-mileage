@@ -3,6 +3,7 @@ package com.evancharlton.mileage.io;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -46,5 +47,8 @@ public class DbImportActivity extends Activity {
 
 	public void setWorking(boolean isWorking) {
 		mProgressBar.setIndeterminate(isWorking);
+		if (!isWorking) {
+			mProgressBar.setVisibility(View.INVISIBLE);
+		}
 	}
 }
