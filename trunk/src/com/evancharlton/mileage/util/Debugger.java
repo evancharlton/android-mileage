@@ -42,7 +42,7 @@ public final class Debugger {
 			case DEBUG_YELL:
 				throw new IllegalStateException(msg);
 			case DEBUG_WARN:
-				Toast.makeText(context, msg, Toast.LENGTH_SHORT);
+				Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
 			case DEBUG_QUIET:
 				Log.d(TAG, msg + getStackTrace());
 		}
