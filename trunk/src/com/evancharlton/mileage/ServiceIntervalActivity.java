@@ -26,7 +26,6 @@ import com.evancharlton.mileage.views.DateDelta;
 import com.evancharlton.mileage.views.DistanceDelta;
 
 public class ServiceIntervalActivity extends BaseFormActivity {
-
 	private final ServiceInterval mInterval = new ServiceInterval(new ContentValues());
 	private CursorSpinner mVehicles;
 	private CursorSpinner mIntervalTemplates;
@@ -105,21 +104,11 @@ public class ServiceIntervalActivity extends BaseFormActivity {
 				ServiceIntervalTemplate template = new ServiceIntervalTemplate(intervalCursor);
 				intervalCursor.close();
 
-				if (mTitle.getText().length() == 0) {
-					mTitle.setText(template.getTitle());
-				}
-
-				if (mDescription.getText().length() == 0) {
-					mDescription.setText(template.getDescription());
-				}
-
-				if (mDistance.getDelta() == 0) {
-					mDistance.setDelta(template.getDistance());
-				}
-
-				if (mDuration.getDelta() == 0) {
-					mDuration.setDelta(template.getDuration());
-				}
+				// Overwrite everything that's on the form.
+				mTitle.setText(template.getTitle());
+				mDescription.setText(template.getDescription());
+				mDistance.setDelta(template.getDistance());
+				mDuration.setDelta(template.getDuration());
 			}
 
 			@Override
