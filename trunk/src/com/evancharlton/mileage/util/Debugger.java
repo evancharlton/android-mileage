@@ -13,7 +13,7 @@ public final class Debugger {
 	private static final int DEBUG_QUIET = 1;
 	private static final int DEBUG_WARN = 2;
 	private static final int DEBUG_YELL = 3;
-	private static final int DEBUG_LEVEL = DEBUG_WARN;
+	private static final int DEBUG_LEVEL = DEBUG_QUIET;
 
 	private static final String TAG = "Debugger";
 
