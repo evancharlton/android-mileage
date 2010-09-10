@@ -105,7 +105,7 @@ public class VehiclesTable extends ContentTable {
 		switch (match) {
 			case VEHICLE_ID:
 				return db.update(getTableName(), values, Vehicle._ID + " = ?", new String[] {
-					values.getAsString(Vehicle._ID)
+					uri.getPathSegments().get(1)
 				});
 		}
 		return -1;
