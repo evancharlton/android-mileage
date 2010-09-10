@@ -296,8 +296,10 @@
 	<string name="update_imported">Processed %1$d rows!</string>
 	<string name="update_erased_database">Erased fillup data</string>
 	<string name="update_erased_cache">Erased statistics cache</string>
-	<string name="update_cleaning_vehicle">Cleaning up fillups for %1$s ...</string>
-	<string name="update_still_working">Still working...</string>
-	<string name="update_finished_cleaning">Finished cleaning for %1$s</string>
 	<string name="update_finished_importing">Import finished!</string>
+	<string name="update_starting_import">Starting import...</string>
+	<string name="update_made_backup">Made a backup of the current db...</string>
+	<string name="update_upgrading_database">Upgrading database...</string>
+	<string name="update_upgraded_database">Database upgraded...</string>
+	<string name="update_cleaning_up">Cleaning up...</string>
 </resources>

@@ -9,6 +9,10 @@ import android.widget.Toast;
 import com.evancharlton.mileage.R;
 import com.evancharlton.mileage.dao.CachedValue;
 import com.evancharlton.mileage.dao.Fillup;
+import com.evancharlton.mileage.dao.FillupSeries;
+import com.evancharlton.mileage.dao.Vehicle;
+import com.evancharlton.mileage.exceptions.InvalidFieldException;
+import com.evancharlton.mileage.math.Calculator;
 import com.evancharlton.mileage.provider.Statistics;
 import com.evancharlton.mileage.provider.tables.CacheTable;
 import com.evancharlton.mileage.provider.tables.FillupsTable;
@@ -40,6 +44,8 @@ public class AverageEconomyTask extends AttachableAsyncTask<Activity, Long, Inte
 				String.valueOf(vehicleId)
 		};
 
+		final Vehicle vehicle = Vehicle.loadById(getParent(), vehicleId.longValue());
+
 		Cursor cacheCursor = getParent().getContentResolver().query(CacheTable.BASE_URI, new String[] {
 			CachedValue.VALUE
 		}, selection, selectionArgs, null);
@@ -59,10 +65,27 @@ public class AverageEconomyTask extends AttachableAsyncTask<Activity, Long, Inte
 			if (fillupsCursor.getCount() > 1) {
 				publishProgress();
 				double totalEconomy = 0D;
+				Fillup previous = null;
 				while (fillupsCursor.isLast() == false) {
 					fillupsCursor.moveToNext();
 					Fillup f = new Fillup(fillupsCursor);
-					totalEconomy += f.getEconomy();
+					double economy = f.getEconomy();
+					if (previous != null && economy == 0D) {
+						Log.d(TAG, "Uncalculated economy, fixing...");
+						// Update the economy
+						FillupSeries series = new FillupSeries(previous, f);
+						economy = Calculator.averageEconomy(vehicle, series);
+						f.setEconomy(economy);
+						try {
+							f.save(getParent());
+						} catch (InvalidFieldException e) {
+							Log.e(TAG, "Couldn't save fillup!", e);
+						}
+						Log.d(TAG, "Updated economy: " + economy);
+					}
+					totalEconomy += economy;
+
+					previous = f;
 				}
 				// subtract 1 to account for the invalid first fillup.
 				// TODO(3.1) -- add support for restarting calculations

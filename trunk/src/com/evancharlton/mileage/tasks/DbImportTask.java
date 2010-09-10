@@ -8,6 +8,7 @@ import java.nio.channels.FileChannel;
 
 import android.database.sqlite.SQLiteDatabase;
 
+import com.evancharlton.mileage.R;
 import com.evancharlton.mileage.io.DbImportActivity;
 import com.evancharlton.mileage.provider.DatabaseUpgrader;
 import com.evancharlton.mileage.provider.Settings;
@@ -28,9 +29,15 @@ public class DbImportTask extends AttachableAsyncTask<DbImportActivity, Void, St
 	@Override
 	protected Boolean doInBackground(Void... params) {
 		try {
+			publishProgress(getParent().getString(R.string.update_starting_import));
 			makeBackup();
+			publishProgress(getParent().getString(R.string.update_made_backup));
+			publishProgress(getParent().getString(R.string.update_upgrading_database));
 			upgradeDatabase();
+			publishProgress(getParent().getString(R.string.update_upgraded_database));
+			publishProgress(getParent().getString(R.string.update_cleaning_up));
 			cleanUp();
+			publishProgress(getParent().getString(R.string.update_finished_importing));
 			return true;
 		} catch (IOException e) {
 			publishProgress(e.getMessage());
@@ -58,7 +65,6 @@ public class DbImportTask extends AttachableAsyncTask<DbImportActivity, Void, St
 
 	private void upgradeDatabase() {
 		SQLiteDatabase db = SQLiteDatabase.openDatabase(TEMP_FILE, null, SQLiteDatabase.OPEN_READWRITE);
-		// TODO(3.0) - determine the actual database version
 		DatabaseUpgrader.upgradeDatabase(db);
 		db.close();
 	}
