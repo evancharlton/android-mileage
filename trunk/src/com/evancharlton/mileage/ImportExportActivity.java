@@ -17,7 +17,7 @@ public class ImportExportActivity extends Activity {
 		map(R.id.import_button, ImportActivity.class);
 		map(R.id.export_button, ExportActivity.class);
 
-		if (Environment.getExternalStorageState() != Environment.MEDIA_MOUNTED) {
+		if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState()) == false) {
 			findViewById(R.id.import_button).setEnabled(false);
 			findViewById(R.id.export_button).setEnabled(false);
 

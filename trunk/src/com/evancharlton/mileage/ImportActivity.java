@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,8 +24,10 @@ import android.widget.TextView;
 import com.evancharlton.mileage.io.CsvColumnMappingActivity;
 import com.evancharlton.mileage.io.DbImportActivity;
 import com.evancharlton.mileage.provider.Settings;
+import com.evancharlton.mileage.util.Debugger;
 
 public class ImportActivity extends Activity {
+	private static final String TAG = "ImportActivity";
 	public static final String FILENAME = "filename";
 	public static final String WIPE_DATA = "wipe data";
 
@@ -128,6 +131,10 @@ public class ImportActivity extends Activity {
 
 		@Override
 		protected void onPostExecute(String[] files) {
+			if (files == null) {
+				Log.d(TAG, "No files found!");
+				files = new String[0];
+			}
 			mActivity.setFiles(files);
 		}
 	}
@@ -188,6 +195,7 @@ public class ImportActivity extends Activity {
 		}
 
 		public void setData(String[] data) {
+			Debugger.ensureOnUiThread(mInflater.getContext(), "Altering data off UI thread!");
 			values = data;
 			notifyDataSetChanged();
 		}
