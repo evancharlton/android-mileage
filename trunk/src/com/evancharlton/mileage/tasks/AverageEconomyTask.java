@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.evancharlton.mileage.R;
 import com.evancharlton.mileage.dao.CachedValue;
 import com.evancharlton.mileage.dao.Fillup;
 import com.evancharlton.mileage.provider.Statistics;
@@ -21,6 +23,11 @@ public class AverageEconomyTask extends AttachableAsyncTask<Activity, Long, Inte
 		} else {
 			throw new IllegalArgumentException("parent must implement AsyncCallback");
 		}
+	}
+
+	@Override
+	public void onProgressUpdate(Integer... update) {
+		Toast.makeText(getParent(), getParent().getString(R.string.toast_calculating_avg_economy), Toast.LENGTH_SHORT).show();
 	}
 
 	@Override
@@ -50,6 +57,7 @@ public class AverageEconomyTask extends AttachableAsyncTask<Activity, Long, Inte
 						String.valueOf(vehicleId)
 					}, null);
 			if (fillupsCursor.getCount() > 1) {
+				publishProgress();
 				double totalEconomy = 0D;
 				while (fillupsCursor.isLast() == false) {
 					fillupsCursor.moveToNext();

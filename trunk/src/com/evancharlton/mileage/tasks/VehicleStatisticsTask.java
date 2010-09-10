@@ -54,6 +54,12 @@ public class VehicleStatisticsTask extends AttachableAsyncTask<VehicleStatistics
 
 		Cursor cursor = mContentResolver.query(FillupsTable.BASE_URI, FillupsTable.PROJECTION, selection, args, Fillup.ODOMETER + " asc");
 		mTotal = cursor.getCount();
+
+		if (mTotal <= 1) {
+			Log.d(TAG, "Not enough fillups to calculate statistics");
+			return 0;
+		}
+
 		Log.d("CalculateTask", "Recalculating...");
 		// recalculate a whole bunch of shit
 		FillupSeries series = new FillupSeries();

@@ -21,6 +21,9 @@
 	<string name="empty_fillups">No saved fillups for this vehicle!\nGo fill up your tank and try again.</string>
 	<string name="empty_fields">No additional fields have been created!\nPress menu or use the button below to add as many as you want!</string>
 	
+	<string name="toast_calculating_avg_economy">Calculating average fuel economy...</string>
+	<string name="toast_vehicle_set_as_default">Vehicle set as default!</string>
+	
 	<string name="previous">Previous</string>
 	<string name="next">Next</string>
 	<string name="partial_fillup">Tank was not filled to the top</string>
@@ -293,4 +296,8 @@
 	<string name="update_imported">Processed %1$d rows!</string>
 	<string name="update_erased_database">Erased fillup data</string>
 	<string name="update_erased_cache">Erased statistics cache</string>
+	<string name="update_cleaning_vehicle">Cleaning up fillups for %1$s ...</string>
+	<string name="update_still_working">Still working...</string>
+	<string name="update_finished_cleaning">Finished cleaning for %1$s</string>
+	<string name="update_finished_importing">Import finished!</string>
 </resources>
