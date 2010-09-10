@@ -27,14 +27,24 @@ public final class Debugger {
 
 	public static final void ensureNotUiThread(Context context, String msg) {
 		if (isOnUiThread()) {
-			switch (DEBUG_LEVEL) {
-				case DEBUG_YELL:
-					throw new IllegalStateException(msg);
-				case DEBUG_WARN:
-					Toast.makeText(context, msg, Toast.LENGTH_SHORT);
-				case DEBUG_QUIET:
-					Log.d(TAG, msg + getStackTrace());
-			}
+			yell(context, msg);
+		}
+	}
+
+	public static final void ensureOnUiThread(Context context, String msg) {
+		if (!isOnUiThread()) {
+			yell(context, msg);
+		}
+	}
+
+	private static final void yell(Context context, String msg) {
+		switch (DEBUG_LEVEL) {
+			case DEBUG_YELL:
+				throw new IllegalStateException(msg);
+			case DEBUG_WARN:
+				Toast.makeText(context, msg, Toast.LENGTH_SHORT);
+			case DEBUG_QUIET:
+				Log.d(TAG, msg + getStackTrace());
 		}
 	}
 
