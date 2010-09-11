@@ -78,6 +78,7 @@ public class VehicleStatisticsActivity extends Activity {
 		mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> list, View row, int position, long id) {
+				position -= mAdapter.getNumHeadersAbove(position);
 				Statistic statistic = Statistics.STATISTICS.get(position);
 				Class<? extends ChartActivity> target = statistic.getChartClass();
 				if (target != null) {
