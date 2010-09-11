@@ -223,4 +223,10 @@ public class VehicleActivity extends BaseFormActivity {
 	protected int getCreateString() {
 		return R.string.add_vehicle;
 	}
+
+	@Override
+	public boolean canDelete() {
+		Cursor count = managedQuery(VehiclesTable.BASE_URI, null, null, null, null);
+		return count != null && count.getCount() > 1;
+	}
 }

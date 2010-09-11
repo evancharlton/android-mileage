@@ -18,6 +18,8 @@ public class ServiceIntervalTemplatesTable extends ContentTable {
 
 	public static final String URI = "intervals/templates";
 
+	public static final Uri BASE_URI = Uri.withAppendedPath(FillUpsProvider.BASE_URI, URI);
+
 	private static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.evancharlton.interval_template";
 	private static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.evancharlton.interval_template";
 

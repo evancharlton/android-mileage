@@ -18,6 +18,8 @@ public class VehicleTypesTable extends ContentTable {
 
 	public static final String URI = "vehicles/types/";
 
+	public static final Uri BASE_URI = Uri.withAppendedPath(FillUpsProvider.BASE_URI, URI);
+
 	private static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.evancharlton.vehicle_types";
 	private static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.evancharlton.vehicle_type";
 

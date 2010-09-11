@@ -44,7 +44,13 @@ public class AverageEconomyTask extends AttachableAsyncTask<Activity, Long, Inte
 				String.valueOf(vehicleId)
 		};
 
-		final Vehicle vehicle = Vehicle.loadById(getParent(), vehicleId.longValue());
+		final Vehicle vehicle;
+		try {
+			vehicle = Vehicle.loadById(getParent(), vehicleId.longValue());
+		} catch (IllegalArgumentException e) {
+			Log.e(TAG, "Couldn't load vehicle!", e);
+			return 0D;
+		}
 
 		Cursor cacheCursor = getParent().getContentResolver().query(CacheTable.BASE_URI, new String[] {
 			CachedValue.VALUE

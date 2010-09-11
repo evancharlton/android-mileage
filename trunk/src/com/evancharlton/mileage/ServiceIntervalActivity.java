@@ -189,4 +189,10 @@ public class ServiceIntervalActivity extends BaseFormActivity {
 	protected int getCreateString() {
 		return R.string.add_service_interval;
 	}
+
+	@Override
+	public boolean canDelete() {
+		Cursor count = managedQuery(ServiceIntervalTemplatesTable.BASE_URI, null, null, null, null);
+		return count != null && count.getCount() > 1;
+	}
 }

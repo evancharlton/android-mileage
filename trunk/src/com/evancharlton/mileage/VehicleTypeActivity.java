@@ -2,6 +2,7 @@ package com.evancharlton.mileage;
 
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.EditText;
@@ -57,5 +58,11 @@ public class VehicleTypeActivity extends BaseFormActivity {
 	@Override
 	protected int getCreateString() {
 		return R.string.add_vehicle_type;
+	}
+
+	@Override
+	public boolean canDelete() {
+		Cursor count = managedQuery(VehicleTypesTable.BASE_URI, null, null, null, null);
+		return count != null && count.getCount() > 1;
 	}
 }

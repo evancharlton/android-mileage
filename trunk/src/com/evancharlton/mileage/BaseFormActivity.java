@@ -75,7 +75,7 @@ public abstract class BaseFormActivity extends Activity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		if (getDao().isExistingObject()) {
+		if (getDao().isExistingObject() && canDelete()) {
 			menu.add(Menu.NONE, R.string.delete, Menu.NONE, R.string.delete);
 		}
 		return super.onCreateOptionsMenu(menu);
@@ -124,6 +124,10 @@ public abstract class BaseFormActivity extends Activity {
 
 	protected void saved() {
 		finish();
+	}
+
+	protected boolean canDelete() {
+		return true;
 	}
 
 	abstract protected int getCreateString();
