@@ -264,6 +264,8 @@ public abstract class Dao {
 						String data = null;
 						if (value instanceof Date) {
 							data = String.valueOf(((Date) value).getTime());
+						} else if (value instanceof Boolean) {
+							data = ((Boolean) value).booleanValue() ? "1" : "0";
 						} else {
 							data = String.valueOf(value);
 						}
