@@ -122,18 +122,20 @@ public class VehicleStatisticsTask extends AttachableAsyncTask<VehicleStatistics
 				}
 
 				double economy = Calculator.averageEconomy(vehicle, fillup);
-				if (Calculator.isBetterEconomy(vehicle, economy, maxEconomy)) {
-					maxEconomy = economy;
-					update(Statistics.MAX_ECONOMY, maxEconomy);
-				} else {
-					publishProgress();
-				}
+				if (economy > 0D) {
+					if (Calculator.isBetterEconomy(vehicle, economy, maxEconomy)) {
+						maxEconomy = economy;
+						update(Statistics.MAX_ECONOMY, maxEconomy);
+					} else {
+						publishProgress();
+					}
 
-				if (!Calculator.isBetterEconomy(vehicle, economy, minEconomy)) {
-					minEconomy = economy;
-					update(Statistics.MIN_ECONOMY, minEconomy);
-				} else {
-					publishProgress();
+					if (!Calculator.isBetterEconomy(vehicle, economy, minEconomy)) {
+						minEconomy = economy;
+						update(Statistics.MIN_ECONOMY, minEconomy);
+					} else {
+						publishProgress();
+					}
 				}
 
 				double costPerDistance = fillup.getCostPerDistance();
