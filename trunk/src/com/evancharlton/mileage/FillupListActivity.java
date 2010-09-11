@@ -15,6 +15,7 @@ import android.widget.SimpleCursorAdapter.ViewBinder;
 import com.evancharlton.mileage.dao.Fillup;
 import com.evancharlton.mileage.dao.Vehicle;
 import com.evancharlton.mileage.math.Calculator;
+import com.evancharlton.mileage.provider.tables.CacheTable;
 import com.evancharlton.mileage.provider.tables.FillupsTable;
 import com.evancharlton.mileage.provider.tables.VehiclesTable;
 import com.evancharlton.mileage.tasks.AverageEconomyTask;
@@ -68,6 +69,15 @@ public class FillupListActivity extends BaseListActivity implements AverageEcono
 		}
 
 		mVehicle = getVehicle();
+	}
+
+	private void calculate() {
+		if (mAverageTask.getStatus() != AsyncTask.Status.FINISHED) {
+			mAverageTask.cancel(true);
+		}
+		mAverageTask = new AverageEconomyTask();
+		mAverageTask.attach(this);
+		mAverageTask.execute(mVehicles.getSelectedItemId());
 	}
 
 	protected final Vehicle getVehicle() {
@@ -144,6 +154,13 @@ public class FillupListActivity extends BaseListActivity implements AverageEcono
 	protected void setupEmptyView() {
 		mEmptyView.removeAllViews();
 		LayoutInflater.from(this).inflate(R.layout.empty_fillups, mEmptyView);
+	}
+
+	@Override
+	protected void itemDeleted(long itemId) {
+		// Clear out the cache
+		getContentResolver().delete(CacheTable.BASE_URI, null, null);
+		calculate();
 	}
 
 	private final ViewBinder mViewBinder = new ViewBinder() {

@@ -187,11 +187,15 @@ public abstract class BaseListActivity extends ListActivity implements AdapterVi
 					getContentResolver().delete(getUri(), Dao._ID + " = ?", new String[] {
 						String.valueOf(itemId)
 					});
+					itemDeleted(itemId);
 				}
 			});
 			return true;
 		}
 		return false;
+	}
+
+	protected void itemDeleted(long itemId) {
 	}
 
 	abstract protected String[] getFrom();
