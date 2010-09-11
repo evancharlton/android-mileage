@@ -290,4 +290,26 @@ public class Fillup extends Dao {
 	public void setLongitude(double longitude) {
 		mLongitude = longitude;
 	}
+
+	/**
+	 * @return true if this fillup should be counted in an economy calculation.
+	 */
+	public boolean validForEconomy() {
+		if (!hasPrevious()) {
+			return false;
+		}
+		if (isPartial()) {
+			// Walk the chain to see if there's a following complete fillup.
+			Fillup fillup = this;
+			while (fillup.hasNext()) {
+				if (fillup.isPartial() == false) {
+					// Found a following complete; this is a valid fillup.
+					return true;
+				}
+				fillup = fillup.getNext();
+			}
+			return false;
+		}
+		return true;
+	}
 }

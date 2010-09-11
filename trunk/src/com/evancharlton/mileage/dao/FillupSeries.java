@@ -16,10 +16,12 @@ public class FillupSeries extends ArrayList<Fillup> {
 		Fillup current = null;
 		for (int i = 0; i < length; i++) {
 			current = fillups[i];
-			if (previous != null) {
+			if (previous != null && previous.hasNext() == false) {
 				previous.setNext(current);
 			}
-			current.setPrevious(previous);
+			if (current.hasPrevious() == false) {
+				current.setPrevious(previous);
+			}
 			super.add(current);
 			previous = current;
 
@@ -41,10 +43,16 @@ public class FillupSeries extends ArrayList<Fillup> {
 	}
 
 	public double getTotalDistance() {
-		final int size = size();
-		if (size >= 2) {
-			// TODO(3.0) - will this work for partials? check the edge case here
-			return Math.abs(last().getOdometer() - first().getOdometer());
+		if (size() >= 2) {
+			Fillup last = last();
+			while (last.isPartial()) {
+				last = last.getPrevious();
+			}
+			Fillup first = first();
+			if (last == first) {
+				return 0D;
+			}
+			return Math.abs(last.getOdometer() - first.getOdometer());
 		}
 		return 0D;
 	}
@@ -65,10 +73,14 @@ public class FillupSeries extends ArrayList<Fillup> {
 	 */
 	public double getEconomyVolume() {
 		if (mEconomyVolume == 0) {
-			final int size = size();
 			double total = 0D;
-			for (int i = 1; i < size; i++) {
-				total += get(i).getVolume();
+			for (Fillup fillup : this) {
+				if (fillup.getPrevious() == null) {
+					continue; // ignore the first fillup for economy calculation
+				}
+				if (fillup.validForEconomy()) {
+					total += fillup.getVolume();
+				}
 			}
 			mEconomyVolume = total;
 		}
