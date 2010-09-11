@@ -7,10 +7,12 @@
 		android:id="@+id/title"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
+		android:hint="@string/field_title"
 	/>
 	<EditText
 		android:id="@+id/description"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
+		android:hint="@string/field_description"
 	/>
 </merge>

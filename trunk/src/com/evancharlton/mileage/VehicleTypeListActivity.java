@@ -45,4 +45,9 @@ public class VehicleTypeListActivity extends BaseListActivity {
 	public void onItemClick(long id) {
 		loadItem(id, VehicleTypeActivity.class);
 	}
+
+	@Override
+	public boolean canDelete(int position) {
+		return getAdapter().getCount() > 1;
+	}
 }
