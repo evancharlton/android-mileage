@@ -33,6 +33,8 @@ public abstract class Dao {
 
 	private Uri mUriBase = null;
 
+	private boolean mInMemoryDataChanged = false;
+
 	protected Dao(final ContentValues values) {
 		load(values);
 	}
@@ -296,6 +298,14 @@ public abstract class Dao {
 		return true;
 	}
 
+	public boolean saveIfChanged(Context context) throws InvalidFieldException {
+		if (mInMemoryDataChanged) {
+			Log.d(TAG, "Saving due to in-memory data changes");
+			return save(context);
+		}
+		return false;
+	}
+
 	public boolean delete(Context context) {
 		return context.getContentResolver().delete(getUri(), null, null) > 0;
 	}
@@ -310,6 +320,10 @@ public abstract class Dao {
 
 	public final void setId(long id) {
 		mId = id;
+	}
+
+	protected void setInMemoryDataChanged() {
+		mInMemoryDataChanged = true;
 	}
 
 	protected long getLong(Cursor cursor, String columnName) {

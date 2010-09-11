@@ -174,6 +174,7 @@ public class Fillup extends Dao {
 	public double getTotalCost() {
 		if (mTotalCost == 0 && (mVolume > 0 && mUnitPrice > 0)) {
 			mTotalCost = mVolume * mUnitPrice;
+			setInMemoryDataChanged();
 		}
 		return mTotalCost;
 	}
@@ -181,6 +182,7 @@ public class Fillup extends Dao {
 	public double getUnitPrice() {
 		if (mUnitPrice == 0 && (mVolume > 0 && mTotalCost > 0)) {
 			mUnitPrice = mTotalCost / mVolume;
+			setInMemoryDataChanged();
 		}
 		return mUnitPrice;
 	}
@@ -192,6 +194,7 @@ public class Fillup extends Dao {
 	public double getVolume() {
 		if (mVolume == 0 && (mTotalCost > 0 && mUnitPrice > 0)) {
 			mVolume = mTotalCost / mUnitPrice;
+			setInMemoryDataChanged();
 		}
 		return mVolume;
 	}

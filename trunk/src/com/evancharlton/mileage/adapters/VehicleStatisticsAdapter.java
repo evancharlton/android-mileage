@@ -53,6 +53,16 @@ public class VehicleStatisticsAdapter extends BaseAdapter {
 		mValues.put(statistic.getKey(), value);
 	}
 
+	public int getNumHeadersAbove(int position) {
+		int total = 0;
+		for (int i = position - 1; i >= 0; i--) {
+			if (getItemViewType(i) == TYPE_GROUP) {
+				total++;
+			}
+		}
+		return total;
+	}
+
 	public void flush() {
 		// flush the statistics to disk
 		new Thread() {

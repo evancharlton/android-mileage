@@ -11,6 +11,7 @@ import com.evancharlton.mileage.dao.CachedValue;
 import com.evancharlton.mileage.dao.Fillup;
 import com.evancharlton.mileage.dao.FillupSeries;
 import com.evancharlton.mileage.dao.Vehicle;
+import com.evancharlton.mileage.exceptions.InvalidFieldException;
 import com.evancharlton.mileage.math.Calculator;
 import com.evancharlton.mileage.provider.Statistics;
 import com.evancharlton.mileage.provider.tables.CacheTable;
@@ -280,6 +281,12 @@ public class VehicleStatisticsTask extends AttachableAsyncTask<VehicleStatistics
 			double costPerDay = Calculator.averageCostPerDay(series);
 			update(Statistics.AVG_MONTHLY_COST, costPerDay * 30);
 			update(Statistics.AVG_YEARLY_COST, costPerDay * 365);
+
+			try {
+				fillup.saveIfChanged(getParent());
+			} catch (InvalidFieldException e) {
+				Log.e(TAG, "Couldn't save in-memory changes.", e);
+			}
 		}
 
 		cursor.close();
