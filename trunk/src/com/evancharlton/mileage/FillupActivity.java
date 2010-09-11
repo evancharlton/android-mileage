@@ -335,7 +335,7 @@ public class FillupActivity extends BaseFormActivity {
 			}
 		}
 
-		if (mFillup.isExistingObject() == false) {
+		if (mPreferences.getBoolean(Settings.STORE_LOCATION, false) && mFillup.isExistingObject() == false) {
 			// Don't want to erase location data
 			LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 			Location lastLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
