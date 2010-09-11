@@ -100,6 +100,9 @@ public class Calculator {
 		if (!fillup.hasPrevious()) {
 			throw new IllegalArgumentException("You can't calculate economy on one fillup");
 		}
+		if (fillup.isPartial()) {
+			return 0D;
+		}
 		return averageEconomy(vehicle, new FillupSeries(fillup.getPrevious(), fillup));
 	}
 
