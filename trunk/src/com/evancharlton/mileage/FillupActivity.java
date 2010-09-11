@@ -8,6 +8,8 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -150,6 +152,7 @@ public class FillupActivity extends BaseFormActivity {
 		} catch (InvalidFieldException exception) {
 			Toast.makeText(this, getString(exception.getErrorMessage()), Toast.LENGTH_LONG).show();
 		}
+
 		return false;
 	}
 
@@ -330,6 +333,14 @@ public class FillupActivity extends BaseFormActivity {
 				double economy = Calculator.averageEconomy(v, new FillupSeries(previous, mFillup));
 				mFillup.setEconomy(economy);
 			}
+		}
+
+		if (mFillup.isExistingObject() == false) {
+			// Don't want to erase location data
+			LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+			Location lastLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+			mFillup.setLatitude(lastLocation.getLatitude());
+			mFillup.setLongitude(lastLocation.getLongitude());
 		}
 	}
 
