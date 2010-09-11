@@ -313,25 +313,29 @@ public class FillupActivity extends BaseFormActivity {
 		mFillup.setPartial(mPartial.isChecked());
 		mFillup.setVehicleId(mVehicles.getSelectedItemId());
 
-		// update the economy number
-		Uri vehicleUri = ContentUris.withAppendedId(VehiclesTable.BASE_URI, mVehicles.getSelectedItemId());
+		if (mFillup.isPartial()) {
+			mFillup.setEconomy(0);
+		} else {
+			// update the economy number
+			Uri vehicleUri = ContentUris.withAppendedId(VehiclesTable.BASE_URI, mVehicles.getSelectedItemId());
 
-		Vehicle v = null;
-		Cursor vehicleCursor = managedQuery(vehicleUri, VehiclesTable.PROJECTION, null, null, null);
-		if (vehicleCursor.getCount() == 1) {
-			vehicleCursor.moveToFirst();
-			v = new Vehicle(vehicleCursor);
-			Fillup previous = null;
-			if (mFillup.isExistingObject()) {
-				previous = mFillup.loadPrevious(this);
-			} else {
-				previous = v.loadLatestFillup(this);
-			}
-			if (previous == null) {
-				mFillup.setEconomy(0D);
-			} else {
-				double economy = Calculator.averageEconomy(v, new FillupSeries(previous, mFillup));
-				mFillup.setEconomy(economy);
+			Vehicle v = null;
+			Cursor vehicleCursor = managedQuery(vehicleUri, VehiclesTable.PROJECTION, null, null, null);
+			if (vehicleCursor.getCount() == 1) {
+				vehicleCursor.moveToFirst();
+				v = new Vehicle(vehicleCursor);
+				Fillup previous = null;
+				if (mFillup.isExistingObject()) {
+					previous = mFillup.loadPrevious(this);
+				} else {
+					previous = v.loadLatestFillup(this);
+				}
+				if (previous == null) {
+					mFillup.setEconomy(0D);
+				} else {
+					double economy = Calculator.averageEconomy(v, new FillupSeries(previous, mFillup));
+					mFillup.setEconomy(economy);
+				}
 			}
 		}
 
