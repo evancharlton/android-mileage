@@ -66,7 +66,7 @@ public class ServiceIntervalsListActivity extends BaseListActivity implements Di
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.add(Menu.NONE, MENU_CREATE, Menu.NONE, R.string.add_service_interval);
+		menu.add(Menu.NONE, MENU_CREATE, Menu.NONE, R.string.add_service_interval).setIcon(R.drawable.ic_menu_add);
 		menu.add(Menu.NONE, MENU_TEMPLATES, Menu.NONE, R.string.service_interval_templates);
 		return super.onCreateOptionsMenu(menu);
 	}

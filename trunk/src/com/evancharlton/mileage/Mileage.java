@@ -8,6 +8,7 @@ import android.database.ContentObserver;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
@@ -85,13 +86,13 @@ public class Mileage extends TabActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		add(menu, R.string.service_intervals, ServiceIntervalsListActivity.class);
-		add(menu, R.string.import_export, ImportExportActivity.class);
-		add(menu, R.string.settings, SettingsActivity.class);
+		add(menu, R.string.service_intervals, ServiceIntervalsListActivity.class).setIcon(R.drawable.wrench);
+		add(menu, R.string.import_export, ImportExportActivity.class).setIcon(R.drawable.importexport_i);
+		add(menu, R.string.settings, SettingsActivity.class).setIcon(R.drawable.ic_menu_preferences);
 		return super.onCreateOptionsMenu(menu);
 	}
 
-	private final void add(final Menu menu, final int string, final Class<? extends Activity> cls) {
-		menu.add(Menu.NONE, string, Menu.NONE, string).setIntent(new Intent(this, cls));
+	private final MenuItem add(final Menu menu, final int string, final Class<? extends Activity> cls) {
+		return menu.add(Menu.NONE, string, Menu.NONE, string).setIntent(new Intent(this, cls));
 	}
 }

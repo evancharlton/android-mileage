@@ -122,7 +122,8 @@ public class FillupActivity extends BaseFormActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.add(Menu.NONE, R.string.edit_fields, Menu.NONE, R.string.edit_fields).setIntent(new Intent(this, FieldListActivity.class));
+		menu.add(Menu.NONE, R.string.edit_fields, Menu.NONE, R.string.edit_fields).setIntent(new Intent(this, FieldListActivity.class)).setIcon(
+				R.drawable.ic_menu_edit);
 		return super.onCreateOptionsMenu(menu);
 	}
 

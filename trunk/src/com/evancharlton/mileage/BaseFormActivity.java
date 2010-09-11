@@ -76,7 +76,7 @@ public abstract class BaseFormActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		if (getDao().isExistingObject() && canDelete()) {
-			menu.add(Menu.NONE, R.string.delete, Menu.NONE, R.string.delete);
+			menu.add(Menu.NONE, R.string.delete, Menu.NONE, R.string.delete).setIcon(R.drawable.ic_menu_delete);
 		}
 		return super.onCreateOptionsMenu(menu);
 	}

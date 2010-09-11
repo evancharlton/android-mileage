@@ -16,7 +16,7 @@ public class FieldListActivity extends BaseListActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.add(Menu.NONE, MENU_ADD_FIELD, Menu.FIRST, R.string.add_field);
+		menu.add(Menu.NONE, MENU_ADD_FIELD, Menu.FIRST, R.string.add_field).setIcon(R.drawable.ic_menu_add);
 		return super.onCreateOptionsMenu(menu);
 	}
 

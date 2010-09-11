@@ -14,7 +14,7 @@ public class VehicleTypeListActivity extends BaseListActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.add(Menu.NONE, MENU_CREATE, Menu.NONE, R.string.add_vehicle_type);
+		menu.add(Menu.NONE, MENU_CREATE, Menu.NONE, R.string.add_vehicle_type).setIcon(R.drawable.ic_menu_add);
 		return super.onCreateOptionsMenu(menu);
 	}
 
