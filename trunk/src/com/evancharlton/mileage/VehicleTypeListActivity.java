@@ -47,7 +47,7 @@ public class VehicleTypeListActivity extends BaseListActivity {
 	}
 
 	@Override
-	public boolean canDelete(int position) {
+	protected boolean canDelete(int position) {
 		return getAdapter().getCount() > 1;
 	}
 }

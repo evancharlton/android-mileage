@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.SimpleCursorAdapter.ViewBinder;
 
@@ -48,7 +49,7 @@ public class FillupListActivity extends BaseListActivity implements AverageEcono
 				mAverageTask.attach(FillupListActivity.this);
 				mAverageTask.execute(id);
 
-				getAdapter().changeCursor(getCursor());
+				((SimpleCursorAdapter) getAdapter()).changeCursor(getCursor());
 				getAdapter().notifyDataSetChanged();
 			}
 
@@ -95,7 +96,7 @@ public class FillupListActivity extends BaseListActivity implements AverageEcono
 
 	@Override
 	protected void postUI() {
-		getAdapter().setViewBinder(mViewBinder);
+		((SimpleCursorAdapter) getAdapter()).setViewBinder(mViewBinder);
 	}
 
 	@Override

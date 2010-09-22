@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.BaseAdapter;
 import android.widget.Toast;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
@@ -16,6 +17,14 @@ import com.evancharlton.mileage.provider.tables.VehiclesTable;
 public class VehicleListActivity extends BaseListActivity {
 	private static final int MENU_TYPES = 1;
 	private static final int MENU_CREATE = 2;
+
+	public VehicleListActivity() {
+		super();
+	}
+
+	protected VehicleListActivity(BaseAdapter adapter) {
+		super(adapter);
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
