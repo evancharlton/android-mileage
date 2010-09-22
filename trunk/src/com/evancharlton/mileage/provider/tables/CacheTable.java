@@ -1,7 +1,6 @@
 package com.evancharlton.mileage.provider.tables;
 
 import android.content.ContentValues;
-import android.content.UriMatcher;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
@@ -80,9 +79,9 @@ public class CacheTable extends ContentTable {
 	}
 
 	@Override
-	public void registerUris(UriMatcher uriMatcher) {
-		uriMatcher.addURI(FillUpsProvider.AUTHORITY, URI, CACHES);
-		uriMatcher.addURI(FillUpsProvider.AUTHORITY, URI + "/*", CACHE_ID);
+	public void registerUris() {
+		FillUpsProvider.registerUri(this, URI, CACHES);
+		FillUpsProvider.registerUri(this, URI + "/*", CACHE_ID);
 	}
 
 	@Override

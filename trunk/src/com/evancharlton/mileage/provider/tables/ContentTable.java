@@ -7,7 +7,6 @@ import java.util.Set;
 
 import android.content.ContentUris;
 import android.content.ContentValues;
-import android.content.UriMatcher;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
@@ -35,7 +34,7 @@ public abstract class ContentTable {
 		return BaseColumns._ID + " desc";
 	}
 
-	abstract public void registerUris(UriMatcher uriMatcher);
+	abstract public void registerUris();
 
 	public int delete(SQLiteDatabase db, Uri uri, String selection, String[] selectionArgs) {
 		try {

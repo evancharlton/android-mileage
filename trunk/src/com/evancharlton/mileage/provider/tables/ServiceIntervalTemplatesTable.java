@@ -1,7 +1,6 @@
 package com.evancharlton.mileage.provider.tables;
 
 import android.content.ContentValues;
-import android.content.UriMatcher;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
@@ -109,9 +108,9 @@ public class ServiceIntervalTemplatesTable extends ContentTable {
 	}
 
 	@Override
-	public void registerUris(UriMatcher uriMatcher) {
-		uriMatcher.addURI(FillUpsProvider.AUTHORITY, URI, SERVICE_TEMPLATES);
-		uriMatcher.addURI(FillUpsProvider.AUTHORITY, URI + "/#", SERVICE_TEMPLATE_ID);
+	public void registerUris() {
+		FillUpsProvider.registerUri(this, URI, SERVICE_TEMPLATES);
+		FillUpsProvider.registerUri(this, URI + "/#", SERVICE_TEMPLATE_ID);
 	}
 
 	@Override

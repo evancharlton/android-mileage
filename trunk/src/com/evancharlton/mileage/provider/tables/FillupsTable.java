@@ -1,7 +1,6 @@
 package com.evancharlton.mileage.provider.tables;
 
 import android.content.ContentValues;
-import android.content.UriMatcher;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
@@ -65,9 +64,9 @@ public class FillupsTable extends ContentTable {
 	}
 
 	@Override
-	public void registerUris(UriMatcher uriMatcher) {
-		uriMatcher.addURI(FillUpsProvider.AUTHORITY, URI, FILLUPS);
-		uriMatcher.addURI(FillUpsProvider.AUTHORITY, URI + "#", FILLUP_ID);
+	public void registerUris() {
+		FillUpsProvider.registerUri(this, URI, FILLUPS);
+		FillUpsProvider.registerUri(this, URI + "#", FILLUP_ID);
 	}
 
 	@Override

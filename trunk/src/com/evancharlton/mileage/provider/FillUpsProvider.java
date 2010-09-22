@@ -17,6 +17,7 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.SparseIntArray;
 
 import com.evancharlton.mileage.SettingsActivity;
 import com.evancharlton.mileage.provider.backup.BackupTransport;
@@ -38,6 +39,7 @@ public class FillUpsProvider extends ContentProvider {
 	public static final Uri BASE_URI = Uri.parse("content://" + AUTHORITY);
 	public static final int DATABASE_VERSION = 6;
 	public static final ArrayList<ContentTable> TABLES = new ArrayList<ContentTable>();
+	private static final SparseIntArray LOOKUP = new SparseIntArray();
 
 	private static final String DATABASE_NAME = "mileage.db";
 	private static final HashMap<String, BackupTransport> BACKUPS = new HashMap<String, BackupTransport>();
@@ -57,10 +59,21 @@ public class FillUpsProvider extends ContentProvider {
 		TABLES.add(new CacheTable());
 
 		for (ContentTable table : TABLES) {
-			table.registerUris(URI_MATCHER);
+			table.registerUris();
 		}
 
 		putBackup(new FileBackupTransport());
+	}
+
+	public static void registerUri(ContentTable table, String path, int code) {
+		// TODO(3.1) - Could this code be auto-generated?
+		URI_MATCHER.addURI(AUTHORITY, path, code);
+		int position = TABLES.indexOf(table);
+		if (position < 0) {
+			TABLES.add(table);
+			position = TABLES.size() - 1;
+		}
+		LOOKUP.put(code, position);
 	}
 
 	private static void putBackup(BackupTransport transport) {
@@ -129,13 +142,9 @@ public class FillUpsProvider extends ContentProvider {
 
 		int count = -1;
 		final int type = URI_MATCHER.match(uri);
-		for (ContentTable table : TABLES) {
-			if (table.isValidType(type)) {
-				count = table.delete(db, uri, selection, selectionArgs);
-				if (count > 0) {
-					break;
-				}
-			}
+		int position = LOOKUP.get(type, -1);
+		if (position >= 0) {
+			count = TABLES.get(position).delete(db, uri, selection, selectionArgs);
 		}
 
 		if (count < 0) {
@@ -165,13 +174,14 @@ public class FillUpsProvider extends ContentProvider {
 		final int match = URI_MATCHER.match(uri);
 		long newId = -1L;
 		SQLiteDatabase db = mDatabaseHelper.getWritableDatabase();
-		for (ContentTable table : TABLES) {
-			newId = table.insert(match, db, initialValues);
+		int position = LOOKUP.get(match, -1);
+		if (position >= 0) {
+			newId = TABLES.get(position).insert(match, db, initialValues);
 			if (newId >= 0) {
 				uri = ContentUris.withAppendedId(uri, newId);
 				notifyListeners(uri);
-				return uri;
 			}
+			return uri;
 		}
 		throw new IllegalArgumentException("Unknown URI: " + uri);
 	}
@@ -183,13 +193,16 @@ public class FillUpsProvider extends ContentProvider {
 		final int match = URI_MATCHER.match(uri);
 		boolean changed = false;
 		ContentTable queryTable = null;
-		for (ContentTable table : TABLES) {
+		int position = LOOKUP.get(match, -1);
+		if (position >= 0) {
+			ContentTable table = TABLES.get(position);
 			changed = table.query(match, uri, qb);
 			if (changed) {
 				queryTable = table;
-				break;
 			}
 		}
+
+		// TODO(3.1) - Clean this up
 		if (!changed) {
 			throw new IllegalArgumentException("Unknown URI: " + uri);
 		}
@@ -212,15 +225,13 @@ public class FillUpsProvider extends ContentProvider {
 	public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
 		Debugger.checkQueryOnUiThread(getContext());
 		final int match = URI_MATCHER.match(uri);
-		if (match >= 0) {
+		int position = LOOKUP.get(match, -1);
+		if (position >= 0) {
 			SQLiteDatabase db = mDatabaseHelper.getWritableDatabase();
-			int count = -1;
-			for (ContentTable table : TABLES) {
-				count = table.update(match, db, uri, values, selection, selectionArgs);
-				if (count >= 0) {
-					notifyListeners(uri);
-					return count;
-				}
+			int count = TABLES.get(position).update(match, db, uri, values, selection, selectionArgs);
+			if (count >= 0) {
+				notifyListeners(uri);
+				return count;
 			}
 		}
 		throw new IllegalArgumentException("Unknown URI: " + uri);
