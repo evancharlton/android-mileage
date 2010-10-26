@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+>
+	<ScrollView
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+	>
+		<LinearLayout
+			android:id="@+id/help_container"
+			android:layout_width="fill_parent"
+			android:layout_height="fill_parent"
+			android:paddingLeft="5dip"
+			android:paddingRight="5dip"
+			android:orientation="vertical"
+		>
+			<TextView
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:text="@string/author"
+			/>
+			<TextView
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:autoLink="all"
+				android:text="@string/contact"
+			/>
+			<TextView
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:autoLink="all"
+				android:text="@string/website"
+			/>
+		</LinearLayout>
+	</ScrollView>
+	<Button
+		android:id="@+id/close_about_btn"
+		android:text="@string/close"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+	/>
+</LinearLayout>

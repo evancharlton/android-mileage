@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string-array name="units_volume">
+		<item>Gallons</item>
+		<item>Liters</item>
+		<item>Imperial Gallons</item>
+	</string-array>
+	<string-array name="values_volume">
+		<item>0</item>
+		<item>1</item>
+		<item>2</item>
+	</string-array>
+	<string-array name="units_distance">
+		<item>Mijlen</item>
+		<item>Kilometers</item>
+	</string-array>
+	<string-array name="values_distance">
+		<item>0</item>
+		<item>1</item>
+	</string-array>
+	<string-array name="units_distance_abbr">
+		<item>Mi</item>
+		<item>Km</item>
+	</string-array>
+	<string-array name="units_economy">
+		<item>Mi per Gallon</item>
+		<item>Km per Gallon</item>
+		<item>Mi per Imp. Gallon</item>
+		<item>Km per Imp. Gallon</item>
+		<item>Mi per Liter</item>
+		<item>Km per Liter</item>
+		<item>Gallons per 100 km</item>
+		<item>Litres per 100 km</item>
+		<item>Imp. Gal. per 100 km</item>
+	</string-array>
+	<string-array name="values_economy">
+		<item>0</item>
+		<item>1</item>
+		<item>2</item>
+		<item>3</item>
+		<item>4</item>
+		<item>5</item>
+		<item>6</item>
+		<item>7</item>
+		<item>8</item>
+	</string-array>
+    <string-array name="unit_price_hints">
+    	<item>Prijs per gallon</item>
+    	<item>Prijs per liter</item>
+    	<item>Prijs per gallon</item>
+    </string-array>
+    <string-array name="unit_amount_hints">
+    	<item>Gallons brandstof</item>
+    	<item>Litres brandstof</item>
+    	<item>Gallons brandstof</item>
+    </string-array>
+    <string-array name="date_formats">
+    	<item>MM/DD/JJ</item>
+    	<item>MM/DD/JJJJ</item>
+    	<item>DD/MM/JJ</item>
+    	<item>DD/MM/JJJJ</item>
+    	<item>DD.MM.JJ</item>
+    	<item>DD.MM.JJJJ</item>
+    	<item>Januari 1, 1970</item>
+    	<item>JJJJ-MM-DD UU:MM:SS</item>
+    </string-array>
+    <string-array name="date_patterns">
+    	<item>MM/dd/jj</item>
+    	<item>MM/dd/jjjj</item>
+    	<item>dd/MM/jj</item>
+    	<item>dd/MM/jjjj</item>
+    	<item>dd.MM.jj</item>
+    	<item>dd.MM.jjjj</item>
+    	<item>MMMM d, jjjj</item>
+    	<item>jjjj-MM-dd UU:mm:ss</item>
+    </string-array>
+    <string-array name="number_formats">
+    	<item>1234.00</item>
+    	<item>1,234.00</item>
+    	<item>1234,00</item>
+    	<item>1.234,00</item>
+    </string-array>
+    <string-array name="number_patterns">
+    	<item>###0.00</item>
+    	<item>#,##0.00</item>
+    	<item>###0,00</item>
+    	<item>#.##0,00</item>
+    </string-array>
+    
+    <string-array name="duration_units">
+    	<item>Dagen</item>
+    	<item>Weken</item>
+    	<item>Maanden</item>
+    	<item>Jaren</item>
+    </string-array>
+</resources>
