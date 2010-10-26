@@ -92,14 +92,16 @@ public abstract class ImportView extends Activity {
 	protected void populateFileSelector() {
 		File directory = Environment.getExternalStorageDirectory();
 		String[] files = directory.list(m_filter);
-		Arrays.sort(files);
+		if (files != null) {
+			Arrays.sort(files);
 
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
-		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		for (String file : files) {
-			adapter.add(file);
+			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
+			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			for (String file : files) {
+				adapter.add(file);
+			}
+			m_fileSelector.setAdapter(adapter);
 		}
-		m_fileSelector.setAdapter(adapter);
 	}
 
 	public String getInput() {
@@ -119,14 +121,15 @@ public abstract class ImportView extends Activity {
 	protected Dialog onCreateDialog(int which) {
 		switch (which) {
 			case DIALOG_FINISHED:
-				return new AlertDialog.Builder(ImportView.this).setTitle(s_title).setMessage(s_message).setPositiveButton(getString(android.R.string.ok), new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						dismissDialog(DIALOG_FINISHED);
-						if (s_success) {
-							postProcessing();
-						}
-					}
-				}).create();
+				return new AlertDialog.Builder(ImportView.this).setTitle(s_title).setMessage(s_message).setPositiveButton(
+						getString(android.R.string.ok), new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int which) {
+								dismissDialog(DIALOG_FINISHED);
+								if (s_success) {
+									postProcessing();
+								}
+							}
+						}).create();
 			case DIALOG_IMPORTING:
 				ProgressDialog dlg = new ProgressDialog(this);
 				dlg.setTitle(R.string.importing_title);
