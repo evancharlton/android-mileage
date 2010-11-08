@@ -45,9 +45,10 @@ public class FillupListActivity extends BaseListActivity implements AverageEcono
 				if (mAverageTask.getStatus() == AsyncTask.Status.RUNNING) {
 					mAverageTask.cancel(true);
 				}
+				mVehicle = getVehicle();
 				mAverageTask = new AverageEconomyTask();
 				mAverageTask.attach(FillupListActivity.this);
-				mAverageTask.execute(id);
+				mAverageTask.execute(mVehicle);
 
 				((SimpleCursorAdapter) getAdapter()).changeCursor(getCursor());
 				getAdapter().notifyDataSetChanged();
@@ -58,6 +59,8 @@ public class FillupListActivity extends BaseListActivity implements AverageEcono
 			}
 		});
 
+		mVehicle = getVehicle();
+
 		Object saved = getLastNonConfigurationInstance();
 		if (saved != null) {
 			mAverageTask = (AverageEconomyTask) saved;
@@ -66,10 +69,8 @@ public class FillupListActivity extends BaseListActivity implements AverageEcono
 		}
 		mAverageTask.attach(this);
 		if (mAverageTask.getStatus() != AsyncTask.Status.RUNNING) {
-			mAverageTask.execute(mVehicles.getSelectedItemId());
+			mAverageTask.execute(mVehicle);
 		}
-
-		mVehicle = getVehicle();
 	}
 
 	private void calculate() {
@@ -78,7 +79,7 @@ public class FillupListActivity extends BaseListActivity implements AverageEcono
 		}
 		mAverageTask = new AverageEconomyTask();
 		mAverageTask.attach(this);
-		mAverageTask.execute(mVehicles.getSelectedItemId());
+		mAverageTask.execute(mVehicle);
 	}
 
 	protected final Vehicle getVehicle() {

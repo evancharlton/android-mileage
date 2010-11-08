@@ -1,29 +1,28 @@
 package com.evancharlton.mileage.tasks;
 
 import android.app.Activity;
-import android.content.ContentValues;
+import android.content.ContentResolver;
 import android.database.Cursor;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.evancharlton.mileage.R;
-import com.evancharlton.mileage.dao.CachedValue;
 import com.evancharlton.mileage.dao.Fillup;
 import com.evancharlton.mileage.dao.FillupSeries;
 import com.evancharlton.mileage.dao.Vehicle;
 import com.evancharlton.mileage.exceptions.InvalidFieldException;
 import com.evancharlton.mileage.math.Calculator;
-import com.evancharlton.mileage.provider.Statistics;
-import com.evancharlton.mileage.provider.tables.CacheTable;
 import com.evancharlton.mileage.provider.tables.FillupsTable;
 
-public class AverageEconomyTask extends AttachableAsyncTask<Activity, Long, Integer, Double> {
+public class AverageEconomyTask extends AttachableAsyncTask<Activity, Vehicle, Integer, Double> {
 	private static final String TAG = "AverageEconomyTask";
+	private ContentResolver mContentResolver;
 
 	@Override
 	public void attach(Activity parent) {
 		if (parent instanceof AsyncCallback) {
 			super.attach(parent);
+			mContentResolver = parent.getContentResolver();
 		} else {
 			throw new IllegalArgumentException("parent must implement AsyncCallback");
 		}
@@ -35,87 +34,50 @@ public class AverageEconomyTask extends AttachableAsyncTask<Activity, Long, Inte
 	}
 
 	@Override
-	public Double doInBackground(Long... vehicleIds) {
-		Long vehicleId = vehicleIds[0];
-		Log.d(TAG, "Getting average fuel economy for vehicle #" + vehicleId);
-		String selection = CachedValue.KEY + " = ? AND " + CachedValue.ITEM + " = ? AND " + CachedValue.VALID + " = 1";
-		String[] selectionArgs = new String[] {
-				Statistics.AVG_ECONOMY.getKey(),
-				String.valueOf(vehicleId)
+	public Double doInBackground(Vehicle... vehicles) {
+		Vehicle vehicle = vehicles[0];
+		String[] args = new String[] {
+			String.valueOf(vehicle.getId())
 		};
 
-		final Vehicle vehicle;
-		try {
-			vehicle = Vehicle.loadById(getParent(), vehicleId.longValue());
-		} catch (IllegalArgumentException e) {
-			Log.e(TAG, "Couldn't load vehicle!", e);
+		String selection = Fillup.VEHICLE_ID + " = ?";
+
+		Cursor cursor = mContentResolver.query(FillupsTable.BASE_URI, FillupsTable.PROJECTION, selection, args, Fillup.ODOMETER + " asc");
+		int mTotal = cursor.getCount();
+
+		if (mTotal <= 1) {
+			Log.d(TAG, "Not enough fillups to calculate statistics");
 			return 0D;
 		}
 
-		Cursor cacheCursor = getParent().getContentResolver().query(CacheTable.BASE_URI, new String[] {
-			CachedValue.VALUE
-		}, selection, selectionArgs, null);
+		Log.d("CalculateTask", "Recalculating...");
+		// recalculate a whole bunch of shit
+		FillupSeries series = new FillupSeries();
+		while (cursor.moveToNext()) {
+			Fillup fillup = new Fillup(cursor);
+			series.add(fillup);
 
-		double avgEconomy = 0D;
-		if (cacheCursor.getCount() > 0) {
-			cacheCursor.moveToFirst();
-			avgEconomy = cacheCursor.getDouble(0);
-			Log.d(TAG, "Returning cached value of " + avgEconomy);
-		} else {
-			Log.d(TAG, "Calculating average economy...");
-			String[] projection = FillupsTable.PROJECTION;
-			Cursor fillupsCursor = getParent().getContentResolver().query(FillupsTable.BASE_URI, projection, Fillup.VEHICLE_ID + " = ?",
-					new String[] {
-						String.valueOf(vehicleId)
-					}, null);
-			if (fillupsCursor.getCount() > 1) {
-				publishProgress();
-				double totalEconomy = 0D;
-				Fillup previous = null;
-				while (fillupsCursor.isLast() == false) {
-					fillupsCursor.moveToNext();
-					Fillup f = new Fillup(fillupsCursor);
-					double economy = f.getEconomy();
-					if (previous != null && economy == 0D) {
-						Log.d(TAG, "Uncalculated economy, fixing...");
-						// Update the economy
-						FillupSeries series = new FillupSeries(previous, f);
-						economy = Calculator.averageEconomy(vehicle, series);
-						f.setEconomy(economy);
-						try {
-							f.save(getParent());
-						} catch (InvalidFieldException e) {
-							Log.e(TAG, "Couldn't save fillup!", e);
-						}
-						Log.d(TAG, "Updated economy: " + economy);
-					}
-					totalEconomy += economy;
-
-					previous = f;
+			if (fillup.hasPrevious()) {
+				double economy = Calculator.averageEconomy(vehicle, fillup);
+				if (economy != fillup.getEconomy()) {
+					fillup.setEconomy(economy);
+					Log.d("CalculateTask", "Had to update the economy on " + fillup.getId());
 				}
-				// subtract 1 to account for the invalid first fillup.
-				// TODO(3.1) -- add support for restarting calculations
-				avgEconomy = totalEconomy / (fillupsCursor.getCount() - 1);
-				Log.d(TAG, "Done! Result is " + avgEconomy);
+			} else {
+				fillup.setEconomy(0D);
 			}
-			fillupsCursor.close();
 
-			// cache the new value
-			ContentValues values = new ContentValues();
-			values.put(CachedValue.ITEM, vehicleId);
-			values.put(CachedValue.VALID, true);
-			values.put(CachedValue.KEY, Statistics.AVG_ECONOMY.getKey());
-			values.put(CachedValue.VALUE, avgEconomy);
-			values.put(CachedValue.GROUP, Statistics.AVG_ECONOMY.getGroup());
-			values.put(CachedValue.ORDER, Statistics.AVG_ECONOMY.getOrder());
-			getParent().getContentResolver().insert(CacheTable.BASE_URI, values);
+			try {
+				fillup.saveIfChanged(getParent());
+			} catch (InvalidFieldException e) {
+				return 0D;
+			}
 		}
-		cacheCursor.close();
 
-		// have to round the average economy
-		avgEconomy *= 100;
-		avgEconomy = Math.floor(avgEconomy);
-		avgEconomy /= 100;
+		double avgEconomy = Calculator.averageEconomy(vehicle, series);
+
+		cursor.close();
+
 		return avgEconomy;
 	}
 

@@ -232,6 +232,7 @@ public class Fillup extends Dao {
 
 	public void setEconomy(double economy) {
 		mEconomy = economy;
+		setInMemoryDataChanged();
 	}
 
 	public void setFields(ArrayList<FillupField> fields) {

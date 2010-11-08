@@ -23,7 +23,7 @@ import com.evancharlton.mileage.provider.FillUpsProvider;
  * A base data access object (DAO). Exposes/provides the common functionality
  * such as persisting objects.
  */
-public abstract class Dao {
+public abstract class Dao implements Cloneable {
 	private static final String TAG = "Dao";
 
 	public static final String _ID = BaseColumns._ID;
@@ -41,6 +41,15 @@ public abstract class Dao {
 
 	public Dao(final Cursor cursor) {
 		load(cursor);
+	}
+
+	public Object clone() {
+		try {
+			return super.clone();
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	public void load(Cursor cursor) {

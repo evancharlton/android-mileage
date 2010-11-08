@@ -103,7 +103,9 @@ public class Calculator {
 		if (fillup.isPartial()) {
 			return 0D;
 		}
-		return averageEconomy(vehicle, new FillupSeries(fillup.getPrevious(), fillup));
+		Fillup clone = (Fillup) fillup.getPrevious().clone();
+		clone.setPrevious(null);
+		return averageEconomy(vehicle, new FillupSeries(clone, fillup));
 	}
 
 	/**
