@@ -50,7 +50,7 @@ public class AverageEconomyTask extends AttachableAsyncTask<Activity, Vehicle, I
 			return 0D;
 		}
 
-		Log.d("CalculateTask", "Recalculating...");
+		Log.d(TAG, "Recalculating...");
 		// recalculate a whole bunch of shit
 		FillupSeries series = new FillupSeries();
 		while (cursor.moveToNext()) {
@@ -61,7 +61,6 @@ public class AverageEconomyTask extends AttachableAsyncTask<Activity, Vehicle, I
 				double economy = Calculator.averageEconomy(vehicle, fillup);
 				if (economy != fillup.getEconomy()) {
 					fillup.setEconomy(economy);
-					Log.d("CalculateTask", "Had to update the economy on " + fillup.getId());
 				}
 			} else {
 				fillup.setEconomy(0D);

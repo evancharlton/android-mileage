@@ -311,7 +311,6 @@ public abstract class Dao implements Cloneable {
 
 	public boolean saveIfChanged(Context context) throws InvalidFieldException {
 		if (mInMemoryDataChanged) {
-			Log.d(TAG, "Saving due to in-memory data changes");
 			return save(context);
 		}
 		return false;
