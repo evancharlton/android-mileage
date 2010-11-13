@@ -5,15 +5,14 @@ import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
-@SuppressWarnings("unused")
 public final class Debugger {
-	public static final boolean DEBUG = true;
+	public static final boolean DEBUG = false;
 
 	private static final int DEBUG_NONE = 0;
 	private static final int DEBUG_QUIET = 1;
 	private static final int DEBUG_WARN = 2;
 	private static final int DEBUG_YELL = 3;
-	private static final int DEBUG_LEVEL = DEBUG_QUIET;
+	private static final int DEBUG_LEVEL = DEBUG_NONE;
 
 	private static final String TAG = "Debugger";
 
