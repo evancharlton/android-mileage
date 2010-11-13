@@ -139,12 +139,7 @@ public class DatabaseUpgrader {
 		try {
 			for (ContentTable table : tables) {
 				exec(table.create());
-				String[] init = table.init();
-				if (init != null) {
-					for (String sql : init) {
-						exec(sql);
-					}
-				}
+				// tables are explicitly NOT initialized since it's an *upgrade*
 			}
 			return true;
 		} catch (IllegalArgumentException e) {
