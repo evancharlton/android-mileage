@@ -126,7 +126,7 @@ public class ServiceInterval extends Dao {
 			Vehicle v = Vehicle.loadById(context, getVehicleId());
 			String description = context.getString(R.string.service_interval_due, v.getTitle());
 
-			Notification notification = new Notification(R.drawable.gasbuttonx, getDescription(), System.currentTimeMillis());
+			Notification notification = new Notification(R.drawable.icon, getDescription(), System.currentTimeMillis());
 			i.putExtra(ServiceInterval._ID, getId());
 			PendingIntent contentIntent = PendingIntent.getActivity(context, 0, i, 0);
 
