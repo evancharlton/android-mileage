@@ -6,4 +6,6 @@ bin/*
 *.class
 *.dex
 *.jar
+*.apk
+*.lic
 gen/*
