@@ -1,15 +1,18 @@
 package com.evancharlton.mileage;
 
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.evancharlton.mileage.dao.ServiceIntervalTemplate;
 import com.evancharlton.mileage.provider.FillUpsProvider;
 import com.evancharlton.mileage.provider.tables.ServiceIntervalTemplatesTable;
 
-public class ServiceIntervalTemplateListActivity extends BaseListActivity {
+public class ServiceIntervalTemplateListActivity extends BaseListActivity implements View.OnClickListener {
 	private static final int MENU_CREATE = 1;
 
 	@Override
@@ -49,5 +52,31 @@ public class ServiceIntervalTemplateListActivity extends BaseListActivity {
 	@Override
 	protected boolean canDelete(int position) {
 		return getAdapter().getCount() > 1;
+	}
+
+	@Override
+	protected void setupEmptyView() {
+		mEmptyView.removeAllViews();
+		View emptyView = LayoutInflater.from(this).inflate(R.layout.empty_service_interval_templates, mEmptyView);
+		emptyView.findViewById(R.id.empty_add_default_templates).setOnClickListener(this);
+		emptyView.findViewById(R.id.empty_add_interval_template).setOnClickListener(this);
+	}
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+			case R.id.empty_add_interval_template:
+				startActivity(new Intent(ServiceIntervalTemplateListActivity.this, ServiceIntervalTemplateActivity.class));
+				break;
+			case R.id.empty_add_default_templates:
+				final ContentResolver resolver = getContentResolver();
+				new Thread() {
+					@Override
+					public void run() {
+						resolver.bulkInsert(ServiceIntervalTemplatesTable.BASE_URI, ServiceIntervalTemplatesTable.TEMPLATES);
+					}
+				}.start();
+				break;
+		}
 	}
 }

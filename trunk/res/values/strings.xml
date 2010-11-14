@@ -18,6 +18,7 @@
 	<string name="edit_service_interval_templates">Edit templates</string>
 	
 	<string name="empty_service_intervals">You haven\'t set any service intervals!\nPress menu or use the buttons below to add some!</string>
+	<string name="empty_service_interval_templates">There are no defined templates.\nPress menu or use the buttons below to add some!</string>
 	<string name="empty_fillups">No saved fillups for this vehicle!\nGo fill up your tank and try again.</string>
 	<string name="empty_fields">No additional fields have been created!\nPress menu or use the button below to add as many as you want!</string>
 	
@@ -42,6 +43,7 @@
 	<string name="add_vehicle">Add new vehicle</string>
 	<string name="edit_vehicle_types">Edit vehicle types</string>
 	<string name="add_service_interval_template">Add service interval template</string>
+	<string name="add_default_templates">Add default templates</string>
 	<string name="service_interval_templates">Templates</string>
 	<string name="set_vehicle_as_default">This is the default vehicle</string>
 	<string name="set_vehicle_as_default_menu">Set vehicle as default</string>
