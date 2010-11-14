@@ -110,6 +110,8 @@
 	<string name="import_data">Import data</string>
 	<string name="export_data">Export data</string>
 	
+	<string name="divider_fillup_info">Fillup information</string>
+	<string name="divider_fillup_fields">Extra data</string>
 	<string name="divider_vehicle_units">Measurement units</string>
 	<string name="divider_vehicle_type">Vehicle type</string>
 	<string name="divider_vehicle_information">Vehicle information</string>

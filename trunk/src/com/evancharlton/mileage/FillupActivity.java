@@ -39,6 +39,7 @@ import com.evancharlton.mileage.provider.tables.FillupsTable;
 import com.evancharlton.mileage.provider.tables.VehiclesTable;
 import com.evancharlton.mileage.views.CursorSpinner;
 import com.evancharlton.mileage.views.DateButton;
+import com.evancharlton.mileage.views.DividerView;
 import com.evancharlton.mileage.views.FieldView;
 
 public class FillupActivity extends BaseFormActivity {
@@ -86,6 +87,12 @@ public class FillupActivity extends BaseFormActivity {
 			for (FillupField field : objectFields) {
 				fieldMap.put(field.getTemplateId(), field);
 			}
+		}
+
+		if (fields.getCount() > 0) {
+			DividerView divider = (DividerView) inflater.inflate(R.layout.divider, mFieldsContainer, false);
+			divider.setText(R.string.divider_fillup_fields);
+			mFieldsContainer.addView(divider);
 		}
 
 		while (fields.moveToNext()) {
