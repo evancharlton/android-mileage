@@ -29,7 +29,10 @@ public class Mileage extends TabActivity {
 
 	private final ContentObserver mFillupsObserver = new ContentObserver(mHandler) {
 		public void onChange(boolean selfChange) {
-			mTabHost.setCurrentTabByTag(TAG_HISTORY);
+			// TODO(3.1) - Fix this so it doesn't spontaneously change tabs
+			if (TAG_FILLUP.equals(mTabHost.getCurrentTabTag())) {
+				mTabHost.setCurrentTabByTag(TAG_HISTORY);
+			}
 		}
 	};
 
