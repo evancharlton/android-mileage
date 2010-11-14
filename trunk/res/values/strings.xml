@@ -109,6 +109,10 @@
 	<string name="import_export">Import / Export</string>
 	<string name="import_data">Import data</string>
 	<string name="export_data">Export data</string>
+	
+	<string name="divider_vehicle_units">Measurement units</string>
+	<string name="divider_vehicle_type">Vehicle type</string>
+	<string name="divider_vehicle_information">Vehicle information</string>
 
 	<string name="transport_enable">Enable</string>
 	<string name="transport_enabled">Data will be backed up</string>

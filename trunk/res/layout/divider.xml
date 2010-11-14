@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView
+<com.evancharlton.mileage.views.DividerView
 	xmlns:android="http://schemas.android.com/apk/res/android"
-    style="?android:attr/listSeparatorTextViewStyle"
-    android:textColor="@*android:color/dim_foreground_dark"
-    android:gravity="center_horizontal"
-    android:id="@android:id/text1"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
 />

@@ -3,6 +3,11 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:mileage="http://schemas.android.com/apk/res/com.evancharlton.mileage"
 >
+	<com.evancharlton.mileage.views.DividerView
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/divider_vehicle_information"
+	/>
 	<TableLayout
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
@@ -52,18 +57,29 @@
 		android:hint="@string/description"
 		android:inputType="textCapSentences|textShortMessage|textAutoCorrect"
 	/>
+	<com.evancharlton.mileage.views.DividerView
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/divider_vehicle_type"
+	/>
 	<com.evancharlton.mileage.views.CursorSpinner
 		android:id="@+id/type"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		mileage:uri="vehicles/types"
 		mileage:display_field="title"
+		mileage:auto_hide="false"
 	/>
 	<CheckBox
 		android:id="@+id/make_default"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:text="@string/set_vehicle_as_default"
+	/>
+	<com.evancharlton.mileage.views.DividerView
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/divider_vehicle_units"
 	/>
 	<Spinner
 		android:id="@+id/distance"
