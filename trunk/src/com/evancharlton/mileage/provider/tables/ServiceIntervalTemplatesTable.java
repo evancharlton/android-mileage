@@ -68,7 +68,7 @@ public class ServiceIntervalTemplatesTable extends ContentTable {
 	}
 
 	@Override
-	public String[] init() {
+	public String[] init(boolean isUpgrade) {
 		String[] sql = new String[TEMPLATES.length];
 
 		for (int i = 0; i < TEMPLATES.length; i++) {

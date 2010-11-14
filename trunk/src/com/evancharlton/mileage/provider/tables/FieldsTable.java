@@ -61,7 +61,7 @@ public class FieldsTable extends ContentTable {
 	}
 
 	@Override
-	public String[] init() {
+	public String[] init(boolean isUpgrade) {
 		// FIXME - Hardcoded strings = bad!
 		return new String[] {
 			new InsertBuilder().add(Field.TITLE, "Comment").add(Field.DESCRIPTION, "Comment about your fillup.").build()

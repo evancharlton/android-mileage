@@ -74,7 +74,7 @@ public abstract class ContentTable {
 
 	abstract public int update(int match, SQLiteDatabase db, Uri uri, ContentValues values, String selection, String[] selectionArgs);
 
-	abstract public String[] init();
+	abstract public String[] init(boolean isUpgrade);
 
 	abstract protected Class<? extends Dao> getDaoType();
 

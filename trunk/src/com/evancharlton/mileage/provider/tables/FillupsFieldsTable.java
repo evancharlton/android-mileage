@@ -73,7 +73,7 @@ public class FillupsFieldsTable extends ContentTable {
 	}
 
 	@Override
-	public String[] init() {
+	public String[] init(boolean isUpgrade) {
 		return null;
 	}
 

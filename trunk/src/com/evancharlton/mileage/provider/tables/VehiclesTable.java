@@ -59,7 +59,10 @@ public class VehiclesTable extends ContentTable {
 	}
 
 	@Override
-	public String[] init() {
+	public String[] init(boolean isUpgrade) {
+		if (isUpgrade) {
+			return null;
+		}
 		// FIXME: hardcoded strings = bad!
 		return new String[] {
 			new InsertBuilder().add(Vehicle.TITLE, "Default vehicle").add(Vehicle.DESCRIPTION, "Auto-generated vehicle").add(Vehicle.DEFAULT_TIME,
