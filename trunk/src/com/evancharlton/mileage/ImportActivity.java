@@ -4,7 +4,10 @@ import java.io.File;
 import java.io.FilenameFilter;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -30,6 +33,8 @@ public class ImportActivity extends Activity {
 	private static final String TAG = "ImportActivity";
 	public static final String FILENAME = "filename";
 	public static final String WIPE_DATA = "wipe data";
+
+	private static final int DIALOG_NO_FILES = 1;
 
 	private static final String[] FILE_TYPES = new String[] {
 			".db",
@@ -97,6 +102,22 @@ public class ImportActivity extends Activity {
 		});
 	}
 
+	@Override
+	protected Dialog onCreateDialog(final int id) {
+		switch (id) {
+			case DIALOG_NO_FILES:
+				return new AlertDialog.Builder(this).setTitle(R.string.dialog_title_missing_files).setMessage(R.string.dialog_message_missing_files)
+						.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								removeDialog(id);
+							}
+						}).create();
+			default:
+				return super.onCreateDialog(id);
+		}
+	}
+
 	private FilenameFilter getFilter() {
 		return new FilenameFilter() {
 			@Override
@@ -111,6 +132,10 @@ public class ImportActivity extends Activity {
 		mFileAdapter.setData(filenames);
 		mFileLoader = null;
 		mSubmitButton.setEnabled(!mFileAdapter.isEmpty());
+
+		if (filenames.length == 0) {
+			showDialog(DIALOG_NO_FILES);
+		}
 	}
 
 	private String getFilename() {

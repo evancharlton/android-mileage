@@ -59,6 +59,8 @@
 	
 	<string name="dialog_title_delete">Really delete?</string>
 	<string name="dialog_message_delete">Are you sure you want to delete this? This cannot be undone!</string>
+	<string name="dialog_title_missing_files">Missing files?</string>
+	<string name="dialog_message_missing_files">To import files, place them in the \"mileage/\" folder in the root of your SD card.</string>
 	
 	<string name="delta_days">Days</string>
 	<string name="delta_weeks">Weeks</string>
