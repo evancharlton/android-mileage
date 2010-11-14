@@ -3,6 +3,11 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:mileage="http://schemas.android.com/apk/res/com.evancharlton.mileage"
 >
+	<com.evancharlton.mileage.views.DividerView
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/divider_interval_info"
+	/>
 	<EditText
 		android:id="@+id/title"
 		android:layout_width="fill_parent"
@@ -16,6 +21,11 @@
 		android:layout_height="wrap_content"
 		android:inputType="textCapSentences|textAutoCorrect|textAutoComplete"
 		android:hint="@string/description"
+	/>
+	<com.evancharlton.mileage.views.DividerView
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/divider_interval_trigger"
 	/>
 	<com.evancharlton.mileage.views.DistanceDelta
 		android:id="@+id/distance"

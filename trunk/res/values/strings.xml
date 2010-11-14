@@ -117,6 +117,11 @@
 	<string name="divider_vehicle_units">Measurement units</string>
 	<string name="divider_vehicle_type">Vehicle type</string>
 	<string name="divider_vehicle_information">Vehicle information</string>
+	<string name="divider_interval_info">Service interval information</string>
+	<string name="divider_interval_trigger">When to remind</string>
+	<string name="divider_interval_start">When to start</string>
+	<string name="divider_interval_vehicle">Vehicle</string>
+	<string name="divider_interval_template">Template to use (optional)</string>
 
 	<string name="transport_enable">Enable</string>
 	<string name="transport_enabled">Data will be backed up</string>
