@@ -19,6 +19,7 @@ public class Field extends Dao {
 
 	@Validate(R.string.error_invalid_field_description)
 	@Column(type = Column.STRING, name = DESCRIPTION)
+	@CanBeEmpty
 	protected String mDescription;
 
 	@Validate
