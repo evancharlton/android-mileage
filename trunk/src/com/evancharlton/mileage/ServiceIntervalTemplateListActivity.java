@@ -50,11 +50,6 @@ public class ServiceIntervalTemplateListActivity extends BaseListActivity implem
 	}
 
 	@Override
-	protected boolean canDelete(int position) {
-		return getAdapter().getCount() > 1;
-	}
-
-	@Override
 	protected void setupEmptyView() {
 		mEmptyView.removeAllViews();
 		View emptyView = LayoutInflater.from(this).inflate(R.layout.empty_service_interval_templates, mEmptyView);
