@@ -234,7 +234,7 @@ public abstract class Dao implements Cloneable {
 						}
 
 						// check strings
-						if (value instanceof String && field.getAnnotation(Empty.class) != null) {
+						if (value instanceof String && field.getAnnotation(CanBeEmpty.class) == null) {
 							if (((String) value).length() == 0) {
 								throw new InvalidFieldException(errorMessage);
 							}
@@ -433,7 +433,7 @@ public abstract class Dao implements Cloneable {
 
 	@Retention(RetentionPolicy.RUNTIME)
 	@Target(ElementType.FIELD)
-	public @interface Empty {
+	public @interface CanBeEmpty {
 	}
 
 	@Retention(RetentionPolicy.RUNTIME)

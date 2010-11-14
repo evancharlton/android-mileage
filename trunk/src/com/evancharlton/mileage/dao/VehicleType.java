@@ -17,7 +17,7 @@ public class VehicleType extends Dao {
 	protected String mTitle;
 
 	@Validate(R.string.error_invalid_vehicle_type_description)
-	@Empty
+	@CanBeEmpty
 	@Column(type = Column.STRING, name = DESCRIPTION)
 	protected String mDescription;
 
