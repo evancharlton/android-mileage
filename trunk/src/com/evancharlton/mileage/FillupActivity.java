@@ -211,7 +211,9 @@ public class FillupActivity extends BaseFormActivity {
 
 	@Override
 	protected void populateUI() {
-		mOdometer.setText(String.valueOf(mFillup.getOdometer()));
+		double odometer = mFillup.getOdometer();
+		odometer = Math.round(odometer * 100D) / 100D;
+		mOdometer.setText(String.valueOf(odometer));
 		mDate.setDate(mFillup.getTimestamp());
 		mPartial.setChecked(mFillup.isPartial());
 
