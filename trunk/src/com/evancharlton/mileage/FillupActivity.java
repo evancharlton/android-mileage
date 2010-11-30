@@ -178,6 +178,8 @@ public class FillupActivity extends BaseFormActivity {
 		Activity parent = getParent();
 		if (parent == null) {
 			finish();
+		} else if (parent instanceof Mileage) {
+			((Mileage) parent).switchToHistoryTab();
 		}
 
 		mFillup = new Fillup(new ContentValues());

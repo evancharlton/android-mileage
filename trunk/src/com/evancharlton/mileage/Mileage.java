@@ -4,16 +4,12 @@ import android.app.Activity;
 import android.app.TabActivity;
 import android.content.Context;
 import android.content.Intent;
-import android.database.ContentObserver;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
-
-import com.evancharlton.mileage.provider.tables.FillupsTable;
 
 public class Mileage extends TabActivity {
 	public static final String VISIBLE_TAB = "visible_tab";
@@ -24,17 +20,6 @@ public class Mileage extends TabActivity {
 	public static final String TAG_VEHICLES = "vehicles";
 
 	private TabHost mTabHost;
-
-	private final Handler mHandler = new Handler();
-
-	private final ContentObserver mFillupsObserver = new ContentObserver(mHandler) {
-		public void onChange(boolean selfChange) {
-			// TODO(3.1) - Fix this so it doesn't spontaneously change tabs
-			if (TAG_FILLUP.equals(mTabHost.getCurrentTabTag())) {
-				mTabHost.setCurrentTabByTag(TAG_HISTORY);
-			}
-		}
-	};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -62,18 +47,8 @@ public class Mileage extends TabActivity {
 		}
 	}
 
-	@Override
-	protected void onResume() {
-		super.onResume();
-
-		getContentResolver().registerContentObserver(FillupsTable.BASE_URI, true, mFillupsObserver);
-	}
-
-	@Override
-	protected void onPause() {
-		super.onPause();
-
-		getContentResolver().unregisterContentObserver(mFillupsObserver);
+	public void switchToHistoryTab() {
+		switchTo(TAG_HISTORY);
 	}
 
 	public void switchTo(String tag) {
