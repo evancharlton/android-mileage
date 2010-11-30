@@ -68,6 +68,9 @@ public class FillupActivity extends BaseFormActivity {
 		if (mVehicle == null) {
 			mVehicle = Vehicle.loadById(this, mVehicles.getSelectedItemId());
 		}
+		if (mVehicle == null) {
+			throw new IllegalStateException("Unable to load vehicle #" + mVehicles.getSelectedItemId());
+		}
 		return mVehicle;
 	}
 
@@ -230,7 +233,7 @@ public class FillupActivity extends BaseFormActivity {
 		switch (dataFormat) {
 			case DataFormats.UNIT_PRICE_VOLUME:
 				mVolume.setHint(Calculator.getVolumeUnits(this, getVehicle()));
-				mPrice.setHint(getString(R.string.price_per_unit, Calculator.getVolumeUnits(this, mVehicle)));
+				mPrice.setHint(getString(R.string.price_per_unit, Calculator.getVolumeUnits(this, getVehicle())));
 				if (existing) {
 					mVolume.setText(String.valueOf(mFillup.getVolume()));
 					mPrice.setText(String.valueOf(mFillup.getUnitPrice()));
@@ -246,7 +249,7 @@ public class FillupActivity extends BaseFormActivity {
 				break;
 			case DataFormats.TOTAL_COST_UNIT_PRICE:
 				mVolume.setHint(R.string.total_cost);
-				mPrice.setHint(getString(R.string.price_per_unit, Calculator.getVolumeUnits(this, mVehicle)));
+				mPrice.setHint(getString(R.string.price_per_unit, Calculator.getVolumeUnits(this, getVehicle())));
 				if (existing) {
 					mVolume.setText(String.valueOf(mFillup.getTotalCost()));
 					mPrice.setText(String.valueOf(mFillup.getUnitPrice()));
