@@ -20,10 +20,12 @@ public class NorthChart extends LatitudeChart {
 				break;
 			}
 			double north = cursor.getDouble(1);
-			if (north > maximum_north) {
-				maximum_north = north;
+			if (north != 0) {
+				if (north > maximum_north) {
+					maximum_north = north;
+				}
+				addPoint(cursor.getLong(0), maximum_north);
 			}
-			addPoint(cursor.getLong(0), maximum_north);
 			generator.update(num++);
 			cursor.moveToNext();
 		}

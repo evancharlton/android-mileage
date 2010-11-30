@@ -20,10 +20,12 @@ public class WestChart extends LongitudeChart {
 				break;
 			}
 			double west = cursor.getDouble(1);
-			if (west < maximum_west) {
-				maximum_west = west;
+			if (west != 0) {
+				if (west < maximum_west) {
+					maximum_west = west;
+				}
+				addPoint(cursor.getLong(0), maximum_west);
 			}
-			addPoint(cursor.getLong(0), maximum_west);
 			generator.update(num++);
 			cursor.moveToNext();
 		}
