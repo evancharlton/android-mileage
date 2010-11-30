@@ -230,14 +230,14 @@ public class VehicleStatisticsTask extends AttachableAsyncTask<VehicleStatistics
 			}
 
 			double latitude = fillup.getLatitude();
-			if (latitude > maxLatitude) {
+			if (latitude > maxLatitude && latitude != 0) {
 				maxLatitude = latitude;
 				update(Statistics.NORTH, maxLatitude);
 			} else {
 				publishProgress();
 			}
 
-			if (latitude < minLatitude) {
+			if (latitude < minLatitude && latitude != 0) {
 				minLatitude = latitude;
 				update(Statistics.SOUTH, minLatitude);
 			} else {
@@ -245,14 +245,14 @@ public class VehicleStatisticsTask extends AttachableAsyncTask<VehicleStatistics
 			}
 
 			double longitude = fillup.getLongitude();
-			if (longitude > maxLongitude) {
+			if (longitude > maxLongitude && longitude != 0) {
 				maxLongitude = longitude;
 				update(Statistics.EAST, maxLongitude);
 			} else {
 				publishProgress();
 			}
 
-			if (longitude < minLongitude) {
+			if (longitude < minLongitude && longitude != 0) {
 				minLongitude = longitude;
 				update(Statistics.WEST, minLongitude);
 			} else {
@@ -290,6 +290,20 @@ public class VehicleStatisticsTask extends AttachableAsyncTask<VehicleStatistics
 				Log.e(TAG, "Couldn't save in-memory changes.", e);
 			}
 		}
+
+		// Force an update for conditional statistics to ensure they happen
+		update(Statistics.MAX_DISTANCE, maxDistance);
+		update(Statistics.MIN_DISTANCE, minDistance);
+		update(Statistics.MAX_ECONOMY, maxEconomy);
+		update(Statistics.MIN_ECONOMY, minEconomy);
+		update(Statistics.MAX_COST_PER_DISTANCE, maxCostPerDistance);
+		update(Statistics.MIN_COST_PER_DISTANCE, minCostPerDistance);
+		update(Statistics.LAST_MONTH_COST, lastMonthCost);
+		update(Statistics.LAST_YEAR_COST, lastYearCost);
+		update(Statistics.NORTH, maxLatitude);
+		update(Statistics.SOUTH, minLatitude);
+		update(Statistics.EAST, maxLongitude);
+		update(Statistics.WEST, minLongitude);
 
 		cursor.close();
 
