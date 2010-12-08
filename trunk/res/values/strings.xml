@@ -106,7 +106,7 @@
 	<string name="settings_interval_vibrate_on">Phone will vibrate for reminders</string>
 	<string name="settings_interval_vibrate_off">Phone will not vibrate</string>
 	<string name="delete_service_interval">Delete service interval?</string>
-	<string name="service_interval_reminder_message">There is a scheduled %s (%s) for %s due. Would you like to delete this service interval?</string>
+	<string name="service_interval_reminder_message">There is a scheduled %1$s (%2$s) for %3$s due. Would you like to delete this service interval?</string>
 	<string name="remind_later">Ask tomorrow</string>
 	<string name="import_export">Import / Export</string>
 	<string name="import_data">Import data</string>
@@ -215,7 +215,7 @@
 	<string name="units_miles_abbr">mi</string>
 	<string name="units_kilometers">Kilometers</string>
 	<string name="units_kilometers_abbr">km</string>
-	<string name="units_per">%s / %s</string>
+	<string name="units_per">%1$s / %2$s</string>
 	<string name="units_miles_per_gallon">Miles / Gallon</string>
 	<string name="units_miles_per_imperial_gallon">Miles / Imp. Gal.</string>
 	<string name="units_mpg">mpg</string>
