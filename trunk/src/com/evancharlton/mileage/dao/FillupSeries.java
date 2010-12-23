@@ -45,7 +45,9 @@ public class FillupSeries extends ArrayList<Fillup> {
 	public double getTotalDistance() {
 		if (size() >= 2) {
 			Fillup last = last();
-			while (last.isPartial()) {
+			
+			// find the newest non-partial fillup
+			while (last.hasPrevious() && last.isPartial()) {
 				last = last.getPrevious();
 			}
 			Fillup first = first();
