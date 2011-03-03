@@ -20,6 +20,7 @@
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
+		<activity android:name=".AboutActivity" android:label="@string/title_about" android:theme="@android:style/Theme.Dialog" />
 		<activity android:name=".FillupActivity" android:label="@string/title_fillup" />
 		<activity android:name=".FillupListActivity" android:label="@string/title_fillup_list" />
 		<activity android:name=".FieldActivity" android:label="@string/title_field" />

@@ -71,4 +71,9 @@
 			android:summaryOff="@string/settings_interval_vibrate_off"
 		/>
 	</PreferenceCategory>
+	<Preference
+		android:key="about"
+		android:title="@string/settings_about"
+		android:summary="@string/settings_about_summary"
+	/>
 </PreferenceScreen>

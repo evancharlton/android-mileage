@@ -3,7 +3,10 @@ package com.evancharlton.mileage;
 import java.util.ArrayList;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
+import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceScreen;
@@ -33,5 +36,21 @@ public class SettingsActivity extends PreferenceActivity {
 			screen.setIntent(intent);
 			screen.setTitle(transport.getName());
 		}
+
+		Preference about = findPreference("about");
+		String version;
+		try {
+			version = getPackageManager().getPackageInfo(getPackageName(), PackageManager.GET_ACTIVITIES).versionName;
+		} catch (NameNotFoundException e) {
+			version = "<unknown version>";
+		}
+		about.setSummary(getString(R.string.settings_about_summary, version));
+		about.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				startActivity(new Intent(SettingsActivity.this, AboutActivity.class));
+				return true;
+			}
+		});
 	}
 }

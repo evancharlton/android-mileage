@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="app_name" translatable="false">Mileage</string>
-	<string name="author" translatable="false">Evan Charlton</string>
-	<string name="contact" translatable="false">mileage@evancharlton.com</string>
-	<string name="website" translatable="false">http://evancharlton.com/</string>
-	
+
 	<string name="creating_chart">Creating chart...</string>
 	
 	<string name="unit_price_volume">Unit price, volume</string>
@@ -105,6 +102,8 @@
 	<string name="settings_interval_vibrate">Vibrate</string>
 	<string name="settings_interval_vibrate_on">Phone will vibrate for reminders</string>
 	<string name="settings_interval_vibrate_off">Phone will not vibrate</string>
+	<string name="settings_about">About</string>
+	<string name="settings_about_summary">About Mileage %1$s</string>
 	<string name="delete_service_interval">Delete service interval?</string>
 	<string name="service_interval_reminder_message">There is a scheduled %1$s (%2$s) for %3$s due. Would you like to delete this service interval?</string>
 	<string name="remind_later">Ask tomorrow</string>
@@ -125,6 +124,10 @@
 	<string name="divider_loaded_date">Saved date</string>
 	<string name="divider_date_format">Date format</string>
 	<string name="divider_parsed_date">Parsed date</string>
+	<string name="divider_about_app">About Mileage</string>
+	<string name="divider_about_graphics">Graphics donated by Steve Albright</string>
+	<string name="divider_about_charts">Charts donated by aiCharts</string>
+	<string name="divider_about_translators">Translated by</string>
 
 	<string name="transport_enable">Enable</string>
 	<string name="transport_enabled">Data will be backed up</string>
@@ -287,6 +290,7 @@
 	<string name="title_csv_date_format">Set date format</string>
 	<string name="title_import_csv">Importing CSV</string>
 	<string name="title_import_db">Importing DB</string>
+	<string name="title_about">About Mileage</string>
 	
 	<string name="importer_csv">Spreadsheet (*.csv)</string>
 	<string name="importer_sqlite">Database (*.db)</string>
@@ -323,4 +327,20 @@
 	<string name="update_upgrading_database">Upgrading database...</string>
 	<string name="update_upgraded_database">Database upgraded...</string>
 	<string name="update_cleaning_up">Cleaning up...</string>
+	
+	<!-- development -->
+	<string name="about_app">Mileage is provided for free; if you paid for this, I suggest you get a refund. Mileage is open-source under the Apache 2.0 license. Patches are very much welcome!</string>
+	<string name="about_author" translatable="false">Evan Charlton</string>
+	<string name="about_contact" translatable="false">mileage@evancharlton.com</string>
+	<string name="about_website" translatable="false">http://android-mileage.googlecode.com/</string>
+	<!-- graphics -->
+	<string name="about_clutchpad">ClutchPad is Steve\'s awesome application for navigating the Android activity stack. I highly recommend checking it out!</string>
+	<string name="about_clutchpad_btn">ClutchPad on Market</string>
+	<string name="about_clutchpad_website" translatable="false">http://stevealbright.com/</string>
+	<!-- charts -->
+	<string name="about_charts">ArtfulBits graciously donated their charting library. I cannot recommend this enough; easily the best charting solution on Android!</string>
+	<string name="about_charts_btn">Check out aiCharts!</string>
+	<string name="about_charts_website" translatable="false">http://www.artfulbits.com/products/android/aicharts.aspx</string>
+	<!-- translations -->
+	<string name="about_translators" translatable="false"></string>
 </resources>
