@@ -100,7 +100,7 @@ public class ServiceIntervalActivity extends BaseFormActivity {
 			public void onItemSelected(AdapterView<?> list, View row, int position, long id) {
 				Uri uri = Uri.withAppendedPath(FillUpsProvider.BASE_URI, ServiceIntervalTemplatesTable.URI);
 				uri = ContentUris.withAppendedId(uri, id);
-				Cursor intervalCursor = getContentResolver().query(uri, ServiceIntervalTemplatesTable.getFullProjectionArray(), null, null, null);
+				Cursor intervalCursor = getContentResolver().query(uri, ServiceIntervalTemplatesTable.PROJECTION, null, null, null);
 				ServiceIntervalTemplate template = new ServiceIntervalTemplate(intervalCursor);
 				intervalCursor.close();
 

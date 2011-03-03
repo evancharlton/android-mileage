@@ -30,7 +30,7 @@ public class FieldActivity extends BaseFormActivity {
 
 	@Override
 	protected String[] getProjectionArray() {
-		return FieldsTable.getFullProjectionArray();
+		return FieldsTable.PROJECTION;
 	}
 
 	@Override

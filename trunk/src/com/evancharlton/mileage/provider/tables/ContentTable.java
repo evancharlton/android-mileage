@@ -109,6 +109,8 @@ public abstract class ContentTable {
 		return builder.build();
 	}
 
+	abstract public String[] getProjection();
+
 	protected final class TableBuilder {
 		private StringBuilder mBuilder = new StringBuilder();
 

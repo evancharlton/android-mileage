@@ -78,8 +78,7 @@ public class FillupActivity extends BaseFormActivity {
 	protected void onResume() {
 		super.onResume();
 
-		Cursor fields = managedQuery(Uri.withAppendedPath(FillUpsProvider.BASE_URI, FieldsTable.URI_PATH), FieldsTable.getFullProjectionArray(),
-				null, null, null);
+		Cursor fields = managedQuery(Uri.withAppendedPath(FillUpsProvider.BASE_URI, FieldsTable.URI_PATH), FieldsTable.PROJECTION, null, null, null);
 		LayoutInflater inflater = LayoutInflater.from(this);
 		mFieldsContainer.removeAllViews();
 

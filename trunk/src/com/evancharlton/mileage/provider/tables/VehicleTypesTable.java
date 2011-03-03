@@ -22,6 +22,12 @@ public class VehicleTypesTable extends ContentTable {
 	private static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.evancharlton.vehicle_types";
 	private static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.evancharlton.vehicle_type";
 
+	public static final String[] PROJECTION = new String[] {
+			BaseColumns._ID,
+			VehicleType.TITLE,
+			VehicleType.DESCRIPTION
+	};
+
 	@Override
 	protected Class<? extends Dao> getDaoType() {
 		return VehicleType.class;
@@ -65,11 +71,11 @@ public class VehicleTypesTable extends ContentTable {
 		switch (type) {
 			case TYPES:
 				queryBuilder.setTables(getTableName());
-				queryBuilder.setProjectionMap(buildProjectionMap(getFullProjectionArray()));
+				queryBuilder.setProjectionMap(buildProjectionMap(PROJECTION));
 				return true;
 			case TYPE_ID:
 				queryBuilder.setTables(getTableName());
-				queryBuilder.setProjectionMap(buildProjectionMap(getFullProjectionArray()));
+				queryBuilder.setProjectionMap(buildProjectionMap(PROJECTION));
 				queryBuilder.appendWhere(VehicleType._ID + " = " + uri.getPathSegments().get(2));
 				return true;
 		}
@@ -93,11 +99,8 @@ public class VehicleTypesTable extends ContentTable {
 		return -1;
 	}
 
-	public static String[] getFullProjectionArray() {
-		return new String[] {
-				BaseColumns._ID,
-				VehicleType.TITLE,
-				VehicleType.DESCRIPTION
-		};
+	@Override
+	public String[] getProjection() {
+		return PROJECTION;
 	}
 }

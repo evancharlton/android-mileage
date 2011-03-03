@@ -24,16 +24,14 @@ public class ServiceIntervalTemplatesTable extends ContentTable {
 	private static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.evancharlton.interval_template";
 	private static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.evancharlton.interval_template";
 
-	public static final String[] getFullProjectionArray() {
-		return new String[] {
-				ServiceIntervalTemplate._ID,
-				ServiceIntervalTemplate.TITLE,
-				ServiceIntervalTemplate.DESCRIPTION,
-				ServiceIntervalTemplate.DISTANCE,
-				ServiceIntervalTemplate.DURATION,
-				ServiceIntervalTemplate.VEHICLE_TYPE
-		};
-	}
+	public static final String[] PROJECTION = new String[] {
+			ServiceIntervalTemplate._ID,
+			ServiceIntervalTemplate.TITLE,
+			ServiceIntervalTemplate.DESCRIPTION,
+			ServiceIntervalTemplate.DISTANCE,
+			ServiceIntervalTemplate.DURATION,
+			ServiceIntervalTemplate.VEHICLE_TYPE
+	};
 
 	// FIXME - Hard-coded strings.
 	public static final ContentValues[] TEMPLATES = new ContentValues[] {
@@ -118,11 +116,11 @@ public class ServiceIntervalTemplatesTable extends ContentTable {
 		switch (type) {
 			case SERVICE_TEMPLATES:
 				queryBuilder.setTables(getTableName());
-				queryBuilder.setProjectionMap(buildProjectionMap(getFullProjectionArray()));
+				queryBuilder.setProjectionMap(buildProjectionMap(PROJECTION));
 				return true;
 			case SERVICE_TEMPLATE_ID:
 				queryBuilder.setTables(getTableName());
-				queryBuilder.setProjectionMap(buildProjectionMap(getFullProjectionArray()));
+				queryBuilder.setProjectionMap(buildProjectionMap(PROJECTION));
 				queryBuilder.appendWhere(BaseColumns._ID + " = " + uri.getPathSegments().get(2));
 				return true;
 		}
@@ -144,5 +142,10 @@ public class ServiceIntervalTemplatesTable extends ContentTable {
 				});
 		}
 		return -1;
+	}
+
+	@Override
+	public String[] getProjection() {
+		return PROJECTION;
 	}
 }

@@ -47,7 +47,7 @@ public class VehicleTypeActivity extends BaseFormActivity {
 
 	@Override
 	protected String[] getProjectionArray() {
-		return VehicleTypesTable.getFullProjectionArray();
+		return VehicleTypesTable.PROJECTION;
 	}
 
 	@Override

@@ -37,7 +37,7 @@ public class ServiceIntervalTemplateActivity extends BaseFormActivity {
 
 	@Override
 	protected String[] getProjectionArray() {
-		return ServiceIntervalTemplatesTable.getFullProjectionArray();
+		return ServiceIntervalTemplatesTable.PROJECTION;
 	}
 
 	@Override

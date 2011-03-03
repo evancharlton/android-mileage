@@ -27,10 +27,10 @@ public class Mileage extends TabActivity {
 		setContentView(R.layout.tabs);
 
 		mTabHost = getTabHost();
-		mTabHost.addTab(createTabSpec(TAG_FILLUP, FillupActivity.class, R.string.fillup));
-		mTabHost.addTab(createTabSpec(TAG_HISTORY, FillupListActivity.class, R.string.history));
-		mTabHost.addTab(createTabSpec(TAG_STATISTICS, VehicleStatisticsActivity.class, R.string.statistics));
-		mTabHost.addTab(createTabSpec(TAG_VEHICLES, VehicleListActivity.class, R.string.vehicles));
+		mTabHost.addTab(createTabSpec(TAG_FILLUP, FillupActivity.class, R.string.fillup, R.drawable.ic_tab_fillup));
+		mTabHost.addTab(createTabSpec(TAG_HISTORY, FillupListActivity.class, R.string.history, R.drawable.ic_tab_history));
+		mTabHost.addTab(createTabSpec(TAG_STATISTICS, VehicleStatisticsActivity.class, R.string.statistics, R.drawable.ic_tab_statistics));
+		mTabHost.addTab(createTabSpec(TAG_VEHICLES, VehicleListActivity.class, R.string.vehicles, R.drawable.ic_tab_vehicles));
 
 		mTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
 			@Override
@@ -55,16 +55,16 @@ public class Mileage extends TabActivity {
 		mTabHost.setCurrentTabByTag(tag);
 	}
 
-	private TabSpec createTabSpec(String tag, Class<? extends Activity> cls, int string) {
+	private TabSpec createTabSpec(String tag, Class<? extends Activity> cls, int string, int icon) {
 		TabSpec spec = mTabHost.newTabSpec(tag);
 		spec.setContent(new Intent(this, cls));
-		spec.setIndicator(getString(string));
+		spec.setIndicator(getString(string), getResources().getDrawable(icon));
 		return spec;
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		add(menu, R.string.service_intervals, ServiceIntervalsListActivity.class).setIcon(R.drawable.wrench);
+		add(menu, R.string.service_intervals, ServiceIntervalsListActivity.class).setIcon(R.drawable.ic_menu_intervals);
 		add(menu, R.string.import_export, ImportExportActivity.class).setIcon(R.drawable.ic_menu_ie);
 		add(menu, R.string.settings, SettingsActivity.class).setIcon(R.drawable.ic_menu_preferences);
 		return super.onCreateOptionsMenu(menu);

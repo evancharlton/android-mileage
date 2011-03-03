@@ -147,7 +147,7 @@ public class VehicleStatisticsActivity extends Activity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.add(Menu.NONE, 1, Menu.NONE, "Recalculate");
+		menu.add(Menu.NONE, 1, Menu.NONE, "Recalculate").setIcon(R.drawable.ic_menu_recalculate);
 		return super.onCreateOptionsMenu(menu);
 	}
 

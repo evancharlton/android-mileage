@@ -117,4 +117,9 @@ public class VehiclesTable extends ContentTable {
 	public String getDefaultSortOrder() {
 		return Vehicle.DEFAULT_TIME + " desc";
 	}
+
+	@Override
+	public String[] getProjection() {
+		return PROJECTION;
+	}
 }
