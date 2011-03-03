@@ -112,6 +112,9 @@
 	<string name="import_data">Import data</string>
 	<string name="export_data">Export data</string>
 	<string name="import_export_text">If you need to get data off your device, or load data from an external source, this is where you want to be. In order to import or export data, use the \"mileage/\" folder on your device; you\'ll likely need to connect to your computer via USB for this.</string>
+	<string name="import_csv_mapping_text">Use this screen to set which fields in the CSV file map to database fields. The left-hand column represents data in the CSV file; the right-hand column options are fields in the database.</string>
+	<string name="import_csv_vehicle_text">Set which vehicles map to imported vehicles. The left-hand side is for vehicles Mileage already knows about; match them up with the appropriate values on the right.</string>
+	<string name="import_csv_date_format">Make sure that we know how to read your date strings! Use the selector in the middle to make the top and bottom dates be the same. The top is what we read from the file and the bottom is how we are parsing it.</string>
 	
 	<string name="divider_fillup_info">Fillup information</string>
 	<string name="divider_fillup_fields">Extra data</string>

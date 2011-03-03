@@ -59,6 +59,8 @@ public class CsvDateFormatActivity extends CsvWizardActivity {
 		});
 
 		restoreTask();
+
+		setHeaderText(R.string.import_csv_date_format);
 	}
 
 	@Override

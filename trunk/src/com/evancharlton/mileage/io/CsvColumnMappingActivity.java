@@ -26,6 +26,8 @@ public class CsvColumnMappingActivity extends CsvWizardActivity {
 		super.onCreate(savedInstanceState);
 
 		restoreTask();
+
+		setHeaderText(R.string.import_csv_mapping_text);
 	}
 
 	@Override

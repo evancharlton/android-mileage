@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.evancharlton.mileage.R;
 
@@ -17,6 +18,7 @@ public abstract class CsvWizardActivity extends Activity implements View.OnClick
 	private Button mNextButton;
 	private Button mPrevButton;
 	protected LinearLayout mContainer;
+	private TextView mHeaderText;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +40,13 @@ public abstract class CsvWizardActivity extends Activity implements View.OnClick
 
 	protected final Button getNextButton() {
 		return mNextButton;
+	}
+
+	protected final void setHeaderText(int resId) {
+		if (mHeaderText == null) {
+			mHeaderText = (TextView) findViewById(android.R.id.text1);
+		}
+		mHeaderText.setText(resId);
 	}
 
 	@Override

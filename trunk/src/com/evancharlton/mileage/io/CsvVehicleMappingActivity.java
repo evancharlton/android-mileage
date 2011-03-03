@@ -62,6 +62,8 @@ public class CsvVehicleMappingActivity extends CsvWizardActivity {
 		vehicleCursor.close();
 
 		restoreTask();
+
+		setHeaderText(R.string.import_csv_vehicle_text);
 	}
 
 	@Override
