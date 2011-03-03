@@ -197,6 +197,10 @@ public class DatabaseUpgrader {
 			BUILDER.append(") SELECT _id, '1', comment FROM OLD_fillups;");
 			flush();
 
+			// Update the vehicle IDs
+			BUILDER.append("UPDATE fillups SET vehicle_id = (SELECT vehicles._id FROM vehicles, OLD_vehicles WHERE vehicles.title = OLD_vehicles.title AND OLD_vehicles._id = vehicle_id)");
+			flush();
+
 			return true;
 		} catch (SQLiteException e) {
 			Log.e(TAG, "Unable to migrate data!", e);
