@@ -33,6 +33,30 @@ import com.evancharlton.mileage.provider.tables.VehicleTypesTable;
 import com.evancharlton.mileage.provider.tables.VehiclesTable;
 import com.evancharlton.mileage.util.Debugger;
 
+/**
+ * Exposed URIs:
+ * 
+ * <ul>
+ * <li>fillups/</li>
+ * <li>fillups/#</li>
+ * <li>fillups/fields</li>
+ * <li>fillups/fields/#</li>
+ * <li>fillups/field/#</li>
+ * <li>fields/</li>
+ * <li>fields/#</li>
+ * <li>vehicles/</li>
+ * <li>vehicles/#</li>
+ * <li>vehicles/types/</li>
+ * <li>vehicles/types/#</li>
+ * <li>intervals/</li>
+ * <li>intervals/#</li>
+ * <li>intervals/templates</li>
+ * <li>intervals/templates/#</li>
+ * <li>cache</li>
+ * <li>cache/*</li>
+ * </ul>
+ * 
+ */
 public class FillUpsProvider extends ContentProvider {
 
 	public static final String AUTHORITY = "com.evancharlton.mileage";
@@ -205,6 +229,10 @@ public class FillUpsProvider extends ContentProvider {
 		// TODO(3.1) - Clean this up
 		if (!changed) {
 			throw new IllegalArgumentException("Unknown URI: " + uri);
+		}
+
+		if (projection == null) {
+			projection = queryTable.getProjection();
 		}
 
 		String orderBy = TextUtils.isEmpty(sortOrder) ? queryTable.getDefaultSortOrder() : sortOrder;

@@ -60,8 +60,8 @@ public class FillupField extends Dao {
 				String.valueOf(mFillupId),
 				String.valueOf(mTemplateId)
 		};
-		Cursor c = context.getContentResolver().query(FillupsFieldsTable.FILLUPS_FIELDS_URI, FillupsFieldsTable.getFullProjectionArray(), selection,
-				selectionArgs, null);
+		Cursor c = context.getContentResolver().query(FillupsFieldsTable.FILLUPS_FIELDS_URI, FillupsFieldsTable.PROJECTION, selection, selectionArgs,
+				null);
 		long id = 0;
 		if (c.getCount() > 0) {
 			c.moveToFirst();
@@ -88,7 +88,7 @@ public class FillupField extends Dao {
 
 	public Field getFieldTemplate(Context context) {
 		Uri uri = ContentUris.withAppendedId(FieldsTable.URI, getTemplateId());
-		Cursor c = context.getContentResolver().query(uri, FieldsTable.getFullProjectionArray(), null, null, null);
+		Cursor c = context.getContentResolver().query(uri, FieldsTable.PROJECTION, null, null, null);
 		Field f = new Field(c);
 		c.close();
 		return f;

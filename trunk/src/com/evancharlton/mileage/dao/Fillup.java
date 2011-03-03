@@ -137,7 +137,7 @@ public class Fillup extends Dao {
 	public ArrayList<FillupField> getFields(Context context) {
 		if (mFields.size() == 0) {
 			Uri uri = ContentUris.withAppendedId(FillupsFieldsTable.FILLUPS_FIELDS_URI, getId());
-			Cursor c = context.getContentResolver().query(uri, FillupsFieldsTable.getFullProjectionArray(), null, null, null);
+			Cursor c = context.getContentResolver().query(uri, FillupsFieldsTable.PROJECTION, null, null, null);
 			if (c.getCount() > 0) {
 				c.moveToFirst();
 				FillupField field = new FillupField(c);

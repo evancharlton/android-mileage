@@ -124,4 +124,9 @@ public class FillupsTable extends ContentTable {
 	public String getDefaultSortOrder() {
 		return Fillup.ODOMETER + " desc";
 	}
+
+	@Override
+	public String[] getProjection() {
+		return PROJECTION;
+	}
 }

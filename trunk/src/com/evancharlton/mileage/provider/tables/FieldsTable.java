@@ -25,14 +25,12 @@ public class FieldsTable extends ContentTable {
 	public static final String URI_PATH = "fields/";
 	public static final Uri URI = Uri.withAppendedPath(FillUpsProvider.BASE_URI, URI_PATH);
 
-	public static String[] getFullProjectionArray() {
-		return new String[] {
-				BaseColumns._ID,
-				Field.TITLE,
-				Field.DESCRIPTION,
-				Field.TYPE
-		};
-	}
+	public static final String[] PROJECTION = new String[] {
+			BaseColumns._ID,
+			Field.TITLE,
+			Field.DESCRIPTION,
+			Field.TYPE
+	};
 
 	@Override
 	protected Class<? extends Dao> getDaoType() {
@@ -82,11 +80,11 @@ public class FieldsTable extends ContentTable {
 		switch (type) {
 			case FIELDS:
 				queryBuilder.setTables(getTableName());
-				queryBuilder.setProjectionMap(buildProjectionMap(getFullProjectionArray()));
+				queryBuilder.setProjectionMap(buildProjectionMap(PROJECTION));
 				return true;
 			case FIELD_ID:
 				queryBuilder.setTables(getTableName());
-				queryBuilder.setProjectionMap(buildProjectionMap(getFullProjectionArray()));
+				queryBuilder.setProjectionMap(buildProjectionMap(PROJECTION));
 				queryBuilder.appendWhere(BaseColumns._ID + " = " + uri.getPathSegments().get(1));
 				return true;
 		}
@@ -118,5 +116,10 @@ public class FieldsTable extends ContentTable {
 				return db.update(getTableName(), values, query, args);
 		}
 		return -1;
+	}
+
+	@Override
+	public String[] getProjection() {
+		return PROJECTION;
 	}
 }

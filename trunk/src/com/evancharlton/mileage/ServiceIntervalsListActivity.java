@@ -38,10 +38,14 @@ public class ServiceIntervalsListActivity extends BaseListActivity implements Di
 		Vehicle vehicle = Vehicle.loadById(this, interval.getVehicleId());
 		switch (id) {
 			case R.string.delete_service_interval:
-				return new AlertDialog.Builder(this).setPositiveButton(android.R.string.yes, this).setNegativeButton(android.R.string.no, this)
-						.setNeutralButton(R.string.remind_later, this).setTitle(R.string.delete_service_interval).setMessage(
-								getString(R.string.service_interval_reminder_message, interval.getTitle(), interval.getDescription(), vehicle
-										.getTitle())).create();
+				return new AlertDialog.Builder(this)
+						.setPositiveButton(android.R.string.yes, this)
+						.setNegativeButton(android.R.string.no, this)
+						.setNeutralButton(R.string.remind_later, this)
+						.setTitle(R.string.delete_service_interval)
+						.setMessage(
+								getString(R.string.service_interval_reminder_message, interval.getTitle(), interval.getDescription(),
+										vehicle.getTitle())).create();
 		}
 		return super.onCreateDialog(id);
 	}
@@ -67,7 +71,7 @@ public class ServiceIntervalsListActivity extends BaseListActivity implements Di
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(Menu.NONE, MENU_CREATE, Menu.NONE, R.string.add_service_interval).setIcon(R.drawable.ic_menu_add);
-		menu.add(Menu.NONE, MENU_TEMPLATES, Menu.NONE, R.string.service_interval_templates);
+		menu.add(Menu.NONE, MENU_TEMPLATES, Menu.NONE, R.string.service_interval_templates).setIcon(R.drawable.ic_menu_edit);
 		return super.onCreateOptionsMenu(menu);
 	}
 

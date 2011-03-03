@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.channels.FileChannel;
 
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.evancharlton.mileage.R;
 import com.evancharlton.mileage.io.DbImportActivity;
@@ -14,6 +15,8 @@ import com.evancharlton.mileage.provider.DatabaseUpgrader;
 import com.evancharlton.mileage.provider.Settings;
 
 public class DbImportTask extends AttachableAsyncTask<DbImportActivity, Void, String, Boolean> {
+	private static final String TAG = "DbImportTask";
+
 	private static final String TEMP_FILE = Settings.EXTERNAL_DIR + ".import.db";
 	private final String mInput;
 
@@ -64,6 +67,7 @@ public class DbImportTask extends AttachableAsyncTask<DbImportActivity, Void, St
 	}
 
 	private void upgradeDatabase() {
+		Log.d(TAG, "Upgrading " + TEMP_FILE);
 		SQLiteDatabase db = SQLiteDatabase.openDatabase(TEMP_FILE, null, SQLiteDatabase.OPEN_READWRITE);
 		DatabaseUpgrader.upgradeDatabase(db);
 		db.close();

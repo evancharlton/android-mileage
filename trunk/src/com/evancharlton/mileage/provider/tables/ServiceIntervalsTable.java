@@ -99,4 +99,9 @@ public class ServiceIntervalsTable extends ContentTable {
 		}
 		return -1;
 	}
+
+	@Override
+	public String[] getProjection() {
+		return PROJECTION;
+	}
 }

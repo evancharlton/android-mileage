@@ -35,14 +35,12 @@ public class FillupsFieldsTable extends ContentTable {
 	private static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.evancharlton.fillup_field_id";
 	private static final String CONTENT_ITEMS_TYPE = "vnd.android.cursor.dir/vnd.evancharlton.fillups_fields";
 
-	public static final String[] getFullProjectionArray() {
-		return new String[] {
-				BaseColumns._ID,
-				FillupField.FILLUP_ID,
-				FillupField.TEMPLATE_ID,
-				FillupField.VALUE
-		};
-	}
+	public static final String[] PROJECTION = new String[] {
+			BaseColumns._ID,
+			FillupField.FILLUP_ID,
+			FillupField.TEMPLATE_ID,
+			FillupField.VALUE
+	};
 
 	@Override
 	protected Class<? extends Dao> getDaoType() {
@@ -92,16 +90,16 @@ public class FillupsFieldsTable extends ContentTable {
 		switch (type) {
 			case FILLUPS_FIELDS:
 				queryBuilder.setTables(getTableName());
-				queryBuilder.setProjectionMap(buildProjectionMap(getFullProjectionArray()));
+				queryBuilder.setProjectionMap(buildProjectionMap(PROJECTION));
 				return true;
 			case FILLUP_FIELDS:
 				queryBuilder.setTables(getTableName());
-				queryBuilder.setProjectionMap(buildProjectionMap(getFullProjectionArray()));
+				queryBuilder.setProjectionMap(buildProjectionMap(PROJECTION));
 				queryBuilder.appendWhere(FillupField.FILLUP_ID + " = " + uri.getPathSegments().get(2));
 				return true;
 			case FILLUP_FIELD:
 				queryBuilder.setTables(getTableName());
-				queryBuilder.setProjectionMap(buildProjectionMap(getFullProjectionArray()));
+				queryBuilder.setProjectionMap(buildProjectionMap(PROJECTION));
 				queryBuilder.appendWhere(FillupField._ID + " = " + uri.getPathSegments().get(2));
 				return true;
 		}
@@ -129,5 +127,10 @@ public class FillupsFieldsTable extends ContentTable {
 				return db.update(getTableName(), values, null, null);
 		}
 		return -1;
+	}
+
+	@Override
+	public String[] getProjection() {
+		return PROJECTION;
 	}
 }
