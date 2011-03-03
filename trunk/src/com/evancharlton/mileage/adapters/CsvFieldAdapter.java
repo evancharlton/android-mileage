@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
+import com.evancharlton.mileage.R;
 import com.evancharlton.mileage.provider.tables.FillupsTable;
 
 public class CsvFieldAdapter implements SpinnerAdapter {
@@ -35,20 +36,26 @@ public class CsvFieldAdapter implements SpinnerAdapter {
 
 	@Override
 	public int getCount() {
-		return FillupsTable.PROJECTION.length;
+		return FillupsTable.PROJECTION.length + 1;
 	}
 
 	@Override
 	public Object getItem(int position) {
+		if (position == FillupsTable.PROJECTION.length) {
+			return "skip";
+		}
 		return FillupsTable.PROJECTION[position];
 	}
 
 	@Override
 	public long getItemId(int position) {
-		return FillupsTable.PROJECTION[position].hashCode();
+		return getItem(position).hashCode();
 	}
 
 	private int getText(int position) {
+		if (position == FillupsTable.PLAINTEXT.length) {
+			return R.string.column_none;
+		}
 		return FillupsTable.PLAINTEXT[position];
 	}
 

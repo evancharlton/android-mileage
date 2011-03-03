@@ -33,6 +33,7 @@ public class CsvImportActivity extends CsvWizardActivity {
 
 		getPreviousButton().setEnabled(false);
 		getNextButton().setText(R.string.done);
+		getNextButton().setEnabled(false);
 	}
 
 	@Override
@@ -59,14 +60,18 @@ public class CsvImportActivity extends CsvWizardActivity {
 		if (update % 10 == 0) {
 			mLog.append(getString(R.string.update_read_rows, update, mProgress.getMax()) + "\n");
 		}
+
+		mLog.scrollTo(0, mLog.getHeight());
 	}
 
 	public void error(int error) {
 		mLog.append(getString(error) + "\n");
+		getNextButton().setEnabled(true);
 	}
 
 	public void completed(int numRecords) {
 		mLog.append(getString(R.string.update_imported, numRecords) + "\n");
+		getNextButton().setEnabled(true);
 	}
 
 	@Override

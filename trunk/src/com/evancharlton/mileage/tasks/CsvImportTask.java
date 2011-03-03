@@ -3,6 +3,8 @@ package com.evancharlton.mileage.tasks;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import android.content.ContentValues;
@@ -14,6 +16,7 @@ import com.evancharlton.mileage.ImportActivity;
 import com.evancharlton.mileage.R;
 import com.evancharlton.mileage.dao.Fillup;
 import com.evancharlton.mileage.exceptions.InvalidFieldException;
+import com.evancharlton.mileage.io.CsvDateFormatActivity;
 import com.evancharlton.mileage.io.CsvImportActivity;
 import com.evancharlton.mileage.provider.Settings;
 import com.evancharlton.mileage.provider.tables.CacheTable;
@@ -31,6 +34,8 @@ public class CsvImportTask extends AttachableAsyncTask<CsvImportActivity, Bundle
 			getParent().getContentResolver().delete(FillupsTable.BASE_URI, null, null);
 			publishProgress(0, R.string.update_erased_database);
 		}
+
+		SimpleDateFormat formatter = new SimpleDateFormat(args.getString(CsvDateFormatActivity.DATE_FORMAT));
 
 		getParent().getContentResolver().delete(CacheTable.BASE_URI, null, null);
 		publishProgress(0, R.string.update_erased_cache);
@@ -66,8 +71,8 @@ public class CsvImportTask extends AttachableAsyncTask<CsvImportActivity, Bundle
 
 					int dateIndex = args.getInt(Fillup.DATE);
 					String date = data[dateIndex];
-					long timestamp = Date.parse(date);
-					values.put(Fillup.DATE, timestamp);
+					Date d = formatter.parse(date);
+					values.put(Fillup.DATE, d.getTime());
 
 					Fillup f = new Fillup(values);
 					f.save(getParent());
@@ -77,6 +82,8 @@ public class CsvImportTask extends AttachableAsyncTask<CsvImportActivity, Bundle
 				}
 			}
 		} catch (IOException e) {
+		} catch (ParseException e) {
+			Log.e(TAG, "Couldn't parse a field!", e);
 		} finally {
 			try {
 				if (csvReader != null) {
@@ -115,6 +122,7 @@ public class CsvImportTask extends AttachableAsyncTask<CsvImportActivity, Bundle
 			values.put(column, parsed);
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
+			values.put(column, 0D);
 		}
 	}
 

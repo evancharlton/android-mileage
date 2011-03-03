@@ -41,6 +41,7 @@
 		<activity android:name=".io.CsvExportActivity" android:label="@string/title_export_csv"/>
 		<activity android:name=".io.CsvColumnMappingActivity" android:label="@string/title_csv_map_columns"/>
 		<activity android:name=".io.CsvVehicleMappingActivity" android:label="@string/title_csv_map_vehicles"/>
+		<activity android:name=".io.CsvDateFormatActivity" android:label="@string/title_csv_date_format" />
 		<activity android:name=".io.CsvImportActivity" android:label="@string/title_import_csv"/>
 		<activity android:name=".io.DbExportActivity" android:label="@string/title_export_db"/>
 		<activity android:name=".io.DbImportActivity" android:label="@string/title_import_db"/>

@@ -83,7 +83,7 @@ public class CsvVehicleMappingActivity extends CsvWizardActivity {
 
 	@Override
 	protected boolean buildIntent(Intent intent) {
-		intent.setClass(this, CsvImportActivity.class);
+		intent.setClass(this, CsvDateFormatActivity.class);
 
 		for (Long vehicleId : mVehicleMapping.keySet()) {
 			Spinner spinner = mVehicleMapping.get(vehicleId);

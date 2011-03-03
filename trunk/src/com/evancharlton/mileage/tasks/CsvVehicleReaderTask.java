@@ -15,7 +15,7 @@ public class CsvVehicleReaderTask extends AttachableAsyncTask<CsvVehicleMappingA
 	private static final String TAG = "CsvVehicleReaderTask";
 
 	private final int INDEX;
-	private static final ArrayList<String> mTitles = new ArrayList<String>();
+	private final ArrayList<String> mTitles = new ArrayList<String>();
 
 	public CsvVehicleReaderTask(int index) {
 		INDEX = index;

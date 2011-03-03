@@ -46,6 +46,7 @@ public class CsvColumnMappingActivity extends CsvWizardActivity {
 	}
 
 	public void setColumns(String[] columnNames) {
+		mColumnSpinners.clear();
 		LayoutInflater inflater = LayoutInflater.from(this);
 		final int length = columnNames.length;
 		for (int i = 0; i < length; i++) {
@@ -59,7 +60,7 @@ public class CsvColumnMappingActivity extends CsvWizardActivity {
 			spinner.setAdapter(new CsvFieldAdapter(this));
 			spinner.setId(columnName.hashCode());
 			spinner.setSelection(i);
-			spinner.setTag(columnName);
+			spinner.setTag(i);
 
 			mColumnSpinners.add(spinner);
 		}
@@ -69,7 +70,9 @@ public class CsvColumnMappingActivity extends CsvWizardActivity {
 	protected boolean buildIntent(Intent intent) {
 		intent.setClass(this, CsvVehicleMappingActivity.class);
 		for (Spinner columnSpinner : mColumnSpinners) {
-			intent.putExtra(columnSpinner.getSelectedItem().toString(), columnSpinner.getSelectedItemPosition());
+			String dbField = columnSpinner.getSelectedItem().toString();
+			int csvIndex = ((Integer) columnSpinner.getTag()).intValue();
+			intent.putExtra(dbField, csvIndex);
 		}
 		setResult(PREVIOUS);
 		return true;

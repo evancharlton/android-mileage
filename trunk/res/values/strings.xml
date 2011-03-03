@@ -122,6 +122,9 @@
 	<string name="divider_interval_start">When to start</string>
 	<string name="divider_interval_vehicle">Vehicle</string>
 	<string name="divider_interval_template">Template to use (optional)</string>
+	<string name="divider_loaded_date">Saved date</string>
+	<string name="divider_date_format">Date format</string>
+	<string name="divider_parsed_date">Parsed date</string>
 
 	<string name="transport_enable">Enable</string>
 	<string name="transport_enabled">Data will be backed up</string>
@@ -205,6 +208,7 @@
 	<string name="error_invalid_statistic_item">Invalid item specified for the statistic</string>
 	<string name="error_invalid_statistic_key">Invalid key specified for the statistic</string>
 	<string name="error_media_unmounted">SD card unmounted or not present!</string>
+	<string name="error_could_not_parse_date">Could not parse date!</string>
 	
 	<string name="units_gallons">Gallons</string>
 	<string name="units_gallons_abbr">g</string>
@@ -280,6 +284,7 @@
 	<string name="title_export_db">Exporting DB</string>
 	<string name="title_csv_map_columns">Column mappings</string>
 	<string name="title_csv_map_vehicles">Vehicle mappings</string>
+	<string name="title_csv_date_format">Set date format</string>
 	<string name="title_import_csv">Importing CSV</string>
 	<string name="title_import_db">Importing DB</string>
 	
@@ -304,6 +309,7 @@
 	<string name="column_longitude">Longitude</string>
 	<string name="column_partial">Is partial?</string>
 	<string name="column_restart">Restart calculations?</string>
+	<string name="column_none">[Skip]</string>
 	
 	<string name="update_wrote_headers">Wrote headers...</string>
 	<string name="update_wrote_rows">%1$d rows written (%2$s total)</string>
