@@ -13,6 +13,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
@@ -35,7 +37,9 @@ public class VehicleStatisticsActivity extends Activity {
 	private Spinner mVehicleSpinner;
 	private ListView mListView;
 	private VehicleStatisticsTask mCalculationTask = null;
+	private LinearLayout mContainer;
 	private ProgressBar mProgressBar;
+	private ImageView mCancel;
 
 	private VehicleStatisticsAdapter mAdapter;
 
@@ -55,7 +59,9 @@ public class VehicleStatisticsActivity extends Activity {
 
 		mListView = (ListView) findViewById(android.R.id.list);
 		mVehicleSpinner = (Spinner) findViewById(R.id.vehicle);
+		mContainer = (LinearLayout) findViewById(R.id.progress_container);
 		mProgressBar = (ProgressBar) findViewById(R.id.progress);
+		mCancel = (ImageView) findViewById(R.id.cancel);
 
 		mVehicleSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			@Override
@@ -88,6 +94,13 @@ public class VehicleStatisticsActivity extends Activity {
 				} else {
 					Toast.makeText(VehicleStatisticsActivity.this, getString(R.string.no_chart), Toast.LENGTH_SHORT).show();
 				}
+			}
+		});
+
+		mCancel.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				cancelTask();
 			}
 		});
 	}
@@ -175,5 +188,14 @@ public class VehicleStatisticsActivity extends Activity {
 
 	public VehicleStatisticsAdapter getAdapter() {
 		return mAdapter;
+	}
+
+	public void startCalculations() {
+		mContainer.setVisibility(View.VISIBLE);
+		mProgressBar.setIndeterminate(true);
+	}
+
+	public void stopCalculations() {
+		mContainer.setVisibility(View.GONE);
 	}
 }

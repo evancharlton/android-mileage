@@ -3,8 +3,6 @@ package com.evancharlton.mileage.tasks;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.util.Log;
-import android.view.View;
-import android.widget.ProgressBar;
 
 import com.evancharlton.mileage.VehicleStatisticsActivity;
 import com.evancharlton.mileage.dao.CachedValue;
@@ -23,7 +21,6 @@ public class VehicleStatisticsTask extends AttachableAsyncTask<VehicleStatistics
 	private ContentResolver mContentResolver;
 	private int mProgress = 0;
 	private int mTotal = 0;
-	private ProgressBar mProgressBar;
 
 	@Override
 	public void attach(VehicleStatisticsActivity activity) {
@@ -34,10 +31,7 @@ public class VehicleStatisticsTask extends AttachableAsyncTask<VehicleStatistics
 	@Override
 	protected void onPreExecute() {
 		Log.d(TAG, "Calculation starting...");
-
-		mProgressBar = getParent().getProgressBar();
-		mProgressBar.setVisibility(View.VISIBLE);
-		mProgressBar.setIndeterminate(true);
+		getParent().startCalculations();
 	}
 
 	@Override
@@ -102,6 +96,11 @@ public class VehicleStatisticsTask extends AttachableAsyncTask<VehicleStatistics
 
 		final Vehicle vehicle = getParent().getVehicle();
 		while (cursor.moveToNext()) {
+			if (isCancelled()) {
+				getParent().stopCalculations();
+				break;
+			}
+
 			Fillup fillup = new Fillup(cursor);
 			series.add(fillup);
 
@@ -319,8 +318,8 @@ public class VehicleStatisticsTask extends AttachableAsyncTask<VehicleStatistics
 	@Override
 	protected void onProgressUpdate(Integer... updates) {
 		if (mTotal > 0) {
-			mProgressBar.setIndeterminate(false);
-			mProgressBar.setMax(mTotal * Statistics.STATISTICS.size());
+			getParent().getProgressBar().setIndeterminate(false);
+			getParent().getProgressBar().setMax(mTotal * Statistics.STATISTICS.size());
 			mTotal = 0;
 		}
 		if (updates.length > 0) {
@@ -328,7 +327,7 @@ public class VehicleStatisticsTask extends AttachableAsyncTask<VehicleStatistics
 		} else {
 			mProgress += 1;
 		}
-		mProgressBar.setProgress(mProgress);
+		getParent().getProgressBar().setProgress(mProgress);
 		getParent().getAdapter().notifyDataSetChanged();
 	}
 
@@ -339,7 +338,7 @@ public class VehicleStatisticsTask extends AttachableAsyncTask<VehicleStatistics
 		} else {
 			getParent().getAdapter().notifyDataSetChanged();
 		}
-		mProgressBar.setVisibility(View.GONE);
+		getParent().stopCalculations();
 
 		Log.d(TAG, "Done recalculating!");
 
