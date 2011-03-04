@@ -7,11 +7,13 @@ import java.io.IOException;
 import java.nio.channels.FileChannel;
 
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.util.Log;
 
 import com.evancharlton.mileage.R;
 import com.evancharlton.mileage.io.DbImportActivity;
 import com.evancharlton.mileage.provider.DatabaseUpgrader;
+import com.evancharlton.mileage.provider.FillUpsProvider;
 import com.evancharlton.mileage.provider.Settings;
 
 public class DbImportTask extends AttachableAsyncTask<DbImportActivity, Void, String, Boolean> {
@@ -76,11 +78,14 @@ public class DbImportTask extends AttachableAsyncTask<DbImportActivity, Void, St
 	private void cleanUp() throws IOException {
 		FileChannel input = new FileInputStream(TEMP_FILE).getChannel();
 		FileChannel output = new FileOutputStream(Settings.DATABASE_PATH).getChannel();
-		input.transferTo(0, input.size(), output);
+		long bytes = input.transferTo(0, input.size(), output);
 		input.close();
 		output.close();
+		Log.d(TAG, "Wrote " + bytes + " bytes to " + Settings.DATABASE_PATH + " from " + TEMP_FILE);
 
 		File tempDatabase = new File(TEMP_FILE);
 		tempDatabase.delete();
+
+		getParent().getContentResolver().getType(Uri.withAppendedPath(FillUpsProvider.BASE_URI, "reset"));
 	}
 }

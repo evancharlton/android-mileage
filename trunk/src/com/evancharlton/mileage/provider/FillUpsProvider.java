@@ -156,6 +156,8 @@ public class FillUpsProvider extends ContentProvider {
 	@Override
 	public boolean onCreate() {
 		mDatabaseHelper = new DatabaseHelper(getContext());
+
+		URI_MATCHER.addURI(AUTHORITY, "reset/", 0);
 		return true;
 	}
 
@@ -182,6 +184,11 @@ public class FillUpsProvider extends ContentProvider {
 	@Override
 	public String getType(Uri uri) {
 		final int type = URI_MATCHER.match(uri);
+		if (type == 0) {
+			mDatabaseHelper.close();
+			Log.d(TAG, "Database closed!");
+			return null;
+		}
 		String result = null;
 		for (ContentTable table : TABLES) {
 			result = table.getType(type);

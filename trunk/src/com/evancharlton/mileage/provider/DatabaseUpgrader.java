@@ -210,9 +210,9 @@ public class DatabaseUpgrader {
 
 	private static boolean cleanUpOldTables() {
 		try {
-			exec("DROP TABLE OLD_vehicles");
-			exec("DROP TABLE OLD_fillups");
-			exec("DROP TABLE OLD_maintenance_intervals");
+			// exec("DROP TABLE OLD_vehicles");
+			// exec("DROP TABLE OLD_fillups");
+			// exec("DROP TABLE OLD_maintenance_intervals");
 			return true;
 		} catch (SQLiteException e) {
 			Log.e(TAG, "Unable to clean up old tables!", e);
