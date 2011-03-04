@@ -31,8 +31,8 @@ import com.evancharlton.mileage.exceptions.InvalidFieldException;
 import com.evancharlton.mileage.math.Calculator;
 import com.evancharlton.mileage.provider.FillUpsProvider;
 import com.evancharlton.mileage.provider.Settings;
-import com.evancharlton.mileage.provider.Statistics;
 import com.evancharlton.mileage.provider.Settings.DataFormats;
+import com.evancharlton.mileage.provider.Statistics;
 import com.evancharlton.mileage.provider.tables.CacheTable;
 import com.evancharlton.mileage.provider.tables.FieldsTable;
 import com.evancharlton.mileage.provider.tables.FillupsTable;
@@ -133,8 +133,8 @@ public class FillupActivity extends BaseFormActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.add(Menu.NONE, R.string.edit_fields, Menu.NONE, R.string.edit_fields).setIntent(new Intent(this, FieldListActivity.class)).setIcon(
-				R.drawable.ic_menu_edit);
+		menu.add(Menu.NONE, R.string.edit_fields, Menu.NONE, R.string.edit_fields).setIntent(new Intent(this, FieldListActivity.class))
+				.setIcon(R.drawable.ic_menu_edit);
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -325,6 +325,7 @@ public class FillupActivity extends BaseFormActivity {
 
 		mFillup.setPartial(mPartial.isChecked());
 		mFillup.setVehicleId(mVehicles.getSelectedItemId());
+		mFillup.setTimestamp(mDate.getTimestamp());
 
 		if (mFillup.isPartial()) {
 			mFillup.setEconomy(0);
