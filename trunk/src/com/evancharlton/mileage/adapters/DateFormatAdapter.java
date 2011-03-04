@@ -10,11 +10,17 @@ import android.widget.TextView;
 public class DateFormatAdapter extends BaseAdapter {
 	private static final String[] FORMATS = new String[] {
 			"YYYY-MM-DD HH:MM:SS",
+			"YYYY-MM-DD HH:MM",
 			"YYYY/MM/DD HH:MM:SS",
+			"YYYY/MM/DD HH:MM",
 			"MM-DD-YYYY HH:MM:SS",
+			"MM-DD-YYYY HH:MM",
 			"MM/DD/YYYY HH:MM:SS",
+			"MM/DD/YYYY HH:MM",
 			"DD-MM-YYYY HH:MM:SS",
-			"DD/MM/YYYY HH:MM:SS"
+			"DD-MM-YYYY HH:MM",
+			"DD/MM/YYYY HH:MM:SS",
+			"DD/MM/YYYY HH:MM"
 	};
 
 	private static final String[] FORMAT_STRINGS = new String[] {
@@ -22,6 +28,7 @@ public class DateFormatAdapter extends BaseAdapter {
 			"yyyy/MM/dd HH:mm:ss",
 			"MM-dd-yyyy HH:mm:ss",
 			"MM/dd/yyyy HH:mm:ss",
+			"MM/dd/yyyy HH:mm",
 			"dd-MM-yyyy HH:mm:ss",
 			"dd/MM/yyyy HH:mm:ss"
 	};

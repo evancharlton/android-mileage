@@ -186,6 +186,7 @@ public class FillUpsProvider extends ContentProvider {
 		final int type = URI_MATCHER.match(uri);
 		if (type == 0) {
 			mDatabaseHelper.close();
+			mDatabaseHelper.getReadableDatabase();
 			Log.d(TAG, "Database closed!");
 			return null;
 		}

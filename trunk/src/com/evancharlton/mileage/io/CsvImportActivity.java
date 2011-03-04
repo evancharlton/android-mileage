@@ -60,8 +60,6 @@ public class CsvImportActivity extends CsvWizardActivity {
 		if (update % 10 == 0) {
 			mLog.append(getString(R.string.update_read_rows, update, mProgress.getMax()) + "\n");
 		}
-
-		mLog.scrollTo(0, mLog.getHeight());
 	}
 
 	public void error(int error) {
