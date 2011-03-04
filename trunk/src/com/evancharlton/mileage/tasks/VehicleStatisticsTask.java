@@ -95,6 +95,17 @@ public class VehicleStatisticsTask extends AttachableAsyncTask<VehicleStatistics
 		final long lastMonth = System.currentTimeMillis() - Calculator.MONTH_MS;
 
 		final Vehicle vehicle = getParent().getVehicle();
+
+		switch (vehicle.getEconomyUnits()) {
+			case Calculator.GALLONS_PER_100KM:
+			case Calculator.LITRES_PER_100KM:
+			case Calculator.IMP_GAL_PER_100KM:
+				// Have to flip over the best/worst
+				minEconomy = MIN;
+				maxEconomy = MAX;
+				break;
+		}
+
 		while (cursor.moveToNext()) {
 			if (isCancelled()) {
 				getParent().stopCalculations();
