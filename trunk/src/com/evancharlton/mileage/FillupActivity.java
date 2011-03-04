@@ -314,7 +314,15 @@ public class FillupActivity extends BaseFormActivity {
 			double odometerValue = 0;
 			if (odometerText.startsWith("+")) {
 				Fillup previous = mFillup.loadPrevious(this);
-				odometerValue = previous.getOdometer() + Double.parseDouble(odometerText.substring(1));
+				double previousOdometer = 0D;
+				if (previous == null) {
+					Cursor top = getContentResolver().query(FillupsTable.BASE_URI, FillupsTable.PROJECTION, null, null, Fillup.ODOMETER + " DESC");
+					previous = new Fillup(top);
+					if (previous != null) {
+						previousOdometer = previous.getOdometer();
+					}
+				}
+				odometerValue = previousOdometer + Double.parseDouble(odometerText.substring(1));
 			} else {
 				odometerValue = Double.parseDouble(odometerText);
 			}
