@@ -2,6 +2,9 @@ package com.evancharlton.mileage;
 
 import java.util.ArrayList;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -52,5 +55,29 @@ public class SettingsActivity extends PreferenceActivity {
 				return true;
 			}
 		});
+
+		findPreference("units").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				showDialog(R.string.settings_units);
+				return true;
+			}
+		});
+	}
+
+	@Override
+	protected Dialog onCreateDialog(final int id) {
+		switch (id) {
+			case R.string.settings_units:
+				return new AlertDialog.Builder(this).setTitle(R.string.units_title).setMessage(R.string.units_description)
+						.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								removeDialog(id);
+							}
+						}).create();
+			default:
+				return super.onCreateDialog(id);
+		}
 	}
 }

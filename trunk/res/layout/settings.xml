@@ -34,6 +34,17 @@
 	        />
     	</PreferenceScreen>
 	</PreferenceCategory>
+	<PreferenceCategory
+		android:orderingFromXml="true"
+		android:title="@string/settings"
+		android:key="units_header"
+	>
+		<Preference
+			android:key="units"
+			android:title="@string/settings_units"
+			android:summary="@string/settings_units_summary"
+		/>
+	</PreferenceCategory>
 	<!-- TODO(3.2) - Allow for interval-specific notifications -->
 	<PreferenceCategory
 		android:title="@string/settings_notification_title"

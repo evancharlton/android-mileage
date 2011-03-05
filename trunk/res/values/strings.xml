@@ -104,6 +104,12 @@
 	<string name="settings_interval_vibrate_off">Phone will not vibrate</string>
 	<string name="settings_about">About</string>
 	<string name="settings_about_summary">About Mileage %1$s</string>
+	<string name="settings_units">Change units</string>
+	<string name="settings_units_summary">How to set gallons/litres/km/etc.</string>
+	
+	<string name="units_title">Setting Units</string>
+	<string name="units_description">Units are stored per-vehicle. To change, open the Vehicles tab, select your vehicle, scroll down, and set your units. Save your vehicle, then go to Statistics tab, press \'menu\', select \'Recalculate\' to see changes immediately.</string>
+	
 	<string name="delete_service_interval">Delete service interval?</string>
 	<string name="service_interval_reminder_message">There is a scheduled %1$s (%2$s) for %3$s due. Would you like to delete this service interval?</string>
 	<string name="remind_later">Ask tomorrow</string>
@@ -347,5 +353,8 @@
 	<string name="about_charts_btn">Check out aiCharts!</string>
 	<string name="about_charts_website" translatable="false">http://www.artfulbits.com/products/android/aicharts.aspx</string>
 	<!-- translations -->
-	<string name="about_translators" translatable="false"></string>
+	<string name="about_translators" translatable="false">
+		<!-- Translators: add your name below if you wish -->
+		\n SnowmanDK
+	</string>
 </resources>
