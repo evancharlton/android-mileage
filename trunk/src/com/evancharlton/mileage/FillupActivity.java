@@ -367,8 +367,12 @@ public class FillupActivity extends BaseFormActivity {
 			// Don't want to erase location data
 			LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 			Location lastLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-			mFillup.setLatitude(lastLocation.getLatitude());
-			mFillup.setLongitude(lastLocation.getLongitude());
+
+			// Only record if the user has a network location.
+			if (lastLocation != null) {
+				mFillup.setLatitude(lastLocation.getLatitude());
+				mFillup.setLongitude(lastLocation.getLongitude());
+			}
 		}
 	}
 
