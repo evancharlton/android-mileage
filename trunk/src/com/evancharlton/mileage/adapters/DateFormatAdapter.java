@@ -25,12 +25,17 @@ public class DateFormatAdapter extends BaseAdapter {
 
 	private static final String[] FORMAT_STRINGS = new String[] {
 			"yyyy-MM-dd HH:mm:ss",
+			"yyyy-MM-dd HH:mm",
 			"yyyy/MM/dd HH:mm:ss",
+			"yyyy/MM/dd HH:mm",
 			"MM-dd-yyyy HH:mm:ss",
+			"MM-dd-yyyy HH:mm",
 			"MM/dd/yyyy HH:mm:ss",
 			"MM/dd/yyyy HH:mm",
 			"dd-MM-yyyy HH:mm:ss",
-			"dd/MM/yyyy HH:mm:ss"
+			"dd-MM-yyyy HH:mm",
+			"dd/MM/yyyy HH:mm:ss",
+			"dd/MM/yyyy HH:mm"
 	};
 
 	private Context mContext;
