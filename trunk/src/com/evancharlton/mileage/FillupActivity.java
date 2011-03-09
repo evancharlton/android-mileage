@@ -374,6 +374,15 @@ public class FillupActivity extends BaseFormActivity {
 				mFillup.setLongitude(lastLocation.getLongitude());
 			}
 		}
+
+		if (mFillup.isPartial() || (mFillup.isExistingObject() && !mFillup.isPartial())) {
+			ContentValues values = new ContentValues();
+			values.put(Fillup.ECONOMY, -1);
+			getContentResolver().update(FillupsTable.BASE_URI, values, Fillup.ODOMETER + " > ? AND " + Fillup.VEHICLE_ID + " = ?", new String[] {
+					String.valueOf(mFillup.getOdometer()),
+					String.valueOf(mFillup.getVehicleId())
+			});
+		}
 	}
 
 	@Override

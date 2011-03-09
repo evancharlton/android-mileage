@@ -6,23 +6,25 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.SimpleCursorAdapter;
-import android.widget.TextView;
 import android.widget.SimpleCursorAdapter.ViewBinder;
+import android.widget.TextView;
 
 import com.evancharlton.mileage.dao.Fillup;
 import com.evancharlton.mileage.dao.Vehicle;
 import com.evancharlton.mileage.math.Calculator;
 import com.evancharlton.mileage.provider.tables.CacheTable;
 import com.evancharlton.mileage.provider.tables.FillupsTable;
-import com.evancharlton.mileage.provider.tables.VehiclesTable;
 import com.evancharlton.mileage.tasks.AverageEconomyTask;
 import com.evancharlton.mileage.views.CursorSpinner;
 
 public class FillupListActivity extends BaseListActivity implements AverageEconomyTask.AsyncCallback {
+	private static final String TAG = "FillupListActivity";
+
 	private static final DecimalFormat ECONOMY_FORMAT = new DecimalFormat("0.00");
 	private static final DecimalFormat VOLUME_FORMAT = new DecimalFormat("0.00");
 
@@ -83,10 +85,12 @@ public class FillupListActivity extends BaseListActivity implements AverageEcono
 	}
 
 	protected final Vehicle getVehicle() {
-		Cursor cursor = managedQuery(VehiclesTable.BASE_URI, VehiclesTable.PROJECTION, Vehicle._ID + " = ?", new String[] {
-			String.valueOf(mVehicles.getSelectedItemId())
-		}, null);
-		return new Vehicle(cursor);
+		Vehicle vehicle = Vehicle.loadById(this, mVehicles.getSelectedItemId());
+		if (vehicle == null) {
+			Log.e(TAG, "Unable to load vehicle #" + mVehicles.getSelectedItemId());
+			throw new IllegalStateException("Unable to load vehicle #" + mVehicles.getSelectedItemId());
+		}
+		return vehicle;
 	}
 
 	@Override
@@ -181,6 +185,17 @@ public class FillupListActivity extends BaseListActivity implements AverageEcono
 						tv.setText("");
 						return true;
 					}
+
+					boolean isPartial = cursor.getInt(cursor.getColumnIndex(Fillup.PARTIAL)) == 1;
+					if (isPartial) {
+						tv.setText("");
+						return true;
+					}
+
+					if (economy <= 0) {
+						return true;
+					}
+
 					if (mAvgEconomy > 0) {
 						if (Calculator.isBetterEconomy(mVehicle, economy, mAvgEconomy)) {
 							tv.setTextColor(0xFF0AB807);

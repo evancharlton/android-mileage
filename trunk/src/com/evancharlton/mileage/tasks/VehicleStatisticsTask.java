@@ -131,7 +131,7 @@ public class VehicleStatisticsTask extends AttachableAsyncTask<VehicleStatistics
 					publishProgress();
 				}
 
-				double economy = Calculator.averageEconomy(vehicle, fillup);
+				double economy = Calculator.fillupEconomy(vehicle, series);
 				if (economy > 0D) {
 					if (Calculator.isBetterEconomy(vehicle, economy, maxEconomy)) {
 						maxEconomy = economy;

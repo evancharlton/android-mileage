@@ -109,6 +109,37 @@ public class Calculator {
 	}
 
 	/**
+	 * Calculate the economy of the most recent fillup of the series.
+	 * 
+	 * @param vehicle
+	 * @param series
+	 * @return
+	 */
+	public static double fillupEconomy(Vehicle vehicle, FillupSeries series) {
+		Fillup current = series.last();
+
+		if (current.isPartial()) {
+			return 0D;
+		}
+
+		double nextValidOdometer = 0D;
+		double topOdometer = current.getOdometer();
+
+		double volume = 0D;
+		while (current.hasPrevious()) {
+			volume += current.getVolume();
+			current = current.getPrevious();
+			nextValidOdometer = current.getOdometer();
+			if (!current.isPartial()) {
+				break;
+			}
+		}
+
+		double distance = topOdometer - nextValidOdometer;
+		return getEconomy(vehicle, distance, volume);
+	}
+
+	/**
 	 * @param vehicle
 	 * @param first
 	 * @param second
@@ -125,9 +156,13 @@ public class Calculator {
 	}
 
 	public static double averageEconomy(Vehicle vehicle, FillupSeries series) {
+		return getEconomy(vehicle, series.getTotalDistance(), series.getEconomyVolume());
+	}
+
+	private static double getEconomy(Vehicle vehicle, double distance, double volume) {
 		// ALL CALCULATIONS ARE DONE IN MPG AND CONVERTED LATER
-		double miles = convert(series.getTotalDistance(), vehicle.getDistanceUnits(), MI);
-		double gallons = convert(series.getEconomyVolume(), vehicle.getVolumeUnits(), GALLONS);
+		double miles = convert(distance, vehicle.getDistanceUnits(), MI);
+		double gallons = convert(volume, vehicle.getVolumeUnits(), GALLONS);
 
 		switch (vehicle.getEconomyUnits()) {
 			case KM_PER_GALLON:
