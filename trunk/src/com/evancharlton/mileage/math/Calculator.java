@@ -338,7 +338,11 @@ public class Calculator {
 
 	public static String getCurrencySymbol() {
 		if (CURRENCY_SYMBOL == null) {
-			CURRENCY_SYMBOL = Currency.getInstance(Locale.getDefault()).getSymbol();
+			try {
+				CURRENCY_SYMBOL = Currency.getInstance(Locale.getDefault()).getSymbol();
+			} catch (IllegalArgumentException e) {
+				CURRENCY_SYMBOL = "";
+			}
 		}
 		return CURRENCY_SYMBOL;
 	}
