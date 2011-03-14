@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -210,6 +211,18 @@ public class FillupActivity extends BaseFormActivity {
 		mFieldsContainer = (LinearLayout) findViewById(R.id.container);
 		mVehicles = (CursorSpinner) findViewById(R.id.vehicle);
 
+		mVehicles.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+				mVehicle = null;
+				mVehicle = getVehicle();
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+			}
+		});
+
 		setDataFormats();
 	}
 
@@ -225,6 +238,8 @@ public class FillupActivity extends BaseFormActivity {
 
 		if (mFillup.isExistingObject()) {
 			setTitle(getString(R.string.title_fillup, mDate.getText()));
+
+			mVehicles.setSelectedId(mFillup.getVehicleId());
 		}
 	}
 
