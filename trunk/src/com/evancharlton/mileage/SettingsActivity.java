@@ -62,7 +62,7 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
 		});
 
 		findPreference("units").setOnPreferenceClickListener(this);
-		findPreference(Settings.META_FIELD).setOnPreferenceClickListener(this);
+		// findPreference(Settings.META_FIELD).setOnPreferenceClickListener(this);
 	}
 
 	@Override
