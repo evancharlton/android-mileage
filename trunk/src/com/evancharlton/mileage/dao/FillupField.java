@@ -70,8 +70,9 @@ public class FillupField extends Dao {
 		c.close();
 		if (id != 0 || isExistingObject()) {
 			// update
-			values.put(_ID, id);
-			context.getContentResolver().update(getUri(), values, null, null);
+			context.getContentResolver().update(getUri(), values, _ID + " = ?", new String[] {
+				String.valueOf(id)
+			});
 			return true;
 		} else {
 			return super.save(context);

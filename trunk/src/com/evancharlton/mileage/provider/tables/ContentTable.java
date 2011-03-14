@@ -7,6 +7,7 @@ import java.util.Set;
 
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
@@ -70,7 +71,7 @@ public abstract class ContentTable {
 
 	abstract public long insert(int type, SQLiteDatabase db, ContentValues initialValues);
 
-	abstract public boolean query(int type, Uri uri, SQLiteQueryBuilder queryBuilder);
+	abstract public boolean query(int type, Uri uri, SQLiteQueryBuilder queryBuilder, Context context, String[] projection);
 
 	abstract public int update(int match, SQLiteDatabase db, Uri uri, ContentValues values, String selection, String[] selectionArgs);
 

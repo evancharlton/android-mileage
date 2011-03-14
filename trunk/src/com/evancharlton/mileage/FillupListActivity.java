@@ -15,6 +15,7 @@ import android.widget.SimpleCursorAdapter.ViewBinder;
 import android.widget.TextView;
 
 import com.evancharlton.mileage.dao.Fillup;
+import com.evancharlton.mileage.dao.FillupField;
 import com.evancharlton.mileage.dao.Vehicle;
 import com.evancharlton.mileage.math.Calculator;
 import com.evancharlton.mileage.provider.tables.CacheTable;
@@ -27,6 +28,15 @@ public class FillupListActivity extends BaseListActivity implements AverageEcono
 
 	private static final DecimalFormat ECONOMY_FORMAT = new DecimalFormat("0.00");
 	private static final DecimalFormat VOLUME_FORMAT = new DecimalFormat("0.00");
+
+	private static final String[] PROJECTION = new String[FillupsTable.PROJECTION.length + 1];
+
+	static {
+		for (int i = 0; i < FillupsTable.PROJECTION.length; i++) {
+			PROJECTION[i] = FillupsTable.PROJECTION[i];
+		}
+		PROJECTION[PROJECTION.length - 1] = FillupField.VALUE;
+	}
 
 	private CursorSpinner mVehicles;
 	private Vehicle mVehicle;
@@ -106,7 +116,7 @@ public class FillupListActivity extends BaseListActivity implements AverageEcono
 
 	@Override
 	protected String[] getProjectionArray() {
-		return FillupsTable.PROJECTION;
+		return PROJECTION;
 	}
 
 	@Override
@@ -137,7 +147,8 @@ public class FillupListActivity extends BaseListActivity implements AverageEcono
 				android.R.id.text1,
 				R.id.volume,
 				R.id.price,
-				R.id.economy
+				R.id.economy,
+				android.R.id.text2
 		};
 	}
 
@@ -152,7 +163,8 @@ public class FillupListActivity extends BaseListActivity implements AverageEcono
 				Fillup.DATE,
 				Fillup.VOLUME,
 				Fillup.UNIT_PRICE,
-				Fillup.ECONOMY
+				Fillup.ECONOMY,
+				FillupField.VALUE
 		};
 	}
 

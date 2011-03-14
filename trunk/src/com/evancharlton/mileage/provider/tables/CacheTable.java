@@ -1,6 +1,7 @@
 package com.evancharlton.mileage.provider.tables;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
@@ -66,7 +67,7 @@ public class CacheTable extends ContentTable {
 	}
 
 	@Override
-	public boolean query(int type, Uri uri, SQLiteQueryBuilder queryBuilder) {
+	public boolean query(int type, Uri uri, SQLiteQueryBuilder queryBuilder, Context context, String[] projection) {
 		switch (type) {
 			case CACHE_ID:
 				queryBuilder.appendWhere(CachedValue.KEY + " = " + uri.getPathSegments().get(1));

@@ -11,6 +11,7 @@ public final class Settings {
 	public static final String NOTIFICATIONS_RINGTONE = "interval_notification_ringtone";
 	public static final String NOTIFICATIONS_LED = "interval_notification_led";
 	public static final String NOTIFICATIONS_VIBRATE = "interval_notification_vibrate";
+	public static final String META_FIELD = "meta_field";
 
 	public static final String EXTERNAL_DIR = Environment.getExternalStorageDirectory() + "/mileage/";
 	// TODO: I really don't like doing this...

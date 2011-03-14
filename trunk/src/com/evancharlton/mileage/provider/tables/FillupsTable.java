@@ -1,6 +1,10 @@
 package com.evancharlton.mileage.provider.tables;
 
+import java.util.HashMap;
+
 import android.content.ContentValues;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
@@ -9,7 +13,9 @@ import android.text.TextUtils;
 import com.evancharlton.mileage.R;
 import com.evancharlton.mileage.dao.Dao;
 import com.evancharlton.mileage.dao.Fillup;
+import com.evancharlton.mileage.dao.FillupField;
 import com.evancharlton.mileage.provider.FillUpsProvider;
+import com.evancharlton.mileage.provider.Settings;
 
 public class FillupsTable extends ContentTable {
 	// make sure it's globally unique
@@ -90,13 +96,25 @@ public class FillupsTable extends ContentTable {
 	}
 
 	@Override
-	public boolean query(final int type, Uri uri, SQLiteQueryBuilder queryBuilder) {
+	public boolean query(final int type, Uri uri, SQLiteQueryBuilder queryBuilder, Context context, String[] projection) {
+
 		switch (type) {
 			case FILLUP_ID:
-				queryBuilder.appendWhere(Fillup._ID + " = " + uri.getPathSegments().get(1));
-			case FILLUPS:
+				queryBuilder.appendWhere(TABLE_NAME + "." + Fillup._ID + " = " + uri.getPathSegments().get(1));
 				queryBuilder.setTables(getTableName());
 				queryBuilder.setProjectionMap(buildProjectionMap(PROJECTION));
+				return true;
+			case FILLUPS:
+				SharedPreferences prefs = context.getSharedPreferences(Settings.NAME, Context.MODE_PRIVATE);
+				HashMap<String, String> map = buildProjectionMap(projection);
+				map.put(Fillup._ID, TABLE_NAME + "." + Fillup._ID);
+				map.put(FillupField.VALUE, FillupField.VALUE);
+				queryBuilder.setProjectionMap(map);
+
+				String on = "(" + FillupsFieldsTable.TABLE_NAME + "." + FillupField.FILLUP_ID + " = " + getTableName() + "." + Fillup._ID + ") AND ("
+						+ FillupsFieldsTable.TABLE_NAME + "." + FillupField.TEMPLATE_ID + " = " + prefs.getLong(Settings.META_FIELD, 1) + ")";
+
+				queryBuilder.setTables(getTableName() + " LEFT JOIN " + FillupsFieldsTable.TABLE_NAME + " ON (" + on + ")");
 				return true;
 		}
 		return false;

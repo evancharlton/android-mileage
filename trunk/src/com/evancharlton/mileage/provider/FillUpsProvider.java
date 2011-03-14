@@ -229,7 +229,7 @@ public class FillUpsProvider extends ContentProvider {
 		int position = LOOKUP.get(match, -1);
 		if (position >= 0) {
 			ContentTable table = TABLES.get(position);
-			changed = table.query(match, uri, qb);
+			changed = table.query(match, uri, qb, getContext(), projection);
 			if (changed) {
 				queryTable = table;
 			}
@@ -252,6 +252,10 @@ public class FillUpsProvider extends ContentProvider {
 		} catch (SQLiteException e) {
 			db = mDatabaseHelper.getWritableDatabase();
 		}
+
+		String query = qb.buildQuery(projection, selection, selectionArgs, null, null, sortOrder, null);
+		Log.d(TAG, query);
+
 		Cursor c = qb.query(db, projection, selection, selectionArgs, null, null, orderBy);
 		c.setNotificationUri(getContext().getContentResolver(), uri);
 
@@ -268,8 +272,8 @@ public class FillUpsProvider extends ContentProvider {
 			int count = TABLES.get(position).update(match, db, uri, values, selection, selectionArgs);
 			if (count >= 0) {
 				notifyListeners(uri);
-				return count;
 			}
+			return count;
 		}
 		throw new IllegalArgumentException("Unknown URI: " + uri);
 	}

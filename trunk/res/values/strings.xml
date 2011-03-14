@@ -60,6 +60,7 @@
 	<string name="dialog_message_delete">Are you sure you want to delete this? This cannot be undone!</string>
 	<string name="dialog_title_missing_files">Missing files?</string>
 	<string name="dialog_message_missing_files">To import files, place them in the \"mileage/\" folder in the root of your SD card.</string>
+	<string name="dialog_title_meta_fields">Extra field</string>
 	
 	<string name="delta_days">Days</string>
 	<string name="delta_weeks">Weeks</string>
@@ -106,6 +107,8 @@
 	<string name="settings_about_summary">About Mileage %1$s</string>
 	<string name="settings_units">Change units</string>
 	<string name="settings_units_summary">How to set gallons/litres/km/etc.</string>
+	<string name="settings_meta_field_title">Extra field</string>
+	<string name="settings_meta_field_summary">Choose which field to show in fillup history</string>
 	
 	<string name="units_title">Setting Units</string>
 	<string name="units_description">Units are stored per-vehicle. To change, open the Vehicles tab, select your vehicle, scroll down, and set your units. Save your vehicle, then go to Statistics tab, press \'menu\', select \'Recalculate\' to see changes immediately.</string>
@@ -324,6 +327,7 @@
 	<string name="column_longitude">Longitude</string>
 	<string name="column_partial">Is partial?</string>
 	<string name="column_restart">Restart calculations?</string>
+	<string name="column_metadata">Metadata</string>
 	<string name="column_none">[Skip]</string>
 	
 	<string name="update_wrote_headers">Wrote headers...</string>

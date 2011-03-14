@@ -20,6 +20,11 @@
 		android:entryValues="@array/data_format_values"
 		android:defaultValue="0"
 	/>
+	<Preference
+		android:key="meta_field"
+		android:title="@string/settings_meta_field_title"
+		android:summary="@string/settings_meta_field_summary"
+	/>
 	<PreferenceCategory
 		android:orderingFromXml="true"
 		android:title="@string/settings_backups_title"

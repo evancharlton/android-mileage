@@ -4,21 +4,26 @@ import java.util.ArrayList;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceScreen;
 
+import com.evancharlton.mileage.dao.Field;
 import com.evancharlton.mileage.provider.FillUpsProvider;
 import com.evancharlton.mileage.provider.Settings;
 import com.evancharlton.mileage.provider.backup.BackupTransport;
+import com.evancharlton.mileage.provider.tables.FieldsTable;
 
-public class SettingsActivity extends PreferenceActivity {
+public class SettingsActivity extends PreferenceActivity implements Preference.OnPreferenceClickListener {
 	public static final String NAME = "com.evancharlton.mileage_preferences";
 
 	private PreferenceCategory mBackupCategory;
@@ -56,13 +61,20 @@ public class SettingsActivity extends PreferenceActivity {
 			}
 		});
 
-		findPreference("units").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-			@Override
-			public boolean onPreferenceClick(Preference preference) {
-				showDialog(R.string.settings_units);
-				return true;
-			}
-		});
+		findPreference("units").setOnPreferenceClickListener(this);
+		findPreference(Settings.META_FIELD).setOnPreferenceClickListener(this);
+	}
+
+	@Override
+	public boolean onPreferenceClick(Preference preference) {
+		if ("units".equals(preference.getKey())) {
+			showDialog(R.string.settings_units);
+			return true;
+		} else if (Settings.META_FIELD.equals(preference.getKey())) {
+			showDialog(R.string.settings_meta_field_title);
+			return true;
+		}
+		return false;
 	}
 
 	@Override
@@ -76,6 +88,26 @@ public class SettingsActivity extends PreferenceActivity {
 								removeDialog(id);
 							}
 						}).create();
+			case R.string.settings_meta_field_title:
+				final Cursor c = managedQuery(FieldsTable.URI, FieldsTable.PROJECTION, null, null, null);
+				final SharedPreferences prefs = getSharedPreferences(Settings.NAME, Context.MODE_PRIVATE);
+				return new AlertDialog.Builder(this).setSingleChoiceItems(c, -1, Field.TITLE, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						long id = -1;
+						if (c.moveToPosition(which)) {
+							id = c.getLong(c.getColumnIndex(Field._ID));
+						}
+						SharedPreferences.Editor editor = prefs.edit();
+						editor.putLong(Settings.META_FIELD, id);
+						editor.commit();
+					}
+				}).setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						removeDialog(id);
+					}
+				}).setTitle(R.string.dialog_title_meta_fields).create();
 			default:
 				return super.onCreateDialog(id);
 		}
