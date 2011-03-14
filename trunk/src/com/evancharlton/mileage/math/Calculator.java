@@ -379,7 +379,7 @@ public class Calculator {
 				CURRENCY_SYMBOL = "";
 			}
 		}
-		return CURRENCY_SYMBOL;
+		return CURRENCY_SYMBOL + " ";
 	}
 
 	public static String getDateString(Context context, int type, Date date) {
