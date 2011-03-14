@@ -95,7 +95,6 @@ public class FillupsTable extends ContentTable {
 		switch (type) {
 			case FILLUP_ID:
 				queryBuilder.appendWhere(TABLE_NAME + "." + Fillup._ID + " = " + uri.getPathSegments().get(1));
-				return true;
 			case FILLUPS:
 				queryBuilder.setTables(getTableName());
 				queryBuilder.setProjectionMap(buildProjectionMap(PROJECTION));
