@@ -105,6 +105,14 @@ public class VehicleStatisticsActivity extends Activity {
 		});
 	}
 
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+		loadVehicle();
+		recalculate();
+	}
+
 	private void recalculate() {
 		Log.d(TAG, "Checking recalculation ...");
 		Cursor c = getCacheCursor();

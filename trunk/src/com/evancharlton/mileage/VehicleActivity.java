@@ -9,10 +9,12 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.evancharlton.mileage.dao.CachedValue;
 import com.evancharlton.mileage.dao.Dao;
 import com.evancharlton.mileage.dao.Fillup;
 import com.evancharlton.mileage.dao.Vehicle;
 import com.evancharlton.mileage.math.Calculator;
+import com.evancharlton.mileage.provider.tables.CacheTable;
 import com.evancharlton.mileage.provider.tables.FillupsTable;
 import com.evancharlton.mileage.provider.tables.VehiclesTable;
 import com.evancharlton.mileage.views.CursorSpinner;
@@ -123,6 +125,9 @@ public class VehicleActivity extends BaseFormActivity {
 			};
 			Uri uri = FillupsTable.BASE_URI;
 			getContentResolver().update(uri, values, where, selectionArgs);
+
+			// Also blow away the statistics cache
+			getContentResolver().delete(CacheTable.BASE_URI, CachedValue.ITEM + " = ?", selectionArgs);
 		}
 		super.saved();
 	}
