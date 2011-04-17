@@ -15,6 +15,7 @@ import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.SparseIntArray;
@@ -72,6 +73,10 @@ public class FillUpsProvider extends ContentProvider {
 	private static final String TAG = "FillupsProvider";
 
 	private DatabaseHelper mDatabaseHelper;
+
+	private final Handler mHandler = new Handler();
+
+	private Runnable mBackupRunnable;
 
 	static {
 		TABLES.add(new FillupsTable());
@@ -282,11 +287,19 @@ public class FillUpsProvider extends ContentProvider {
 		Context context = getContext();
 		context.getContentResolver().notifyChange(uri, null);
 
-		SharedPreferences preferences = context.getSharedPreferences(SettingsActivity.NAME, Context.MODE_PRIVATE);
-		for (BackupTransport transport : BACKUPS.values()) {
-			if (transport.isEnabled(preferences)) {
-				// transport.performIncrementalBackup(context, uri);
+		mHandler.removeCallbacks(mBackupRunnable);
+
+		mBackupRunnable = new Runnable() {
+			@Override
+			public void run() {
+				SharedPreferences preferences = getContext().getSharedPreferences(SettingsActivity.NAME, Context.MODE_PRIVATE);
+				for (BackupTransport transport : BACKUPS.values()) {
+					if (transport.isEnabled(preferences)) {
+						transport.performIncrementalBackup(getContext(), uri);
+					}
+				}
 			}
-		}
+		};
+		mHandler.postDelayed(mBackupRunnable, 1000);
 	}
 }
