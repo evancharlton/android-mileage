@@ -11,31 +11,43 @@ public class DateFormatAdapter extends BaseAdapter {
 	private static final String[] FORMATS = new String[] {
 			"YYYY-MM-DD HH:MM:SS",
 			"YYYY-MM-DD HH:MM",
+			"YYYY-MM-DD",
 			"YYYY/MM/DD HH:MM:SS",
 			"YYYY/MM/DD HH:MM",
+			"YYYY/MM/DD",
 			"MM-DD-YYYY HH:MM:SS",
 			"MM-DD-YYYY HH:MM",
+			"MM-DD-YYYY",
 			"MM/DD/YYYY HH:MM:SS",
 			"MM/DD/YYYY HH:MM",
+			"MM/DD/YYYY",
 			"DD-MM-YYYY HH:MM:SS",
 			"DD-MM-YYYY HH:MM",
+			"DD-MM-YYYY",
 			"DD/MM/YYYY HH:MM:SS",
-			"DD/MM/YYYY HH:MM"
+			"DD/MM/YYYY HH:MM",
+			"DD/MM/YYYY"
 	};
 
 	private static final String[] FORMAT_STRINGS = new String[] {
 			"yyyy-MM-dd HH:mm:ss",
 			"yyyy-MM-dd HH:mm",
+			"yyyy-MM-dd",
 			"yyyy/MM/dd HH:mm:ss",
 			"yyyy/MM/dd HH:mm",
+			"yyyy/MM/dd",
 			"MM-dd-yyyy HH:mm:ss",
 			"MM-dd-yyyy HH:mm",
+			"MM-dd-yyyy",
 			"MM/dd/yyyy HH:mm:ss",
 			"MM/dd/yyyy HH:mm",
+			"MM/dd/yyyy",
 			"dd-MM-yyyy HH:mm:ss",
 			"dd-MM-yyyy HH:mm",
+			"dd-MM-yyyy",
 			"dd/MM/yyyy HH:mm:ss",
-			"dd/MM/yyyy HH:mm"
+			"dd/MM/yyyy HH:mm",
+			"dd/MM/yyyy"
 	};
 
 	private Context mContext;

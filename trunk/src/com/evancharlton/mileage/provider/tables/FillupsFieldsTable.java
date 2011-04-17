@@ -37,7 +37,8 @@ public class FillupsFieldsTable extends ContentTable {
 	private static final String CONTENT_ITEMS_TYPE = "vnd.android.cursor.dir/vnd.evancharlton.fillups_fields";
 
 	public static final String[] PROJECTION = new String[] {
-			BaseColumns._ID,
+			FillupField._ID,
+			FillupField.TIMESTAMP,
 			FillupField.FILLUP_ID,
 			FillupField.TEMPLATE_ID,
 			FillupField.VALUE
@@ -125,7 +126,7 @@ public class FillupsFieldsTable extends ContentTable {
 				if (values.containsKey(BaseColumns._ID)) {
 					values.remove(BaseColumns._ID);
 				}
-				return db.update(getTableName(), values, null, null);
+				return db.update(getTableName(), values, selection, selectionArgs);
 		}
 		return -1;
 	}

@@ -1,61 +1,66 @@
 package com.evancharlton.mileage;
 
-import java.text.DecimalFormat;
-
-import android.database.Cursor;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.ContentUris;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.SimpleCursorAdapter;
-import android.widget.SimpleCursorAdapter.ViewBinder;
-import android.widget.TextView;
+import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.widget.ListView;
 
-import com.evancharlton.mileage.dao.Fillup;
+import com.evancharlton.mileage.adapters.FillupAdapter;
 import com.evancharlton.mileage.dao.Vehicle;
-import com.evancharlton.mileage.math.Calculator;
-import com.evancharlton.mileage.provider.tables.CacheTable;
 import com.evancharlton.mileage.provider.tables.FillupsTable;
 import com.evancharlton.mileage.tasks.AverageEconomyTask;
 import com.evancharlton.mileage.views.CursorSpinner;
 
-public class FillupListActivity extends BaseListActivity implements AverageEconomyTask.AsyncCallback {
+public class FillupListActivity extends Activity {
 	private static final String TAG = "FillupListActivity";
-
-	private static final DecimalFormat ECONOMY_FORMAT = new DecimalFormat("0.00");
-	private static final DecimalFormat VOLUME_FORMAT = new DecimalFormat("0.00");
-
-	private static final String[] PROJECTION = FillupsTable.PROJECTION;
 
 	private CursorSpinner mVehicles;
 	private Vehicle mVehicle;
-	private double mAvgEconomy;
 	private AverageEconomyTask mAverageTask;
+
+	private FillupAdapter mAdapter;
+	private ListView mList;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState, R.layout.fillup_list);
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.fillup_list);
+
+		initUI();
 	}
 
 	@Override
+	protected void onResume() {
+		mAdapter.requery();
+		super.onResume();
+	}
+
 	protected void initUI() {
 		mVehicles = (CursorSpinner) findViewById(R.id.vehicle);
 		mVehicles.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> list, View row, int position, long id) {
-				if (mAverageTask.getStatus() == AsyncTask.Status.RUNNING) {
-					mAverageTask.cancel(true);
-				}
 				mVehicle = getVehicle();
-				mAverageTask = new AverageEconomyTask();
-				mAverageTask.attach(FillupListActivity.this);
-				mAverageTask.execute(mVehicle);
 
-				((SimpleCursorAdapter) getAdapter()).changeCursor(getCursor());
-				getAdapter().notifyDataSetChanged();
+				// Change the adapter's vehicle
+				mAdapter.setVehicle(mVehicle);
+
+				// Start a new task
+				calculate();
 			}
 
 			@Override
@@ -65,13 +70,85 @@ public class FillupListActivity extends BaseListActivity implements AverageEcono
 
 		mVehicle = getVehicle();
 
+		mAdapter = new FillupAdapter(this, getVehicle());
+		mList = (ListView) findViewById(android.R.id.list);
+		mList.setAdapter(mAdapter);
+		registerForContextMenu(mList);
+		mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> row, View view, int position, long id) {
+				editFillup(id);
+			}
+		});
+
+		restoreTask();
+	}
+
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, v, menuInfo);
+
+		menu.add(Menu.NONE, R.string.edit, Menu.NONE, R.string.edit);
+		menu.add(Menu.NONE, R.string.delete, Menu.NONE, R.string.delete);
+	}
+
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		AdapterView.AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+		switch (item.getItemId()) {
+			case R.string.edit:
+				editFillup(info.id);
+				return true;
+			case R.string.delete:
+				showDeleteDialog(info.id);
+				return true;
+			default:
+				return super.onContextItemSelected(item);
+		}
+	}
+
+	private void editFillup(long id) {
+		Intent intent = new Intent(FillupListActivity.this, FillupActivity.class);
+		intent.putExtra(BaseFormActivity.EXTRA_ITEM_ID, id);
+		startActivity(intent);
+	}
+
+	private void showDeleteDialog(final long id) {
+		showDeleteDialog(new Runnable() {
+			@Override
+			public void run() {
+				Uri uri = ContentUris.withAppendedId(FillupsTable.BASE_URI, id);
+				getContentResolver().delete(uri, null, null);
+			}
+		});
+	}
+
+	protected void showDeleteDialog(final Runnable deleteAction) {
+		// TODO(3.1) - This dialog doesn't persist through rotations.
+		Dialog deleteDialog = new AlertDialog.Builder(this).setTitle(R.string.dialog_title_delete).setMessage(R.string.dialog_message_delete)
+				.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						deleteAction.run();
+						dialog.dismiss();
+					}
+				}).setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+					}
+				}).create();
+		deleteDialog.show();
+	}
+
+	private void restoreTask() {
 		Object saved = getLastNonConfigurationInstance();
 		if (saved != null) {
 			mAverageTask = (AverageEconomyTask) saved;
 		} else {
 			mAverageTask = new AverageEconomyTask();
 		}
-		mAverageTask.attach(this);
+		mAverageTask.attach(mAdapter);
 		if (mAverageTask.getStatus() != AsyncTask.Status.RUNNING) {
 			mAverageTask.execute(mVehicle);
 		}
@@ -82,7 +159,7 @@ public class FillupListActivity extends BaseListActivity implements AverageEcono
 			mAverageTask.cancel(true);
 		}
 		mAverageTask = new AverageEconomyTask();
-		mAverageTask.attach(this);
+		mAverageTask.attach(mAdapter);
 		mAverageTask.execute(mVehicle);
 	}
 
@@ -94,122 +171,4 @@ public class FillupListActivity extends BaseListActivity implements AverageEcono
 		}
 		return vehicle;
 	}
-
-	@Override
-	public void calculationFinished(double avgEconomy) {
-		mAvgEconomy = avgEconomy;
-		getAdapter().notifyDataSetChanged();
-	}
-
-	@Override
-	protected void postUI() {
-		((SimpleCursorAdapter) getAdapter()).setViewBinder(mViewBinder);
-	}
-
-	@Override
-	protected String[] getProjectionArray() {
-		return PROJECTION;
-	}
-
-	@Override
-	protected String getSelection() {
-		return Fillup.VEHICLE_ID + " = ?";
-	}
-
-	@Override
-	protected String[] getSelectionArgs() {
-		return new String[] {
-			String.valueOf(mVehicles.getSelectedItemId())
-		};
-	}
-
-	@Override
-	protected Uri getUri() {
-		return FillupsTable.BASE_URI;
-	}
-
-	@Override
-	public void onItemClick(long id) {
-		loadItem(id, FillupActivity.class);
-	}
-
-	@Override
-	protected int[] getTo() {
-		return new int[] {
-				android.R.id.text1,
-				R.id.volume,
-				R.id.price,
-				R.id.economy
-		};
-	}
-
-	@Override
-	protected int getListLayout() {
-		return R.layout.fillup_list_item;
-	}
-
-	@Override
-	protected String[] getFrom() {
-		return new String[] {
-				Fillup.DATE,
-				Fillup.VOLUME,
-				Fillup.UNIT_PRICE,
-				Fillup.ECONOMY
-		};
-	}
-
-	@Override
-	protected void setupEmptyView() {
-		mEmptyView.removeAllViews();
-		LayoutInflater.from(this).inflate(R.layout.empty_fillups, mEmptyView);
-	}
-
-	@Override
-	protected void itemDeleted(long itemId) {
-		// Clear out the cache
-		getContentResolver().delete(CacheTable.BASE_URI, null, null);
-		calculate();
-	}
-
-	private final ViewBinder mViewBinder = new ViewBinder() {
-		@Override
-		public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
-			TextView tv = (TextView) view;
-			switch (columnIndex) {
-				case 3: // Fillup.VOLUME
-					String volume = VOLUME_FORMAT.format(cursor.getDouble(columnIndex));
-					String units = Calculator.getVolumeUnits(FillupListActivity.this, mVehicle);
-					tv.setText(volume + " " + units);
-					return true;
-				case 5: // Fillup.ECONOMY
-					double economy = cursor.getDouble(columnIndex);
-					if (economy == 0) {
-						tv.setText("");
-						return true;
-					}
-
-					boolean isPartial = cursor.getInt(cursor.getColumnIndex(Fillup.PARTIAL)) == 1;
-					if (isPartial) {
-						tv.setText("");
-						return true;
-					}
-
-					if (economy <= 0) {
-						return true;
-					}
-
-					if (mAvgEconomy > 0) {
-						if (Calculator.isBetterEconomy(mVehicle, economy, mAvgEconomy)) {
-							tv.setTextColor(0xFF0AB807);
-						} else {
-							tv.setTextColor(0xFFD90000);
-						}
-					}
-					units = Calculator.getEconomyUnitsAbbr(FillupListActivity.this, mVehicle);
-					tv.setText(ECONOMY_FORMAT.format(economy) + " " + units);
-					return true;
-			}
-			return false;
-		}
-	};
 }

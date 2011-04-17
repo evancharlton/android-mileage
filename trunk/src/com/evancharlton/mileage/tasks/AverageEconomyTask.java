@@ -1,12 +1,12 @@
 package com.evancharlton.mileage.tasks;
 
-import android.app.Activity;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.evancharlton.mileage.R;
+import com.evancharlton.mileage.adapters.FillupAdapter;
 import com.evancharlton.mileage.dao.Fillup;
 import com.evancharlton.mileage.dao.FillupSeries;
 import com.evancharlton.mileage.dao.Vehicle;
@@ -14,28 +14,30 @@ import com.evancharlton.mileage.exceptions.InvalidFieldException;
 import com.evancharlton.mileage.math.Calculator;
 import com.evancharlton.mileage.provider.tables.FillupsTable;
 
-public class AverageEconomyTask extends AttachableAsyncTask<Activity, Vehicle, Integer, Double> {
+public class AverageEconomyTask extends AttachableAsyncTask<FillupAdapter, Vehicle, Integer, Double> {
 	private static final String TAG = "AverageEconomyTask";
 	private ContentResolver mContentResolver;
+	private Vehicle mVehicle = null;
 
 	@Override
-	public void attach(Activity parent) {
-		if (parent instanceof AsyncCallback) {
-			super.attach(parent);
-			mContentResolver = parent.getContentResolver();
-		} else {
-			throw new IllegalArgumentException("parent must implement AsyncCallback");
+	public void attach(FillupAdapter parent) {
+		super.attach(parent);
+		mContentResolver = parent.getContext().getContentResolver();
+		if (mVehicle != null) {
+			parent.setVehicle(mVehicle);
 		}
 	}
 
 	@Override
 	public void onProgressUpdate(Integer... update) {
-		Toast.makeText(getParent(), getParent().getString(R.string.toast_calculating_avg_economy), Toast.LENGTH_SHORT).show();
+		Toast.makeText(getParent().getContext(), getParent().getContext().getString(R.string.toast_calculating_avg_economy), Toast.LENGTH_SHORT)
+				.show();
 	}
 
 	@Override
 	public Double doInBackground(Vehicle... vehicles) {
 		Vehicle vehicle = vehicles[0];
+		mVehicle = vehicle;
 		String[] args = new String[] {
 			String.valueOf(vehicle.getId())
 		};
@@ -68,7 +70,7 @@ public class AverageEconomyTask extends AttachableAsyncTask<Activity, Vehicle, I
 			}
 
 			try {
-				fillup.saveIfChanged(getParent());
+				fillup.saveIfChanged(getParent().getContext());
 			} catch (InvalidFieldException e) {
 				return 0D;
 			}
@@ -83,10 +85,6 @@ public class AverageEconomyTask extends AttachableAsyncTask<Activity, Vehicle, I
 
 	@Override
 	protected void onPostExecute(Double avgEconomy) {
-		((AsyncCallback) getParent()).calculationFinished(avgEconomy.doubleValue());
-	}
-
-	public interface AsyncCallback {
-		public void calculationFinished(double avgEconomy);
+		getParent().calculationFinished(avgEconomy.doubleValue());
 	}
 }

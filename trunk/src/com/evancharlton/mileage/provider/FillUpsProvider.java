@@ -20,6 +20,7 @@ import android.util.Log;
 import android.util.SparseIntArray;
 
 import com.evancharlton.mileage.SettingsActivity;
+import com.evancharlton.mileage.dao.Dao;
 import com.evancharlton.mileage.provider.backup.BackupTransport;
 import com.evancharlton.mileage.provider.backup.FileBackupTransport;
 import com.evancharlton.mileage.provider.tables.CacheTable;
@@ -61,7 +62,7 @@ public class FillUpsProvider extends ContentProvider {
 
 	public static final String AUTHORITY = "com.evancharlton.mileage";
 	public static final Uri BASE_URI = Uri.parse("content://" + AUTHORITY);
-	public static final int DATABASE_VERSION = 6;
+	public static final int DATABASE_VERSION = 7;
 	public static final ArrayList<ContentTable> TABLES = new ArrayList<ContentTable>();
 	private static final SparseIntArray LOOKUP = new SparseIntArray();
 
@@ -209,6 +210,7 @@ public class FillUpsProvider extends ContentProvider {
 		SQLiteDatabase db = mDatabaseHelper.getWritableDatabase();
 		int position = LOOKUP.get(match, -1);
 		if (position >= 0) {
+			initialValues.put(Dao.TIMESTAMP, System.currentTimeMillis());
 			newId = TABLES.get(position).insert(match, db, initialValues);
 			if (newId >= 0) {
 				uri = ContentUris.withAppendedId(uri, newId);
@@ -266,6 +268,7 @@ public class FillUpsProvider extends ContentProvider {
 		int position = LOOKUP.get(match, -1);
 		if (position >= 0) {
 			SQLiteDatabase db = mDatabaseHelper.getWritableDatabase();
+			values.put(Dao.TIMESTAMP, System.currentTimeMillis());
 			int count = TABLES.get(position).update(match, db, uri, values, selection, selectionArgs);
 			if (count >= 0) {
 				notifyListeners(uri);
@@ -282,7 +285,7 @@ public class FillUpsProvider extends ContentProvider {
 		SharedPreferences preferences = context.getSharedPreferences(SettingsActivity.NAME, Context.MODE_PRIVATE);
 		for (BackupTransport transport : BACKUPS.values()) {
 			if (transport.isEnabled(preferences)) {
-				transport.performIncrementalBackup(context, uri);
+				// transport.performIncrementalBackup(context, uri);
 			}
 		}
 	}

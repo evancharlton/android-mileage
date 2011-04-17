@@ -118,6 +118,7 @@ public abstract class ContentTable {
 		public TableBuilder() {
 			mBuilder.append("CREATE TABLE ").append(getTableName()).append(" (");
 			mBuilder.append(BaseColumns._ID).append(" INTEGER PRIMARY KEY AUTOINCREMENT");
+			addInteger(Dao.TIMESTAMP);
 		}
 
 		public TableBuilder addDouble(String fieldName) {

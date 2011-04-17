@@ -26,6 +26,22 @@ public class FillupsTable extends ContentTable {
 
 	public static final String[] PROJECTION = new String[] {
 			Fillup._ID,
+			Fillup.TIMESTAMP,
+			Fillup.TOTAL_COST,
+			Fillup.UNIT_PRICE,
+			Fillup.VOLUME,
+			Fillup.ODOMETER,
+			Fillup.ECONOMY,
+			Fillup.VEHICLE_ID,
+			Fillup.DATE,
+			Fillup.LATITUDE,
+			Fillup.LONGITUDE,
+			Fillup.PARTIAL,
+			Fillup.RESTART
+	};
+
+	public static final String[] CSV_PROJECTION = new String[] {
+			Fillup._ID,
 			Fillup.TOTAL_COST,
 			Fillup.UNIT_PRICE,
 			Fillup.VOLUME,

@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
-import android.provider.BaseColumns;
 
 import com.evancharlton.mileage.dao.Dao;
 import com.evancharlton.mileage.dao.VehicleType;
@@ -24,7 +23,8 @@ public class VehicleTypesTable extends ContentTable {
 	private static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.evancharlton.vehicle_type";
 
 	public static final String[] PROJECTION = new String[] {
-			BaseColumns._ID,
+			VehicleType._ID,
+			VehicleType.TIMESTAMP,
 			VehicleType.TITLE,
 			VehicleType.DESCRIPTION
 	};
@@ -96,6 +96,8 @@ public class VehicleTypesTable extends ContentTable {
 				return db.update(getTableName(), values, VehicleType._ID + " = ?", new String[] {
 					values.getAsString(VehicleType._ID)
 				});
+			case TYPES:
+				return db.update(getTableName(), values, selection, selectionArgs);
 		}
 		return -1;
 	}

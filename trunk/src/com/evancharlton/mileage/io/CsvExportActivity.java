@@ -29,11 +29,11 @@ public class CsvExportActivity extends BaseExportActivity {
 
 				// TODO(3.5) - export more than just fillup data
 				Uri uri = FillupsTable.BASE_URI;
-				Cursor fillups = mActivity.getContentResolver().query(uri, FillupsTable.PROJECTION, null, null, null);
+				Cursor fillups = mActivity.getContentResolver().query(uri, FillupsTable.CSV_PROJECTION, null, null, null);
 				final int FILLUP_COUNT = fillups.getCount();
 				publishProgress(new Update(0, FILLUP_COUNT + 1));
 
-				final int COLUMN_COUNT = FillupsTable.PROJECTION.length;
+				final int COLUMN_COUNT = FillupsTable.CSV_PROJECTION.length;
 				String[] data = new String[COLUMN_COUNT];
 
 				// write the column data first
@@ -47,7 +47,7 @@ public class CsvExportActivity extends BaseExportActivity {
 				// figure out what columns are where, for formatting purposes
 				int COLUMN_DATE = -1;
 				for (int i = 0; i < COLUMN_COUNT; i++) {
-					if (FillupsTable.PROJECTION[i].equals(Fillup.DATE)) {
+					if (FillupsTable.CSV_PROJECTION[i].equals(Fillup.DATE)) {
 						COLUMN_DATE = i;
 					}
 				}

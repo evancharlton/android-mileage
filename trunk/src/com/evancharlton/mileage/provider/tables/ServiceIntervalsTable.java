@@ -23,6 +23,7 @@ public class ServiceIntervalsTable extends ContentTable {
 
 	public static String[] PROJECTION = new String[] {
 			ServiceInterval._ID,
+			ServiceInterval.TIMESTAMP,
 			ServiceInterval.TITLE,
 			ServiceInterval.DESCRIPTION,
 			ServiceInterval.START_DATE,
@@ -97,6 +98,8 @@ public class ServiceIntervalsTable extends ContentTable {
 				return db.update(getTableName(), values, ServiceInterval._ID + " = ?", new String[] {
 					values.getAsString(ServiceInterval._ID)
 				});
+			case SERVICE_INTERVALS:
+				return db.update(getTableName(), values, selection, selectionArgs);
 		}
 		return -1;
 	}

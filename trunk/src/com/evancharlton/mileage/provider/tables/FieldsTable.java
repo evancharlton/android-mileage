@@ -27,7 +27,8 @@ public class FieldsTable extends ContentTable {
 	public static final Uri URI = Uri.withAppendedPath(FillUpsProvider.BASE_URI, URI_PATH);
 
 	public static final String[] PROJECTION = new String[] {
-			BaseColumns._ID,
+			Field._ID,
+			Field.TIMESTAMP,
 			Field.TITLE,
 			Field.DESCRIPTION,
 			Field.TYPE
@@ -115,6 +116,8 @@ public class FieldsTable extends ContentTable {
 					args[i + 1] = selectionArgs[i];
 				}
 				return db.update(getTableName(), values, query, args);
+			case FIELDS:
+				return db.update(getTableName(), values, selection, selectionArgs);
 		}
 		return -1;
 	}

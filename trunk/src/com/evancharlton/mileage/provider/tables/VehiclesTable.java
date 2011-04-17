@@ -24,7 +24,8 @@ public class VehiclesTable extends ContentTable {
 	private static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.evancharlton.vehicle";
 
 	public static String[] PROJECTION = new String[] {
-			BaseColumns._ID,
+			Vehicle._ID,
+			Vehicle.TIMESTAMP,
 			Vehicle.TITLE,
 			Vehicle.DESCRIPTION,
 			Vehicle.YEAR,
@@ -66,9 +67,9 @@ public class VehiclesTable extends ContentTable {
 		}
 		// FIXME: hardcoded strings = bad!
 		return new String[] {
-			new InsertBuilder().add(Vehicle.TITLE, "Default vehicle").add(Vehicle.DESCRIPTION, "Auto-generated vehicle").add(Vehicle.DEFAULT_TIME,
-					System.currentTimeMillis()).add(Vehicle.MAKE, "Android").add(Vehicle.MODEL, "Mileage").add(Vehicle.YEAR, "2010").add(
-					Vehicle.VEHICLE_TYPE, 1).build()
+			new InsertBuilder().add(Vehicle.TITLE, "Default vehicle").add(Vehicle.DESCRIPTION, "Auto-generated vehicle")
+					.add(Vehicle.DEFAULT_TIME, System.currentTimeMillis()).add(Vehicle.MAKE, "Android").add(Vehicle.MODEL, "Mileage")
+					.add(Vehicle.YEAR, "2010").add(Vehicle.VEHICLE_TYPE, 1).build()
 		};
 	}
 
@@ -110,6 +111,8 @@ public class VehiclesTable extends ContentTable {
 				return db.update(getTableName(), values, Vehicle._ID + " = ?", new String[] {
 					uri.getPathSegments().get(1)
 				});
+			case VEHICLES:
+				return db.update(getTableName(), values, selection, selectionArgs);
 		}
 		return -1;
 	}

@@ -20,5 +20,4 @@
 		android:fastScrollEnabled="true"
 		android:id="@android:id/list"
 	/>
-	<include layout="@layout/empty" />
 </LinearLayout>
