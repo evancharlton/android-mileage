@@ -276,48 +276,63 @@ public class FillupActivity extends BaseFormActivity {
 
 	@Override
 	protected void setFields() {
+		double unitPrice = 0D;
+		double totalCost = 0D;
+		double volume = 0D;
 		try {
 			int dataFormat = Integer.parseInt(mPreferences.getString(Settings.DATA_FORMAT, "0"));
 			switch (dataFormat) {
 				case DataFormats.TOTAL_COST_VOLUME:
 					try {
-						mFillup.setVolume(Double.parseDouble(mVolume.getText().toString()));
+						volume = Double.parseDouble(mVolume.getText().toString());
+						mFillup.setVolume(volume);
 					} catch (NumberFormatException e) {
 						throw new InvalidFieldException(R.string.error_no_volume_specified);
 					}
 
 					try {
-						mFillup.setTotalCost(Double.parseDouble(mPrice.getText().toString()));
+						totalCost = Double.parseDouble(mPrice.getText().toString());
+						mFillup.setTotalCost(totalCost);
 					} catch (NumberFormatException e) {
 						throw new InvalidFieldException(R.string.error_no_total_cost_specified);
 					}
+					unitPrice = totalCost / volume;
+					mFillup.setUnitPrice(unitPrice);
 					break;
 				case DataFormats.TOTAL_COST_UNIT_PRICE:
 					try {
-						mFillup.setTotalCost(Double.parseDouble(mVolume.getText().toString()));
+						totalCost = Double.parseDouble(mVolume.getText().toString());
+						mFillup.setTotalCost(totalCost);
 					} catch (NumberFormatException e) {
 						throw new InvalidFieldException(R.string.error_no_total_cost_specified);
 					}
 
 					try {
-						mFillup.setUnitPrice(Double.parseDouble(mPrice.getText().toString()));
+						unitPrice = Double.parseDouble(mPrice.getText().toString());
+						mFillup.setUnitPrice(unitPrice);
 					} catch (NumberFormatException e) {
 						throw new InvalidFieldException(R.string.error_no_price_specified);
 					}
+					volume = totalCost / unitPrice;
+					mFillup.setVolume(volume);
 					break;
 				default:
 				case DataFormats.UNIT_PRICE_VOLUME:
 					try {
-						mFillup.setVolume(Double.parseDouble(mVolume.getText().toString()));
+						volume = Double.parseDouble(mVolume.getText().toString());
+						mFillup.setVolume(volume);
 					} catch (NumberFormatException e) {
 						throw new InvalidFieldException(R.string.error_no_volume_specified);
 					}
 
 					try {
-						mFillup.setUnitPrice(Double.parseDouble(mPrice.getText().toString()));
+						unitPrice = Double.parseDouble(mPrice.getText().toString());
+						mFillup.setUnitPrice(unitPrice);
 					} catch (NumberFormatException e) {
 						throw new InvalidFieldException(R.string.error_no_price_specified);
 					}
+					totalCost = unitPrice * volume;
+					mFillup.setTotalCost(totalCost);
 					break;
 			}
 		} catch (InvalidFieldException e) {
