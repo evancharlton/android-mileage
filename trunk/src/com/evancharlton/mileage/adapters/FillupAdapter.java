@@ -3,6 +3,7 @@ package com.evancharlton.mileage.adapters;
 import java.text.DecimalFormat;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.os.Handler;
@@ -14,6 +15,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.evancharlton.mileage.FillupInfoActivity;
 import com.evancharlton.mileage.R;
 import com.evancharlton.mileage.dao.Fillup;
 import com.evancharlton.mileage.dao.Vehicle;
@@ -41,8 +43,6 @@ public class FillupAdapter extends BaseAdapter implements View.OnClickListener {
 	private String mEconomyUnits;
 
 	private double mAvgEconomy;
-
-	private FillupInfoDisplay mDisplay;
 
 	private final ContentObserver mObserver = new ContentObserver(new Handler()) {
 		@Override
@@ -120,8 +120,8 @@ public class FillupAdapter extends BaseAdapter implements View.OnClickListener {
 		holder.price.setText(mCursor.getString(mCursor.getColumnIndex(Fillup.UNIT_PRICE)));
 
 		// holder.metaField.setText(mCursor.getString(mCursor.getColumnIndex(FillupField.VALUE)));
-		// holder.info.setOnClickListener(this);
-		// holder.info.setTag(getItem(position));
+		holder.info.setOnClickListener(this);
+		holder.info.setTag(getItem(position));
 
 		// Set the economy
 		double economy = mCursor.getDouble(mCursor.getColumnIndex(Fillup.ECONOMY));
@@ -147,15 +147,13 @@ public class FillupAdapter extends BaseAdapter implements View.OnClickListener {
 		return convertView;
 	}
 
-	public void setFillupDisplay(FillupInfoDisplay display) {
-		mDisplay = display;
-	}
-
 	@Override
 	public void onClick(View v) {
 		Fillup fillup = (Fillup) v.getTag();
 		if (fillup != null) {
-			mDisplay.displayFillupInfo(fillup);
+			Intent intent = new Intent(mContext, FillupInfoActivity.class);
+			intent.putExtra(Fillup._ID, fillup.getId());
+			mContext.startActivity(intent);
 		}
 	}
 
@@ -187,9 +185,5 @@ public class FillupAdapter extends BaseAdapter implements View.OnClickListener {
 
 	public Context getContext() {
 		return mContext;
-	}
-
-	public interface FillupInfoDisplay {
-		void displayFillupInfo(Fillup fillup);
 	}
 }

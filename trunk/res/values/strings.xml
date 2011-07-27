@@ -129,6 +129,7 @@
 	
 	<string name="divider_fillup_info">Fillup information</string>
 	<string name="divider_fillup_fields">Extra data</string>
+	<string name="divider_fillup_statistics">Statistics</string>
 	<string name="divider_vehicle_units">Measurement units</string>
 	<string name="divider_vehicle_type">Vehicle type</string>
 	<string name="divider_vehicle_information">Vehicle information</string>
@@ -259,6 +260,7 @@
 	<string name="per_year">/ yr</string>
 	
 	<string name="title_fillup">Fillup on %s</string>
+	<string name="title_fillup_info">Fillup information</string>
 	<string name="title_fillup_list">Fillup history</string>
 	<string name="title_field">Fillup field</string>
 	<string name="title_field_list">Fillup fields</string>

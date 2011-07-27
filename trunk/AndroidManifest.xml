@@ -26,6 +26,7 @@
 		</activity>
 		<activity android:name=".AboutActivity" android:label="@string/title_about" android:theme="@android:style/Theme.Dialog" />
 		<activity android:name=".FillupActivity" android:label="@string/title_fillup" />
+		<activity android:name=".FillupInfoActivity" android:label="@string/title_fillup_info" android:theme="@android:style/Theme.Dialog" />
 		<activity android:name=".FillupListActivity" android:label="@string/title_fillup_list" />
 		<activity android:name=".FieldActivity" android:label="@string/title_field" />
 		<activity android:name=".FieldListActivity" android:label="@string/title_field_list" />
