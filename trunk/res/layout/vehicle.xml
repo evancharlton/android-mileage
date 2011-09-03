@@ -99,4 +99,23 @@
 		android:layout_height="wrap_content"
 		android:entries="@array/economies"
 	/>
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+	>
+		<TextView
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:text="@string/settings_currency_title"
+		/>
+		<EditText
+			android:id="@+id/currency"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:ems="3"
+			android:gravity="right"
+		/>
+	</LinearLayout>
 </merge>
