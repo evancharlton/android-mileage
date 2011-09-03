@@ -101,8 +101,8 @@ public class Vehicle extends Dao {
         String[] projection = FillupsTable.PROJECTION;
         Cursor c = context.getContentResolver().query(uri, projection, Fillup.VEHICLE_ID + " = ?",
                 new String[] {
-                String.valueOf(getId())
-        }, Fillup.ODOMETER + " desc");
+                    String.valueOf(getId())
+                }, Fillup.ODOMETER + " desc");
 
         Fillup newest = null;
         if (c.getCount() >= 1) {

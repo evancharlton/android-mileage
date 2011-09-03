@@ -1,13 +1,6 @@
 
 package com.evancharlton.mileage.provider.backup;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.channels.FileChannel;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -18,6 +11,13 @@ import android.widget.Toast;
 import com.evancharlton.mileage.R;
 import com.evancharlton.mileage.SettingsActivity;
 import com.evancharlton.mileage.provider.Settings;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
 
 public class FileBackupTransport extends BackupTransport {
     private final Handler mErrorHandler = new Handler();

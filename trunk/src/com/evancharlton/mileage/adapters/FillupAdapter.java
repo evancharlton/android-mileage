@@ -1,8 +1,6 @@
 
 package com.evancharlton.mileage.adapters;
 
-import java.text.DecimalFormat;
-
 import android.content.Context;
 import android.content.Intent;
 import android.database.ContentObserver;
@@ -25,6 +23,8 @@ import com.evancharlton.mileage.provider.tables.FillupsTable;
 import com.evancharlton.mileage.views.FormattedCurrencyView;
 import com.evancharlton.mileage.views.FormattedDateView;
 import com.evancharlton.mileage.views.FormattedNumberView;
+
+import java.text.DecimalFormat;
 
 public class FillupAdapter extends BaseAdapter implements View.OnClickListener {
     private static final String TAG = "FillupAdapter";
@@ -67,8 +67,8 @@ public class FillupAdapter extends BaseAdapter implements View.OnClickListener {
         }
         mCursor = mContext.getContentResolver().query(FillupsTable.BASE_URI, PROJECTION,
                 Fillup.VEHICLE_ID + " = ?", new String[] {
-                String.valueOf(mVehicle.getId())
-        }, Fillup.ODOMETER + " DESC");
+                    String.valueOf(mVehicle.getId())
+                }, Fillup.ODOMETER + " DESC");
 
         mVolumeUnits = " " + Calculator.getVolumeUnitsAbbr(mContext, vehicle);
         mEconomyUnits = " " + Calculator.getEconomyUnitsAbbr(mContext, vehicle);

@@ -1,12 +1,6 @@
 
 package com.evancharlton.mileage.tasks;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.channels.FileChannel;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
@@ -18,6 +12,12 @@ import com.evancharlton.mileage.io.DbImportActivity;
 import com.evancharlton.mileage.provider.DatabaseUpgrader;
 import com.evancharlton.mileage.provider.FillUpsProvider;
 import com.evancharlton.mileage.provider.Settings;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
 
 public class DbImportTask extends AttachableAsyncTask<DbImportActivity, Void, String, Boolean> {
     private static final String TAG = "DbImportTask";

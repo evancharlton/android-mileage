@@ -1,3 +1,4 @@
+
 package com.evancharlton.mileage;
 
 import android.content.ContentUris;
@@ -18,81 +19,84 @@ import com.evancharlton.mileage.views.DistanceDelta;
 
 public class ServiceIntervalTemplateActivity extends BaseFormActivity {
 
-	protected final ServiceIntervalTemplate mTemplate = new ServiceIntervalTemplate(new ContentValues());
-	protected EditText mTitle;
-	protected EditText mDescription;
-	protected DistanceDelta mDistance;
-	protected DateDelta mDuration;
-	protected CursorSpinner mVehicleTypes;
+    protected final ServiceIntervalTemplate mTemplate = new ServiceIntervalTemplate(
+            new ContentValues());
+    protected EditText mTitle;
+    protected EditText mDescription;
+    protected DistanceDelta mDistance;
+    protected DateDelta mDuration;
+    protected CursorSpinner mVehicleTypes;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState, R.layout.service_interval_template);
-	}
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState, R.layout.service_interval_template);
+    }
 
-	@Override
-	protected Dao getDao() {
-		return mTemplate;
-	}
+    @Override
+    protected Dao getDao() {
+        return mTemplate;
+    }
 
-	@Override
-	protected String[] getProjectionArray() {
-		return ServiceIntervalTemplatesTable.PROJECTION;
-	}
+    @Override
+    protected String[] getProjectionArray() {
+        return ServiceIntervalTemplatesTable.PROJECTION;
+    }
 
-	@Override
-	protected Uri getUri(long id) {
-		return ContentUris.withAppendedId(Uri.withAppendedPath(FillUpsProvider.BASE_URI, ServiceIntervalTemplatesTable.URI), id);
-	}
+    @Override
+    protected Uri getUri(long id) {
+        return ContentUris.withAppendedId(
+                Uri.withAppendedPath(FillUpsProvider.BASE_URI, ServiceIntervalTemplatesTable.URI),
+                id);
+    }
 
-	@Override
-	protected void initUI() {
-		mTitle = (EditText) findViewById(R.id.title);
-		mDescription = (EditText) findViewById(R.id.description);
-		mDistance = (DistanceDelta) findViewById(R.id.distance);
-		mDuration = (DateDelta) findViewById(R.id.duration);
-		mVehicleTypes = (CursorSpinner) findViewById(R.id.types);
-	}
+    @Override
+    protected void initUI() {
+        mTitle = (EditText) findViewById(R.id.title);
+        mDescription = (EditText) findViewById(R.id.description);
+        mDistance = (DistanceDelta) findViewById(R.id.distance);
+        mDuration = (DateDelta) findViewById(R.id.duration);
+        mVehicleTypes = (CursorSpinner) findViewById(R.id.types);
+    }
 
-	@Override
-	protected void populateUI() {
-		mTitle.setText(mTemplate.getTitle());
-		mDescription.setText(mTemplate.getDescription());
-		mDistance.setDelta(mTemplate.getDistance());
-		mDuration.setDelta(mTemplate.getDuration());
-	}
+    @Override
+    protected void populateUI() {
+        mTitle.setText(mTemplate.getTitle());
+        mDescription.setText(mTemplate.getDescription());
+        mDistance.setDelta(mTemplate.getDistance());
+        mDuration.setDelta(mTemplate.getDuration());
+    }
 
-	@Override
-	protected void setFields() {
-		try {
-			String title = mTitle.getText().toString();
-			if (title.length() == 0) {
-				throw new InvalidFieldException(R.string.error_invalid_interval_title);
-			}
-			mTemplate.setTitle(title);
+    @Override
+    protected void setFields() {
+        try {
+            String title = mTitle.getText().toString();
+            if (title.length() == 0) {
+                throw new InvalidFieldException(R.string.error_invalid_interval_title);
+            }
+            mTemplate.setTitle(title);
 
-			mTemplate.setDescription(mDescription.getText().toString());
+            mTemplate.setDescription(mDescription.getText().toString());
 
-			long distance = mDistance.getDelta();
-			if (distance <= 0) {
-				throw new InvalidFieldException(R.string.error_invalid_interval_distance);
-			}
-			mTemplate.setDistance(distance);
+            long distance = mDistance.getDelta();
+            if (distance <= 0) {
+                throw new InvalidFieldException(R.string.error_invalid_interval_distance);
+            }
+            mTemplate.setDistance(distance);
 
-			long duration = mDuration.getDelta();
-			if (duration <= 0) {
-				throw new InvalidFieldException(R.string.error_invalid_interval_duration);
-			}
-			mTemplate.setDuration(mDuration.getDelta());
+            long duration = mDuration.getDelta();
+            if (duration <= 0) {
+                throw new InvalidFieldException(R.string.error_invalid_interval_duration);
+            }
+            mTemplate.setDuration(mDuration.getDelta());
 
-			mTemplate.setVehicleTypeId(mVehicleTypes.getSelectedItemId());
-		} catch (InvalidFieldException e) {
-			Toast.makeText(this, getString(e.getErrorMessage()), Toast.LENGTH_LONG).show();
-		}
-	}
+            mTemplate.setVehicleTypeId(mVehicleTypes.getSelectedItemId());
+        } catch (InvalidFieldException e) {
+            Toast.makeText(this, getString(e.getErrorMessage()), Toast.LENGTH_LONG).show();
+        }
+    }
 
-	@Override
-	protected int getCreateString() {
-		return R.string.add_service_interval_template;
-	}
+    @Override
+    protected int getCreateString() {
+        return R.string.add_service_interval_template;
+    }
 }

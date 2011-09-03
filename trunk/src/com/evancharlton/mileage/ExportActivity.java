@@ -1,8 +1,6 @@
 
 package com.evancharlton.mileage;
 
-import java.io.File;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -18,6 +16,8 @@ import android.widget.TextView;
 import com.evancharlton.mileage.io.CsvExportActivity;
 import com.evancharlton.mileage.io.DbExportActivity;
 import com.evancharlton.mileage.provider.Settings;
+
+import java.io.File;
 
 public class ExportActivity extends Activity {
     public static final String FILENAME = "filename";

@@ -1,3 +1,4 @@
+
 package com.evancharlton.mileage;
 
 import android.content.ContentUris;
@@ -13,56 +14,57 @@ import com.evancharlton.mileage.provider.FillUpsProvider;
 import com.evancharlton.mileage.provider.tables.VehicleTypesTable;
 
 public class VehicleTypeActivity extends BaseFormActivity {
-	private EditText mTitle;
-	private EditText mDescription;
-	private VehicleType mVehicleType = new VehicleType(new ContentValues());
+    private EditText mTitle;
+    private EditText mDescription;
+    private VehicleType mVehicleType = new VehicleType(new ContentValues());
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState, R.layout.vehicle_type);
-	}
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState, R.layout.vehicle_type);
+    }
 
-	@Override
-	protected Dao getDao() {
-		return mVehicleType;
-	}
+    @Override
+    protected Dao getDao() {
+        return mVehicleType;
+    }
 
-	@Override
-	protected void initUI() {
-		mTitle = (EditText) findViewById(R.id.title);
-		mDescription = (EditText) findViewById(R.id.description);
-	}
+    @Override
+    protected void initUI() {
+        mTitle = (EditText) findViewById(R.id.title);
+        mDescription = (EditText) findViewById(R.id.description);
+    }
 
-	@Override
-	protected void populateUI() {
-		mTitle.setText(mVehicleType.getTitle());
-		mDescription.setText(mVehicleType.getDescription());
-	}
+    @Override
+    protected void populateUI() {
+        mTitle.setText(mVehicleType.getTitle());
+        mDescription.setText(mVehicleType.getDescription());
+    }
 
-	@Override
-	protected void setFields() {
-		mVehicleType.setTitle(mTitle.getText().toString());
-		mVehicleType.setDescription(mDescription.getText().toString());
-	}
+    @Override
+    protected void setFields() {
+        mVehicleType.setTitle(mTitle.getText().toString());
+        mVehicleType.setDescription(mDescription.getText().toString());
+    }
 
-	@Override
-	protected String[] getProjectionArray() {
-		return VehicleTypesTable.PROJECTION;
-	}
+    @Override
+    protected String[] getProjectionArray() {
+        return VehicleTypesTable.PROJECTION;
+    }
 
-	@Override
-	protected Uri getUri(long id) {
-		return ContentUris.withAppendedId(Uri.withAppendedPath(FillUpsProvider.BASE_URI, VehicleTypesTable.URI), id);
-	}
+    @Override
+    protected Uri getUri(long id) {
+        return ContentUris.withAppendedId(
+                Uri.withAppendedPath(FillUpsProvider.BASE_URI, VehicleTypesTable.URI), id);
+    }
 
-	@Override
-	protected int getCreateString() {
-		return R.string.add_vehicle_type;
-	}
+    @Override
+    protected int getCreateString() {
+        return R.string.add_vehicle_type;
+    }
 
-	@Override
-	public boolean canDelete() {
-		Cursor count = managedQuery(VehicleTypesTable.BASE_URI, null, null, null, null);
-		return count != null && count.getCount() > 1;
-	}
+    @Override
+    public boolean canDelete() {
+        Cursor count = managedQuery(VehicleTypesTable.BASE_URI, null, null, null, null);
+        return count != null && count.getCount() > 1;
+    }
 }

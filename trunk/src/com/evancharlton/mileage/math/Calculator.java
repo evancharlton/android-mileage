@@ -1,10 +1,6 @@
 
 package com.evancharlton.mileage.math;
 
-import java.util.Currency;
-import java.util.Date;
-import java.util.Locale;
-
 import android.content.Context;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
@@ -13,6 +9,10 @@ import com.evancharlton.mileage.R;
 import com.evancharlton.mileage.dao.Fillup;
 import com.evancharlton.mileage.dao.FillupSeries;
 import com.evancharlton.mileage.dao.Vehicle;
+
+import java.util.Currency;
+import java.util.Date;
+import java.util.Locale;
 
 // TODO(future) - Does the name of this still make sense?
 public class Calculator {

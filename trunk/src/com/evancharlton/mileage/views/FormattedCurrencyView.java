@@ -1,13 +1,13 @@
 
 package com.evancharlton.mileage.views;
 
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.text.NumberFormat;
-
 import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.TextView;
+
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
 
 public class FormattedCurrencyView extends TextView {
     private static final NumberFormat FORMAT = DecimalFormat.getCurrencyInstance();

@@ -1,10 +1,6 @@
 
 package com.evancharlton.mileage.provider;
 
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import android.content.Context;
 
 import com.evancharlton.mileage.ChartActivity;
@@ -35,6 +31,10 @@ import com.evancharlton.mileage.charts.WorstFuelEconomyChart;
 import com.evancharlton.mileage.dao.CachedValue;
 import com.evancharlton.mileage.dao.Vehicle;
 import com.evancharlton.mileage.math.Calculator;
+
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 // There be dragons in this code. Tread with caution.
 public final class Statistics {

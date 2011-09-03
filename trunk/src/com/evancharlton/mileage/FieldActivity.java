@@ -1,3 +1,4 @@
+
 package com.evancharlton.mileage;
 
 import android.content.ContentUris;
@@ -12,52 +13,53 @@ import com.evancharlton.mileage.provider.FillUpsProvider;
 import com.evancharlton.mileage.provider.tables.FieldsTable;
 
 public class FieldActivity extends BaseFormActivity {
-	public static final String EXTRA_FIELD_ID = "field_id";
+    public static final String EXTRA_FIELD_ID = "field_id";
 
-	private EditText mTitle;
-	private EditText mDescription;
-	private final Field mField = new Field(new ContentValues());
+    private EditText mTitle;
+    private EditText mDescription;
+    private final Field mField = new Field(new ContentValues());
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState, R.layout.field_form);
-	}
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState, R.layout.field_form);
+    }
 
-	@Override
-	protected Dao getDao() {
-		return mField;
-	}
+    @Override
+    protected Dao getDao() {
+        return mField;
+    }
 
-	@Override
-	protected String[] getProjectionArray() {
-		return FieldsTable.PROJECTION;
-	}
+    @Override
+    protected String[] getProjectionArray() {
+        return FieldsTable.PROJECTION;
+    }
 
-	@Override
-	protected Uri getUri(long id) {
-		return ContentUris.withAppendedId(Uri.withAppendedPath(FillUpsProvider.BASE_URI, FieldsTable.URI_PATH), id);
-	}
+    @Override
+    protected Uri getUri(long id) {
+        return ContentUris.withAppendedId(
+                Uri.withAppendedPath(FillUpsProvider.BASE_URI, FieldsTable.URI_PATH), id);
+    }
 
-	@Override
-	protected void initUI() {
-		mTitle = (EditText) findViewById(R.id.title);
-		mDescription = (EditText) findViewById(R.id.description);
-	}
+    @Override
+    protected void initUI() {
+        mTitle = (EditText) findViewById(R.id.title);
+        mDescription = (EditText) findViewById(R.id.description);
+    }
 
-	@Override
-	protected void populateUI() {
-		mTitle.setText(mField.getTitle());
-		mDescription.setText(mField.getDescription());
-	}
+    @Override
+    protected void populateUI() {
+        mTitle.setText(mField.getTitle());
+        mDescription.setText(mField.getDescription());
+    }
 
-	@Override
-	protected void setFields() {
-		mField.setTitle(mTitle.getText().toString());
-		mField.setDescription(mDescription.getText().toString());
-	}
+    @Override
+    protected void setFields() {
+        mField.setTitle(mTitle.getText().toString());
+        mField.setDescription(mDescription.getText().toString());
+    }
 
-	@Override
-	protected int getCreateString() {
-		return R.string.add_field;
-	}
+    @Override
+    protected int getCreateString() {
+        return R.string.add_field;
+    }
 }

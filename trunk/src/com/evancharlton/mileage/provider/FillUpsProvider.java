@@ -1,9 +1,6 @@
 
 package com.evancharlton.mileage.provider;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -35,6 +32,9 @@ import com.evancharlton.mileage.provider.tables.ServiceIntervalsTable;
 import com.evancharlton.mileage.provider.tables.VehicleTypesTable;
 import com.evancharlton.mileage.provider.tables.VehiclesTable;
 import com.evancharlton.mileage.util.Debugger;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Exposed URIs:

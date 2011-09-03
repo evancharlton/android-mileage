@@ -1,3 +1,4 @@
+
 package com.evancharlton.mileage.charts;
 
 import android.database.Cursor;
@@ -6,21 +7,21 @@ import com.evancharlton.mileage.R;
 import com.evancharlton.mileage.dao.Vehicle;
 
 public class AverageCostChart extends CostChart {
-	@Override
-	protected String getAxisTitle() {
-		return getString(R.string.stat_avg_cost);
-	}
+    @Override
+    protected String getAxisTitle() {
+        return getString(R.string.stat_avg_cost);
+    }
 
-	@Override
-	protected void processCursor(LineChartGenerator generator, Cursor cursor, Vehicle vehicle) {
-		int num = 0;
-		while (cursor.isAfterLast() == false) {
-			if (generator.isCancelled()) {
-				break;
-			}
-			addPoint(cursor.getLong(0), cursor.getDouble(1));
-			generator.update(num++);
-			cursor.moveToNext();
-		}
-	}
+    @Override
+    protected void processCursor(LineChartGenerator generator, Cursor cursor, Vehicle vehicle) {
+        int num = 0;
+        while (cursor.isAfterLast() == false) {
+            if (generator.isCancelled()) {
+                break;
+            }
+            addPoint(cursor.getLong(0), cursor.getDouble(1));
+            generator.update(num++);
+            cursor.moveToNext();
+        }
+    }
 }

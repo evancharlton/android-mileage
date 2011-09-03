@@ -1,6 +1,5 @@
-package com.evancharlton.mileage;
 
-import java.util.ArrayList;
+package com.evancharlton.mileage;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -23,93 +22,106 @@ import com.evancharlton.mileage.provider.Settings;
 import com.evancharlton.mileage.provider.backup.BackupTransport;
 import com.evancharlton.mileage.provider.tables.FieldsTable;
 
-public class SettingsActivity extends PreferenceActivity implements Preference.OnPreferenceClickListener {
-	public static final String NAME = "com.evancharlton.mileage_preferences";
+import java.util.ArrayList;
 
-	private PreferenceCategory mBackupCategory;
+public class SettingsActivity extends PreferenceActivity implements
+        Preference.OnPreferenceClickListener {
+    public static final String NAME = "com.evancharlton.mileage_preferences";
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		addPreferencesFromResource(R.layout.settings);
+    private PreferenceCategory mBackupCategory;
 
-		mBackupCategory = (PreferenceCategory) findPreference(Settings.BACKUPS);
-		final int count = mBackupCategory.getPreferenceCount();
-		ArrayList<BackupTransport> transports = FillUpsProvider.getBackupTransports();
-		for (int i = 0; i < count; i++) {
-			BackupTransport transport = transports.get(i);
-			PreferenceScreen screen = (PreferenceScreen) mBackupCategory.getPreference(i);
-			Intent intent = screen.getIntent();
-			intent.putExtra(TransportSettingsActivity.PACKAGE_NAME, transport.getClass().getName());
-			screen.setIntent(intent);
-			screen.setTitle(transport.getName());
-		}
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        addPreferencesFromResource(R.layout.settings);
 
-		Preference about = findPreference("about");
-		String version;
-		try {
-			version = getPackageManager().getPackageInfo(getPackageName(), PackageManager.GET_ACTIVITIES).versionName;
-		} catch (NameNotFoundException e) {
-			version = "<unknown version>";
-		}
-		about.setSummary(getString(R.string.settings_about_summary, version));
-		about.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-			@Override
-			public boolean onPreferenceClick(Preference preference) {
-				startActivity(new Intent(SettingsActivity.this, AboutActivity.class));
-				return true;
-			}
-		});
+        mBackupCategory = (PreferenceCategory) findPreference(Settings.BACKUPS);
+        final int count = mBackupCategory.getPreferenceCount();
+        ArrayList<BackupTransport> transports = FillUpsProvider.getBackupTransports();
+        for (int i = 0; i < count; i++) {
+            BackupTransport transport = transports.get(i);
+            PreferenceScreen screen = (PreferenceScreen) mBackupCategory.getPreference(i);
+            Intent intent = screen.getIntent();
+            intent.putExtra(TransportSettingsActivity.PACKAGE_NAME, transport.getClass().getName());
+            screen.setIntent(intent);
+            screen.setTitle(transport.getName());
+        }
 
-		findPreference("units").setOnPreferenceClickListener(this);
-		// findPreference(Settings.META_FIELD).setOnPreferenceClickListener(this);
-	}
+        Preference about = findPreference("about");
+        String version;
+        try {
+            version = getPackageManager().getPackageInfo(getPackageName(),
+                    PackageManager.GET_ACTIVITIES).versionName;
+        } catch (NameNotFoundException e) {
+            version = "<unknown version>";
+        }
+        about.setSummary(getString(R.string.settings_about_summary, version));
+        about.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                startActivity(new Intent(SettingsActivity.this, AboutActivity.class));
+                return true;
+            }
+        });
 
-	@Override
-	public boolean onPreferenceClick(Preference preference) {
-		if ("units".equals(preference.getKey())) {
-			showDialog(R.string.settings_units);
-			return true;
-		} else if (Settings.META_FIELD.equals(preference.getKey())) {
-			showDialog(R.string.settings_meta_field_title);
-			return true;
-		}
-		return false;
-	}
+        findPreference("units").setOnPreferenceClickListener(this);
+        // findPreference(Settings.META_FIELD).setOnPreferenceClickListener(this);
+    }
 
-	@Override
-	protected Dialog onCreateDialog(final int id) {
-		switch (id) {
-			case R.string.settings_units:
-				return new AlertDialog.Builder(this).setTitle(R.string.units_title).setMessage(R.string.units_description)
-						.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(DialogInterface dialog, int which) {
-								removeDialog(id);
-							}
-						}).create();
-			case R.string.settings_meta_field_title:
-				final Cursor c = managedQuery(FieldsTable.URI, FieldsTable.PROJECTION, null, null, null);
-				final SharedPreferences prefs = getSharedPreferences(Settings.NAME, Context.MODE_PRIVATE);
-				return new AlertDialog.Builder(this).setSingleChoiceItems(c, -1, Field.TITLE, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						long id = -1;
-						if (c.moveToPosition(which)) {
-							id = c.getLong(c.getColumnIndex(Field._ID));
-						}
-						SharedPreferences.Editor editor = prefs.edit();
-						editor.putLong(Settings.META_FIELD, id);
-						editor.commit();
-					}
-				}).setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						removeDialog(id);
-					}
-				}).setTitle(R.string.dialog_title_meta_fields).create();
-			default:
-				return super.onCreateDialog(id);
-		}
-	}
+    @Override
+    public boolean onPreferenceClick(Preference preference) {
+        if ("units".equals(preference.getKey())) {
+            showDialog(R.string.settings_units);
+            return true;
+        } else if (Settings.META_FIELD.equals(preference.getKey())) {
+            showDialog(R.string.settings_meta_field_title);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    protected Dialog onCreateDialog(final int id) {
+        switch (id) {
+            case R.string.settings_units:
+                return new AlertDialog.Builder(this)
+                        .setTitle(R.string.units_title)
+                        .setMessage(R.string.units_description)
+                        .setPositiveButton(android.R.string.ok,
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        removeDialog(id);
+                                    }
+                                }).create();
+            case R.string.settings_meta_field_title:
+                final Cursor c = managedQuery(FieldsTable.URI, FieldsTable.PROJECTION, null, null,
+                        null);
+                final SharedPreferences prefs = getSharedPreferences(Settings.NAME,
+                        Context.MODE_PRIVATE);
+                return new AlertDialog.Builder(this)
+                        .setSingleChoiceItems(c, -1, Field.TITLE,
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        long id = -1;
+                                        if (c.moveToPosition(which)) {
+                                            id = c.getLong(c.getColumnIndex(Field._ID));
+                                        }
+                                        SharedPreferences.Editor editor = prefs.edit();
+                                        editor.putLong(Settings.META_FIELD, id);
+                                        editor.commit();
+                                    }
+                                })
+                        .setPositiveButton(android.R.string.ok,
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        removeDialog(id);
+                                    }
+                                }).setTitle(R.string.dialog_title_meta_fields).create();
+            default:
+                return super.onCreateDialog(id);
+        }
+    }
 }
