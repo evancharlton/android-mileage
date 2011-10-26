@@ -1,6 +1,10 @@
 
 package com.evancharlton.mileage.provider.tables;
 
+import com.evancharlton.mileage.dao.Dao;
+import com.evancharlton.mileage.dao.Field;
+import com.evancharlton.mileage.provider.FillUpsProvider;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -8,10 +12,6 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.provider.BaseColumns;
 import android.text.TextUtils;
-
-import com.evancharlton.mileage.dao.Dao;
-import com.evancharlton.mileage.dao.Field;
-import com.evancharlton.mileage.provider.FillUpsProvider;
 
 public class FieldsTable extends ContentTable {
     // make sure it's globally unique

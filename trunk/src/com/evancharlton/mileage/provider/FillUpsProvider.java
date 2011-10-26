@@ -1,6 +1,21 @@
 
 package com.evancharlton.mileage.provider;
 
+import com.evancharlton.mileage.SettingsActivity;
+import com.evancharlton.mileage.dao.Dao;
+import com.evancharlton.mileage.provider.backup.BackupTransport;
+import com.evancharlton.mileage.provider.backup.FileBackupTransport;
+import com.evancharlton.mileage.provider.tables.CacheTable;
+import com.evancharlton.mileage.provider.tables.ContentTable;
+import com.evancharlton.mileage.provider.tables.FieldsTable;
+import com.evancharlton.mileage.provider.tables.FillupsFieldsTable;
+import com.evancharlton.mileage.provider.tables.FillupsTable;
+import com.evancharlton.mileage.provider.tables.ServiceIntervalTemplatesTable;
+import com.evancharlton.mileage.provider.tables.ServiceIntervalsTable;
+import com.evancharlton.mileage.provider.tables.VehicleTypesTable;
+import com.evancharlton.mileage.provider.tables.VehiclesTable;
+import com.evancharlton.mileage.util.Debugger;
+
 import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -17,21 +32,6 @@ import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.SparseIntArray;
-
-import com.evancharlton.mileage.SettingsActivity;
-import com.evancharlton.mileage.dao.Dao;
-import com.evancharlton.mileage.provider.backup.BackupTransport;
-import com.evancharlton.mileage.provider.backup.FileBackupTransport;
-import com.evancharlton.mileage.provider.tables.CacheTable;
-import com.evancharlton.mileage.provider.tables.ContentTable;
-import com.evancharlton.mileage.provider.tables.FieldsTable;
-import com.evancharlton.mileage.provider.tables.FillupsFieldsTable;
-import com.evancharlton.mileage.provider.tables.FillupsTable;
-import com.evancharlton.mileage.provider.tables.ServiceIntervalTemplatesTable;
-import com.evancharlton.mileage.provider.tables.ServiceIntervalsTable;
-import com.evancharlton.mileage.provider.tables.VehicleTypesTable;
-import com.evancharlton.mileage.provider.tables.VehiclesTable;
-import com.evancharlton.mileage.util.Debugger;
 
 import java.util.ArrayList;
 import java.util.HashMap;

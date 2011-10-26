@@ -1,10 +1,10 @@
 
 package com.evancharlton.mileage.views;
 
+import com.evancharlton.mileage.R;
+
 import android.content.Context;
 import android.util.AttributeSet;
-
-import com.evancharlton.mileage.R;
 
 public class DateDelta extends DeltaView {
     private static final long ONE_DAY = 24 * 60 * 60 * 1000;

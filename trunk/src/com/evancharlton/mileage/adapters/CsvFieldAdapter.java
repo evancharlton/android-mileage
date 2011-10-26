@@ -1,6 +1,9 @@
 
 package com.evancharlton.mileage.adapters;
 
+import com.evancharlton.mileage.R;
+import com.evancharlton.mileage.provider.tables.FillupsTable;
+
 import android.content.Context;
 import android.database.DataSetObserver;
 import android.view.LayoutInflater;
@@ -8,9 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
-
-import com.evancharlton.mileage.R;
-import com.evancharlton.mileage.provider.tables.FillupsTable;
 
 public class CsvFieldAdapter implements SpinnerAdapter {
     private final LayoutInflater mInflater;

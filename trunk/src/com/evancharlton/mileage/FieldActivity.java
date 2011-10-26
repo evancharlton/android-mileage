@@ -1,16 +1,16 @@
 
 package com.evancharlton.mileage;
 
+import com.evancharlton.mileage.dao.Dao;
+import com.evancharlton.mileage.dao.Field;
+import com.evancharlton.mileage.provider.FillUpsProvider;
+import com.evancharlton.mileage.provider.tables.FieldsTable;
+
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.EditText;
-
-import com.evancharlton.mileage.dao.Dao;
-import com.evancharlton.mileage.dao.Field;
-import com.evancharlton.mileage.provider.FillUpsProvider;
-import com.evancharlton.mileage.provider.tables.FieldsTable;
 
 public class FieldActivity extends BaseFormActivity {
     public static final String EXTRA_FIELD_ID = "field_id";

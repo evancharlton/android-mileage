@@ -1,6 +1,8 @@
 
 package com.evancharlton.mileage.views;
 
+import com.evancharlton.mileage.R;
+
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Bundle;
@@ -11,8 +13,6 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-
-import com.evancharlton.mileage.R;
 
 public abstract class DeltaView extends LinearLayout {
     private EditText mValue;

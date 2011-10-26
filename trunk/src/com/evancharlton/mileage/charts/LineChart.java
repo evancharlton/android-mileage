@@ -1,8 +1,6 @@
 
 package com.evancharlton.mileage.charts;
 
-import android.database.Cursor;
-
 import com.artfulbits.aiCharts.Base.ChartPoint;
 import com.artfulbits.aiCharts.Base.ChartPointCollection;
 import com.artfulbits.aiCharts.Base.ChartSeries;
@@ -12,6 +10,8 @@ import com.evancharlton.mileage.dao.Fillup;
 import com.evancharlton.mileage.dao.Vehicle;
 import com.evancharlton.mileage.provider.tables.FillupsTable;
 import com.evancharlton.mileage.provider.tables.VehiclesTable;
+
+import android.database.Cursor;
 
 import java.util.Date;
 

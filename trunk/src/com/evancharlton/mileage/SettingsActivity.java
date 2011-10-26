@@ -1,6 +1,12 @@
 
 package com.evancharlton.mileage;
 
+import com.evancharlton.mileage.dao.Field;
+import com.evancharlton.mileage.provider.FillUpsProvider;
+import com.evancharlton.mileage.provider.Settings;
+import com.evancharlton.mileage.provider.backup.BackupTransport;
+import com.evancharlton.mileage.provider.tables.FieldsTable;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -15,12 +21,6 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceScreen;
-
-import com.evancharlton.mileage.dao.Field;
-import com.evancharlton.mileage.provider.FillUpsProvider;
-import com.evancharlton.mileage.provider.Settings;
-import com.evancharlton.mileage.provider.backup.BackupTransport;
-import com.evancharlton.mileage.provider.tables.FieldsTable;
 
 import java.util.ArrayList;
 

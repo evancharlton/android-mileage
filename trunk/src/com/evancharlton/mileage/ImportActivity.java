@@ -1,6 +1,11 @@
 
 package com.evancharlton.mileage;
 
+import com.evancharlton.mileage.io.CsvColumnMappingActivity;
+import com.evancharlton.mileage.io.DbImportActivity;
+import com.evancharlton.mileage.provider.Settings;
+import com.evancharlton.mileage.util.Debugger;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -21,11 +26,6 @@ import android.widget.CheckedTextView;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
-
-import com.evancharlton.mileage.io.CsvColumnMappingActivity;
-import com.evancharlton.mileage.io.DbImportActivity;
-import com.evancharlton.mileage.provider.Settings;
-import com.evancharlton.mileage.util.Debugger;
 
 import java.io.File;
 import java.io.FilenameFilter;

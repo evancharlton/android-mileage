@@ -1,6 +1,9 @@
 
 package com.evancharlton.mileage.dao;
 
+import com.evancharlton.mileage.exceptions.InvalidFieldException;
+import com.evancharlton.mileage.provider.FillUpsProvider;
+
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
@@ -8,9 +11,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
 import android.util.Log;
-
-import com.evancharlton.mileage.exceptions.InvalidFieldException;
-import com.evancharlton.mileage.provider.FillUpsProvider;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

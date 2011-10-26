@@ -1,8 +1,6 @@
 
 package com.evancharlton.mileage.provider;
 
-import android.content.Context;
-
 import com.evancharlton.mileage.ChartActivity;
 import com.evancharlton.mileage.R;
 import com.evancharlton.mileage.charts.AverageCostChart;
@@ -31,6 +29,8 @@ import com.evancharlton.mileage.charts.WorstFuelEconomyChart;
 import com.evancharlton.mileage.dao.CachedValue;
 import com.evancharlton.mileage.dao.Vehicle;
 import com.evancharlton.mileage.math.Calculator;
+
+import android.content.Context;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;

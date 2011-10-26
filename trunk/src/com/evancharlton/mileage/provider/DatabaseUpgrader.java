@@ -1,11 +1,6 @@
 
 package com.evancharlton.mileage.provider;
 
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
-import android.provider.BaseColumns;
-import android.util.Log;
-
 import com.evancharlton.mileage.dao.Fillup;
 import com.evancharlton.mileage.dao.FillupField;
 import com.evancharlton.mileage.dao.Vehicle;
@@ -19,6 +14,11 @@ import com.evancharlton.mileage.provider.tables.ServiceIntervalsTable;
 import com.evancharlton.mileage.provider.tables.VehicleTypesTable;
 import com.evancharlton.mileage.provider.tables.VehiclesTable;
 import com.evancharlton.mileage.util.Debugger;
+
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
+import android.provider.BaseColumns;
+import android.util.Log;
 
 public class DatabaseUpgrader {
     private static final String TAG = "DatabaseUpgrader";

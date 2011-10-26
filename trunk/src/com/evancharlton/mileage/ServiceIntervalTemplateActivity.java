@@ -1,13 +1,6 @@
 
 package com.evancharlton.mileage;
 
-import android.content.ContentUris;
-import android.content.ContentValues;
-import android.net.Uri;
-import android.os.Bundle;
-import android.widget.EditText;
-import android.widget.Toast;
-
 import com.evancharlton.mileage.dao.Dao;
 import com.evancharlton.mileage.dao.ServiceIntervalTemplate;
 import com.evancharlton.mileage.exceptions.InvalidFieldException;
@@ -16,6 +9,13 @@ import com.evancharlton.mileage.provider.tables.ServiceIntervalTemplatesTable;
 import com.evancharlton.mileage.views.CursorSpinner;
 import com.evancharlton.mileage.views.DateDelta;
 import com.evancharlton.mileage.views.DistanceDelta;
+
+import android.content.ContentUris;
+import android.content.ContentValues;
+import android.net.Uri;
+import android.os.Bundle;
+import android.widget.EditText;
+import android.widget.Toast;
 
 public class ServiceIntervalTemplateActivity extends BaseFormActivity {
 

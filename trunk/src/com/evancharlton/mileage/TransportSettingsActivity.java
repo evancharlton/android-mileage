@@ -1,13 +1,13 @@
 
 package com.evancharlton.mileage;
 
+import com.evancharlton.mileage.provider.FillUpsProvider;
+import com.evancharlton.mileage.provider.backup.BackupTransport;
+
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-
-import com.evancharlton.mileage.provider.FillUpsProvider;
-import com.evancharlton.mileage.provider.backup.BackupTransport;
 
 public class TransportSettingsActivity extends PreferenceActivity {
     public static final String PACKAGE_NAME = "package_name";

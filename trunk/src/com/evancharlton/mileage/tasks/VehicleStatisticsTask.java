@@ -1,10 +1,6 @@
 
 package com.evancharlton.mileage.tasks;
 
-import android.content.ContentResolver;
-import android.database.Cursor;
-import android.util.Log;
-
 import com.evancharlton.mileage.VehicleStatisticsActivity;
 import com.evancharlton.mileage.dao.CachedValue;
 import com.evancharlton.mileage.dao.Fillup;
@@ -15,6 +11,10 @@ import com.evancharlton.mileage.math.Calculator;
 import com.evancharlton.mileage.provider.Statistics;
 import com.evancharlton.mileage.provider.tables.CacheTable;
 import com.evancharlton.mileage.provider.tables.FillupsTable;
+
+import android.content.ContentResolver;
+import android.database.Cursor;
+import android.util.Log;
 
 public class VehicleStatisticsTask extends
         AttachableAsyncTask<VehicleStatisticsActivity, Cursor, Integer, Integer> {

@@ -1,6 +1,14 @@
 
 package com.evancharlton.mileage.io;
 
+import com.evancharlton.mileage.ImportActivity;
+import com.evancharlton.mileage.R;
+import com.evancharlton.mileage.dao.Fillup;
+import com.evancharlton.mileage.dao.Vehicle;
+import com.evancharlton.mileage.io.importers.CsvWizardActivity;
+import com.evancharlton.mileage.provider.tables.VehiclesTable;
+import com.evancharlton.mileage.tasks.CsvVehicleReaderTask;
+
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
@@ -10,14 +18,6 @@ import android.view.View;
 import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
-
-import com.evancharlton.mileage.ImportActivity;
-import com.evancharlton.mileage.R;
-import com.evancharlton.mileage.dao.Fillup;
-import com.evancharlton.mileage.dao.Vehicle;
-import com.evancharlton.mileage.io.importers.CsvWizardActivity;
-import com.evancharlton.mileage.provider.tables.VehiclesTable;
-import com.evancharlton.mileage.tasks.CsvVehicleReaderTask;
 
 import java.util.ArrayList;
 import java.util.HashMap;

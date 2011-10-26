@@ -1,16 +1,6 @@
 
 package com.evancharlton.mileage;
 
-import android.content.ContentUris;
-import android.content.ContentValues;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.EditText;
-import android.widget.Toast;
-
 import com.evancharlton.mileage.dao.Dao;
 import com.evancharlton.mileage.dao.Fillup;
 import com.evancharlton.mileage.dao.ServiceInterval;
@@ -25,6 +15,16 @@ import com.evancharlton.mileage.views.CursorSpinner;
 import com.evancharlton.mileage.views.DateButton;
 import com.evancharlton.mileage.views.DateDelta;
 import com.evancharlton.mileage.views.DistanceDelta;
+
+import android.content.ContentUris;
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.EditText;
+import android.widget.Toast;
 
 public class ServiceIntervalActivity extends BaseFormActivity {
     private final ServiceInterval mInterval = new ServiceInterval(new ContentValues());

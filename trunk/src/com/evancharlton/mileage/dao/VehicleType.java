@@ -1,12 +1,12 @@
 
 package com.evancharlton.mileage.dao;
 
-import android.content.ContentValues;
-import android.database.Cursor;
-
 import com.evancharlton.mileage.R;
 import com.evancharlton.mileage.dao.Dao.DataObject;
 import com.evancharlton.mileage.provider.tables.VehicleTypesTable;
+
+import android.content.ContentValues;
+import android.database.Cursor;
 
 @DataObject(path = VehicleTypesTable.URI)
 public class VehicleType extends Dao {

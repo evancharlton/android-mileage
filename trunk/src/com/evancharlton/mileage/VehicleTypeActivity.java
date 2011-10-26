@@ -1,17 +1,17 @@
 
 package com.evancharlton.mileage;
 
+import com.evancharlton.mileage.dao.Dao;
+import com.evancharlton.mileage.dao.VehicleType;
+import com.evancharlton.mileage.provider.FillUpsProvider;
+import com.evancharlton.mileage.provider.tables.VehicleTypesTable;
+
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.EditText;
-
-import com.evancharlton.mileage.dao.Dao;
-import com.evancharlton.mileage.dao.VehicleType;
-import com.evancharlton.mileage.provider.FillUpsProvider;
-import com.evancharlton.mileage.provider.tables.VehicleTypesTable;
 
 public class VehicleTypeActivity extends BaseFormActivity {
     private EditText mTitle;

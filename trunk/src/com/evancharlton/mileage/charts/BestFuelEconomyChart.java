@@ -1,11 +1,11 @@
 
 package com.evancharlton.mileage.charts;
 
-import android.database.Cursor;
-
 import com.evancharlton.mileage.R;
 import com.evancharlton.mileage.dao.Vehicle;
 import com.evancharlton.mileage.math.Calculator;
+
+import android.database.Cursor;
 
 public class BestFuelEconomyChart extends FuelEconomyChart {
     @Override

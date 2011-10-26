@@ -1,11 +1,6 @@
 
 package com.evancharlton.mileage.tasks;
 
-import android.content.ContentResolver;
-import android.database.Cursor;
-import android.util.Log;
-import android.widget.Toast;
-
 import com.evancharlton.mileage.R;
 import com.evancharlton.mileage.adapters.FillupAdapter;
 import com.evancharlton.mileage.dao.Fillup;
@@ -14,6 +9,11 @@ import com.evancharlton.mileage.dao.Vehicle;
 import com.evancharlton.mileage.exceptions.InvalidFieldException;
 import com.evancharlton.mileage.math.Calculator;
 import com.evancharlton.mileage.provider.tables.FillupsTable;
+
+import android.content.ContentResolver;
+import android.database.Cursor;
+import android.util.Log;
+import android.widget.Toast;
 
 public class AverageEconomyTask extends
         AttachableAsyncTask<FillupAdapter, Vehicle, Integer, Double> {

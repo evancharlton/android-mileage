@@ -1,6 +1,13 @@
 
 package com.evancharlton.mileage.io;
 
+import com.evancharlton.mileage.ImportActivity;
+import com.evancharlton.mileage.R;
+import com.evancharlton.mileage.adapters.DateFormatAdapter;
+import com.evancharlton.mileage.dao.Fillup;
+import com.evancharlton.mileage.io.importers.CsvWizardActivity;
+import com.evancharlton.mileage.tasks.CsvDateReaderTask;
+
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -9,13 +16,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 import android.widget.TextView;
-
-import com.evancharlton.mileage.ImportActivity;
-import com.evancharlton.mileage.R;
-import com.evancharlton.mileage.adapters.DateFormatAdapter;
-import com.evancharlton.mileage.dao.Fillup;
-import com.evancharlton.mileage.io.importers.CsvWizardActivity;
-import com.evancharlton.mileage.tasks.CsvDateReaderTask;
 
 import java.text.DateFormat;
 import java.text.ParseException;

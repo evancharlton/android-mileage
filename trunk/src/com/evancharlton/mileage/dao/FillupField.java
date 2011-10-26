@@ -1,17 +1,17 @@
 
 package com.evancharlton.mileage.dao;
 
-import android.content.ContentUris;
-import android.content.ContentValues;
-import android.content.Context;
-import android.database.Cursor;
-import android.net.Uri;
-
 import com.evancharlton.mileage.R;
 import com.evancharlton.mileage.exceptions.InvalidFieldException;
 import com.evancharlton.mileage.provider.FillUpsProvider;
 import com.evancharlton.mileage.provider.tables.FieldsTable;
 import com.evancharlton.mileage.provider.tables.FillupsFieldsTable;
+
+import android.content.ContentUris;
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
 
 public class FillupField extends Dao {
     public static final String FILLUP_ID = "fillup_id";

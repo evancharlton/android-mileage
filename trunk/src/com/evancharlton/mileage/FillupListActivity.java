@@ -1,6 +1,12 @@
 
 package com.evancharlton.mileage;
 
+import com.evancharlton.mileage.adapters.FillupAdapter;
+import com.evancharlton.mileage.dao.Vehicle;
+import com.evancharlton.mileage.provider.tables.FillupsTable;
+import com.evancharlton.mileage.tasks.AverageEconomyTask;
+import com.evancharlton.mileage.views.CursorSpinner;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -19,12 +25,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.ListView;
-
-import com.evancharlton.mileage.adapters.FillupAdapter;
-import com.evancharlton.mileage.dao.Vehicle;
-import com.evancharlton.mileage.provider.tables.FillupsTable;
-import com.evancharlton.mileage.tasks.AverageEconomyTask;
-import com.evancharlton.mileage.views.CursorSpinner;
 
 public class FillupListActivity extends Activity {
     private static final String TAG = "FillupListActivity";

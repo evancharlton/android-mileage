@@ -1,6 +1,12 @@
 
 package com.evancharlton.mileage;
 
+import com.evancharlton.mileage.dao.ServiceInterval;
+import com.evancharlton.mileage.dao.Vehicle;
+import com.evancharlton.mileage.math.Calculator;
+import com.evancharlton.mileage.provider.FillUpsProvider;
+import com.evancharlton.mileage.provider.tables.ServiceIntervalsTable;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -11,12 +17,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-
-import com.evancharlton.mileage.dao.ServiceInterval;
-import com.evancharlton.mileage.dao.Vehicle;
-import com.evancharlton.mileage.math.Calculator;
-import com.evancharlton.mileage.provider.FillUpsProvider;
-import com.evancharlton.mileage.provider.tables.ServiceIntervalsTable;
 
 public class ServiceIntervalsListActivity extends BaseListActivity implements
         DialogInterface.OnClickListener, View.OnClickListener {

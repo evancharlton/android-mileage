@@ -1,6 +1,10 @@
 
 package com.evancharlton.mileage.io;
 
+import com.evancharlton.mileage.R;
+import com.evancharlton.mileage.io.importers.CsvWizardActivity;
+import com.evancharlton.mileage.tasks.CsvImportTask;
+
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -8,10 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
-import com.evancharlton.mileage.R;
-import com.evancharlton.mileage.io.importers.CsvWizardActivity;
-import com.evancharlton.mileage.tasks.CsvImportTask;
 
 public class CsvImportActivity extends CsvWizardActivity {
     public static final String TOTAL_ROWS = "total_rows";

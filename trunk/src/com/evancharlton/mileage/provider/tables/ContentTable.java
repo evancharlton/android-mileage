@@ -1,6 +1,9 @@
 
 package com.evancharlton.mileage.provider.tables;
 
+import com.evancharlton.mileage.dao.Dao;
+import com.evancharlton.mileage.dao.Dao.Column;
+
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
@@ -8,9 +11,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.provider.BaseColumns;
-
-import com.evancharlton.mileage.dao.Dao;
-import com.evancharlton.mileage.dao.Dao.Column;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;

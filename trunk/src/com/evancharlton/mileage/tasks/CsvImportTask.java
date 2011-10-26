@@ -1,12 +1,6 @@
 
 package com.evancharlton.mileage.tasks;
 
-import android.content.ContentValues;
-import android.os.Bundle;
-import android.util.Log;
-
-import au.com.bytecode.opencsv.CSVReader;
-
 import com.evancharlton.mileage.ImportActivity;
 import com.evancharlton.mileage.R;
 import com.evancharlton.mileage.dao.Fillup;
@@ -16,6 +10,12 @@ import com.evancharlton.mileage.io.CsvImportActivity;
 import com.evancharlton.mileage.provider.Settings;
 import com.evancharlton.mileage.provider.tables.CacheTable;
 import com.evancharlton.mileage.provider.tables.FillupsTable;
+
+import android.content.ContentValues;
+import android.os.Bundle;
+import android.util.Log;
+
+import au.com.bytecode.opencsv.CSVReader;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

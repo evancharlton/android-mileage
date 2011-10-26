@@ -1,12 +1,12 @@
 
 package com.evancharlton.mileage.views;
 
+import com.evancharlton.mileage.R;
+
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.widget.TextView;
-
-import com.evancharlton.mileage.R;
 
 import java.text.DateFormat;
 import java.util.Date;

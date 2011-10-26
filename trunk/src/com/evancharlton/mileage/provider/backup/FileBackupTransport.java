@@ -1,16 +1,16 @@
 
 package com.evancharlton.mileage.provider.backup;
 
+import com.evancharlton.mileage.R;
+import com.evancharlton.mileage.SettingsActivity;
+import com.evancharlton.mileage.provider.Settings;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
 import android.widget.Toast;
-
-import com.evancharlton.mileage.R;
-import com.evancharlton.mileage.SettingsActivity;
-import com.evancharlton.mileage.provider.Settings;
 
 import java.io.File;
 import java.io.FileInputStream;

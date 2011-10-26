@@ -1,9 +1,9 @@
 
 package com.evancharlton.mileage.charts;
 
-import android.database.Cursor;
-
 import com.evancharlton.mileage.dao.Vehicle;
+
+import android.database.Cursor;
 
 public abstract class IntervalCostChart extends CostChart {
     protected abstract long getInterval();

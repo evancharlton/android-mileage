@@ -1,15 +1,15 @@
 
 package com.evancharlton.mileage.provider.tables;
 
+import com.evancharlton.mileage.dao.CachedValue;
+import com.evancharlton.mileage.dao.Dao;
+import com.evancharlton.mileage.provider.FillUpsProvider;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
-
-import com.evancharlton.mileage.dao.CachedValue;
-import com.evancharlton.mileage.dao.Dao;
-import com.evancharlton.mileage.provider.FillUpsProvider;
 
 public class CacheTable extends ContentTable {
     private static final int CACHES = 80;

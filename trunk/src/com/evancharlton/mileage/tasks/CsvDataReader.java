@@ -1,12 +1,12 @@
 
 package com.evancharlton.mileage.tasks;
 
+import com.evancharlton.mileage.io.CsvColumnMappingActivity;
+import com.evancharlton.mileage.provider.Settings;
+
 import android.util.Log;
 
 import au.com.bytecode.opencsv.CSVReader;
-
-import com.evancharlton.mileage.io.CsvColumnMappingActivity;
-import com.evancharlton.mileage.provider.Settings;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

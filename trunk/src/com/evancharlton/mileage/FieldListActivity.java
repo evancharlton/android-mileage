@@ -1,16 +1,16 @@
 
 package com.evancharlton.mileage;
 
+import com.evancharlton.mileage.dao.Field;
+import com.evancharlton.mileage.provider.FillUpsProvider;
+import com.evancharlton.mileage.provider.tables.FieldsTable;
+
 import android.content.Intent;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-
-import com.evancharlton.mileage.dao.Field;
-import com.evancharlton.mileage.provider.FillUpsProvider;
-import com.evancharlton.mileage.provider.tables.FieldsTable;
 
 public class FieldListActivity extends BaseListActivity {
     private static final int MENU_ADD_FIELD = 0;

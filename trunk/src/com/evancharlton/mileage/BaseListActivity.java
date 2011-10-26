@@ -1,6 +1,8 @@
 
 package com.evancharlton.mileage;
 
+import com.evancharlton.mileage.dao.Dao;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -22,8 +24,6 @@ import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
-
-import com.evancharlton.mileage.dao.Dao;
 
 public abstract class BaseListActivity extends ListActivity implements
         AdapterView.OnItemClickListener, View.OnCreateContextMenuListener {

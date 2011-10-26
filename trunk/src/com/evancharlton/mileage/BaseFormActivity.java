@@ -1,6 +1,10 @@
 
 package com.evancharlton.mileage;
 
+import com.evancharlton.mileage.dao.Dao;
+import com.evancharlton.mileage.exceptions.InvalidFieldException;
+import com.evancharlton.mileage.provider.Settings;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -17,10 +21,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
-
-import com.evancharlton.mileage.dao.Dao;
-import com.evancharlton.mileage.exceptions.InvalidFieldException;
-import com.evancharlton.mileage.provider.Settings;
 
 public abstract class BaseFormActivity extends Activity {
     public static final String EXTRA_ITEM_ID = "dao_item_id";

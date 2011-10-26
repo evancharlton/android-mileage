@@ -1,14 +1,14 @@
 
 package com.evancharlton.mileage.math;
 
-import android.content.Context;
-import android.text.TextUtils;
-import android.text.format.DateFormat;
-
 import com.evancharlton.mileage.R;
 import com.evancharlton.mileage.dao.Fillup;
 import com.evancharlton.mileage.dao.FillupSeries;
 import com.evancharlton.mileage.dao.Vehicle;
+
+import android.content.Context;
+import android.text.TextUtils;
+import android.text.format.DateFormat;
 
 import java.util.Currency;
 import java.util.Date;

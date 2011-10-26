@@ -1,6 +1,12 @@
 
 package com.evancharlton.mileage.io;
 
+import com.evancharlton.mileage.ImportActivity;
+import com.evancharlton.mileage.R;
+import com.evancharlton.mileage.adapters.CsvFieldAdapter;
+import com.evancharlton.mileage.io.importers.CsvWizardActivity;
+import com.evancharlton.mileage.tasks.CsvColumnReaderTask;
+
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -9,12 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Spinner;
 import android.widget.TextView;
-
-import com.evancharlton.mileage.ImportActivity;
-import com.evancharlton.mileage.R;
-import com.evancharlton.mileage.adapters.CsvFieldAdapter;
-import com.evancharlton.mileage.io.importers.CsvWizardActivity;
-import com.evancharlton.mileage.tasks.CsvColumnReaderTask;
 
 import java.util.ArrayList;
 

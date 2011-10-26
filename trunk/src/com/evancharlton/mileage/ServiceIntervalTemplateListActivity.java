@@ -1,6 +1,10 @@
 
 package com.evancharlton.mileage;
 
+import com.evancharlton.mileage.dao.ServiceIntervalTemplate;
+import com.evancharlton.mileage.provider.FillUpsProvider;
+import com.evancharlton.mileage.provider.tables.ServiceIntervalTemplatesTable;
+
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
@@ -8,10 +12,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-
-import com.evancharlton.mileage.dao.ServiceIntervalTemplate;
-import com.evancharlton.mileage.provider.FillUpsProvider;
-import com.evancharlton.mileage.provider.tables.ServiceIntervalTemplatesTable;
 
 public class ServiceIntervalTemplateListActivity extends BaseListActivity implements
         View.OnClickListener {

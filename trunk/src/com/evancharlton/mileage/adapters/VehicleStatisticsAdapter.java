@@ -1,6 +1,14 @@
 
 package com.evancharlton.mileage.adapters;
 
+import com.evancharlton.mileage.R;
+import com.evancharlton.mileage.dao.CachedValue;
+import com.evancharlton.mileage.dao.Vehicle;
+import com.evancharlton.mileage.provider.Statistics;
+import com.evancharlton.mileage.provider.Statistics.Statistic;
+import com.evancharlton.mileage.provider.Statistics.StatisticsGroup;
+import com.evancharlton.mileage.provider.tables.CacheTable;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -10,14 +18,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-
-import com.evancharlton.mileage.R;
-import com.evancharlton.mileage.dao.CachedValue;
-import com.evancharlton.mileage.dao.Vehicle;
-import com.evancharlton.mileage.provider.Statistics;
-import com.evancharlton.mileage.provider.Statistics.Statistic;
-import com.evancharlton.mileage.provider.Statistics.StatisticsGroup;
-import com.evancharlton.mileage.provider.tables.CacheTable;
 
 import java.util.ArrayList;
 import java.util.HashMap;

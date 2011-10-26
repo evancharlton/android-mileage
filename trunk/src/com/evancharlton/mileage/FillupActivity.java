@@ -1,24 +1,6 @@
 
 package com.evancharlton.mileage;
 
-import android.app.Activity;
-import android.content.ContentUris;
-import android.content.ContentValues;
-import android.content.Intent;
-import android.database.Cursor;
-import android.location.Location;
-import android.location.LocationManager;
-import android.net.Uri;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.Toast;
-
 import com.evancharlton.mileage.dao.CachedValue;
 import com.evancharlton.mileage.dao.Dao;
 import com.evancharlton.mileage.dao.Field;
@@ -40,6 +22,24 @@ import com.evancharlton.mileage.views.CursorSpinner;
 import com.evancharlton.mileage.views.DateButton;
 import com.evancharlton.mileage.views.DividerView;
 import com.evancharlton.mileage.views.FieldView;
+
+import android.app.Activity;
+import android.content.ContentUris;
+import android.content.ContentValues;
+import android.content.Intent;
+import android.database.Cursor;
+import android.location.Location;
+import android.location.LocationManager;
+import android.net.Uri;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;

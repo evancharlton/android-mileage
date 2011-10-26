@@ -1,6 +1,11 @@
 
 package com.evancharlton.mileage;
 
+import com.evancharlton.mileage.dao.Fillup;
+import com.evancharlton.mileage.provider.tables.FillupsTable;
+import com.evancharlton.mileage.tasks.FillupInfoTask;
+import com.evancharlton.mileage.tasks.FillupInfoTask.Information;
+
 import android.app.Activity;
 import android.content.ContentUris;
 import android.content.Intent;
@@ -12,11 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import com.evancharlton.mileage.dao.Fillup;
-import com.evancharlton.mileage.provider.tables.FillupsTable;
-import com.evancharlton.mileage.tasks.FillupInfoTask;
-import com.evancharlton.mileage.tasks.FillupInfoTask.Information;
 
 public class FillupInfoActivity extends Activity implements View.OnClickListener {
     private static final String TAG = "FillupInfoActivity";

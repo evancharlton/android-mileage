@@ -1,6 +1,16 @@
 
 package com.evancharlton.mileage.adapters;
 
+import com.evancharlton.mileage.FillupInfoActivity;
+import com.evancharlton.mileage.R;
+import com.evancharlton.mileage.dao.Fillup;
+import com.evancharlton.mileage.dao.Vehicle;
+import com.evancharlton.mileage.math.Calculator;
+import com.evancharlton.mileage.provider.tables.FillupsTable;
+import com.evancharlton.mileage.views.FormattedCurrencyView;
+import com.evancharlton.mileage.views.FormattedDateView;
+import com.evancharlton.mileage.views.FormattedNumberView;
+
 import android.content.Context;
 import android.content.Intent;
 import android.database.ContentObserver;
@@ -13,16 +23,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.evancharlton.mileage.FillupInfoActivity;
-import com.evancharlton.mileage.R;
-import com.evancharlton.mileage.dao.Fillup;
-import com.evancharlton.mileage.dao.Vehicle;
-import com.evancharlton.mileage.math.Calculator;
-import com.evancharlton.mileage.provider.tables.FillupsTable;
-import com.evancharlton.mileage.views.FormattedCurrencyView;
-import com.evancharlton.mileage.views.FormattedDateView;
-import com.evancharlton.mileage.views.FormattedNumberView;
 
 import java.text.DecimalFormat;
 

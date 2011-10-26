@@ -1,6 +1,15 @@
 
 package com.evancharlton.mileage;
 
+import com.evancharlton.mileage.adapters.VehicleStatisticsAdapter;
+import com.evancharlton.mileage.dao.CachedValue;
+import com.evancharlton.mileage.dao.Vehicle;
+import com.evancharlton.mileage.provider.Statistics;
+import com.evancharlton.mileage.provider.Statistics.Statistic;
+import com.evancharlton.mileage.provider.tables.CacheTable;
+import com.evancharlton.mileage.provider.tables.VehiclesTable;
+import com.evancharlton.mileage.tasks.VehicleStatisticsTask;
+
 import android.app.Activity;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -20,15 +29,6 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
-
-import com.evancharlton.mileage.adapters.VehicleStatisticsAdapter;
-import com.evancharlton.mileage.dao.CachedValue;
-import com.evancharlton.mileage.dao.Vehicle;
-import com.evancharlton.mileage.provider.Statistics;
-import com.evancharlton.mileage.provider.Statistics.Statistic;
-import com.evancharlton.mileage.provider.tables.CacheTable;
-import com.evancharlton.mileage.provider.tables.VehiclesTable;
-import com.evancharlton.mileage.tasks.VehicleStatisticsTask;
 
 public class VehicleStatisticsActivity extends Activity {
     private static final String TAG = "VehicleStatisticsActivity";

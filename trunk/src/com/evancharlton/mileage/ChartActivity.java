@@ -1,6 +1,10 @@
 
 package com.evancharlton.mileage;
 
+import com.artfulbits.aiCharts.ChartView;
+import com.artfulbits.aiCharts.Base.ChartArea;
+import com.artfulbits.aiCharts.Base.ChartSeries;
+
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -10,10 +14,6 @@ import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.ZoomControls;
-
-import com.artfulbits.aiCharts.ChartView;
-import com.artfulbits.aiCharts.Base.ChartArea;
-import com.artfulbits.aiCharts.Base.ChartSeries;
 
 public abstract class ChartActivity extends Activity implements DialogInterface.OnCancelListener {
     public static final String VEHICLE_ID = "vehicle_id";

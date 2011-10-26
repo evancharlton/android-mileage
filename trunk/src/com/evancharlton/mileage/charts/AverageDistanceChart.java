@@ -1,10 +1,10 @@
 
 package com.evancharlton.mileage.charts;
 
-import android.database.Cursor;
-
 import com.evancharlton.mileage.R;
 import com.evancharlton.mileage.dao.Vehicle;
+
+import android.database.Cursor;
 
 public class AverageDistanceChart extends DistanceChart {
 

@@ -1,14 +1,14 @@
 
 package com.evancharlton.mileage.io;
 
+import com.evancharlton.mileage.R;
+import com.evancharlton.mileage.dao.Fillup;
+import com.evancharlton.mileage.provider.tables.FillupsTable;
+
 import android.database.Cursor;
 import android.net.Uri;
 
 import au.com.bytecode.opencsv.CSVWriter;
-
-import com.evancharlton.mileage.R;
-import com.evancharlton.mileage.dao.Fillup;
-import com.evancharlton.mileage.provider.tables.FillupsTable;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;

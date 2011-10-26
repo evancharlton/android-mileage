@@ -1,16 +1,16 @@
 
 package com.evancharlton.mileage.io;
 
+import com.evancharlton.mileage.ImportActivity;
+import com.evancharlton.mileage.R;
+import com.evancharlton.mileage.tasks.DbImportTask;
+
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
-import com.evancharlton.mileage.ImportActivity;
-import com.evancharlton.mileage.R;
-import com.evancharlton.mileage.tasks.DbImportTask;
 
 public class DbImportActivity extends Activity {
     private DbImportTask mTask;

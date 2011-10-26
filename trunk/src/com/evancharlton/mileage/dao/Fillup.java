@@ -1,16 +1,16 @@
 
 package com.evancharlton.mileage.dao;
 
+import com.evancharlton.mileage.R;
+import com.evancharlton.mileage.dao.Dao.DataObject;
+import com.evancharlton.mileage.provider.tables.FillupsFieldsTable;
+import com.evancharlton.mileage.provider.tables.FillupsTable;
+
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
-
-import com.evancharlton.mileage.R;
-import com.evancharlton.mileage.dao.Dao.DataObject;
-import com.evancharlton.mileage.provider.tables.FillupsFieldsTable;
-import com.evancharlton.mileage.provider.tables.FillupsTable;
 
 import java.util.ArrayList;
 import java.util.Date;

@@ -1,6 +1,10 @@
 
 package com.evancharlton.mileage.views;
 
+import com.evancharlton.mileage.R;
+import com.evancharlton.mileage.adapters.SpinnerCursorAdapter;
+import com.evancharlton.mileage.provider.FillUpsProvider;
+
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.database.Cursor;
@@ -9,10 +13,6 @@ import android.provider.BaseColumns;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Spinner;
-
-import com.evancharlton.mileage.R;
-import com.evancharlton.mileage.adapters.SpinnerCursorAdapter;
-import com.evancharlton.mileage.provider.FillUpsProvider;
 
 public class CursorSpinner extends Spinner {
     private Cursor mCursor;

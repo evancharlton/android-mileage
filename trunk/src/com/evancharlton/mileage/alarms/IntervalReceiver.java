@@ -1,11 +1,11 @@
 
 package com.evancharlton.mileage.alarms;
 
+import com.evancharlton.mileage.dao.ServiceInterval;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-
-import com.evancharlton.mileage.dao.ServiceInterval;
 
 public class IntervalReceiver extends BroadcastReceiver {
     @Override

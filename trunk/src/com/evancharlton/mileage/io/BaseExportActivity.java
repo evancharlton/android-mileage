@@ -1,6 +1,10 @@
 
 package com.evancharlton.mileage.io;
 
+import com.evancharlton.mileage.ExportActivity;
+import com.evancharlton.mileage.R;
+import com.evancharlton.mileage.provider.Settings;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -8,10 +12,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
-import com.evancharlton.mileage.ExportActivity;
-import com.evancharlton.mileage.R;
-import com.evancharlton.mileage.provider.Settings;
 
 public abstract class BaseExportActivity extends Activity {
     private ProgressBar mProgressBar;

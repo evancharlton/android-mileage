@@ -1,6 +1,8 @@
 
 package com.evancharlton.mileage.io.importers;
 
+import com.evancharlton.mileage.R;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,8 +10,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import com.evancharlton.mileage.R;
 
 public abstract class CsvWizardActivity extends Activity implements View.OnClickListener {
     protected static final int REQUEST_NEXT = 0;

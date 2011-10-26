@@ -1,15 +1,6 @@
 
 package com.evancharlton.mileage;
 
-import android.content.ContentUris;
-import android.content.ContentValues;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.Bundle;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.Spinner;
-
 import com.evancharlton.mileage.dao.CachedValue;
 import com.evancharlton.mileage.dao.Dao;
 import com.evancharlton.mileage.dao.Fillup;
@@ -19,6 +10,15 @@ import com.evancharlton.mileage.provider.tables.CacheTable;
 import com.evancharlton.mileage.provider.tables.FillupsTable;
 import com.evancharlton.mileage.provider.tables.VehiclesTable;
 import com.evancharlton.mileage.views.CursorSpinner;
+
+import android.content.ContentUris;
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.Bundle;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.Spinner;
 
 public class VehicleActivity extends BaseFormActivity {
     private EditText mTitle;

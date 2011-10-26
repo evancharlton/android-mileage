@@ -1,6 +1,9 @@
 
 package com.evancharlton.mileage;
 
+import com.evancharlton.mileage.dao.Vehicle;
+import com.evancharlton.mileage.provider.tables.VehiclesTable;
+
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -11,9 +14,6 @@ import android.view.MenuItem;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.BaseAdapter;
 import android.widget.Toast;
-
-import com.evancharlton.mileage.dao.Vehicle;
-import com.evancharlton.mileage.provider.tables.VehiclesTable;
 
 public class VehicleListActivity extends BaseListActivity {
     private static final int MENU_TYPES = 1;

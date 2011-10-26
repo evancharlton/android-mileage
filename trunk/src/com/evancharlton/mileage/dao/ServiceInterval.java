@@ -1,6 +1,14 @@
 
 package com.evancharlton.mileage.dao;
 
+import com.evancharlton.mileage.R;
+import com.evancharlton.mileage.ServiceIntervalsListActivity;
+import com.evancharlton.mileage.alarms.IntervalReceiver;
+import com.evancharlton.mileage.dao.Dao.DataObject;
+import com.evancharlton.mileage.math.Calculator;
+import com.evancharlton.mileage.provider.Settings;
+import com.evancharlton.mileage.provider.tables.ServiceIntervalsTable;
+
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.Notification;
@@ -14,14 +22,6 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.widget.Toast;
-
-import com.evancharlton.mileage.R;
-import com.evancharlton.mileage.ServiceIntervalsListActivity;
-import com.evancharlton.mileage.alarms.IntervalReceiver;
-import com.evancharlton.mileage.dao.Dao.DataObject;
-import com.evancharlton.mileage.math.Calculator;
-import com.evancharlton.mileage.provider.Settings;
-import com.evancharlton.mileage.provider.tables.ServiceIntervalsTable;
 
 import java.util.Date;
 
