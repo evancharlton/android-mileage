@@ -2,8 +2,8 @@
 <resources>
 	<string name="app_name" translatable="false">Mileage</string>
 
-	<string name="creating_chart">Creating chart...</string>
-	<string name="status_calculating">calculating...</string>
+	<string name="creating_chart">Creating chart&#8230;</string>
+	<string name="status_calculating">calculating&#8230;</string>
 	<string name="status_partial">partial</string>
 	
 	<string name="unit_price_volume">Unit price, volume</string>
@@ -21,7 +21,7 @@
 	<string name="empty_fillups">No saved fillups for this vehicle!\nGo fill up your tank and try again.</string>
 	<string name="empty_fields">No additional fields have been created!\nPress menu or use the button below to add as many as you want!</string>
 	
-	<string name="toast_calculating_avg_economy">Calculating average fuel economy...</string>
+	<string name="toast_calculating_avg_economy">Calculating average fuel economy&#8230;</string>
 	<string name="toast_vehicle_set_as_default">Vehicle set as default!</string>
 	
 	<string name="previous">Previous</string>
@@ -314,10 +314,9 @@
 	<string name="importer_sqlite">Database (*.db)</string>
 	<string name="exporter_csv">Spreadsheet (Excel, Google Docs)</string>
 	<string name="exporter_sqlite">Database (backups, SQLite)</string>
-	<string name="exporting">Exporting to %1$s ...</string>
+	<string name="exporting">Exporting to %1$s &#8230;</string>
 	<string name="exported">Exported data to %1$s!</string>
 	<string name="export_error">Unable to export data!</string>
-	<string name="importing">Importing from %1$s ...</string>
 	
 	<string name="column_id">ID</string>
 	<string name="column_total_cost">Total cost</string>
@@ -334,18 +333,18 @@
 	<string name="column_metadata">Metadata</string>
 	<string name="column_none">[Skip]</string>
 	
-	<string name="update_wrote_headers">Wrote headers...</string>
+	<string name="update_wrote_headers">Wrote headers&#8230;</string>
 	<string name="update_wrote_rows">%1$d rows written (%2$s total)</string>
 	<string name="update_read_rows">%1$d rows processed (%2$s total)</string>
 	<string name="update_imported">Processed %1$d rows!</string>
 	<string name="update_erased_database">Erased fillup data</string>
 	<string name="update_erased_cache">Erased statistics cache</string>
 	<string name="update_finished_importing">Import finished!</string>
-	<string name="update_starting_import">Starting import...</string>
-	<string name="update_made_backup">Made a backup of the current db...</string>
-	<string name="update_upgrading_database">Upgrading database...</string>
-	<string name="update_upgraded_database">Database upgraded...</string>
-	<string name="update_cleaning_up">Cleaning up...</string>
+	<string name="update_starting_import">Starting import&#8230;</string>
+	<string name="update_made_backup">Made a backup of the current db&#8230;</string>
+	<string name="update_upgrading_database">Upgrading database&#8230;</string>
+	<string name="update_upgraded_database">Database upgraded&#8230;</string>
+	<string name="update_cleaning_up">Cleaning up&#8230;</string>
 	
 	<!-- development -->
 	<string name="about_app">Mileage is provided for free; if you paid for this, I suggest you get a refund. Mileage is open-source under the Apache 2.0 license. Patches are very much welcome!</string>

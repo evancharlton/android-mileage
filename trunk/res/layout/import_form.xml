@@ -20,8 +20,8 @@
 			<Spinner
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
-				android:entries="@array/exporters"
-				android:id="@+id/exporter"
+				android:entries="@array/importers"
+				android:id="@+id/importer"
 			/>
 			<Spinner
 				android:layout_width="fill_parent"

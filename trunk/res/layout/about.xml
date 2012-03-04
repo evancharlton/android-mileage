@@ -1,18 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:orientation="vertical"
-	android:layout_width="fill_parent"
-	android:layout_height="fill_parent"
->
 	<ScrollView
+		xmlns:android="http://schemas.android.com/apk/res/android"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 	>
 		<LinearLayout
 			android:id="@+id/help_container"
 			android:layout_width="fill_parent"
-			android:layout_height="fill_parent"
+			android:layout_height="wrap_content"
 			android:paddingLeft="5dip"
 			android:paddingRight="5dip"
 			android:orientation="vertical"
@@ -31,7 +26,7 @@
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
 				android:text="@string/about_author"
-			/>
+			/>fill_parent
 			<TextView
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
@@ -102,4 +97,3 @@
 			/>
 		</LinearLayout>
 	</ScrollView>
-</LinearLayout>

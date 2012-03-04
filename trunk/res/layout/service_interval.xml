@@ -35,25 +35,24 @@
 		android:layout_height="wrap_content"
 		android:text="@string/divider_interval_start"
 	/>
-	<TableLayout
+	<LinearLayout
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
+		android:orientation="horizontal"
 	>
-		<TableRow>
-		`	<EditText
-				android:id="@+id/odometer"
-				android:layout_width="fill_parent"
-				android:layout_height="wrap_content"
-				android:inputType="number"
-				android:hint="@string/odometer"
-				android:layout_weight="1"
-			/>
-			<com.evancharlton.mileage.views.DateButton
-				android:id="@+id/date"
-				android:layout_width="fill_parent"
-				android:layout_height="wrap_content"
-				android:layout_weight="1"
-			/>
-		</TableRow>
-	</TableLayout>
+		<EditText
+			android:id="@+id/odometer"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:inputType="number"
+			android:hint="@string/odometer"
+			android:layout_weight="1"
+		/>
+		<com.evancharlton.mileage.views.DateButton
+			android:id="@+id/date"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+		/>
+	</LinearLayout>
 </merge>

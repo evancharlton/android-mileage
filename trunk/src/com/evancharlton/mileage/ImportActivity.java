@@ -32,27 +32,31 @@ import java.io.FilenameFilter;
 
 public class ImportActivity extends Activity {
     private static final String TAG = "ImportActivity";
+
     public static final String FILENAME = "filename";
+
     public static final String WIPE_DATA = "wipe data";
 
     private static final int DIALOG_NO_FILES = 1;
 
     private static final String[] FILE_TYPES = new String[] {
-            ".db",
-            ".csv"
+            ".db", ".csv"
     };
 
-    @SuppressWarnings("unchecked")
-    private static final Class[] EXPORTERS = new Class[] {
-            DbImportActivity.class,
-            CsvColumnMappingActivity.class
+    private static final Class<?>[] IMPORTERS = new Class[] {
+            DbImportActivity.class, CsvColumnMappingActivity.class
     };
 
     private FileLoader mFileLoader;
+
     private Spinner mFileTypes;
+
     private Spinner mInputFile;
+
     private Button mSubmitButton;
+
     private FileAdapter mFileAdapter;
+
     private CheckBox mWipeData;
 
     @Override
@@ -63,15 +67,16 @@ public class ImportActivity extends Activity {
 
         mFileAdapter = new FileAdapter(this);
 
-        mFileTypes = (Spinner) findViewById(R.id.exporter);
+        mFileTypes = (Spinner) findViewById(R.id.importer);
         mInputFile = (Spinner) findViewById(R.id.files);
         mWipeData = (CheckBox) findViewById(R.id.erase_database);
         mSubmitButton = (Button) findViewById(R.id.submit);
         mSubmitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ImportActivity.this, EXPORTERS[mFileTypes
-                        .getSelectedItemPosition()]);
+                Intent intent =
+                        new Intent(ImportActivity.this, IMPORTERS[mFileTypes
+                                .getSelectedItemPosition()]);
                 intent.putExtra(ImportActivity.FILENAME, getFilename());
                 intent.putExtra(ImportActivity.WIPE_DATA, mWipeData.isChecked());
                 startActivity(intent);
@@ -171,6 +176,7 @@ public class ImportActivity extends Activity {
 
     private static class FileAdapter extends BaseAdapter implements SpinnerAdapter {
         private final LayoutInflater mInflater;
+
         private String[] values = new String[0];
 
         public FileAdapter(Context context) {
@@ -195,8 +201,8 @@ public class ImportActivity extends Activity {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             if (convertView == null) {
-                convertView = mInflater
-                        .inflate(android.R.layout.simple_spinner_item, parent, false);
+                convertView =
+                        mInflater.inflate(android.R.layout.simple_spinner_item, parent, false);
             }
 
             TextView tv = (TextView) convertView.getTag();
@@ -212,8 +218,9 @@ public class ImportActivity extends Activity {
         @Override
         public View getDropDownView(int position, View convertView, ViewGroup parent) {
             if (convertView == null) {
-                convertView = mInflater.inflate(android.R.layout.simple_spinner_dropdown_item,
-                        parent, false);
+                convertView =
+                        mInflater.inflate(android.R.layout.simple_spinner_dropdown_item, parent,
+                                false);
             }
 
             CheckedTextView ctv = (CheckedTextView) convertView.getTag();
