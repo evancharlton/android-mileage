@@ -20,12 +20,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public abstract class BaseFormActivity extends Activity {
     public static final String EXTRA_ITEM_ID = "dao_item_id";
 
     protected SharedPreferences mPreferences;
+
     private Button mSaveBtn;
 
     protected void onCreate(Bundle savedInstanceState, int layoutResId) {
@@ -55,8 +57,7 @@ public abstract class BaseFormActivity extends Activity {
                         }
                     }
                 } catch (InvalidFieldException e) {
-                    Toast.makeText(BaseFormActivity.this, getString(e.getErrorMessage()),
-                            Toast.LENGTH_LONG).show();
+                    handleInvalidField(e);
                 }
             }
         });
@@ -72,6 +73,17 @@ public abstract class BaseFormActivity extends Activity {
                 populateUI();
                 mSaveBtn.setText(R.string.save_changes);
             }
+        }
+    }
+
+    protected void handleInvalidField(InvalidFieldException e) {
+        TextView field = e.getField();
+        if (field == null) {
+            Toast.makeText(BaseFormActivity.this, getString(e.getErrorMessage()), Toast.LENGTH_LONG)
+                    .show();
+        } else {
+            field.setError(getString(e.getErrorMessage()));
+            field.requestFocus();
         }
     }
 
@@ -146,7 +158,7 @@ public abstract class BaseFormActivity extends Activity {
 
     abstract protected void populateUI();
 
-    abstract protected void setFields();
+    abstract protected void setFields() throws InvalidFieldException;
 
     abstract protected String[] getProjectionArray();
 

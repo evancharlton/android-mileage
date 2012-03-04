@@ -49,6 +49,7 @@ public abstract class Dao implements Cloneable {
         load(cursor);
     }
 
+    @Override
     public Object clone() {
         try {
             return super.clone();
@@ -250,7 +251,8 @@ public abstract class Dao implements Cloneable {
                         // check the numeric types
                         if (value instanceof Number) {
                             boolean checkPast = field.getAnnotation(Past.class) != null;
-                            boolean checkPositive = field.getAnnotation(Range.Positive.class) != null;
+                            boolean checkPositive =
+                                    field.getAnnotation(Range.Positive.class) != null;
                             if (value instanceof Double) {
                                 if (checkPositive && ((Double) value) <= 0D) {
                                     throw new InvalidFieldException(errorMessage);
@@ -409,10 +411,15 @@ public abstract class Dao implements Cloneable {
     @Target(ElementType.FIELD)
     public @interface Column {
         public static final int STRING = 0;
+
         public static final int INTEGER = 1;
+
         public static final int DOUBLE = 2;
+
         public static final int BOOLEAN = 3;
+
         public static final int TIMESTAMP = 4;
+
         public static final int LONG = 5;
 
         int value() default 0;

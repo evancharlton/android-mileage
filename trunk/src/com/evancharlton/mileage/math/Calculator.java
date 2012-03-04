@@ -18,36 +18,53 @@ import java.util.Locale;
 public class Calculator {
     // dates
     public static final long DAY_MILLIS = 1000L * 60L * 60L * 24L;
+
     public static final long MONTH_MS = DAY_MILLIS * 30L;
+
     public static final long YEAR_MS = DAY_MILLIS * 365L;
 
     public static final int DATE_DATE = 1;
+
     public static final int DATE_LONG = 2;
+
     public static final int DATE_MEDIUM = 3;
+
     public static final int DATE_TIME = 4;
 
     // distance
     public static final int KM = 1;
+
     public static final int MI = 2;
 
     // volume
     public static final int GALLONS = 3;
+
     public static final int LITRES = 4;
+
     public static final int IMPERIAL_GALLONS = 5;
 
     // economy
     public static final int MI_PER_GALLON = 6;
+
     public static final int KM_PER_GALLON = 7;
+
     public static final int MI_PER_IMP_GALLON = 8;
+
     public static final int KM_PER_IMP_GALLON = 9;
+
     public static final int MI_PER_LITRE = 10;
+
     public static final int KM_PER_LITRE = 11;
+
     public static final int GALLONS_PER_100KM = 12;
+
     public static final int LITRES_PER_100KM = 13;
+
     public static final int IMP_GAL_PER_100KM = 14;
 
     // cache
     private static String CURRENCY_SYMBOL = null;
+
     private static final java.text.DateFormat[] FORMATTERS = new java.text.DateFormat[4];
 
     private Calculator() {
@@ -376,9 +393,13 @@ public class Calculator {
     public static String getCurrencySymbol(Vehicle vehicle) {
         String savedCurrency = vehicle.getCurrency();
         if (TextUtils.isEmpty(savedCurrency)) {
-            savedCurrency = Currency.getInstance(Locale.getDefault()).getSymbol();
+            savedCurrency = getCurrencySymbol();
         }
         return savedCurrency;
+    }
+
+    public static String getCurrencySymbol() {
+        return Currency.getInstance(Locale.getDefault()).getSymbol();
     }
 
     public static String getDateString(Context context, int type, Date date) {

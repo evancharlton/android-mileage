@@ -16,15 +16,25 @@ import android.net.Uri;
 @DataObject(path = VehiclesTable.VEHICLES_URI)
 public class Vehicle extends Dao {
     public static final String TITLE = "title";
+
     public static final String DESCRIPTION = "description";
+
     public static final String YEAR = "year";
+
     public static final String MAKE = "make";
+
     public static final String MODEL = "model";
+
     public static final String VEHICLE_TYPE = "vehicle_type_id";
+
     public static final String DEFAULT_TIME = "default_time";
+
     public static final String PREF_DISTANCE_UNITS = "odometer_units";
+
     public static final String PREF_VOLUME_UNITS = "volume_units";
+
     public static final String PREF_ECONOMY_UNITS = "economy_units";
+
     public static final String PREF_CURRENCY = "currency_units";
 
     @Validate(R.string.error_invalid_vehicle_title)
@@ -83,8 +93,8 @@ public class Vehicle extends Dao {
 
     public static final Vehicle loadById(final Context context, final long id) {
         Uri uri = ContentUris.withAppendedId(VehiclesTable.BASE_URI, id);
-        Cursor cursor = context.getContentResolver().query(uri, VehiclesTable.PROJECTION, null,
-                null, null);
+        Cursor cursor =
+                context.getContentResolver().query(uri, VehiclesTable.PROJECTION, null, null, null);
         Vehicle v = null;
         if (cursor.getCount() > 0) {
             v = new Vehicle(cursor);
@@ -99,10 +109,11 @@ public class Vehicle extends Dao {
     public Fillup loadLatestFillup(Context context) {
         Uri uri = FillupsTable.BASE_URI;
         String[] projection = FillupsTable.PROJECTION;
-        Cursor c = context.getContentResolver().query(uri, projection, Fillup.VEHICLE_ID + " = ?",
-                new String[] {
-                    String.valueOf(getId())
-                }, Fillup.ODOMETER + " desc");
+        Cursor c =
+                context.getContentResolver().query(uri, projection, Fillup.VEHICLE_ID + " = ?",
+                        new String[] {
+                            String.valueOf(getId())
+                        }, Fillup.ODOMETER + " desc");
 
         Fillup newest = null;
         if (c.getCount() >= 1) {

@@ -5,6 +5,7 @@ import com.evancharlton.mileage.dao.CachedValue;
 import com.evancharlton.mileage.dao.Dao;
 import com.evancharlton.mileage.dao.Fillup;
 import com.evancharlton.mileage.dao.Vehicle;
+import com.evancharlton.mileage.exceptions.InvalidFieldException;
 import com.evancharlton.mileage.math.Calculator;
 import com.evancharlton.mileage.provider.tables.CacheTable;
 import com.evancharlton.mileage.provider.tables.FillupsTable;
@@ -16,26 +17,40 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 
 public class VehicleActivity extends BaseFormActivity {
     private EditText mTitle;
+
     private EditText mDescription;
+
     private EditText mMake;
+
     private EditText mModel;
+
     private EditText mYear;
+
     private EditText mCurrency;
+
     private CheckBox mSetDefault;
+
     private CursorSpinner mVehicleTypes;
+
     private Spinner mDistances;
+
     private Spinner mVolumes;
+
     private Spinner mEconomies;
+
     private Vehicle mVehicle = new Vehicle(new ContentValues());
 
     private int mDistanceUnits = Calculator.MI;
+
     private int mVolumeUnits = Calculator.GALLONS;
+
     private int mEconomyUnits = Calculator.MI_PER_GALLON;
 
     @Override
@@ -71,6 +86,8 @@ public class VehicleActivity extends BaseFormActivity {
         mDistances = (Spinner) findViewById(R.id.distance);
         mVolumes = (Spinner) findViewById(R.id.volume);
         mEconomies = (Spinner) findViewById(R.id.economy);
+
+        mCurrency.setText(Calculator.getCurrencySymbol());
     }
 
     @Override
@@ -83,7 +100,7 @@ public class VehicleActivity extends BaseFormActivity {
 
         Uri uri = VehiclesTable.BASE_URI;
         String[] projection = new String[] {
-                Vehicle._ID
+            Vehicle._ID
         };
         Cursor c = managedQuery(uri, projection, null, null, Vehicle.DEFAULT_TIME + " desc");
         if (c.getCount() > 0) {
@@ -103,12 +120,34 @@ public class VehicleActivity extends BaseFormActivity {
     }
 
     @Override
-    protected void setFields() {
-        mVehicle.setTitle(mTitle.getText().toString());
-        mVehicle.setDescription(mDescription.getText().toString());
-        mVehicle.setMake(mMake.getText().toString());
-        mVehicle.setModel(mModel.getText().toString());
-        mVehicle.setYear(mYear.getText().toString());
+    protected void setFields() throws InvalidFieldException {
+        String title = mTitle.getText().toString().trim();
+        if (TextUtils.isEmpty(title)) {
+            throw new InvalidFieldException(mTitle, R.string.error_invalid_vehicle_title);
+        }
+        mVehicle.setTitle(title);
+
+        String year = mYear.getText().toString().trim();
+        if (TextUtils.isEmpty(year)) {
+            throw new InvalidFieldException(mYear, R.string.error_invalid_vehicle_year);
+        }
+        mVehicle.setYear(year);
+
+        String make = mMake.getText().toString().trim();
+        if (TextUtils.isEmpty(make)) {
+            throw new InvalidFieldException(mMake, R.string.error_invalid_vehicle_make);
+        }
+        mVehicle.setMake(make);
+
+        String model = mModel.getText().toString().trim();
+        if (TextUtils.isEmpty(model)) {
+            throw new InvalidFieldException(mModel, R.string.error_invalid_vehicle_model);
+        }
+        mVehicle.setModel(model);
+
+        String description = mDescription.getText().toString().trim();
+        mVehicle.setDescription(description);
+
         mVehicle.setVehicleType(mVehicleTypes.getSelectedItemId());
         if (mSetDefault.isChecked()) {
             mVehicle.setDefaultTime(System.currentTimeMillis());
@@ -116,6 +155,11 @@ public class VehicleActivity extends BaseFormActivity {
         mVehicle.setVolumeUnits(getVolume());
         mVehicle.setDistanceUnits(getDistance());
         mVehicle.setEconomyUnits(getEconomy());
+
+        String currency = mCurrency.getText().toString();
+        if (TextUtils.isEmpty(currency)) {
+            currency = Calculator.getCurrencySymbol();
+        }
         mVehicle.setCurrency(mCurrency.getText().toString());
     }
 
@@ -129,7 +173,7 @@ public class VehicleActivity extends BaseFormActivity {
             values.put(Fillup.ECONOMY, 0D);
             String where = Fillup.VEHICLE_ID + " = ?";
             String[] selectionArgs = new String[] {
-                    String.valueOf(mVehicle.getId())
+                String.valueOf(mVehicle.getId())
             };
             Uri uri = FillupsTable.BASE_URI;
             getContentResolver().update(uri, values, where, selectionArgs);

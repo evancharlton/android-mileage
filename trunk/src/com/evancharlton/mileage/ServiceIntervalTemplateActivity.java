@@ -15,16 +15,20 @@ import android.content.ContentValues;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.EditText;
-import android.widget.Toast;
 
 public class ServiceIntervalTemplateActivity extends BaseFormActivity {
 
     protected final ServiceIntervalTemplate mTemplate = new ServiceIntervalTemplate(
             new ContentValues());
+
     protected EditText mTitle;
+
     protected EditText mDescription;
+
     protected DistanceDelta mDistance;
+
     protected DateDelta mDuration;
+
     protected CursorSpinner mVehicleTypes;
 
     @Override
@@ -67,32 +71,30 @@ public class ServiceIntervalTemplateActivity extends BaseFormActivity {
     }
 
     @Override
-    protected void setFields() {
-        try {
-            String title = mTitle.getText().toString();
-            if (title.length() == 0) {
-                throw new InvalidFieldException(R.string.error_invalid_interval_title);
-            }
-            mTemplate.setTitle(title);
-
-            mTemplate.setDescription(mDescription.getText().toString());
-
-            long distance = mDistance.getDelta();
-            if (distance <= 0) {
-                throw new InvalidFieldException(R.string.error_invalid_interval_distance);
-            }
-            mTemplate.setDistance(distance);
-
-            long duration = mDuration.getDelta();
-            if (duration <= 0) {
-                throw new InvalidFieldException(R.string.error_invalid_interval_duration);
-            }
-            mTemplate.setDuration(mDuration.getDelta());
-
-            mTemplate.setVehicleTypeId(mVehicleTypes.getSelectedItemId());
-        } catch (InvalidFieldException e) {
-            Toast.makeText(this, getString(e.getErrorMessage()), Toast.LENGTH_LONG).show();
+    protected void setFields() throws InvalidFieldException {
+        String title = mTitle.getText().toString();
+        if (title.length() == 0) {
+            throw new InvalidFieldException(mTitle, R.string.error_invalid_interval_title);
         }
+        mTemplate.setTitle(title);
+
+        mTemplate.setDescription(mDescription.getText().toString());
+
+        long distance = mDistance.getDelta();
+        if (distance <= 0) {
+            throw new InvalidFieldException(mDistance.getEditField(),
+                    R.string.error_invalid_interval_distance);
+        }
+        mTemplate.setDistance(distance);
+
+        long duration = mDuration.getDelta();
+        if (duration <= 0) {
+            throw new InvalidFieldException(mDuration.getEditField(),
+                    R.string.error_invalid_interval_duration);
+        }
+        mTemplate.setDuration(mDuration.getDelta());
+
+        mTemplate.setVehicleTypeId(mVehicleTypes.getSelectedItemId());
     }
 
     @Override

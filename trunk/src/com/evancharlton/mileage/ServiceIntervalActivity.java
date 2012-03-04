@@ -24,17 +24,24 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.Toast;
 
 public class ServiceIntervalActivity extends BaseFormActivity {
     private final ServiceInterval mInterval = new ServiceInterval(new ContentValues());
+
     private CursorSpinner mVehicles;
+
     private CursorSpinner mIntervalTemplates;
+
     private EditText mTitle;
+
     private EditText mDescription;
+
     private DistanceDelta mDistance;
+
     private DateDelta mDuration;
+
     private EditText mOdometer;
+
     private DateButton mDate;
 
     @Override
@@ -77,14 +84,15 @@ public class ServiceIntervalActivity extends BaseFormActivity {
                 // update the odometer field
                 if (!mInterval.isExistingObject()) {
                     String[] projection = new String[] {
-                            Fillup.ODOMETER
+                        Fillup.ODOMETER
                     };
                     String selection = Fillup.VEHICLE_ID + " = ?";
                     String[] args = new String[] {
-                            String.valueOf(id)
+                        String.valueOf(id)
                     };
-                    Cursor fillupsCursor = getContentResolver().query(FillupsTable.BASE_URI,
-                            projection, selection, args, Fillup.ODOMETER + " desc");
+                    Cursor fillupsCursor =
+                            getContentResolver().query(FillupsTable.BASE_URI, projection,
+                                    selection, args, Fillup.ODOMETER + " desc");
                     if (fillupsCursor.getCount() > 0) {
                         fillupsCursor.moveToFirst();
                         mOdometer.setText(fillupsCursor.getString(0));
@@ -101,11 +109,13 @@ public class ServiceIntervalActivity extends BaseFormActivity {
         mIntervalTemplates.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> list, View row, int position, long id) {
-                Uri uri = Uri.withAppendedPath(FillUpsProvider.BASE_URI,
-                        ServiceIntervalTemplatesTable.URI);
+                Uri uri =
+                        Uri.withAppendedPath(FillUpsProvider.BASE_URI,
+                                ServiceIntervalTemplatesTable.URI);
                 uri = ContentUris.withAppendedId(uri, id);
-                Cursor intervalCursor = getContentResolver().query(uri,
-                        ServiceIntervalTemplatesTable.PROJECTION, null, null, null);
+                Cursor intervalCursor =
+                        getContentResolver().query(uri, ServiceIntervalTemplatesTable.PROJECTION,
+                                null, null, null);
                 ServiceIntervalTemplate template = new ServiceIntervalTemplate(intervalCursor);
                 intervalCursor.close();
 
@@ -125,10 +135,10 @@ public class ServiceIntervalActivity extends BaseFormActivity {
     private void filterTemplates(long id) {
         StringBuilder selection = new StringBuilder();
         selection.append(ServiceIntervalTemplate.VEHICLE_TYPE).append(" = ( select ")
-                .append(Vehicle.VEHICLE_TYPE).append(" from vehicles where ")
-                .append(Vehicle._ID).append(" =  ?)");
+                .append(Vehicle.VEHICLE_TYPE).append(" from vehicles where ").append(Vehicle._ID)
+                .append(" =  ?)");
         String[] selectionArgs = new String[] {
-                String.valueOf(id)
+            String.valueOf(id)
         };
         mIntervalTemplates.filter(selection.toString(), selectionArgs);
     }
@@ -137,51 +147,48 @@ public class ServiceIntervalActivity extends BaseFormActivity {
     protected void populateUI() {
         mTitle.setText(mInterval.getTitle());
         mDescription.setText(mInterval.getDescription());
-        mDistance.setDelta((long) mInterval.getDistance());
+        mDistance.setDelta(mInterval.getDistance());
         mDuration.setDelta(mInterval.getDuration());
         mOdometer.setText(String.valueOf(mInterval.getStartOdometer()));
         mDate.setDate(mInterval.getStartDate());
     }
 
     @Override
-    protected void setFields() {
-        try {
-            String title = mTitle.getText().toString();
-            if (title.length() == 0) {
-                throw new InvalidFieldException(R.string.error_invalid_interval_title);
-            }
-            mInterval.setTitle(title);
-
-            mInterval.setDescription(mDescription.getText().toString());
-
-            long duration = mDuration.getDelta();
-            if (duration == 0) {
-                throw new InvalidFieldException(R.string.error_invalid_interval_duration);
-            }
-            mInterval.setDuration(duration);
-
-            try {
-                mInterval.setStartOdometer(Double.parseDouble(mOdometer.getText().toString()));
-            } catch (NumberFormatException e) {
-                throw new InvalidFieldException(R.string.error_invalid_interval_odometer);
-            }
-
-            long timestamp = mDate.getTimestamp();
-            if (timestamp == 0) {
-                throw new InvalidFieldException(R.string.error_invalid_interval_timestamp);
-            }
-            mInterval.setStartDate(timestamp);
-
-            long distance = mDistance.getDelta();
-            if (distance == 0) {
-                throw new InvalidFieldException(R.string.error_invalid_interval_distance);
-            }
-            mInterval.setDistance(mDistance.getDelta());
-
-            mInterval.setVehicleId(mVehicles.getSelectedItemId());
-        } catch (InvalidFieldException e) {
-            Toast.makeText(this, getString(e.getErrorMessage()), Toast.LENGTH_LONG).show();
+    protected void setFields() throws InvalidFieldException {
+        String title = mTitle.getText().toString();
+        if (title.length() == 0) {
+            throw new InvalidFieldException(mTitle, R.string.error_invalid_interval_title);
         }
+        mInterval.setTitle(title);
+
+        mInterval.setDescription(mDescription.getText().toString());
+
+        long duration = mDuration.getDelta();
+        if (duration == 0) {
+            throw new InvalidFieldException(mDescription, R.string.error_invalid_interval_duration);
+        }
+        mInterval.setDuration(duration);
+
+        try {
+            mInterval.setStartOdometer(Double.parseDouble(mOdometer.getText().toString()));
+        } catch (NumberFormatException e) {
+            throw new InvalidFieldException(mOdometer, R.string.error_invalid_interval_odometer);
+        }
+
+        long timestamp = mDate.getTimestamp();
+        if (timestamp == 0) {
+            throw new InvalidFieldException(R.string.error_invalid_interval_timestamp);
+        }
+        mInterval.setStartDate(timestamp);
+
+        long distance = mDistance.getDelta();
+        if (distance == 0) {
+            throw new InvalidFieldException(mDistance.getEditField(),
+                    R.string.error_invalid_interval_distance);
+        }
+        mInterval.setDistance(mDistance.getDelta());
+
+        mInterval.setVehicleId(mVehicles.getSelectedItemId());
     }
 
     @Override

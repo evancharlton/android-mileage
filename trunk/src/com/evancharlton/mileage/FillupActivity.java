@@ -39,20 +39,27 @@ import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class FillupActivity extends BaseFormActivity {
     private EditText mOdometer;
+
     private EditText mVolume;
+
     private EditText mPrice;
+
     private DateButton mDate;
+
     private CursorSpinner mVehicles;
+
     private CheckBox mPartial;
+
     private LinearLayout mFieldsContainer;
+
     private final ArrayList<FieldView> mFields = new ArrayList<FieldView>();
+
     private Fillup mFillup = new Fillup(new ContentValues());
 
     private Bundle mIcicle;
@@ -81,9 +88,9 @@ public class FillupActivity extends BaseFormActivity {
     protected void onResume() {
         super.onResume();
 
-        Cursor fields = managedQuery(
-                Uri.withAppendedPath(FillUpsProvider.BASE_URI, FieldsTable.URI_PATH),
-                FieldsTable.PROJECTION, null, null, null);
+        Cursor fields =
+                managedQuery(Uri.withAppendedPath(FillUpsProvider.BASE_URI, FieldsTable.URI_PATH),
+                        FieldsTable.PROJECTION, null, null, null);
         LayoutInflater inflater = LayoutInflater.from(this);
         mFieldsContainer.removeAllViews();
 
@@ -97,8 +104,8 @@ public class FillupActivity extends BaseFormActivity {
         }
 
         if (fields.getCount() > 0) {
-            DividerView divider = (DividerView) inflater.inflate(R.layout.divider,
-                    mFieldsContainer, false);
+            DividerView divider =
+                    (DividerView) inflater.inflate(R.layout.divider, mFieldsContainer, false);
             divider.setText(R.string.divider_fillup_fields);
             mFieldsContainer.addView(divider);
         }
@@ -166,7 +173,7 @@ public class FillupActivity extends BaseFormActivity {
             }
             return true;
         } catch (InvalidFieldException exception) {
-            Toast.makeText(this, getString(exception.getErrorMessage()), Toast.LENGTH_LONG).show();
+            handleInvalidField(exception);
         }
 
         return false;
@@ -284,68 +291,64 @@ public class FillupActivity extends BaseFormActivity {
     }
 
     @Override
-    protected void setFields() {
+    protected void setFields() throws InvalidFieldException {
         double unitPrice = 0D;
         double totalCost = 0D;
         double volume = 0D;
-        try {
-            int dataFormat = Integer.parseInt(mPreferences.getString(Settings.DATA_FORMAT, "0"));
-            switch (dataFormat) {
-                case DataFormats.TOTAL_COST_VOLUME:
-                    try {
-                        volume = Double.parseDouble(mVolume.getText().toString());
-                        mFillup.setVolume(volume);
-                    } catch (NumberFormatException e) {
-                        throw new InvalidFieldException(R.string.error_no_volume_specified);
-                    }
-
-                    try {
-                        totalCost = Double.parseDouble(mPrice.getText().toString());
-                        mFillup.setTotalCost(totalCost);
-                    } catch (NumberFormatException e) {
-                        throw new InvalidFieldException(R.string.error_no_total_cost_specified);
-                    }
-                    unitPrice = totalCost / volume;
-                    mFillup.setUnitPrice(unitPrice);
-                    break;
-                case DataFormats.TOTAL_COST_UNIT_PRICE:
-                    try {
-                        totalCost = Double.parseDouble(mVolume.getText().toString());
-                        mFillup.setTotalCost(totalCost);
-                    } catch (NumberFormatException e) {
-                        throw new InvalidFieldException(R.string.error_no_total_cost_specified);
-                    }
-
-                    try {
-                        unitPrice = Double.parseDouble(mPrice.getText().toString());
-                        mFillup.setUnitPrice(unitPrice);
-                    } catch (NumberFormatException e) {
-                        throw new InvalidFieldException(R.string.error_no_price_specified);
-                    }
-                    volume = totalCost / unitPrice;
+        int dataFormat = Integer.parseInt(mPreferences.getString(Settings.DATA_FORMAT, "0"));
+        switch (dataFormat) {
+            case DataFormats.TOTAL_COST_VOLUME:
+                try {
+                    volume = Double.parseDouble(mVolume.getText().toString());
                     mFillup.setVolume(volume);
-                    break;
-                default:
-                case DataFormats.UNIT_PRICE_VOLUME:
-                    try {
-                        volume = Double.parseDouble(mVolume.getText().toString());
-                        mFillup.setVolume(volume);
-                    } catch (NumberFormatException e) {
-                        throw new InvalidFieldException(R.string.error_no_volume_specified);
-                    }
+                } catch (NumberFormatException e) {
+                    throw new InvalidFieldException(mVolume, R.string.error_no_volume_specified);
+                }
 
-                    try {
-                        unitPrice = Double.parseDouble(mPrice.getText().toString());
-                        mFillup.setUnitPrice(unitPrice);
-                    } catch (NumberFormatException e) {
-                        throw new InvalidFieldException(R.string.error_no_price_specified);
-                    }
-                    totalCost = unitPrice * volume;
+                try {
+                    totalCost = Double.parseDouble(mPrice.getText().toString());
                     mFillup.setTotalCost(totalCost);
-                    break;
-            }
-        } catch (InvalidFieldException e) {
-            Toast.makeText(this, getString(e.getErrorMessage()), Toast.LENGTH_LONG).show();
+                } catch (NumberFormatException e) {
+                    throw new InvalidFieldException(mPrice, R.string.error_no_total_cost_specified);
+                }
+                unitPrice = totalCost / volume;
+                mFillup.setUnitPrice(unitPrice);
+                break;
+            case DataFormats.TOTAL_COST_UNIT_PRICE:
+                try {
+                    totalCost = Double.parseDouble(mVolume.getText().toString());
+                    mFillup.setTotalCost(totalCost);
+                } catch (NumberFormatException e) {
+                    throw new InvalidFieldException(mVolume, R.string.error_no_total_cost_specified);
+                }
+
+                try {
+                    unitPrice = Double.parseDouble(mPrice.getText().toString());
+                    mFillup.setUnitPrice(unitPrice);
+                } catch (NumberFormatException e) {
+                    throw new InvalidFieldException(mPrice, R.string.error_no_price_specified);
+                }
+                volume = totalCost / unitPrice;
+                mFillup.setVolume(volume);
+                break;
+            default:
+            case DataFormats.UNIT_PRICE_VOLUME:
+                try {
+                    volume = Double.parseDouble(mVolume.getText().toString());
+                    mFillup.setVolume(volume);
+                } catch (NumberFormatException e) {
+                    throw new InvalidFieldException(mVolume, R.string.error_no_volume_specified);
+                }
+
+                try {
+                    unitPrice = Double.parseDouble(mPrice.getText().toString());
+                    mFillup.setUnitPrice(unitPrice);
+                } catch (NumberFormatException e) {
+                    throw new InvalidFieldException(mPrice, R.string.error_no_price_specified);
+                }
+                totalCost = unitPrice * volume;
+                mFillup.setTotalCost(totalCost);
+                break;
         }
 
         try {
@@ -355,8 +358,9 @@ public class FillupActivity extends BaseFormActivity {
                 Fillup previous = mFillup.loadPrevious(this);
                 double previousOdometer = 0D;
                 if (previous == null) {
-                    Cursor top = getContentResolver().query(FillupsTable.BASE_URI,
-                            FillupsTable.PROJECTION, null, null, Fillup.ODOMETER + " DESC");
+                    Cursor top =
+                            getContentResolver().query(FillupsTable.BASE_URI,
+                                    FillupsTable.PROJECTION, null, null, Fillup.ODOMETER + " DESC");
                     if (top.getCount() > 0) {
                         previous = new Fillup(top);
                         if (previous != null) {
@@ -370,8 +374,7 @@ public class FillupActivity extends BaseFormActivity {
             }
             mFillup.setOdometer(odometerValue);
         } catch (NumberFormatException e) {
-            Toast.makeText(this, getString(R.string.error_no_odometer_specified), Toast.LENGTH_LONG)
-                    .show();
+            throw new InvalidFieldException(mOdometer, R.string.error_no_odometer_specified);
         }
 
         mFillup.setPartial(mPartial.isChecked());
@@ -382,12 +385,13 @@ public class FillupActivity extends BaseFormActivity {
             mFillup.setEconomy(0);
         } else {
             // update the economy number
-            Uri vehicleUri = ContentUris.withAppendedId(VehiclesTable.BASE_URI,
-                    mVehicles.getSelectedItemId());
+            Uri vehicleUri =
+                    ContentUris.withAppendedId(VehiclesTable.BASE_URI,
+                            mVehicles.getSelectedItemId());
 
             Vehicle v = null;
-            Cursor vehicleCursor = managedQuery(vehicleUri, VehiclesTable.PROJECTION, null, null,
-                    null);
+            Cursor vehicleCursor =
+                    managedQuery(vehicleUri, VehiclesTable.PROJECTION, null, null, null);
             if (vehicleCursor.getCount() == 1) {
                 vehicleCursor.moveToFirst();
                 v = new Vehicle(vehicleCursor);
@@ -400,8 +404,8 @@ public class FillupActivity extends BaseFormActivity {
                 if (previous == null) {
                     mFillup.setEconomy(0D);
                 } else {
-                    double economy = Calculator.averageEconomy(v, new FillupSeries(previous,
-                            mFillup));
+                    double economy =
+                            Calculator.averageEconomy(v, new FillupSeries(previous, mFillup));
                     mFillup.setEconomy(economy);
                 }
             }
@@ -411,8 +415,8 @@ public class FillupActivity extends BaseFormActivity {
                 && mFillup.isExistingObject() == false) {
             // Don't want to erase location data
             LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-            Location lastLocation = locationManager
-                    .getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            Location lastLocation =
+                    locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
             // Only record if the user has a network location.
             if (lastLocation != null) {
@@ -424,8 +428,11 @@ public class FillupActivity extends BaseFormActivity {
         if (mFillup.isPartial() || (mFillup.isExistingObject() && !mFillup.isPartial())) {
             ContentValues values = new ContentValues();
             values.put(Fillup.ECONOMY, -1);
-            getContentResolver().update(FillupsTable.BASE_URI, values,
-                    Fillup.ODOMETER + " > ? AND " + Fillup.VEHICLE_ID + " = ?", new String[] {
+            getContentResolver().update(
+                    FillupsTable.BASE_URI,
+                    values,
+                    Fillup.ODOMETER + " > ? AND " + Fillup.VEHICLE_ID + " = ?",
+                    new String[] {
                             String.valueOf(mFillup.getOdometer()),
                             String.valueOf(mFillup.getVehicleId())
                     });
@@ -435,7 +442,7 @@ public class FillupActivity extends BaseFormActivity {
     @Override
     protected void deleted() {
         getContentResolver().delete(CacheTable.BASE_URI, CachedValue.KEY + " = ?", new String[] {
-                Statistics.AVG_ECONOMY.getKey()
+            Statistics.AVG_ECONOMY.getKey()
         });
         super.deleted();
     }

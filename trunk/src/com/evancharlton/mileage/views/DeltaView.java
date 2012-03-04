@@ -13,9 +13,11 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 public abstract class DeltaView extends LinearLayout {
     private EditText mValue;
+
     private Spinner mUnits;
 
     public DeltaView(Context context, AttributeSet attrs) {
@@ -32,8 +34,9 @@ public abstract class DeltaView extends LinearLayout {
         TypedArray arr = context.obtainStyledAttributes(attrs, R.styleable.DeltaView);
         mValue.setHint(arr.getString(R.styleable.DeltaView_hint));
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,
-                android.R.layout.simple_spinner_item, android.R.id.text1, getTexts());
+        ArrayAdapter<String> adapter =
+                new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item,
+                        android.R.id.text1, getTexts());
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mUnits.setAdapter(adapter);
     }
@@ -68,6 +71,10 @@ public abstract class DeltaView extends LinearLayout {
         final long multiplier = getValues()[position];
         mValue.setText(String.valueOf(delta / multiplier));
         mUnits.setSelection(position);
+    }
+
+    public final TextView getEditField() {
+        return mValue;
     }
 
     abstract protected int getPosition(long delta);
