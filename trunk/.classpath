@@ -4,6 +4,6 @@
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="lib" path="libs/opencsv-1.8.jar"/>
-	<classpathentry kind="lib" path="libs/com.artfulbits.aiCharts.jar"/>
+	<classpathentry kind="lib" path="libs/aiCharts.2.0.0.182.84147.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

@@ -19,11 +19,13 @@ public abstract class Statistic {
     protected final DecimalFormat mFormatter = new DecimalFormat("0.00");
 
     public Statistic(int label) {
-        this(String.valueOf(label), null, label);
+        this(null, null, label);
     }
 
     public Statistic(String value, Class<? extends ChartActivity> chartClass, int label) {
-        Statistics.STATISTICS.add(this);
+        if (value != null) {
+            Statistics.STATISTICS.add(this);
+        }
         mLabel = label;
         mValue = new CachedValue(value);
         mChartClass = chartClass;
