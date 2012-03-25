@@ -18,16 +18,27 @@ import java.util.Date;
 @DataObject(path = FillupsTable.URI)
 public class Fillup extends Dao {
     public static final String TOTAL_COST = "total_cost";
+
     public static final String UNIT_PRICE = "price";
+
     public static final String VOLUME = "volume";
+
     public static final String ODOMETER = "odometer";
+
     public static final String DATE = "timestamp"; // ms since epoch
+
     public static final String PARTIAL = "is_partial";
+
     public static final String VEHICLE_ID = "vehicle_id";
+
     public static final String LATITUDE = "latitude";
+
     public static final String LONGITUDE = "longitude";
+
     public static final String COMMENT = "comment";
+
     public static final String RESTART = "restart";
+
     public static final String ECONOMY = "economy";
 
     @Range.Positive
@@ -82,7 +93,9 @@ public class Fillup extends Dao {
     protected double mLongitude;
 
     private final ArrayList<FillupField> mFields = new ArrayList<FillupField>();
+
     private Fillup mNext = null;
+
     private Fillup mPrevious = null;
 
     public Fillup(ContentValues contentValues) {
@@ -108,11 +121,11 @@ public class Fillup extends Dao {
         if (!mIsRestart) {
             Uri uri = FillupsTable.BASE_URI;
             String[] projection = FillupsTable.PROJECTION;
-            Cursor c = context.getContentResolver().query(uri, projection,
-                    Fillup.VEHICLE_ID + " = ? AND " + ODOMETER + " < ?", new String[] {
-                            String.valueOf(getVehicleId()),
-                            String.valueOf(getOdometer())
-                    }, Fillup.ODOMETER + " desc");
+            Cursor c =
+                    context.getContentResolver().query(uri, projection,
+                            Fillup.VEHICLE_ID + " = ? AND " + ODOMETER + " < ?", new String[] {
+                                    String.valueOf(getVehicleId()), String.valueOf(getOdometer())
+                            }, Fillup.ODOMETER + " desc");
             if (c.getCount() >= 1) {
                 c.moveToFirst();
                 previous = new Fillup(c);
@@ -120,6 +133,25 @@ public class Fillup extends Dao {
             c.close();
         }
         return previous;
+    }
+
+    public Fillup loadNext(Context context) {
+        Fillup next = null;
+        if (!mIsRestart) {
+            Uri uri = FillupsTable.BASE_URI;
+            String[] projection = FillupsTable.PROJECTION;
+            Cursor c =
+                    context.getContentResolver().query(uri, projection,
+                            Fillup.VEHICLE_ID + " = ? AND " + ODOMETER + " > ?", new String[] {
+                                    String.valueOf(getVehicleId()), String.valueOf(getOdometer())
+                            }, Fillup.ODOMETER + " asc");
+            if (c.getCount() >= 1) {
+                c.moveToFirst();
+                next = new Fillup(c);
+            }
+            c.close();
+        }
+        return next;
     }
 
     public double getEconomy() {
@@ -139,8 +171,9 @@ public class Fillup extends Dao {
     public ArrayList<FillupField> getFields(Context context) {
         if (mFields.size() == 0) {
             Uri uri = ContentUris.withAppendedId(FillupsFieldsTable.FILLUPS_FIELDS_URI, getId());
-            Cursor c = context.getContentResolver().query(uri, FillupsFieldsTable.PROJECTION, null,
-                    null, null);
+            Cursor c =
+                    context.getContentResolver().query(uri, FillupsFieldsTable.PROJECTION, null,
+                            null, null);
             if (c.getCount() > 0) {
                 c.moveToFirst();
                 FillupField field = new FillupField(c);

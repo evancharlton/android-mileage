@@ -13,15 +13,19 @@ import java.util.Date;
 
 public class FormattedDateView extends TextView {
     private static final int DATE = 1;
+
     private static final String FMT_DATE = "date";
 
     private static final int MEDIUM = 2;
+
     private static final String FMT_MEDIUM = "medium";
 
     private static final int LONG = 3;
+
     private static final String FMT_LONG = "long";
 
     private static final int TIME = 4;
+
     private static final String FMT_TIME = "time";
 
     private int mFormat = 1;
@@ -74,5 +78,9 @@ public class FormattedDateView extends TextView {
                 super.setText(text, type);
             }
         }
+    }
+
+    public void setText(long timestamp) {
+        setText(String.valueOf(timestamp));
     }
 }

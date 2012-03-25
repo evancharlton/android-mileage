@@ -30,10 +30,13 @@ public class FillupListActivity extends Activity {
     private static final String TAG = "FillupListActivity";
 
     private CursorSpinner mVehicles;
+
     private Vehicle mVehicle;
+
     private AverageEconomyTask mAverageTask;
 
     private FillupAdapter mAdapter;
+
     private ListView mList;
 
     @Override
@@ -78,7 +81,7 @@ public class FillupListActivity extends Activity {
         mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> row, View view, int position, long id) {
-                editFillup(id);
+                openFillup(id);
             }
         });
 
@@ -108,8 +111,14 @@ public class FillupListActivity extends Activity {
         }
     }
 
+    private void openFillup(long id) {
+        Intent intent = new Intent(this, FillupInfoActivity.class);
+        intent.putExtra(BaseFormActivity.EXTRA_ITEM_ID, id);
+        startActivity(intent);
+    }
+
     private void editFillup(long id) {
-        Intent intent = new Intent(FillupListActivity.this, FillupActivity.class);
+        Intent intent = new Intent(this, FillupActivity.class);
         intent.putExtra(BaseFormActivity.EXTRA_ITEM_ID, id);
         startActivity(intent);
     }
@@ -126,20 +135,25 @@ public class FillupListActivity extends Activity {
 
     protected void showDeleteDialog(final Runnable deleteAction) {
         // TODO(3.1) - This dialog doesn't persist through rotations.
-        Dialog deleteDialog = new AlertDialog.Builder(this).setTitle(R.string.dialog_title_delete)
-                .setMessage(R.string.dialog_message_delete)
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        deleteAction.run();
-                        dialog.dismiss();
-                    }
-                }).setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                }).create();
+        Dialog deleteDialog =
+                new AlertDialog.Builder(this)
+                        .setTitle(R.string.dialog_title_delete)
+                        .setMessage(R.string.dialog_message_delete)
+                        .setPositiveButton(android.R.string.yes,
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        deleteAction.run();
+                                        dialog.dismiss();
+                                    }
+                                })
+                        .setNegativeButton(android.R.string.no,
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                }).create();
         deleteDialog.show();
     }
 

@@ -9,7 +9,7 @@ import android.widget.TextView;
 public class DividerView extends TextView {
 
     public DividerView(Context context) {
-        super(context, null, 0);
+        this(context, null, 0);
     }
 
     public DividerView(Context context, AttributeSet attrs) {

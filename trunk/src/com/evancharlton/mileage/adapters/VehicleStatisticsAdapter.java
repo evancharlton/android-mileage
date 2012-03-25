@@ -4,9 +4,9 @@ package com.evancharlton.mileage.adapters;
 import com.evancharlton.mileage.R;
 import com.evancharlton.mileage.dao.CachedValue;
 import com.evancharlton.mileage.dao.Vehicle;
+import com.evancharlton.mileage.provider.Statistic;
 import com.evancharlton.mileage.provider.Statistics;
-import com.evancharlton.mileage.provider.Statistics.Statistic;
-import com.evancharlton.mileage.provider.Statistics.StatisticsGroup;
+import com.evancharlton.mileage.provider.StatisticsGroup;
 import com.evancharlton.mileage.provider.tables.CacheTable;
 
 import android.content.ContentValues;
@@ -24,21 +24,27 @@ import java.util.HashMap;
 
 public class VehicleStatisticsAdapter extends BaseAdapter {
     private static final String TAG = "VehicleStatisticsAdapter";
+
     private static final int TYPE_STATISTIC = 0;
+
     private static final int TYPE_GROUP = 1;
 
     private final ArrayList<StatisticHolder> mObjects = new ArrayList<StatisticHolder>();
+
     private final HashMap<String, String> mValues = new HashMap<String, String>();
+
     private final Context mContext;
+
     private final Vehicle mVehicle;
+
     private final LayoutInflater mInflater;
 
-    public VehicleStatisticsAdapter(Context context, Vehicle vehicle) {
+    public VehicleStatisticsAdapter(Context context, Vehicle vehicle, StatisticsGroup[] groups) {
         mInflater = LayoutInflater.from(context);
         mContext = context;
         mVehicle = vehicle;
 
-        for (StatisticsGroup group : Statistics.GROUPS) {
+        for (StatisticsGroup group : groups) {
             mObjects.add(new StatisticHolder(context, group));
             for (Statistic statistic : group.getStatistics()) {
                 mObjects.add(new StatisticHolder(context, statistic, vehicle));
@@ -73,7 +79,7 @@ public class VehicleStatisticsAdapter extends BaseAdapter {
                 // erase the existing cache
                 String where = CachedValue.ITEM + " = ?";
                 String[] selectionArgs = new String[] {
-                        String.valueOf(mVehicle.getId())
+                    String.valueOf(mVehicle.getId())
                 };
                 mContext.getContentResolver().delete(CacheTable.BASE_URI, where, selectionArgs);
 
@@ -101,7 +107,7 @@ public class VehicleStatisticsAdapter extends BaseAdapter {
                     long start = System.currentTimeMillis();
                     mContext.getContentResolver().bulkInsert(CacheTable.BASE_URI, values);
                     long diff = System.currentTimeMillis() - start;
-                    double seconds = (double) diff / 1000D;
+                    double seconds = diff / 1000D;
                     Log.d(TAG, "Caching of " + num + " records complete! (" + seconds + " seconds)");
                 }
             }
@@ -187,7 +193,9 @@ public class VehicleStatisticsAdapter extends BaseAdapter {
 
     private static class StatisticHolder {
         public final String key;
+
         public final String text;
+
         public final int type;
 
         public StatisticHolder(Context context, Statistic statistic, Vehicle vehicle) {
@@ -205,6 +213,7 @@ public class VehicleStatisticsAdapter extends BaseAdapter {
 
     private static class ViewHolder {
         public final TextView text;
+
         public final TextView value;
 
         public ViewHolder(View convertView) {

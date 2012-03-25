@@ -1,9 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:mileage="http://schemas.android.com/apk/res/com.evancharlton.mileage"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	android:orientation="vertical"
 >
+	<LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal">
+	    <Button
+	        android:id="@+id/next"
+	        android:layout_width="0dp"
+	        android:layout_weight="1"
+	        android:layout_height="wrap_content"
+	        android:text="@string/next"
+        />
+	    <Button
+	        android:id="@+id/previous"
+	        android:layout_width="0dp"
+	        android:layout_weight="1"
+	        android:layout_height="wrap_content"
+	        android:text="@string/previous"
+	    />
+	</LinearLayout>
+	<com.evancharlton.mileage.views.FormattedDateView
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:textAppearance="?android:attr/textAppearanceLarge"
+	    android:id="@+id/header"
+	    mileage:dateFormat="long"
+    />
 	<ScrollView
 		android:layout_width="match_parent"
 		android:layout_height="0dp"
@@ -13,48 +41,13 @@
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:orientation="vertical"
-		>
-			<com.evancharlton.mileage.views.DividerView
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:text="@string/divider_fillup_info"
-			/>
-			<LinearLayout
-				android:id="@+id/info"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:orientation="vertical"
-			/>
-			<com.evancharlton.mileage.views.DividerView
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:text="@string/divider_fillup_statistics"
-			/>
-			<com.evancharlton.mileage.views.DividerView
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:text="@string/divider_fillup_fields"
-			/>
-		</LinearLayout>
+			android:id="@+id/stat_container"
+		/>
 	</ScrollView>
-	<LinearLayout
+	<Button
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:orientation="horizontal"
-	>
-		<Button
-			android:layout_width="0dp"
-			android:layout_weight="1"
-			android:layout_height="wrap_content"
-			android:id="@+id/edit"
-			android:text="@string/edit"
-		/>
-		<Button
-			android:layout_width="0dp"
-			android:layout_weight="1"
-			android:layout_height="wrap_content"
-			android:id="@+id/close"
-			android:text="@string/close"
-		/>
-	</LinearLayout>
+		android:id="@+id/edit"
+		android:text="@string/edit"
+	/>
 </LinearLayout>

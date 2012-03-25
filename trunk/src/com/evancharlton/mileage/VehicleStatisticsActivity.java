@@ -4,8 +4,9 @@ package com.evancharlton.mileage;
 import com.evancharlton.mileage.adapters.VehicleStatisticsAdapter;
 import com.evancharlton.mileage.dao.CachedValue;
 import com.evancharlton.mileage.dao.Vehicle;
+import com.evancharlton.mileage.provider.Statistic;
 import com.evancharlton.mileage.provider.Statistics;
-import com.evancharlton.mileage.provider.Statistics.Statistic;
+import com.evancharlton.mileage.provider.StatisticsGroup;
 import com.evancharlton.mileage.provider.tables.CacheTable;
 import com.evancharlton.mileage.provider.tables.VehiclesTable;
 import com.evancharlton.mileage.tasks.VehicleStatisticsTask;
@@ -33,13 +34,60 @@ import android.widget.Toast;
 public class VehicleStatisticsActivity extends Activity {
     private static final String TAG = "VehicleStatisticsActivity";
 
+    private static final Statistic[] ECONOMIES = {
+            Statistics.AVG_ECONOMY, Statistics.MIN_ECONOMY, Statistics.MAX_ECONOMY
+    };
+
+    private static final Statistic[] DISTANCES = {
+            Statistics.AVG_DISTANCE, Statistics.MIN_DISTANCE, Statistics.MAX_DISTANCE
+    };
+
+    private static final Statistic[] COSTS = {
+            Statistics.AVG_COST, Statistics.MIN_COST, Statistics.MAX_COST, Statistics.TOTAL_COST,
+            Statistics.LAST_MONTH_COST, Statistics.AVG_MONTHLY_COST, Statistics.LAST_YEAR_COST,
+            Statistics.AVG_YEARLY_COST
+    };
+
+    private static final Statistic[] COSTS_PER_DISTANCE = {
+            Statistics.AVG_COST_PER_DISTANCE, Statistics.MIN_COST_PER_DISTANCE,
+            Statistics.MAX_COST_PER_DISTANCE
+    };
+
+    private static final Statistic[] PRICES = {
+            Statistics.AVG_PRICE, Statistics.MIN_PRICE, Statistics.MAX_PRICE
+    };
+
+    private static final Statistic[] CONSUMPTIONS = {
+            Statistics.MIN_FUEL, Statistics.MAX_FUEL, Statistics.AVG_FUEL, Statistics.TOTAL_FUEL,
+            Statistics.FUEL_PER_YEAR
+    };
+
+    private static final Statistic[] LOCATIONS = {
+            Statistics.NORTH, Statistics.SOUTH, Statistics.EAST, Statistics.WEST
+    };
+
+    private static final StatisticsGroup[] GROUPS = {
+            new StatisticsGroup(R.string.stat_fuel_economy, ECONOMIES),
+            new StatisticsGroup(R.string.stat_distance_between_fillups, DISTANCES),
+            new StatisticsGroup(R.string.stat_fillup_cost, COSTS),
+            new StatisticsGroup(R.string.stat_cost_per_distance, COSTS_PER_DISTANCE),
+            new StatisticsGroup(R.string.stat_price, PRICES),
+            new StatisticsGroup(R.string.stat_fuel, CONSUMPTIONS),
+            new StatisticsGroup(R.string.stat_location, LOCATIONS)
+    };
+
     private final Vehicle mVehicle = new Vehicle(new ContentValues());
 
     private Spinner mVehicleSpinner;
+
     private ListView mListView;
+
     private VehicleStatisticsTask mCalculationTask = null;
+
     private LinearLayout mContainer;
+
     private ProgressBar mProgressBar;
+
     private ImageView mCancel;
 
     private VehicleStatisticsAdapter mAdapter;
@@ -136,8 +184,7 @@ public class VehicleStatisticsActivity extends Activity {
     public Cursor getCacheCursor() {
         return managedQuery(CacheTable.BASE_URI, CacheTable.PROJECTION, CachedValue.ITEM
                 + " = ? and " + CachedValue.VALID + " = ?", new String[] {
-                String.valueOf(mVehicle.getId()),
-                "1"
+                String.valueOf(mVehicle.getId()), "1"
         }, CachedValue.GROUP + " asc, " + CachedValue.ORDER + " asc");
     }
 
@@ -147,7 +194,7 @@ public class VehicleStatisticsActivity extends Activity {
 
     public void setAdapter(Cursor c) {
         if (mAdapter == null) {
-            mAdapter = new VehicleStatisticsAdapter(this, mVehicle);
+            mAdapter = new VehicleStatisticsAdapter(this, mVehicle, GROUPS);
         }
         mAdapter.changeCursor(c);
         mListView.setAdapter(mAdapter);
@@ -164,8 +211,7 @@ public class VehicleStatisticsActivity extends Activity {
     @Override
     public Object onRetainNonConfigurationInstance() {
         return new Object[] {
-                mCalculationTask,
-                mAdapter
+                mCalculationTask, mAdapter
         };
     }
 

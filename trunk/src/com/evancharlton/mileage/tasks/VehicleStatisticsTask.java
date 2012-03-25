@@ -8,6 +8,7 @@ import com.evancharlton.mileage.dao.FillupSeries;
 import com.evancharlton.mileage.dao.Vehicle;
 import com.evancharlton.mileage.exceptions.InvalidFieldException;
 import com.evancharlton.mileage.math.Calculator;
+import com.evancharlton.mileage.provider.Statistic;
 import com.evancharlton.mileage.provider.Statistics;
 import com.evancharlton.mileage.provider.tables.CacheTable;
 import com.evancharlton.mileage.provider.tables.FillupsTable;
@@ -327,7 +328,7 @@ public class VehicleStatisticsTask extends
         return 0;
     }
 
-    private void update(Statistics.Statistic statistic, double value) {
+    private void update(Statistic statistic, double value) {
         statistic.setValue(value);
         getParent().getAdapter().setValue(statistic, value);
         publishProgress();

@@ -195,6 +195,9 @@
 	<string name="stat_east">East</string>
 	<string name="stat_west">West</string>
 	
+	<string name="info_distance">Distance</string>
+	<string name="info_economy">Economy</string>
+	
 	<string name="error_no_vehicle_specified">No vehicle was specified</string>
 	<string name="error_no_odometer_specified">Invalid value for odometer</string>
 	<string name="error_no_volume_specified">Invalid value for volume</string>
@@ -256,8 +259,8 @@
 	<string name="units_litres_per_100km">Litres / 100 km</string>
 	<string name="units_lpckm">L/100 km</string>
 	
-	<string name="per_month">/ mo</string>
-	<string name="per_year">/ yr</string>
+	<string name="per_month">mo</string>
+	<string name="per_year">yr</string>
 	
 	<string name="title_fillup">Fillup on %s</string>
 	<string name="title_fillup_info">Fillup information</string>
