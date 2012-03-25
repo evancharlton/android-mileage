@@ -74,6 +74,8 @@
 		<activity android:name=".charts.SouthChart" android:label="@string/title_chart_south" />
 		<activity android:name=".charts.EastChart" android:label="@string/title_chart_east" />
 		<activity android:name=".charts.WestChart" android:label="@string/title_chart_west" />
+		
+		<service android:name=".services.RecalculateEconomyService" />
 
 		<receiver android:name=".alarms.IntervalReceiver" />
 	</application>

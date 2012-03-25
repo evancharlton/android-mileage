@@ -133,10 +133,10 @@ public class FillupAdapter extends BaseAdapter {
         double economy = mCursor.getDouble(mCursor.getColumnIndex(Fillup.ECONOMY));
 
         holder.economy.setTextColor(holder.metaField.getTextColors().getDefaultColor());
-        if (economy == 0) {
-            value = mContext.getString(R.string.status_calculating);
-        } else if (mCursor.getInt(mCursor.getColumnIndex(Fillup.PARTIAL)) == 1) {
+        if (mCursor.getInt(mCursor.getColumnIndex(Fillup.PARTIAL)) == 1) {
             value = mContext.getString(R.string.status_partial);
+        } else if (economy == 0) {
+            value = mContext.getString(R.string.status_calculating);
         } else {
             value = ECONOMY_FORMAT.format(economy) + mEconomyUnits;
             if (mAvgEconomy > 0) {

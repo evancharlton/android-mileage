@@ -18,6 +18,7 @@ import com.evancharlton.mileage.provider.tables.CacheTable;
 import com.evancharlton.mileage.provider.tables.FieldsTable;
 import com.evancharlton.mileage.provider.tables.FillupsTable;
 import com.evancharlton.mileage.provider.tables.VehiclesTable;
+import com.evancharlton.mileage.services.RecalculateEconomyService;
 import com.evancharlton.mileage.views.CursorSpinner;
 import com.evancharlton.mileage.views.DateButton;
 import com.evancharlton.mileage.views.DividerView;
@@ -436,6 +437,7 @@ public class FillupActivity extends BaseFormActivity {
                             String.valueOf(mFillup.getOdometer()),
                             String.valueOf(mFillup.getVehicleId())
                     });
+            RecalculateEconomyService.run(this, mVehicle);
         }
     }
 

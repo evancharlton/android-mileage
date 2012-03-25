@@ -4,17 +4,19 @@ package com.evancharlton.mileage;
 import com.evancharlton.mileage.adapters.FillupAdapter;
 import com.evancharlton.mileage.dao.Vehicle;
 import com.evancharlton.mileage.provider.tables.FillupsTable;
-import com.evancharlton.mileage.tasks.AverageEconomyTask;
+import com.evancharlton.mileage.services.RecalculateEconomyService;
 import com.evancharlton.mileage.views.CursorSpinner;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
 import android.content.ContentUris;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -33,11 +35,17 @@ public class FillupListActivity extends Activity {
 
     private Vehicle mVehicle;
 
-    private AverageEconomyTask mAverageTask;
-
     private FillupAdapter mAdapter;
 
     private ListView mList;
+
+    private final BroadcastReceiver mCalculationFinishedReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            mAdapter.calculationFinished(intent.getDoubleExtra(
+                    RecalculateEconomyService.EXTRA_AVERAGE_ECONOMY, 0D));
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +59,14 @@ public class FillupListActivity extends Activity {
     protected void onResume() {
         mAdapter.requery();
         super.onResume();
+        registerReceiver(mCalculationFinishedReceiver, new IntentFilter(
+                RecalculateEconomyService.CALCULATION_FINISHED));
+    }
+
+    @Override
+    protected void onPause() {
+        unregisterReceiver(mCalculationFinishedReceiver);
+        super.onPause();
     }
 
     protected void initUI() {
@@ -85,7 +101,7 @@ public class FillupListActivity extends Activity {
             }
         });
 
-        restoreTask();
+        calculate();
     }
 
     @Override
@@ -157,26 +173,8 @@ public class FillupListActivity extends Activity {
         deleteDialog.show();
     }
 
-    private void restoreTask() {
-        Object saved = getLastNonConfigurationInstance();
-        if (saved != null) {
-            mAverageTask = (AverageEconomyTask) saved;
-        } else {
-            mAverageTask = new AverageEconomyTask();
-        }
-        mAverageTask.attach(mAdapter);
-        if (mAverageTask.getStatus() != AsyncTask.Status.RUNNING) {
-            mAverageTask.execute(mVehicle);
-        }
-    }
-
     private void calculate() {
-        if (mAverageTask.getStatus() != AsyncTask.Status.FINISHED) {
-            mAverageTask.cancel(true);
-        }
-        mAverageTask = new AverageEconomyTask();
-        mAverageTask.attach(mAdapter);
-        mAverageTask.execute(mVehicle);
+        RecalculateEconomyService.run(this, mVehicle);
     }
 
     protected final Vehicle getVehicle() {
