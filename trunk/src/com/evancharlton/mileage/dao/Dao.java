@@ -34,9 +34,6 @@ public abstract class Dao implements Cloneable {
     @Column(type = Column.LONG, name = BaseColumns._ID)
     private long mId;
 
-    @Column(type = Column.TIMESTAMP, name = TIMESTAMP)
-    private long mTimestamp;
-
     private Uri mUriBase = null;
 
     private boolean mInMemoryDataChanged = false;
