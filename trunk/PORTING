@@ -1,0 +1,22 @@
+So you want to fork Mileage or port it to another platform? Great! Mileage is
+licensed under the Apache 2.0 license, so you're free to do that. However,
+I ask that you follow three simple steps:
+
+  1) Change the icon
+     I don't want users to be confused about the authenticity of the
+     application, so please pick a different icon.
+
+  2) Change the package name
+     Do not leave it as com.evancharlton.mileage, and please don't
+     use anything in the com.evancharlton.* namespace.
+
+  3) Change the strings
+     In particular, remove the strings which reference email
+     addresses or authors. I do not want your users accidentally
+     emailing me for support.
+
+When these rules are followed, everyone wins! You get Mileage on your other
+platform, your users get a consistent experience, and I don't have to deal
+with confused users!
+
+Thanks!
