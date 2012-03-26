@@ -23,20 +23,22 @@ public class ExportActivity extends Activity {
     public static final String FILENAME = "filename";
 
     private static final String[] FILE_TYPES = new String[] {
-            ".db",
-            ".csv"
+            ".db", ".csv"
     };
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("rawtypes")
     private static final Class[] EXPORTERS = new Class[] {
-            DbExportActivity.class,
-            CsvExportActivity.class
+            DbExportActivity.class, CsvExportActivity.class
     };
 
     private Spinner mFileTypes;
+
     private EditText mFilename;
+
     private Button mSubmitButton;
+
     private TextView mFileExt;
+
     private FilenameTask mFilenameTask;
 
     @Override
@@ -52,8 +54,9 @@ public class ExportActivity extends Activity {
         mSubmitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ExportActivity.this, EXPORTERS[mFileTypes
-                        .getSelectedItemPosition()]);
+                Intent intent =
+                        new Intent(ExportActivity.this, EXPORTERS[mFileTypes
+                                .getSelectedItemPosition()]);
                 intent.putExtra(ExportActivity.FILENAME, getFilename());
                 startActivity(intent);
                 finish();
@@ -105,7 +108,9 @@ public class ExportActivity extends Activity {
 
     protected static final class FilenameTask extends AsyncTask<Void, Void, String> {
         private static final String TAG = "FilenameTask";
+
         private static final String BASE_NAME = "mileage-export";
+
         private ExportActivity mActivity;
 
         public void attach(ExportActivity activity) {
