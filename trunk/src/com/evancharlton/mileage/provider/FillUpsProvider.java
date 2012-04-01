@@ -57,13 +57,19 @@ import java.util.ArrayList;
 public class FillUpsProvider extends ContentProvider {
 
     public static final String AUTHORITY = "com.evancharlton.mileage";
+
     public static final Uri BASE_URI = Uri.parse("content://" + AUTHORITY);
-    public static final int DATABASE_VERSION = 7;
+
+    public static final int DATABASE_VERSION = 6;
+
     public static final ArrayList<ContentTable> TABLES = new ArrayList<ContentTable>();
+
     private static final SparseIntArray LOOKUP = new SparseIntArray();
 
     public static final String DATABASE_NAME = "mileage.db";
+
     private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
+
     private static final String TAG = "FillupsProvider";
 
     private DatabaseHelper mDatabaseHelper;
@@ -140,8 +146,8 @@ public class FillUpsProvider extends ContentProvider {
         mDatabaseHelper = new DatabaseHelper(getContext());
 
         // Save the path to the database into SharedPreferences
-        SharedPreferences prefs = getContext().getSharedPreferences(Settings.NAME,
-                Context.MODE_PRIVATE);
+        SharedPreferences prefs =
+                getContext().getSharedPreferences(Settings.NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         String path = mDatabaseHelper.getReadableDatabase().getPath();
         Log.d(TAG, "Storing database path as " + path);
@@ -237,8 +243,8 @@ public class FillUpsProvider extends ContentProvider {
             projection = queryTable.getProjection();
         }
 
-        String orderBy = TextUtils.isEmpty(sortOrder) ? queryTable.getDefaultSortOrder()
-                : sortOrder;
+        String orderBy =
+                TextUtils.isEmpty(sortOrder) ? queryTable.getDefaultSortOrder() : sortOrder;
 
         SQLiteDatabase db;
         try {
@@ -261,8 +267,8 @@ public class FillUpsProvider extends ContentProvider {
         if (position >= 0) {
             SQLiteDatabase db = mDatabaseHelper.getWritableDatabase();
             values.put(Dao.TIMESTAMP, System.currentTimeMillis());
-            int count = TABLES.get(position).update(match, db, uri, values, selection,
-                    selectionArgs);
+            int count =
+                    TABLES.get(position).update(match, db, uri, values, selection, selectionArgs);
             if (count >= 0) {
                 notifyListeners(uri);
             }

@@ -24,8 +24,11 @@ public class DatabaseUpgrader {
     private static final String TAG = "DatabaseUpgrader";
 
     private static final int V1_DATABASE = 3; // Version 1.X
+
     private static final int V2_DATABASE = 4; // Version 2.X
+
     private static final int V3_DATABASE = 5; // Version 3.X
+
     private static final int V3_1_DATABASE = 6; // Version 3.1
 
     private static final StringBuilder BUILDER = new StringBuilder();
@@ -82,25 +85,7 @@ public class DatabaseUpgrader {
                         Log.e(TAG, "Unable to complete migration!");
                     }
                 case V3_1_DATABASE:
-                    // Add the timestamp field to all tables
-                    String[] tables = new String[] {
-                            "cache",
-                            "fields",
-                            "fillups_fields",
-                            "fillups",
-                            "service_intervals",
-                            "service_interval_templates",
-                            "vehicles",
-                            "vehicle_types"
-                    };
-                    for (String table : tables) {
-                        try {
-                            exec("ALTER TABLE " + table + " ADD COLUMN last_change INTEGER");
-                        } catch (SQLiteException e) {
-                            Log.e(TAG, "Couldn't upgrade " + table, e);
-                        }
-                        exec("UPDATE " + table + " SET last_change = " + System.currentTimeMillis());
-                    }
+                    // 3.1; I don't think anything changed.
                     break;
                 default:
                     // unknown version; recurse and start from the beginning
@@ -130,9 +115,7 @@ public class DatabaseUpgrader {
 
     private static boolean backupExistingTables() {
         String[] tables = new String[] {
-                "fillups",
-                "vehicles",
-                "maintenance_intervals"
+                "fillups", "vehicles", "maintenance_intervals"
         };
 
         try {
@@ -149,16 +132,12 @@ public class DatabaseUpgrader {
     }
 
     private static boolean createNewTables() {
-        ContentTable[] tables = new ContentTable[] {
-                new FillupsTable(),
-                new FillupsFieldsTable(),
-                new FieldsTable(),
-                new VehiclesTable(),
-                new VehicleTypesTable(),
-                new ServiceIntervalsTable(),
-                new ServiceIntervalTemplatesTable(),
-                new CacheTable()
-        };
+        ContentTable[] tables =
+                new ContentTable[] {
+                        new FillupsTable(), new FillupsFieldsTable(), new FieldsTable(),
+                        new VehiclesTable(), new VehicleTypesTable(), new ServiceIntervalsTable(),
+                        new ServiceIntervalTemplatesTable(), new CacheTable()
+                };
 
         try {
             for (ContentTable table : tables) {
