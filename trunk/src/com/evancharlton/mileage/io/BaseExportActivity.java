@@ -3,11 +3,10 @@ package com.evancharlton.mileage.io;
 
 import com.evancharlton.mileage.ExportActivity;
 import com.evancharlton.mileage.R;
+import com.evancharlton.mileage.provider.FillUpsProvider;
 import com.evancharlton.mileage.provider.Settings;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.ProgressBar;
@@ -15,7 +14,9 @@ import android.widget.TextView;
 
 public abstract class BaseExportActivity extends Activity {
     private ProgressBar mProgressBar;
+
     private TextView mLog;
+
     private ExportTask mExportTask;
 
     @Override
@@ -39,8 +40,8 @@ public abstract class BaseExportActivity extends Activity {
         mExportTask.attach(this);
 
         if (mExportTask.getStatus() == AsyncTask.Status.PENDING) {
-            SharedPreferences prefs = getSharedPreferences(Settings.NAME, Context.MODE_PRIVATE);
-            mExportTask.execute(prefs.getString(Settings.DATABASE_PATH, null), filename);
+            String dbPath = getDatabasePath(FillUpsProvider.DATABASE_NAME).getAbsolutePath();
+            mExportTask.execute(dbPath, filename);
         }
     }
 
@@ -96,8 +97,9 @@ public abstract class BaseExportActivity extends Activity {
         protected final void onPostExecute(String result) {
             final String msg;
             if (result != null) {
-                msg = mActivity.getString(R.string.exported,
-                        result.substring(result.lastIndexOf('/') + 1));
+                msg =
+                        mActivity.getString(R.string.exported,
+                                result.substring(result.lastIndexOf('/') + 1));
             } else {
                 msg = mActivity.getString(R.string.export_error);
             }
@@ -109,7 +111,9 @@ public abstract class BaseExportActivity extends Activity {
 
     protected static final class Update {
         public final String message;
+
         public final int progress;
+
         public final int max;
 
         public Update(String message, int progress) {

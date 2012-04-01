@@ -144,16 +144,6 @@ public class FillUpsProvider extends ContentProvider {
     @Override
     public boolean onCreate() {
         mDatabaseHelper = new DatabaseHelper(getContext());
-
-        // Save the path to the database into SharedPreferences
-        SharedPreferences prefs =
-                getContext().getSharedPreferences(Settings.NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        String path = mDatabaseHelper.getReadableDatabase().getPath();
-        Log.d(TAG, "Storing database path as " + path);
-        editor.putString(Settings.DATABASE_PATH, path);
-        editor.commit();
-
         URI_MATCHER.addURI(AUTHORITY, "reset/", 0);
         return true;
     }

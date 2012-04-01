@@ -7,8 +7,6 @@ import com.evancharlton.mileage.provider.DatabaseUpgrader;
 import com.evancharlton.mileage.provider.FillUpsProvider;
 import com.evancharlton.mileage.provider.Settings;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.util.Log;
@@ -23,6 +21,7 @@ public class DbImportTask extends AttachableAsyncTask<DbImportActivity, Void, St
     private static final String TAG = "DbImportTask";
 
     private static final String TEMP_FILE = Settings.EXTERNAL_DIR + ".import.db";
+
     private final String mInput;
 
     public DbImportTask(String input) {
@@ -73,22 +72,21 @@ public class DbImportTask extends AttachableAsyncTask<DbImportActivity, Void, St
 
     private void upgradeDatabase() {
         Log.d(TAG, "Upgrading " + TEMP_FILE);
-        SQLiteDatabase db = SQLiteDatabase.openDatabase(TEMP_FILE, null,
-                SQLiteDatabase.OPEN_READWRITE);
+        SQLiteDatabase db =
+                SQLiteDatabase.openDatabase(TEMP_FILE, null, SQLiteDatabase.OPEN_READWRITE);
         DatabaseUpgrader.upgradeDatabase(db);
         db.close();
     }
 
     private void cleanUp() throws IOException {
-        SharedPreferences prefs = getParent().getSharedPreferences(Settings.NAME,
-                Context.MODE_PRIVATE);
-        String path = prefs.getString(Settings.DATABASE_PATH, null);
+        File database = getParent().getDatabasePath(FillUpsProvider.DATABASE_NAME);
         FileChannel input = new FileInputStream(TEMP_FILE).getChannel();
-        FileChannel output = new FileOutputStream(path).getChannel();
+        FileChannel output = new FileOutputStream(database).getChannel();
         long bytes = input.transferTo(0, input.size(), output);
         input.close();
         output.close();
-        Log.d(TAG, "Wrote " + bytes + " bytes to " + path + " from " + TEMP_FILE);
+        Log.d(TAG, "Wrote " + bytes + " bytes to " + database.getAbsolutePath() + " from "
+                + TEMP_FILE);
 
         File tempDatabase = new File(TEMP_FILE);
         tempDatabase.delete();
