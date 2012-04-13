@@ -1,14 +1,14 @@
 
 package com.evancharlton.mileage.math;
 
+import android.content.Context;
+import android.text.TextUtils;
+import android.text.format.DateFormat;
+
 import com.evancharlton.mileage.R;
 import com.evancharlton.mileage.dao.Fillup;
 import com.evancharlton.mileage.dao.FillupSeries;
 import com.evancharlton.mileage.dao.Vehicle;
-
-import android.content.Context;
-import android.text.TextUtils;
-import android.text.format.DateFormat;
 
 import java.util.Currency;
 import java.util.Date;
@@ -75,7 +75,7 @@ public class Calculator {
      * Returns a positive integer if first is a *better* economy than second, a
      * negative integer if second is *better* than first, and 0 if the two are
      * equal.
-     * 
+     *
      * @param first value of the first economy
      * @param firstUnit units on the first economy
      * @param second value of the second economy
@@ -129,7 +129,7 @@ public class Calculator {
 
     /**
      * Calculate the economy of the most recent fillup of the series.
-     * 
+     *
      * @param vehicle
      * @param series
      * @return
@@ -219,7 +219,18 @@ public class Calculator {
     }
 
     public static double averageCostPerDistance(FillupSeries series) {
-        return series.getTotalCost() / series.getTotalDistance();
+        if (series.size() <= 1) {
+            return 0D;
+        }
+
+        double totalCost = series.getTotalCost();
+        double totalDistance = series.getTotalDistance();
+
+        // We need to subtract out the cost for the very first fillup because
+        // it does not have a distance associated with it.
+        totalCost -= series.get(0).getTotalCost();
+
+        return (totalCost / totalDistance);
     }
 
     public static double averageFuelPerDay(FillupSeries series) {
