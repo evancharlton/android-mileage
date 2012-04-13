@@ -39,7 +39,6 @@
 		<activity android:name=".ServiceIntervalTemplateActivity" android:label="@string/title_service_interval_template" />
 		<activity android:name=".ServiceIntervalTemplateListActivity" android:label="@string/title_service_interval_template_list" />
 		<activity android:name=".SettingsActivity" android:label="@string/title_settings" />
-		<activity android:name=".TransportSettingsActivity" android:label="@string/title_transport_settings" />
 		<activity android:name=".VehicleStatisticsActivity" android:label="@string/title_statistics" />
 		<activity android:name=".ImportExportActivity" android:label="@string/title_importexport" />
 		<activity android:name=".ImportActivity" android:label="@string/title_import" />
@@ -74,8 +73,17 @@
 		<activity android:name=".charts.SouthChart" android:label="@string/title_chart_south" />
 		<activity android:name=".charts.EastChart" android:label="@string/title_chart_east" />
 		<activity android:name=".charts.WestChart" android:label="@string/title_chart_west" />
-		
+
 		<service android:name=".services.RecalculateEconomyService" />
+
+		<service android:name=".services.AutomaticBackupService" />
+
+		<receiver android:name=".receivers.MediaChangedReceiver">
+		    <intent-filter>
+		        <action android:name="android.intent.action.MEDIA_MOUNTED" />
+		        <data android:scheme="file" />
+		    </intent-filter>
+		</receiver>
 
 		<receiver android:name=".alarms.IntervalReceiver" />
 	</application>

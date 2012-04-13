@@ -1,21 +1,6 @@
 
 package com.evancharlton.mileage.provider;
 
-import com.evancharlton.mileage.SettingsActivity;
-import com.evancharlton.mileage.dao.Dao;
-import com.evancharlton.mileage.provider.backup.BackupTransport;
-import com.evancharlton.mileage.provider.backup.FileBackupTransport;
-import com.evancharlton.mileage.provider.tables.CacheTable;
-import com.evancharlton.mileage.provider.tables.ContentTable;
-import com.evancharlton.mileage.provider.tables.FieldsTable;
-import com.evancharlton.mileage.provider.tables.FillupsFieldsTable;
-import com.evancharlton.mileage.provider.tables.FillupsTable;
-import com.evancharlton.mileage.provider.tables.ServiceIntervalTemplatesTable;
-import com.evancharlton.mileage.provider.tables.ServiceIntervalsTable;
-import com.evancharlton.mileage.provider.tables.VehicleTypesTable;
-import com.evancharlton.mileage.provider.tables.VehiclesTable;
-import com.evancharlton.mileage.util.Debugger;
-
 import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -28,13 +13,24 @@ import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
-import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.SparseIntArray;
 
+import com.evancharlton.mileage.dao.Dao;
+import com.evancharlton.mileage.provider.tables.CacheTable;
+import com.evancharlton.mileage.provider.tables.ContentTable;
+import com.evancharlton.mileage.provider.tables.FieldsTable;
+import com.evancharlton.mileage.provider.tables.FillupsFieldsTable;
+import com.evancharlton.mileage.provider.tables.FillupsTable;
+import com.evancharlton.mileage.provider.tables.ServiceIntervalTemplatesTable;
+import com.evancharlton.mileage.provider.tables.ServiceIntervalsTable;
+import com.evancharlton.mileage.provider.tables.VehicleTypesTable;
+import com.evancharlton.mileage.provider.tables.VehiclesTable;
+import com.evancharlton.mileage.services.AutomaticBackupService;
+import com.evancharlton.mileage.util.Debugger;
+
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Exposed URIs:
@@ -66,16 +62,11 @@ public class FillUpsProvider extends ContentProvider {
     public static final ArrayList<ContentTable> TABLES = new ArrayList<ContentTable>();
     private static final SparseIntArray LOOKUP = new SparseIntArray();
 
-    private static final String DATABASE_NAME = "mileage.db";
-    private static final HashMap<String, BackupTransport> BACKUPS = new HashMap<String, BackupTransport>();
+    public static final String DATABASE_NAME = "mileage.db";
     private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
     private static final String TAG = "FillupsProvider";
 
     private DatabaseHelper mDatabaseHelper;
-
-    private final Handler mHandler = new Handler();
-
-    private Runnable mBackupRunnable;
 
     static {
         TABLES.add(new FillupsTable());
@@ -90,8 +81,6 @@ public class FillUpsProvider extends ContentProvider {
         for (ContentTable table : TABLES) {
             table.registerUris();
         }
-
-        putBackup(new FileBackupTransport());
     }
 
     public static void registerUri(ContentTable table, String path, int code) {
@@ -103,14 +92,6 @@ public class FillUpsProvider extends ContentProvider {
             position = TABLES.size() - 1;
         }
         LOOKUP.put(code, position);
-    }
-
-    private static void putBackup(BackupTransport transport) {
-        BACKUPS.put(transport.getClass().getName(), transport);
-    }
-
-    public static BackupTransport getBackupTransport(String packageName) {
-        return BACKUPS.get(packageName);
     }
 
     private static class DatabaseHelper extends SQLiteOpenHelper {
@@ -141,10 +122,6 @@ public class FillUpsProvider extends ContentProvider {
         public void onUpgrade(SQLiteDatabase db, final int oldVersion, final int newVersion) {
             DatabaseUpgrader.upgradeDatabase(db);
         }
-    }
-
-    public static ArrayList<BackupTransport> getBackupTransports() {
-        return new ArrayList<BackupTransport>(BACKUPS.values());
     }
 
     public static void initTables(SQLiteDatabase db) {
@@ -298,20 +275,6 @@ public class FillUpsProvider extends ContentProvider {
         Context context = getContext();
         context.getContentResolver().notifyChange(uri, null);
 
-        mHandler.removeCallbacks(mBackupRunnable);
-
-        mBackupRunnable = new Runnable() {
-            @Override
-            public void run() {
-                SharedPreferences preferences = getContext().getSharedPreferences(
-                        SettingsActivity.NAME, Context.MODE_PRIVATE);
-                for (BackupTransport transport : BACKUPS.values()) {
-                    if (transport.isEnabled(preferences)) {
-                        transport.performIncrementalBackup(getContext(), uri);
-                    }
-                }
-            }
-        };
-        mHandler.postDelayed(mBackupRunnable, 1000);
+        AutomaticBackupService.run(context);
     }
 }

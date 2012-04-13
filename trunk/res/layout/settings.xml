@@ -20,20 +20,13 @@
 		android:entryValues="@array/data_format_values"
 		android:defaultValue="0"
 	/>
-	<PreferenceCategory
-		android:orderingFromXml="true"
-		android:title="@string/settings_backups_title"
-		android:key="backups"
-	>
-		<!-- TODO: make this auto-generated -->
-		<PreferenceScreen>
-	        <intent
-	            android:action="android.intent.ACTION_VIEW"
-	            android:targetPackage="com.evancharlton.mileage"
-	            android:targetClass="com.evancharlton.mileage.TransportSettingsActivity"
-	        />
-    	</PreferenceScreen>
-	</PreferenceCategory>
+	<CheckBoxPreference
+	    android:key="auto_backup"
+	    android:title="@string/settings_auto_backup_title"
+	    android:summaryOn="@string/settings_auto_backup_on"
+	    android:summaryOff="@string/settings_auto_backup_off"
+	    android:defaultValue="true"
+	/>
 	<PreferenceCategory
 		android:orderingFromXml="true"
 		android:title="@string/settings"

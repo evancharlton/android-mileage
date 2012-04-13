@@ -1,12 +1,6 @@
 
 package com.evancharlton.mileage;
 
-import com.evancharlton.mileage.dao.Field;
-import com.evancharlton.mileage.provider.FillUpsProvider;
-import com.evancharlton.mileage.provider.Settings;
-import com.evancharlton.mileage.provider.backup.BackupTransport;
-import com.evancharlton.mileage.provider.tables.FieldsTable;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -19,33 +13,19 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.preference.PreferenceCategory;
-import android.preference.PreferenceScreen;
 
-import java.util.ArrayList;
+import com.evancharlton.mileage.dao.Field;
+import com.evancharlton.mileage.provider.Settings;
+import com.evancharlton.mileage.provider.tables.FieldsTable;
 
 public class SettingsActivity extends PreferenceActivity implements
         Preference.OnPreferenceClickListener {
     public static final String NAME = "com.evancharlton.mileage_preferences";
 
-    private PreferenceCategory mBackupCategory;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.layout.settings);
-
-        mBackupCategory = (PreferenceCategory) findPreference(Settings.BACKUPS);
-        final int count = mBackupCategory.getPreferenceCount();
-        ArrayList<BackupTransport> transports = FillUpsProvider.getBackupTransports();
-        for (int i = 0; i < count; i++) {
-            BackupTransport transport = transports.get(i);
-            PreferenceScreen screen = (PreferenceScreen) mBackupCategory.getPreference(i);
-            Intent intent = screen.getIntent();
-            intent.putExtra(TransportSettingsActivity.PACKAGE_NAME, transport.getClass().getName());
-            screen.setIntent(intent);
-            screen.setTitle(transport.getName());
-        }
 
         Preference about = findPreference("about");
         String version;

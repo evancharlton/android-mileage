@@ -84,12 +84,6 @@
 	<string name="settings_location">Store location</string>
 	<string name="settings_location_on">Your location for fillups will be stored privately</string>
 	<string name="settings_location_off">No location information will be stored at all</string>
-	<string name="settings_backups_title">Automatic backup settings</string>
-	<string name="settings_backups">Enable backups</string>
-	<string name="settings_backups_enabled">Backups will be performed automatically</string>
-	<string name="settings_backups_disabled">Your data will not be backed up</string>
-	<string name="settings_backup_transports">Backup routines</string>
-	<string name="settings_backup_transports_summary">How would you like your data backed up?</string>
 	<string name="settings_currency_title">Currency symbol</string>
 	<string name="settings_currency_summary">What symbol to use when displaying money</string>
 	<string name="settings_data_format_title">Fillup options</string>
@@ -111,6 +105,9 @@
 	<string name="settings_units_summary">How to set gallons/litres/km/etc.</string>
 	<string name="settings_meta_field_title">Extra field</string>
 	<string name="settings_meta_field_summary">Choose which field to show in fillup history</string>
+	<string name="settings_auto_backup_title">Perform backups</string>
+	<string name="settings_auto_backup_on">Your data will be automatically copied to external storage</string>
+	<string name="settings_auto_backup_off">Backups will not be automatically made</string>
 	
 	<string name="units_title">Setting Units</string>
 	<string name="units_description">Units are stored per-vehicle. To change, open the Vehicles tab, select your vehicle, scroll down, and set your units. Save your vehicle, then go to Statistics tab, press \'menu\', select \'Recalculate\' to see changes immediately.</string>
@@ -146,18 +143,6 @@
 	<string name="divider_about_charts">Charts donated by aiCharts</string>
 	<string name="divider_about_translators">Translated by</string>
 
-	<string name="transport_enable">Enable</string>
-	<string name="transport_enabled">Data will be backed up</string>
-	<string name="transport_disabled">Data will not be backed up</string>	
-	<string name="transport_file_name">SD card backup</string>
-	<string name="transport_file_description_on">Database will be backed up on your SD card</string>
-	<string name="transport_file_description_off">Nothing will be saved to your SD card</string>
-	<string name="transport_file_filename_title">Filename</string>
-	<string name="transport_file_filename_summary">The base name for your backup.</string>
-	<string name="transport_web_name">Online backup</string>
-	<string name="transport_web_description_on">Database will be backed up to the web</string>
-	<string name="transport_web_description_ff">Nothing will be saved to the web</string>
-	
 	<string name="stat_fuel_economy">Fuel economy</string>
 	<string name="stat_avg_economy">Average fuel economy</string>
 	<string name="stat_min_economy">Worst fuel economy</string>
@@ -276,7 +261,6 @@
 	<string name="title_service_interval_template">Service interval template</string>
 	<string name="title_service_interval_template_list">Service interval templates</string>
 	<string name="title_settings">Settings</string>
-	<string name="title_transport_settings">Transport settings</string>
 	<string name="title_statistics">Statistics</string>
 	<string name="title_importexport">Import / Export data</string>
 	<string name="title_import">Import data</string>
