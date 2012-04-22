@@ -136,7 +136,7 @@ public class FillupAdapter extends BaseAdapter {
         if (mCursor.getInt(mCursor.getColumnIndex(Fillup.PARTIAL)) == 1) {
             value = mContext.getString(R.string.status_partial);
         } else if (economy == 0) {
-            value = mContext.getString(R.string.status_calculating);
+            value = "";
         } else {
             value = ECONOMY_FORMAT.format(economy) + mEconomyUnits;
             if (mAvgEconomy > 0) {

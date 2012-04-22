@@ -3,7 +3,6 @@
 	<string name="app_name" translatable="false">Mileage</string>
 
 	<string name="creating_chart">Creating chart&#8230;</string>
-	<string name="status_calculating">calculating&#8230;</string>
 	<string name="status_partial">partial</string>
 	
 	<string name="unit_price_volume">Unit price, volume</string>
