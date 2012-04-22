@@ -13,23 +13,21 @@ import android.net.Uri;
 
 public class CacheTable extends ContentTable {
     private static final int CACHES = 80;
+
     private static final int CACHE_ID = 81;
 
     public static final String URI = "cache";
+
     public static final Uri BASE_URI = Uri.withAppendedPath(FillUpsProvider.BASE_URI, URI);
 
     private static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.evancharlton.statistics";
-    private static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.evancharlton.statistic";
+
+    private static final String CONTENT_ITEM_TYPE =
+            "vnd.android.cursor.item/vnd.evancharlton.statistic";
 
     public static final String[] PROJECTION = new String[] {
-            CachedValue._ID,
-            CachedValue.TIMESTAMP,
-            CachedValue.ITEM,
-            CachedValue.KEY,
-            CachedValue.VALUE,
-            CachedValue.VALID,
-            CachedValue.GROUP,
-            CachedValue.ORDER
+            CachedValue._ID, CachedValue.ITEM, CachedValue.KEY, CachedValue.VALUE,
+            CachedValue.VALID, CachedValue.GROUP, CachedValue.ORDER
     };
 
     @Override

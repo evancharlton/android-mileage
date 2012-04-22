@@ -13,25 +13,24 @@ import android.net.Uri;
 
 public class ServiceIntervalsTable extends ContentTable {
     private static final int SERVICE_INTERVALS = 70;
+
     private static final int SERVICE_INTERVAL_ID = 71;
 
     public static final String TABLE_NAME = "service_intervals";
+
     public static final String URI = "intervals/";
+
     public static final Uri BASE_URI = Uri.withAppendedPath(FillUpsProvider.BASE_URI, URI);
 
     private static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.evancharlton.interval";
-    private static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.evancharlton.interval";
+
+    private static final String CONTENT_ITEM_TYPE =
+            "vnd.android.cursor.item/vnd.evancharlton.interval";
 
     public static String[] PROJECTION = new String[] {
-            ServiceInterval._ID,
-            ServiceInterval.TIMESTAMP,
-            ServiceInterval.TITLE,
-            ServiceInterval.DESCRIPTION,
-            ServiceInterval.START_DATE,
-            ServiceInterval.START_ODOMETER,
-            ServiceInterval.TEMPLATE_ID,
-            ServiceInterval.VEHICLE_ID,
-            ServiceInterval.DURATION,
+            ServiceInterval._ID, ServiceInterval.TITLE, ServiceInterval.DESCRIPTION,
+            ServiceInterval.START_DATE, ServiceInterval.START_ODOMETER,
+            ServiceInterval.TEMPLATE_ID, ServiceInterval.VEHICLE_ID, ServiceInterval.DURATION,
             ServiceInterval.DISTANCE
     };
 

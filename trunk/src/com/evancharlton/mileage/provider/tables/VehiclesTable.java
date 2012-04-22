@@ -15,29 +15,24 @@ import android.provider.BaseColumns;
 public class VehiclesTable extends ContentTable {
     // make sure it's globally unique
     private static final int VEHICLES = 40;
+
     private static final int VEHICLE_ID = 41;
 
     public static final String TABLE_NAME = "vehicles";
+
     public static final String VEHICLES_URI = "vehicles/";
+
     public static final Uri BASE_URI = Uri.withAppendedPath(FillUpsProvider.BASE_URI, VEHICLES_URI);
 
     private static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.evancharlton.vehicles";
-    private static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.evancharlton.vehicle";
+
+    private static final String CONTENT_ITEM_TYPE =
+            "vnd.android.cursor.item/vnd.evancharlton.vehicle";
 
     public static String[] PROJECTION = new String[] {
-            Vehicle._ID,
-            Vehicle.TIMESTAMP,
-            Vehicle.TITLE,
-            Vehicle.DESCRIPTION,
-            Vehicle.YEAR,
-            Vehicle.MAKE,
-            Vehicle.MODEL,
-            Vehicle.VEHICLE_TYPE,
-            Vehicle.DEFAULT_TIME,
-            Vehicle.PREF_DISTANCE_UNITS,
-            Vehicle.PREF_VOLUME_UNITS,
-            Vehicle.PREF_ECONOMY_UNITS,
-            Vehicle.PREF_CURRENCY
+            Vehicle._ID, Vehicle.TITLE, Vehicle.DESCRIPTION, Vehicle.YEAR, Vehicle.MAKE,
+            Vehicle.MODEL, Vehicle.VEHICLE_TYPE, Vehicle.DEFAULT_TIME, Vehicle.PREF_DISTANCE_UNITS,
+            Vehicle.PREF_VOLUME_UNITS, Vehicle.PREF_ECONOMY_UNITS, Vehicle.PREF_CURRENCY
     };
 
     @Override
@@ -68,11 +63,11 @@ public class VehiclesTable extends ContentTable {
         }
         // FIXME: hardcoded strings = bad!
         return new String[] {
-                new InsertBuilder().add(Vehicle.TITLE, "Default vehicle")
-                        .add(Vehicle.DESCRIPTION, "Auto-generated vehicle")
-                        .add(Vehicle.DEFAULT_TIME, System.currentTimeMillis())
-                        .add(Vehicle.MAKE, "Android").add(Vehicle.MODEL, "Mileage")
-                        .add(Vehicle.YEAR, "2010").add(Vehicle.VEHICLE_TYPE, 1).build()
+            new InsertBuilder().add(Vehicle.TITLE, "Default vehicle")
+                    .add(Vehicle.DESCRIPTION, "Auto-generated vehicle")
+                    .add(Vehicle.DEFAULT_TIME, System.currentTimeMillis())
+                    .add(Vehicle.MAKE, "Android").add(Vehicle.MODEL, "Mileage")
+                    .add(Vehicle.YEAR, "2010").add(Vehicle.VEHICLE_TYPE, 1).build()
         };
     }
 
@@ -114,7 +109,7 @@ public class VehiclesTable extends ContentTable {
         switch (match) {
             case VEHICLE_ID:
                 return db.update(getTableName(), values, Vehicle._ID + " = ?", new String[] {
-                        uri.getPathSegments().get(1)
+                    uri.getPathSegments().get(1)
                 });
             case VEHICLES:
                 return db.update(getTableName(), values, selection, selectionArgs);

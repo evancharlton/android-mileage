@@ -17,23 +17,23 @@ import java.util.Map.Entry;
 public class ServiceIntervalTemplatesTable extends ContentTable {
 
     private static final int SERVICE_TEMPLATES = 60;
+
     private static final int SERVICE_TEMPLATE_ID = 61;
 
     public static final String URI = "intervals/templates";
 
     public static final Uri BASE_URI = Uri.withAppendedPath(FillUpsProvider.BASE_URI, URI);
 
-    private static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.evancharlton.interval_template";
-    private static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.evancharlton.interval_template";
+    private static final String CONTENT_TYPE =
+            "vnd.android.cursor.dir/vnd.evancharlton.interval_template";
+
+    private static final String CONTENT_ITEM_TYPE =
+            "vnd.android.cursor.item/vnd.evancharlton.interval_template";
 
     public static final String[] PROJECTION = new String[] {
-            ServiceIntervalTemplate._ID,
-            ServiceIntervalTemplate.TIMESTAMP,
-            ServiceIntervalTemplate.TITLE,
-            ServiceIntervalTemplate.DESCRIPTION,
-            ServiceIntervalTemplate.DISTANCE,
-            ServiceIntervalTemplate.DURATION,
-            ServiceIntervalTemplate.VEHICLE_TYPE
+            ServiceIntervalTemplate._ID, ServiceIntervalTemplate.TITLE,
+            ServiceIntervalTemplate.DESCRIPTION, ServiceIntervalTemplate.DISTANCE,
+            ServiceIntervalTemplate.DURATION, ServiceIntervalTemplate.VEHICLE_TYPE
     };
 
     // FIXME - Hard-coded strings.

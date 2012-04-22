@@ -16,7 +16,9 @@ public class FillupsFieldsTable extends ContentTable {
     // make sure it's globally unique
     // TODO: rename these because it's confusing as fuck
     private static final int FILLUP_FIELDS = 20;
+
     private static final int FILLUP_FIELD = 21;
+
     private static final int FILLUPS_FIELDS = 22;
 
     public static final String TABLE_NAME = "fillups_fields";
@@ -26,6 +28,7 @@ public class FillupsFieldsTable extends ContentTable {
      * fillup
      */
     public static final String FILLUPS_FIELDS_PATH = "fillups/fields";
+
     public static final Uri FILLUPS_FIELDS_URI = Uri.withAppendedPath(FillUpsProvider.BASE_URI,
             FILLUPS_FIELDS_PATH);
 
@@ -34,16 +37,17 @@ public class FillupsFieldsTable extends ContentTable {
      */
     public static final String FILLUPS_FIELD_PATH = "fillups/field";
 
-    private static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.evancharlton.fillup_fields";
-    private static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.evancharlton.fillup_field_id";
-    private static final String CONTENT_ITEMS_TYPE = "vnd.android.cursor.dir/vnd.evancharlton.fillups_fields";
+    private static final String CONTENT_TYPE =
+            "vnd.android.cursor.dir/vnd.evancharlton.fillup_fields";
+
+    private static final String CONTENT_ITEM_TYPE =
+            "vnd.android.cursor.item/vnd.evancharlton.fillup_field_id";
+
+    private static final String CONTENT_ITEMS_TYPE =
+            "vnd.android.cursor.dir/vnd.evancharlton.fillups_fields";
 
     public static final String[] PROJECTION = new String[] {
-            FillupField._ID,
-            FillupField.TIMESTAMP,
-            FillupField.FILLUP_ID,
-            FillupField.TEMPLATE_ID,
-            FillupField.VALUE
+            FillupField._ID, FillupField.FILLUP_ID, FillupField.TEMPLATE_ID, FillupField.VALUE
     };
 
     @Override
@@ -125,7 +129,7 @@ public class FillupsFieldsTable extends ContentTable {
         switch (match) {
             case FILLUP_FIELD:
                 return db.update(getTableName(), values, FillupField._ID + " = ?", new String[] {
-                        values.getAsString(FillupField._ID)
+                    values.getAsString(FillupField._ID)
                 });
             case FILLUPS_FIELDS:
                 if (values.containsKey(BaseColumns._ID)) {

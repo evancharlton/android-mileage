@@ -16,23 +16,23 @@ import android.text.TextUtils;
 public class FieldsTable extends ContentTable {
     // make sure it's globally unique
     private static final int FIELDS = 30;
+
     private static final int FIELD_ID = 31;
 
     private static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.evancharlton.fields";
-    private static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.evancharlton.field_id";
+
+    private static final String CONTENT_ITEM_TYPE =
+            "vnd.android.cursor.item/vnd.evancharlton.field_id";
 
     /**
      * All saved field templates
      */
     public static final String URI_PATH = "fields/";
+
     public static final Uri URI = Uri.withAppendedPath(FillUpsProvider.BASE_URI, URI_PATH);
 
     public static final String[] PROJECTION = new String[] {
-            Field._ID,
-            Field.TIMESTAMP,
-            Field.TITLE,
-            Field.DESCRIPTION,
-            Field.TYPE
+            Field._ID, Field.TITLE, Field.DESCRIPTION, Field.TYPE
     };
 
     @Override
@@ -65,8 +65,8 @@ public class FieldsTable extends ContentTable {
     public String[] init(boolean isUpgrade) {
         // FIXME - Hardcoded strings = bad!
         return new String[] {
-                new InsertBuilder().add(Field.TITLE, "Comment")
-                        .add(Field.DESCRIPTION, "Comment about your fillup.").build()
+            new InsertBuilder().add(Field.TITLE, "Comment")
+                    .add(Field.DESCRIPTION, "Comment about your fillup.").build()
         };
     }
 
@@ -113,8 +113,9 @@ public class FieldsTable extends ContentTable {
         }
         switch (match) {
             case FIELD_ID:
-                String query = Field._ID + " = ?"
-                        + (TextUtils.isEmpty(selection) ? "" : " AND (" + selection + ")");
+                String query =
+                        Field._ID + " = ?"
+                                + (TextUtils.isEmpty(selection) ? "" : " AND (" + selection + ")");
                 String[] args = new String[selectionArgs.length + 1];
                 args[0] = values.getAsString(Field._ID);
                 for (int i = 0; i < selectionArgs.length; i++) {

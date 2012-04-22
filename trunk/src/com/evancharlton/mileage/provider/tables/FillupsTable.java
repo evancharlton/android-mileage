@@ -16,59 +16,37 @@ import android.text.TextUtils;
 public class FillupsTable extends ContentTable {
     // make sure it's globally unique
     private static final int FILLUPS = 10;
+
     private static final int FILLUP_ID = 11;
 
     private static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.evancharlton.fillup";
-    private static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.evancharlton.fillup";
+
+    private static final String CONTENT_ITEM_TYPE =
+            "vnd.android.cursor.item/vnd.evancharlton.fillup";
 
     public static final String TABLE_NAME = "fillups";
+
     public static final String URI = "fillups/";
+
     public static final Uri BASE_URI = Uri.withAppendedPath(FillUpsProvider.BASE_URI, URI);
 
     public static final String[] PROJECTION = new String[] {
-            Fillup._ID,
-            Fillup.TIMESTAMP,
-            Fillup.TOTAL_COST,
-            Fillup.UNIT_PRICE,
-            Fillup.VOLUME,
-            Fillup.ODOMETER,
-            Fillup.ECONOMY,
-            Fillup.VEHICLE_ID,
-            Fillup.DATE,
-            Fillup.LATITUDE,
-            Fillup.LONGITUDE,
-            Fillup.PARTIAL,
-            Fillup.RESTART
+            Fillup._ID, Fillup.TOTAL_COST, Fillup.UNIT_PRICE, Fillup.VOLUME, Fillup.ODOMETER,
+            Fillup.ECONOMY, Fillup.VEHICLE_ID, Fillup.DATE, Fillup.LATITUDE, Fillup.LONGITUDE,
+            Fillup.PARTIAL, Fillup.RESTART
     };
 
     public static final String[] CSV_PROJECTION = new String[] {
-            Fillup._ID,
-            Fillup.TOTAL_COST,
-            Fillup.UNIT_PRICE,
-            Fillup.VOLUME,
-            Fillup.ODOMETER,
-            Fillup.ECONOMY,
-            Fillup.VEHICLE_ID,
-            Fillup.DATE,
-            Fillup.LATITUDE,
-            Fillup.LONGITUDE,
-            Fillup.PARTIAL,
-            Fillup.RESTART
+            Fillup._ID, Fillup.TOTAL_COST, Fillup.UNIT_PRICE, Fillup.VOLUME, Fillup.ODOMETER,
+            Fillup.ECONOMY, Fillup.VEHICLE_ID, Fillup.DATE, Fillup.LATITUDE, Fillup.LONGITUDE,
+            Fillup.PARTIAL, Fillup.RESTART
     };
 
     public static final int[] PLAINTEXT = new int[] {
-            R.string.column_id,
-            R.string.column_total_cost,
-            R.string.column_unit_price,
-            R.string.column_volume,
-            R.string.column_odometer,
-            R.string.column_economy,
-            R.string.column_vehicle,
-            R.string.column_date,
-            R.string.column_latitude,
-            R.string.column_longitude,
-            R.string.column_partial,
-            R.string.column_restart
+            R.string.column_id, R.string.column_total_cost, R.string.column_unit_price,
+            R.string.column_volume, R.string.column_odometer, R.string.column_economy,
+            R.string.column_vehicle, R.string.column_date, R.string.column_latitude,
+            R.string.column_longitude, R.string.column_partial, R.string.column_restart
     };
 
     @Override
@@ -130,8 +108,9 @@ public class FillupsTable extends ContentTable {
                 return db.update(getTableName(), values, selection, selectionArgs);
             case FILLUP_ID:
                 String fillUpId = uri.getPathSegments().get(1);
-                String clause = Fillup._ID + " = " + fillUpId
-                        + (!TextUtils.isEmpty(selection) ? " AND (" + selection + ")" : "");
+                String clause =
+                        Fillup._ID + " = " + fillUpId
+                                + (!TextUtils.isEmpty(selection) ? " AND (" + selection + ")" : "");
                 return db.update(getTableName(), values, clause, selectionArgs);
         }
         return -1;

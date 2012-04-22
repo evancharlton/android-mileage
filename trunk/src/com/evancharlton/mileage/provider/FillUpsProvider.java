@@ -1,23 +1,6 @@
 
 package com.evancharlton.mileage.provider;
 
-import android.content.ContentProvider;
-import android.content.ContentUris;
-import android.content.ContentValues;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.UriMatcher;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.database.sqlite.SQLiteQueryBuilder;
-import android.net.Uri;
-import android.text.TextUtils;
-import android.util.Log;
-import android.util.SparseIntArray;
-
-import com.evancharlton.mileage.dao.Dao;
 import com.evancharlton.mileage.provider.tables.CacheTable;
 import com.evancharlton.mileage.provider.tables.ContentTable;
 import com.evancharlton.mileage.provider.tables.FieldsTable;
@@ -29,6 +12,21 @@ import com.evancharlton.mileage.provider.tables.VehicleTypesTable;
 import com.evancharlton.mileage.provider.tables.VehiclesTable;
 import com.evancharlton.mileage.services.AutomaticBackupService;
 import com.evancharlton.mileage.util.Debugger;
+
+import android.content.ContentProvider;
+import android.content.ContentUris;
+import android.content.ContentValues;
+import android.content.Context;
+import android.content.UriMatcher;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteQueryBuilder;
+import android.net.Uri;
+import android.text.TextUtils;
+import android.util.Log;
+import android.util.SparseIntArray;
 
 import java.util.ArrayList;
 
@@ -196,7 +194,6 @@ public class FillUpsProvider extends ContentProvider {
         SQLiteDatabase db = mDatabaseHelper.getWritableDatabase();
         int position = LOOKUP.get(match, -1);
         if (position >= 0) {
-            initialValues.put(Dao.TIMESTAMP, System.currentTimeMillis());
             newId = TABLES.get(position).insert(match, db, initialValues);
             if (newId >= 0) {
                 uri = ContentUris.withAppendedId(uri, newId);
@@ -256,7 +253,6 @@ public class FillUpsProvider extends ContentProvider {
         int position = LOOKUP.get(match, -1);
         if (position >= 0) {
             SQLiteDatabase db = mDatabaseHelper.getWritableDatabase();
-            values.put(Dao.TIMESTAMP, System.currentTimeMillis());
             int count =
                     TABLES.get(position).update(match, db, uri, values, selection, selectionArgs);
             if (count >= 0) {

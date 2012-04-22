@@ -29,8 +29,6 @@ public abstract class Dao implements Cloneable {
 
     public static final String _ID = BaseColumns._ID;
 
-    public static final String TIMESTAMP = "last_change";
-
     @Column(type = Column.LONG, name = BaseColumns._ID)
     private long mId;
 
@@ -301,7 +299,6 @@ public abstract class Dao implements Cloneable {
     public boolean save(Context context) throws InvalidFieldException {
         ContentValues values = new ContentValues();
         validate(values);
-        values.put(TIMESTAMP, System.currentTimeMillis());
         if (isExistingObject()) {
             // update
             values.put(_ID, mId);

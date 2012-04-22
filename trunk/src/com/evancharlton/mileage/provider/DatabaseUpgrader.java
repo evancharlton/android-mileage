@@ -29,8 +29,6 @@ public class DatabaseUpgrader {
 
     private static final int V3_DATABASE = 5; // Version 3.X
 
-    private static final int V3_1_DATABASE = 6; // Version 3.1
-
     private static final StringBuilder BUILDER = new StringBuilder();
 
     private static SQLiteDatabase sDatabase;
@@ -84,8 +82,6 @@ public class DatabaseUpgrader {
                     } else {
                         Log.e(TAG, "Unable to complete migration!");
                     }
-                case V3_1_DATABASE:
-                    // 3.1; I don't think anything changed.
                     break;
                 default:
                     // unknown version; recurse and start from the beginning

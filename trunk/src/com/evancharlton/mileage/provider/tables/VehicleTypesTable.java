@@ -14,20 +14,21 @@ import android.net.Uri;
 public class VehicleTypesTable extends ContentTable {
     // make sure it's globally unique
     private static final int TYPES = 50;
+
     private static final int TYPE_ID = 51;
 
     public static final String URI = "vehicles/types/";
 
     public static final Uri BASE_URI = Uri.withAppendedPath(FillUpsProvider.BASE_URI, URI);
 
-    private static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.evancharlton.vehicle_types";
-    private static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.evancharlton.vehicle_type";
+    private static final String CONTENT_TYPE =
+            "vnd.android.cursor.dir/vnd.evancharlton.vehicle_types";
+
+    private static final String CONTENT_ITEM_TYPE =
+            "vnd.android.cursor.item/vnd.evancharlton.vehicle_type";
 
     public static final String[] PROJECTION = new String[] {
-            VehicleType._ID,
-            VehicleType.TIMESTAMP,
-            VehicleType.TITLE,
-            VehicleType.DESCRIPTION
+            VehicleType._ID, VehicleType.TITLE, VehicleType.DESCRIPTION
     };
 
     @Override
@@ -55,8 +56,8 @@ public class VehicleTypesTable extends ContentTable {
     public String[] init(boolean isUpgrade) {
         // FIXME: hardcoded strings = bad!
         return new String[] {
-                new InsertBuilder().add(VehicleType.TITLE, "Car")
-                        .add(VehicleType.DESCRIPTION, "Passenger car").build()
+            new InsertBuilder().add(VehicleType.TITLE, "Car")
+                    .add(VehicleType.DESCRIPTION, "Passenger car").build()
         };
     }
 
@@ -98,7 +99,7 @@ public class VehicleTypesTable extends ContentTable {
         switch (match) {
             case TYPE_ID:
                 return db.update(getTableName(), values, VehicleType._ID + " = ?", new String[] {
-                        values.getAsString(VehicleType._ID)
+                    values.getAsString(VehicleType._ID)
                 });
             case TYPES:
                 return db.update(getTableName(), values, selection, selectionArgs);
