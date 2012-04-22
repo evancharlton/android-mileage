@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Mileage" default="help">
+
+	<property environment="env" />
+	<property file="keys.properties" />
+	
+	<target name="clean">
+		<delete includeemptydirs="true" failonerror="false">
+			<fileset dir="${basedir}/bin"/>
+		</delete>
+	</target>
+	
+	<target name="sign" depends="release">
+		<echo>Signing bin/${ant.project.name}-unsigned.apk ...</echo>
+		<exec executable="jarsigner" failonerror="true">
+			<arg line="${store.passwd}"/>
+			<arg line="${key.passwd}"/>
+			<arg line="-signedjar ${basedir}/${ant.project.name}-signed.apk"/>
+			<arg value="${basedir}/bin/${ant.project.name}-release-unsigned.apk"/>
+			<arg value="android"/>
+		</exec>
+		<echo>Signed APK: ${ant.project.name}-signed.apk</echo>
+	</target>
+	
+	<target name="align" depends="sign">
+		<echo>Zipaligning ${ant.project.name}-signed-aligned.apk</echo>
+		<exec executable="zipalign" failonerror="true">
+			<arg line="-f"/>
+			<arg line="4" />
+			<arg line="${ant.project.name}-signed.apk" />
+			<arg line="${ant.project.name}-signed-aligned.apk" />
+		</exec>
+		<echo>Aligned APK: ${ant.project.name}-signed-aligned.apk</echo>
+	</target>
+</project>
