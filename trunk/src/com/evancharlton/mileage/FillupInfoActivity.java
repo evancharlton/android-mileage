@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
@@ -142,7 +143,8 @@ public class FillupInfoActivity extends Activity implements View.OnClickListener
                 intent.putExtra(BaseFormActivity.EXTRA_ITEM_ID, mFillup.getPrevious().getId());
                 startActivity(intent);
                 finish();
-                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                Overrider.get(this).overridePendingTransition(R.anim.slide_in_right,
+                        R.anim.slide_out_left);
                 break;
 
             case R.id.next:
@@ -150,7 +152,8 @@ public class FillupInfoActivity extends Activity implements View.OnClickListener
                 intent.putExtra(BaseFormActivity.EXTRA_ITEM_ID, mFillup.getNext().getId());
                 startActivity(intent);
                 finish();
-                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                Overrider.get(this).overridePendingTransition(R.anim.slide_in_left,
+                        R.anim.slide_out_right);
                 break;
         }
     }
@@ -184,6 +187,35 @@ public class FillupInfoActivity extends Activity implements View.OnClickListener
         @Override
         public String format(Context context, Vehicle vehicle, double value) {
             return String.format("%b", value > 0);
+        }
+    }
+
+    private static class Overrider {
+        public static Overrider get(Activity activity) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ECLAIR) {
+                return new RealOverrider(activity);
+            }
+            return new Overrider(activity);
+        }
+
+        protected final Activity mActivity;
+
+        public Overrider(Activity activity) {
+            mActivity = activity;
+        }
+
+        public void overridePendingTransition(int in, int out) {
+        }
+
+        private static class RealOverrider extends Overrider {
+            public RealOverrider(Activity activity) {
+                super(activity);
+            }
+
+            @Override
+            public void overridePendingTransition(int in, int out) {
+                mActivity.overridePendingTransition(in, out);
+            }
         }
     }
 }

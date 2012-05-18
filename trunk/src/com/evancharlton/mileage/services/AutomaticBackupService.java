@@ -1,5 +1,10 @@
+
 package com.evancharlton.mileage.services;
 
+import com.evancharlton.mileage.provider.FillUpsProvider;
+import com.evancharlton.mileage.util.Util;
+
+import android.annotation.TargetApi;
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
@@ -7,9 +12,6 @@ import android.os.Build;
 import android.os.DropBoxManager;
 import android.os.Environment;
 import android.util.Log;
-
-import com.evancharlton.mileage.provider.FillUpsProvider;
-import com.evancharlton.mileage.util.Util;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -55,7 +57,7 @@ public class AutomaticBackupService extends IntentService {
                         dest.getParentFile().mkdirs();
                     }
                     if (!dest.createNewFile()) {
-                        Log.wtf(TAG, "Unable to create file!");
+                        Wtf.get(this).wtf("Unable to create file!");
                     }
                 }
                 source = new FileInputStream(src).getChannel();
@@ -87,27 +89,61 @@ public class AutomaticBackupService extends IntentService {
 
     private void error(Exception e) {
         Log.e(TAG, "Backup failed!", e);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
-            Log.wtf(TAG, e);
-            DropBoxManager dropbox = (DropBoxManager) getSystemService(DROPBOX_SERVICE);
+        Wtf.get(this).wtf(e);
+    }
 
-            StringBuilder message = new StringBuilder();
-            message.append(e.getMessage());
-            message.append("|");
-
-            StackTraceElement[] traces = e.getStackTrace();
-            final int N = Math.min(10, traces.length);
-            for (int i = 0; i < N; i++) {
-                StackTraceElement trace = traces[i];
-                message
-                    .append(trace.getClassName())
-                    .append(".")
-                    .append(trace.getMethodName())
-                    .append(":")
-                    .append(trace.getLineNumber())
-                    .append("\t");
+    private static class Wtf {
+        public static Wtf get(Context context) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
+                return new RealWtf(context);
             }
-            dropbox.addText("Mileage.AutomaticBackupService", message.toString());
+            return new Wtf(context);
+        }
+
+        protected final Context mContext;
+
+        public Wtf(Context context) {
+            mContext = context;
+        }
+
+        public void wtf(Exception e) {
+            Log.e(TAG, "WTF!", e);
+        }
+
+        public void wtf(String text) {
+            Log.e(TAG, "WTF: " + text);
+        }
+
+        @TargetApi(8)
+        private static class RealWtf extends Wtf {
+            public RealWtf(Context context) {
+                super(context);
+            }
+
+            @Override
+            public void wtf(Exception e) {
+                Log.wtf(TAG, e);
+                DropBoxManager dropbox =
+                        (DropBoxManager) mContext.getSystemService(DROPBOX_SERVICE);
+
+                StringBuilder message = new StringBuilder();
+                message.append(e.getMessage());
+                message.append("|");
+
+                StackTraceElement[] traces = e.getStackTrace();
+                final int N = Math.min(10, traces.length);
+                for (int i = 0; i < N; i++) {
+                    StackTraceElement trace = traces[i];
+                    message.append(trace.getClassName()).append(".").append(trace.getMethodName())
+                            .append(":").append(trace.getLineNumber()).append("\t");
+                }
+                dropbox.addText("Mileage.AutomaticBackupService", message.toString());
+            }
+
+            @Override
+            public void wtf(String text) {
+                Log.wtf(TAG, text);
+            }
         }
     }
 }
